@@ -1,0 +1,34 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="Big5"%>
+
+
+<div class="blog-pagenat-wthree">
+                <ul>
+
+  <%if (rowsPerPage<rowNumber) {%>
+    <%if(pageIndex>=rowsPerPage){%>
+        <li><A class="frist" href="<%=request.getContextPath()%>/group/group.do?whichPage=1&action=listGroups_ByCompositeQuery">第一頁</A></li>
+        <li><A class="frist" href="<%=request.getContextPath()%>/group/group.do?whichPage=<%=whichPage-1%>&action=listGroups_ByCompositeQuery">上一頁 </A></li>
+    <%}%>
+  
+    <%if(pageIndex<pageIndexArray[pageNumber-1]){%>
+        <li><A class="last" href="<%=request.getContextPath()%>/group/group.do?whichPage=<%=whichPage+1%>&action=listGroups_ByCompositeQuery">下一頁 </A></li>
+        <li><A class="last" href="<%=request.getContextPath()%>/group/group.do?whichPage=<%=pageNumber%>&action=listGroups_ByCompositeQuery">至最後一頁</A></li>
+    <%}%>
+  <%}%>  
+   		</ul>
+   </div>
+ 
+<div class="blog-pagenat-wthree">
+   <%if (pageNumber>1) {%>
+    <FORM METHOD="post" ACTION="<%=request.getRequestURI()%>">   
+
+       <select size="1" name="whichPage">
+         <%for (int i=1; i<=pageNumber; i++){%>
+         	<option value="<%=i%>">至第<%=i%>頁
+         <%}%> 
+       </select>
+
+       <input type="submit" value="確定" class="btn btn-primary" >  
+    </FORM>
+  <%}%>
+  </div>

@@ -1,0 +1,45 @@
+        section.booking_area {
+            font-family: 'Montserrat', sans-serif;
+            background-size: cover;
+            background-position: center;
+
+            background:
+                radial-gradient(circle, transparent 40%, var(--color-v) 75%),
+                linear-gradient(to right, var(--color), var(--color)),
+                var(--image2);
+            background-position: center center;
+            background-size: cover;
+            background-blend-mode:
+                var(--blend-top, normal),
+                var(--blend-bottom, saturation),
+                normal;
+            --image: url(https://images.unsplash.com/photo-1519522800923-7999b95cb3c6?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NTg5fQ&s=81c09a0eae279992234d18e52c8857fa);
+
+            --image2: url(https://wallpapercave.com/wp/wp2043918.jpg);
+            --color-v: black;
+            --color: grey;
+            flex: 1;
+            width: 100vw;
+        }
+
+        section.booking_area>div.container-fluid>div.row>div>div.booking-form {
+            margin: 0px auto;
+        }
+
+        section.booking_area>div.container-fluid {
+            margin: 0px auto;
+            padding: 30px 20px;
+        }
+        div.container.article-form {
+            max-width: 100%;
+        }
+        div.article-table.table-responsive>table.table {
+            border-top-right-radius: 3px;
+            border-top-left-radius: 3px;
+        }
+
+        @media screen and (max-width: 767px) {
+            div.article-table.table-responsive {
+                border: none;
+            }
+        }

@@ -1,0 +1,47 @@
+diff a/WebContent/front-end/mem/memberSys.jsp b/WebContent/front-end/mem/memberSys.jsp	(rejected hunks)
+@@ -926,38 +926,39 @@
+ 
+ 
+ //����P�P�X�{�q�v��T
+ 
+ $(".hover_rating").hover(function(){
+ 	let movie_no = $($(this).find('td')[0]).text(); //$(this).find('td')[0]�ODOM���󤣯��jquery��text()�A�]���n�A�[�W$()�୼jquery����
+-	console.log(movie_no);
+ 	$.ajax({
+ 		url: "<%=request.getContextPath()%>/MovieServlet?action=getOne_For_Display_Ajax",
+ 		data:{"movieno":movie_no},
+ 		type:"POST",
+ 		success:function(json){
+ 			let jsonobj = JSON.parse(json);
+ 			let allRating = jsonobj.allRating;
+ 			let allComment = jsonobj.allComment;
+-// 			console.log(allRating);
+-// 			console.log(allComment[0].content);
+ 			let fragment = document.createElement("div");
+ 				fragment.classList.add("movie_info");
+-				fragment.innerHTML = `
++			let slice = `
+ 					<div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+ 					  <div class="carousel-inner">
+ 					    <div class="carousel-item active">
+ 					      <img src="<%=request.getContextPath()%>/DBGifReader1?movieno=`+movie_no+`"class="d-block w-100 rating_mov_pic" alt="...">
+ 					    </div>
+ // 					    <div class="carousel-item active">
+ <%-- 					      <img src="<%=request.getContextPath()%>/DBGifReader2?movieno=`+movie_no+`"class="d-block w-100 rating_mov_pic" alt="..."> --%>
+ // 					    </div>
+ 					  </div>
+ 					</div>
+-                    <table class="table-dark" style="font-size:20px;"><tr><th> ���� </th><td>` + allRating + `</td></tr> 
+-                    <tr><th> �v�� </th><td>` + allComment[0].content+`</td></tr></table>`
++                    <table class="table-dark" style="font-size:20px;"><tr><th> ���� </th><td>` + allRating + `</td></tr>
++                    <tr><th> �v�� </th></tr>`;
++        
++                    slice += allComment.map(comment => `<tr><td>` + comment.content + `</td></tr>`).join("");
++                    slice += `</table>`;
++                    fragment.innerHTML = slice;
+             $(".rating_movinfo").append(fragment);
+ 			
+ 		}
+ 	})
+ },function(){
+  $(this).closest('form').siblings().children().remove();

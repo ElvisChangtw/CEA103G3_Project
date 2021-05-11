@@ -1,0 +1,13 @@
+<script src="https://cdn.jsdelivr.net/npm/jquery-twzipcode@1.7.14/jquery.twzipcode.min.js"></script>
+<script>
+	$("#twzipcode").twzipcode({
+        countySel: '臺北市', // 城市預設值, 字串一定要用繁體的 "臺", 否則抓不到資料
+        districtSel: "大安區", // 地區預設值
+        zipcodeIntoDistrict: true, // 郵遞區號自動顯示在地區
+        css: ["city form-control", "town form-control"], // 自訂 "城市"、"地區" class 名稱
+        countyName: "hos_city", // 自訂城市 select 標籤的 name 值
+        districtName: "hos_dist" // 自訂地區 select 標籤的 name 值
+    });
+	</script>
+給DIV 設定id就可以了
+<div id="twzipcode"></div>

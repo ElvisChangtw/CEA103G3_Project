@@ -1,0 +1,122 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+
+	
+<div class="page-wrapper">
+            <div id="sidebar" class="sidebar-wrapper">
+                <div class="sidebar-brand">
+                    <img src="<%=request.getContextPath()%>/img/logo_vertical.png" />
+                </div>
+                <div class="sidebar-content">
+                    <div class="sidebar-header">
+                        <div class="user-pic">
+                           <img class="img-responsive img-rounded emp-pic" src="${pageContext.request.contextPath}/emp/emp.do?emp_id=${empVO.emp_id}&action=getEmpPic" />
+                        </div>
+                        <div class="user-info">
+                        <jsp:useBean id="titleSvc" scope="page" class="com.title.model.TitleService" />
+                            <span class="emp-name">${empVO.emp_name}<span class="emp-title">${titleSvc.getOneTitle(empVO.title_no).title}</span></span>
+
+                            <span class="user-status"> <i class="fa fa-circle"></i> <span>Online</span> </span>
+                        </div>
+                         <div class="emp-func">
+                            	 <a class="emp-logout" href="<%=request.getContextPath()%>/emp/emp.do?action=logout">Logout</a>
+                           		 <a class="emp-personal" href="<%=request.getContextPath()%>/back-end/update/updateByEmp.jsp">Staff Info</a>
+                          </div>
+                    </div>
+
+                    <div class="sidebar-menu">
+                        <ul>
+                            <li class="header-menu"><span>MoviesHit back-end System</span></li>
+                            <li>
+                                <a href="<%=request.getContextPath()%>/back-end/back-end_index.jsp"><i class="fas fa-home"></i><span>Homepage</span> </a>
+                            </li>
+                            <li>
+                                <a href="<%=request.getContextPath()%>/back-end/emp/protected/selectPage.jsp">
+                                    <i class="fa fa-users"></i> <span>Employee Management</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="<%=request.getContextPath()%>/back-end/members/memberInfo.jsp">
+                                    <i class="fa fa-users"></i> <span>Membership Management</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="<%=request.getContextPath()%>/back-end/members/messenger.jsp">
+                                     <i class="fas fa-sms"></i> <span>Online Contact</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-dropdown">
+                                <a href="#"> <i class="fa fa-file-alt"></i> <span>Resort Management System</span> </a>
+                                <div class="sidebar-submenu">
+                                    <ul>
+                                        <li>
+                                            <a href="<%=request.getContextPath()%>/back-end/roomtype/roomTypeInfo.jsp"
+                                                >Room Type Management</a
+                                            >
+                                        </li>
+                                        <li>
+                                            <a href="<%=request.getContextPath()%>/back-end/rooms/roomInfo.jsp"
+                                                >Room Management</a
+                                            >
+                                        </li>
+                                        <li>
+                                            <a href="<%=request.getContextPath()%>/back-end/choppers/chopInfo.jsp"
+                                                >Chopper Management</a
+                                            >
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="sidebar-dropdown">
+                                <a href="#"> <i class="fa fa-bell"></i> <span>Room System</span> </a>
+                                <div class="sidebar-submenu">
+                                    <ul>
+                                        <li><a href="<%=request.getContextPath()%>/back-end/booking/counterSystem.jsp">Check in/ Check out</a></li>
+                                        <li><a href="<%=request.getContextPath()%>/back-end/pickup/pkupInfo.jsp">Chopper Reservation</a></li>
+                                        <li><a href="<%=request.getContextPath()%>/back-end/booking/bookingInfo.jsp">Room Order</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="sidebar-dropdown">
+                                <a> <i class="fa fa-user-tie"></i> <span>Shop Mall System</span> </a>
+                                <div class="sidebar-submenu">
+                                    <ul>
+                                        <li><a href="<%=request.getContextPath()%>/back-end/item/itemInfo.jsp">Commodity Management</a></li>
+                                        <li><a href="<%=request.getContextPath()%>/back-end/shop_order/listAllShop_order.jsp">Commodity Order Management</a></li>
+             
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="sidebar-dropdown">
+                                <a> <i class="fas fa-utensils"></i> <span>Food System</span> </a>
+                                <div class="sidebar-submenu">
+                                    <ul>
+                                        <li><a href="<%=request.getContextPath()%>/back-end/meal/mealInfo.jsp">Food Management</a></li>
+                                        <li><a href="<%=request.getContextPath()%>/back-end/mealtype/mealTypeInfo.jsp">Food Type Management</a></li>
+                                        <li><a href="<%=request.getContextPath()%>/back-end/mealorder/mealOrderInfo.jsp">Food Order Management</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="sidebar-dropdown">
+                                <a> <i class="fa fa-user-tie"></i> <span>Service Registration System</span> </a>
+                                <div class="sidebar-submenu">
+                                    <ul>
+                                        <li><a href="<%=request.getContextPath()%>/back-end/services/servicesInfo.jsp">Service Management</a></li>
+                                        <li><a href="<%=request.getContextPath()%>/back-end/serviceOrder/serviceOrderInfo.jsp">Service Order Management</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="sidebar-dropdown">
+                                <a href="#"> <i class="fas fa-snowboarding"></i> <span>Activity Registration System</span> </a>
+                                <div class="sidebar-submenu">
+                                    <ul>
+                                        <li><a href="<%=request.getContextPath()%>/back-end/act/actInfo.jsp">Activity Management</a></li>
+                                        <li><a href="<%=request.getContextPath()%>/back-end/actorder/actorderInfo.jsp">Activity Order Management</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>   

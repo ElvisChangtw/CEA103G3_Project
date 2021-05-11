@@ -1,0 +1,83 @@
+        .w3l-movie-gride-agile.requested-movies img.img-responsive {
+            width: 227.865px;
+            height: 300px;
+        }
+        /*         .w3l-movie-text h6 a.group-title {
+            color: #02a388;
+            font-size: 20px;
+        } */
+
+        div.mid-1 agileits_w3layouts_mid_1_home {
+            height: 100px;
+        }
+
+        form select[multiple], select[size] {
+            height: 34px;
+        }
+
+        div.blog-pagenat-wthree form {
+            align-items: center;
+        }
+        div.modal-xl {
+            width: 95%;
+
+        }
+
+        table.table>tbody>tr>th, table.table>tbody>tr>td {
+            color: black;
+        }
+        table.table.table-bordered {
+            height: auto;
+        }
+        div.modal-content div.modal-header {
+            padding-top: 10px;
+            padding-bottom: 0px;
+            padding-left: 32px;
+        }
+        form.composite-query {
+            margin: 20px 15px;
+            margin-top: 20px;
+        }
+        form div.container {
+            width: auto;
+        }
+        div.form-group>button.btn {
+            border-radius: 3px;
+        }
+        td div.container {
+            width: auto;
+        }
+        nav.navbar.navbar-light {
+            margin-bottom: 0px;
+        }
+        div.w3_content_agilleinfo_inner {
+            padding-top: 1em;
+        }
+        div.agile_featured_movies>h3.h3.agile_w3_title.hor-t {
+            margin-bottom: 0.5em;
+        }
+        div.container.div-add, div.container.div-update, div.container.div-addReport{
+            max-width: 800px;
+        }
+        #dd-cntDown>p.counter {
+            color: darkblue !important;
+            font-style: italic !important;
+        }
+        #dd-cntDown>p.urgentCounter {
+            color: #DC143C !important;
+            font-style: italic !important;
+        }
+        div.mid-1.agileits_w3layouts_mid_1_home {
+            color: darkgreen;
+        }
+        
+        #reportBtn>a{
+        	background-color:rgb(235, 198, 52);
+        	color:white;
+        }
+        .alpha{
+        	FILTER: Alpha(opacity=60);/*ªí®æ³z©ú*/
+        }
+        #table-listOne>tbody>tr>th, #table-listOne>tbody>tr>td{
+        	font-size:1em;
+        }

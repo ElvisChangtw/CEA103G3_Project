@@ -1,0 +1,201 @@
+@charset "UTF-8";
+*::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+/* 覆蓋MAIN CSS */
+body {
+    font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+    background-image: url("../../img/background.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+button:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+.menu-item .nav-menu .mainmenu .nav-list a.nav-event {
+    color: white;
+}
+.menu-item {
+    background-color: rgb(34, 39, 54);
+}
+/* memberInfo CSS */
+.main-wrapper {
+    display: flex;
+    flex-direction: column;
+    padding: 80px 20px 20px 20px;
+    height: 90vh;
+    min-width: 850px;
+    margin: 0 auto;
+}
+/* member info  */
+.info-div {
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+}
+
+
+.info-content .tab-panel form {
+    width: 50%;
+    min-height: 300px;
+    height: 100%;
+    padding: 10px 20px;
+}
+
+
+
+/* .tab-panel .basic-info-buttons button { */
+/*     width: 50%; */
+/*     margin: 0 5px; */
+/* } */
+/* i.log-in { */
+/*     color: white; */
+/* } */
+/* .info-div .info-content { */
+/*     height: 100%; */
+/* } */
+/* .info-div .info-content .user-pic { */
+/* 	display:flex; */
+/* 	flex-direction: column; */
+/*     width: 300px; */
+/*     height: 100%; */
+/*     overflow: hidden; */
+/*     padding: 5px; */
+/*     float: left; */
+/* } */
+/* .info-div .info-content .user-pic div { */
+/* 	position:relative; */
+/* 	background-color: #DEEDEB; */
+/* 	min-width: 280px; */
+/* 	max-height: 40px; */
+/* 	padding:10px 0px; */
+/* 	margin-top:10px; */
+/* 	display:flex; */
+/* 	flex-direction: row; */
+/* 	justify-content: center; */
+/* 	align-items: center; */
+/* 	border-radius: 5px; */
+/* } */
+/* .info-div .info-content .user-pic div i { */
+/* 	font-size: 20px; */
+/* 	margin-right: 20px; */
+/* } */
+/* .info-div .info-content .user-pic div p { */
+/* 	font-size: 16px; */
+/* 	letter-spacing: 1px; */
+/* 	padding:0px; */
+/* 	margin:0px; */
+/* } */
+/* .info-div .info-content .user-pic input { */
+/* 	cursor:pointer; */
+/* 	position:absolute; */
+/* 	height:40px; */
+/* 	width:100%; */
+/* 	opacity:0; */
+/* 	left:0; */
+/* 	top:0; */
+/* } */
+/* .info-div .info-content .user-pic img { */
+/*     box-shadow: 1px 1px 3px black; */
+/* 	max-width: 100%; */
+/* } */
+
+
+/* tab */
+.tabset > input[type="radio"] {
+    position: absolute;
+    left: -200vw;
+}
+
+.tabset .tab-panel {
+    display: none;
+}
+
+.tab-panels{
+	overflow: scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
+.tabset > input:first-child:checked ~ .tab-panels > .tab-panel:first-child,
+.tabset > input:nth-child(3):checked ~ .tab-panels > .tab-panel:nth-child(2),
+.tabset > input:nth-child(5):checked ~ .tab-panels > .tab-panel:nth-child(3),
+.tabset > input:nth-child(7):checked ~ .tab-panels > .tab-panel:nth-child(4),
+.tabset > input:nth-child(9):checked ~ .tab-panels > .tab-panel:nth-child(5),
+.tabset > input:nth-child(11):checked ~ .tab-panels > .tab-panel:nth-child(6),
+.tabset > input:nth-child(13):checked ~ .tab-panels > .tab-panel:nth-child(7)  {
+    display: block;
+}
+
+/*
+ Styling
+*/
+
+.tabset {
+    background-image: linear-gradient(to bottom left, rgba(219, 219, 219, 0.171), rgba(255, 255, 0, 0));
+    border-radius: 20px;
+}
+.tabset > label {
+    position: relative;
+    display: inline-block;
+    padding: 10px 25px 20px;
+    border: transparent;
+    border-bottom: 0;
+    cursor: pointer;
+    font-weight: 600;
+	letter-spacing: 1px;
+}
+
+.tabset > label::after {
+    content: "";
+    position: absolute;
+    left: 25px;
+    bottom: 10px;
+    width: 22px;
+    height: 4px;
+    background: #8d8d8d;
+	transition: 0.5s ease;
+}
+
+.tabset > label:hover,
+.tabset > input:focus + label {
+    color: #0f4c75;
+}
+.tabset > label:hover::after {
+	width:60px;
+} 
+.tabset > label:hover::after,
+.tabset > input:focus + label::after,
+.tabset > input:checked + label::after {
+    background: #0f4c75;
+}
+
+.tabset > input:checked + label {
+    border-color: #ccc;
+    margin-bottom: -1px;
+}
+.tab-panel {
+    position: relative;
+    min-height: 70vh;
+    min-width: 400px;
+    padding-top: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+
+@media screen and (max-width: 767px) {
+    .info-div .info-content .user-pic {
+        float: none;
+        transform: translate(25%);
+    }
+    #user-info-form {
+        width: fit-content;
+    }
+    .main-wrapper {
+        min-width: fit-content;
+    }
+}
