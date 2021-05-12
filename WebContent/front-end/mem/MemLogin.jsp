@@ -11,7 +11,8 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 <title>MemLogin</title>
-
+<!--     自定義css格式開始 -->
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/styleForMember.css" />
 <!--引用 jQuery + Bootstrap -->
 <script src='//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js'></script>
 <!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"></link> -->
@@ -169,14 +170,17 @@ a{color:inherit;text-decoration:none}
 .foot-lnk{
 	text-align:center;
 }
+.modal-footer {
+   border-top: 0px; 
+}
 .errorMsgs {
 	position: absolute;
-	left: 72%;
+	left: 71%;
 	top: 15%;
 }
 .successMsgs {
 	position: absolute;
-	left: 72%;
+	left: 71%;
 	top: 15%;
 }
 
@@ -299,7 +303,7 @@ a{color:inherit;text-decoration:none}
 </FORM>
 
 
-
+<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/mem/mem.do" name="form3" enctype="multipart/form-data" data-toggle="validator">
 <!--modal-->
 <div id="pwdModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog">
@@ -316,9 +320,13 @@ a{color:inherit;text-decoration:none}
                           <p>If you have forgotten your password you can reset it here.</p>
                             <div class="panel-body">
                                 <fieldset>
-                                    <div class="form-group">
-                                        <input class="form-control input-lg" placeholder="E-mail Address" name="email" type="email">
+                                        
+                                        <div class="group form-group">
+										<input id="email" type="text" name="mb_email" placeholder="E-mail Address" class="input form-control input-lg" value="<%= (memVO==null)? "" : memVO.getMb_email()%>" data-error="郵件格式錯誤" pattern="^[(a-zA-Z0-9_)]{2,20}[@][(a-zA-Z0-9)]{3,10}[.][(a-zA-Z)]{1,5}$" required="required" autocomplete="off">
+										<div class="help-block with-errors"></div>
+                                        
                                     </div>
+                                    <input type="hidden" name="action" value="forgot_password">
                                     <input class="btn btn-lg btn-primary btn-block" value="Send My Password" type="submit">
                                 </fieldset>
                             </div>
@@ -335,7 +343,7 @@ a{color:inherit;text-decoration:none}
   </div>
   </div>
 </div>
-
+</FORM>
 
 	<!--引用 Validator-->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>

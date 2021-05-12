@@ -5,11 +5,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+
+import com.relationship.model.RelationshipVO;
 
 
 public class MemDAO implements MemDAO_interface {
@@ -36,6 +41,10 @@ public class MemDAO implements MemDAO_interface {
 	private static final String LOGIN_CHECK = "SELECT * FROM member where mb_email = ? and mb_pwd = ?";
 	private static final String ACOUNTACTIVATE = "SELECT * FROM member where mb_email = ? and status ='0'";
 	private static final String EMAIL_CHECK = "SELECT * FROM member where mb_email = ?";
+	private static final String GET_Relationships_ByMemberno_STMT = 
+			"SELECT * FROM RELATIONSHIP where MEMBER_NO = ? order by MEMBER_NO and FRIEND_NO";
+	private static final String GET_PASSWORD = "SELECT * FROM member where mb_email = ?";
+	private static final String UPDATERANDOMPWD = "UPDATE MEMBER SET mb_pwd = ? WHERE mb_email = ?";
 
 	public void insert(MemVO memVO) {
 		Connection con = null;
@@ -55,12 +64,9 @@ public class MemDAO implements MemDAO_interface {
 			pstmt.setString(7, memVO.getMb_city());
 			pstmt.setString(8, memVO.getMb_address());
 
-			int i = pstmt.executeUpdate();
+			pstmt.executeUpdate();
 
-			if (i != 0) {
-				SendEmail mailService = new SendEmail();
-				mailService.sendMail();
-			}
+			
 
 			// Handle any driver errors
 		} catch (SQLException se) {
@@ -639,6 +645,161 @@ public class MemDAO implements MemDAO_interface {
 			}
 		}
 		return memVO;
+	}
+	
+	@Override
+	public Set<RelationshipVO> getRelationshipsByMemberno(Integer member_no) {
+		Set<RelationshipVO> set = new LinkedHashSet<RelationshipVO>();
+		RelationshipVO relationshipVO = null;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+	
+		try {
+	
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_Relationships_ByMemberno_STMT);
+			pstmt.setInt(1, member_no);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				
+				relationshipVO = new RelationshipVO();
+				relationshipVO.setMember_no(rs.getInt("member_no"));
+				relationshipVO.setFriend_no(rs.getInt("friend_no"));
+				relationshipVO.setStatus(rs.getString("status"));
+				relationshipVO.setIsblock(rs.getString("isblock"));
+				set.add(relationshipVO);// Store the row in the vector
+			}
+			
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return set;
+	}
+	
+	@Override
+	public MemVO getPassword(String mb_email) {
+		MemVO memVO = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_PASSWORD);
+
+			pstmt.setString(1, mb_email);
+
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+
+				memVO = new MemVO();
+				memVO.setMember_no(rs.getInt("member_no"));
+				memVO.setMb_name(rs.getString("mb_name"));
+				memVO.setMb_email(rs.getString("mb_email"));
+				memVO.setMb_pwd(rs.getString("mb_pwd"));
+				memVO.setMb_bd(rs.getDate("mb_bd"));
+				memVO.setMb_pic(rs.getBytes("mb_pic"));
+				memVO.setMb_phone(rs.getString("mb_phone"));
+				memVO.setMb_city(rs.getString("mb_city"));
+				memVO.setMb_address(rs.getString("mb_address"));
+				memVO.setStatus(rs.getString("status"));
+				memVO.setMb_point(rs.getInt("mb_point"));
+				memVO.setMb_level(rs.getString("mb_level"));
+				memVO.setCrt_dt(rs.getDate("crt_dt"));
+
+			}
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return memVO;
+	}
+
+	@Override
+	public void updateRandomPws(String mb_email, String mb_pwd) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = ds.getConnection();
+			pstmt = conn.prepareStatement(UPDATERANDOMPWD);
+			
+			pstmt.setString(1, mb_pwd);
+			pstmt.setString(2, mb_email);
+
+			pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			throw new RuntimeException("A database error occured. " + e.getMessage());
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace(System.err);
+				}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
 	}
 }
 

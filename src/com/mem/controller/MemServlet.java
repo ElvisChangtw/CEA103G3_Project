@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.Base64.Decoder;
 import java.util.Base64.Encoder;
 
@@ -25,6 +26,8 @@ import javax.servlet.http.Part;
 import com.mem.model.MemDAO;
 import com.mem.model.MemService;
 import com.mem.model.MemVO;
+import com.mem.model.SendEmail;
+import com.relationship.model.RelationshipVO;
 
 import security.SecureUtils;
 
@@ -143,9 +146,14 @@ public class MemServlet extends HttpServlet {
 				MemService memSvc = new MemService();
 				memVO = memSvc.emailCheck(mb_email);
 				memVO = memSvc.addMem(mb_name, mb_email, mb_pwd, mb_bd, mb_pic, mb_phone, mb_city, mb_address);
+				if (memVO != null) {
+					SendEmail mailService = new SendEmail();
+					mailService.sendMail(mb_email);
+//					System.out.println(mb_email);
+				}
 
 				/*************************** 3.新增完成,準備轉交(Send the Success view) ***********/
-				successMsgs.add("帳號註冊成功! 請至信箱點選連結，以啟用帳號。");
+				successMsgs.add("帳號註冊成功! 請至信箱點選連結以啟用帳號。");
 				String url = "/front-end/mem/MemLogin.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 新增成功後轉交listAllEmp.jsp
 				successView.forward(req, res);
@@ -603,6 +611,104 @@ public class MemServlet extends HttpServlet {
 				String url = "/index.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交 listOneEmp.jsp
 				successView.forward(req, res);
+
+				/*************************** 其他可能的錯誤處理 *************************************/
+			} catch (Exception e) {
+				errorMsgs.add("無法取得資料:" + e.getMessage());
+				RequestDispatcher failureView = req.getRequestDispatcher("/front-end/mem/MemLogin.jsp");
+				failureView.forward(req, res);
+			}
+		}
+		
+		if ("listRelationships_ByMemberno_A".equals(action) || "listRelationships_ByMemberno_B".equals(action)) {
+
+			List<String> errorMsgs = new LinkedList<String>();
+			req.setAttribute("errorMsgs", errorMsgs);
+
+			try {
+				/*************************** 1.接收請求參數 ****************************************/
+				Integer member_no = new Integer(req.getParameter("member_no"));
+				
+				/*************************** 2.開始查詢資料 ****************************************/			
+				MemService memSvc = new MemService();
+				Set<RelationshipVO> set = memSvc.getRelationshipsByMemberno(member_no);
+
+				/*************************** 3.查詢完成,準備轉交(Send the Success view) ************/
+				req.setAttribute("listRelationships_ByMemno", set);    // 資料庫取出的list物件,存入request
+
+				String url = null;
+				if ("listRelationships_ByMemberno_A".equals(action))
+					url = "/front-end/relationship/select_page.jsp";        // 成功轉交 dept/listEmps_ByDeptno.jsp
+				else if ("listRelationships_ByMemberno_B".equals(action))
+					url = "/front-end/relationship/select_page.jsp";              // 成功轉交 dept/listAllDept.jsp
+
+				RequestDispatcher successView = req.getRequestDispatcher(url);
+				successView.forward(req, res);
+
+				/*************************** 其他可能的錯誤處理 ***********************************/
+			} catch (Exception e) {
+				throw new ServletException(e);
+			}
+		}
+		
+		if ("forgot_password".equals(action)) { // 來自MemLogin.jsp的請求
+
+			List<String> errorMsgs = new LinkedList<String>();
+			// Store this set in the request scope, in case we need to
+			// send the ErrorPage view.
+			req.setAttribute("errorMsgs", errorMsgs);
+			
+			List<String> successMsgs = new LinkedList<String>();
+			req.setAttribute("successMsgs", successMsgs);
+
+			try {
+				/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 **********************/
+				String mb_email = req.getParameter("mb_email");
+				String mb_emailReg = "^[(a-zA-Z0-9_)]{2,20}[@][(a-zA-Z0-9)]{3,10}[.][(a-zA-Z)]{1,5}$"; // ^是規定開頭有後面的字(not
+																										// sure)
+				if (mb_email == null || mb_email.trim().length() == 0) {
+					errorMsgs.add("會員信箱: 請勿空白");
+				} else if (!mb_email.trim().matches(mb_emailReg)) { // 以下練習正則(規)表示式(regular-expression)
+					errorMsgs.add("會員信箱: 只能是英文字母、數字和_ , 且長度必需在2到20之間");
+				}
+
+				// Send the use back to the form, if there were errors
+				if (!errorMsgs.isEmpty()) {
+					RequestDispatcher failureView = req.getRequestDispatcher("/front-end/mem/MemLogin.jsp");
+					failureView.forward(req, res);
+					return;// 程式中斷
+				}
+
+				/*************************** 2.開始查詢資料 *****************************************/
+				//System.out.println(mb_email);
+				MemService memSvc = new MemService();
+				MemVO memVO = memSvc.getPassword(mb_email);
+				if (memVO == null) {
+					errorMsgs.add("會員信箱錯誤，請重新輸入會員信箱");
+				}else {
+					SendEmail mailService = new SendEmail();
+					String randomPwd = mailService.sendPassword(mb_email);
+//					System.out.println(randomPwd);
+					// 將該用戶的密碼修改成亂數密碼 
+					memSvc.updateRandomPws(mb_email, randomPwd);
+				}
+				
+				// Send the use back to the form, if there were errors
+				if (!errorMsgs.isEmpty()) {
+					RequestDispatcher failureView = req.getRequestDispatcher("/front-end/mem/MemLogin.jsp");
+					failureView.forward(req, res);
+					return;// 程式中斷
+				}
+				
+				
+				/*************************** 3.查詢完成,準備轉交(Send the Success view) *************/
+				successMsgs.add("新密碼寄送成功! 請至信箱收取新密碼，並重新登入");
+				String url = "/front-end/mem/MemLogin.jsp";
+				RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交 listOneEmp.jsp
+				successView.forward(req, res);
+				
+				
+				/*************************** 4.亂數密碼新增至資料庫  *************/
 
 				/*************************** 其他可能的錯誤處理 *************************************/
 			} catch (Exception e) {
