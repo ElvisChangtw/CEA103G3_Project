@@ -11,50 +11,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-twzipcode@1.7.14/jquery.twzipcode.min.js"></script>
 <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>	
-<script>
-	$(document).ready(function(){
-		$("#s1").click(function(){
-			$(".all-star").css("color","gray");
-			$("#s1").css("color","yellow");
-			$("#con").val("1.0");
-		})
-		$("#s2").click(function(){
-			$(".all-star").css("color","gray");
-			$("#s1,#s2").css("color","yellow");
-			$("#con").val("2.0");
-		})
-		$("#s3").click(function(){
-			$(".all-star").css("color","gray");
-			$("#s1,#s2,#s3").css("color","yellow");
-			$("#con").val("3.0");
-		})
-		$("#s4").click(function(){
-			$(".all-star").css("color","gray");
-			$("#s1,#s2,#s3,#s4").css("color","yellow");
-			$("#con").val("4.0");
-		})
-		$("#s5").click(function(){
-			$(".all-star").css("color","gray");
-			$(".all-star").css("color","yellow");
-			$("#con").val("5");
-		})
-	})
-		$(document).ready(function(){
-		$("#t1").click(function(){
-			$(".thumbsup").css("color","gray");
-			$("#t1").css("color","blue");
-			$("#t2").css("color","gray");
-			$("#con1").val("1.0");
-		})
-		$("#t2").click(function(){
-			$(".thumbsdown").css("color","gray");
-			$("#t2").css("color","blue");
-			$("#t1").css("color","gray");
-			$("#con1").val("0.0");
-		})
-	})
-</script>
-
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <title>電影資料新增 - addMovie.jsp</title>
 
@@ -114,22 +70,27 @@ th, td {
 </script> 
 
 </head>
-<body bgcolor='white'>
+<h1 class="shadow p-3 mb-1  rounded" align="center" style="background-color:#7d4627;" >
+	<span class="badge badge-secondary" style="background-color:#7d4627;">
+		電影資料新增
+	</span>
+</h1>
+<body>
 
-	<table id="table-1">	
-		<tr>
-			<td>
-				<h3>電影資料新增 - addMovie.jsp</h3>
-			</td>
-			<td>
-				<h4>
-					<a
-						href="<%=request.getContextPath()%>/front-end/movie/select_movie_page.jsp"><img
-						src="<%=request.getContextPath()%>/images/movie_images/movie.jpg" width="100" height="100" border="0">回首頁</a>
-				</h4>
-			</td>
-		</tr>
-	</table>
+<!-- 	<table id="table-1">	 -->
+<!-- 		<tr> -->
+<!-- 			<td> -->
+<!-- 				<h3>電影資料新增 - addMovie.jsp</h3> -->
+<!-- 			</td> -->
+<!-- 			<td> -->
+<!-- 				<h4> -->
+<!-- 					<a -->
+<%-- 						href="<%=request.getContextPath()%>/front-end/movie/select_movie_page.jsp"><img --%>
+<%-- 						src="<%=request.getContextPath()%>/images/movie_images/movie.jpg" width="100" height="100" border="0">回首頁</a> --%>
+<!-- 				</h4> -->
+<!-- 			</td> -->
+<!-- 		</tr> -->
+<!-- 	</table> -->
 
 	<h3>資料新增:</h3>
 
@@ -156,12 +117,13 @@ th, td {
 				<td><input type="file" name="moviepicture1" size="45" accept="image/*" onchange="readURL(this)" targetID="preview_img"
 					value="<%=(movieVO == null) ? "QAQ" : movieVO.getMoviepicture1()%>" />
 					<img id="preview_img" src="<%=request.getContextPath()%>/images/NoData/none2.jpg" /></td>
+<%-- 					<img id="preview_img" src="<%=(movieVO == null) ? "QAQ" : movieVO.getMoviepicture1()%>" /></td> --%>
 			</tr>
 			<tr>
 				<td>電影照片2:</td>
-				<td><input type="file" name="moviepicture2" size="45" accept="image/*" onchange="readURL(this)" targetID="preview_img"
+				<td><input type="file" name="moviepicture2" size="45" accept="image/*" onchange="readURL(this)" targetID="preview_img2"
 					value="<%=(movieVO == null) ? "QAQ" : movieVO.getMoviepicture2()%>" />
-					<img id="preview_img" src="<%=request.getContextPath()%>/images/NoData/none2.jpg" /></td>
+					<img id="preview_img2" src="<%=request.getContextPath()%>/images/NoData/none2.jpg" /></td>
 			</tr>
 			<tr>
 				<td>導演:</td>
@@ -212,11 +174,11 @@ th, td {
 			</tr>
 			<tr>
 				<td>上映日期:</td>
-				<td><input name="premiredate" id="f_date1" type="text"></td>
+				<td><input name="premiredate" id="f_date1" type="text" value="<%=(movieVO == null) ? "" : movieVO.getPremiredate()%>"></td>
 			</tr>
 			<tr>
 				<td>下檔日期:</td>
-				<td><input name="offdate" id="f_date2" type="text"></td>
+				<td><input name="offdate" id="f_date2" type="text" value="<%=(movieVO == null) ? "" : movieVO.getOffdate()%>"></td>
 			</tr>
 			<tr>
 				<td>預告片:</td>
