@@ -1,0 +1,12 @@
+ul.list-unstyled> li{
+	color: crimson;
+	font-size: 14px;
+}
+
+div.text-center{
+	font:600 15px/18px 'Open Sans',sans-serif;
+}
+
+div.modal-header {
+	justify-content: space-around;
+}

@@ -2,6 +2,9 @@ package com.mem.model;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Set;
+
+import com.relationship.model.RelationshipVO;
 
 
 
@@ -119,7 +122,19 @@ public class MemService {
 		return dao.email_check(mb_email);
 	}
 	
+	public Set<RelationshipVO> getRelationshipsByMemberno(Integer member_no) {
+		return dao.getRelationshipsByMemberno(member_no);
+	}
 	
+	public MemVO getPassword(String mb_email) {
+		return dao.getPassword(mb_email);
+	}
+	public void updateRandomPws(String mb_email, String mb_pwd) {
+//		MemVO memVO1 = new MemVO();
+//		memVO1.setMb_email(mb_email);
+//		memVO1.setMb_pwd(mb_pwd);
+		dao.updateRandomPws(mb_email, mb_pwd);
+	}
 	
 	 
 	

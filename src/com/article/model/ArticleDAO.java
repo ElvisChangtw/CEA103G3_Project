@@ -24,7 +24,7 @@ public class ArticleDAO implements ArticleDAO_interface{
 			e.printStackTrace();
 		}
 	}	
-	private static final String INSERT_STMT = 
+		private static final String INSERT_STMT = 
 			"INSERT INTO article (member_no,article_type,content,article_headline,crt_dt,update_dt,`status`,like_count) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		private static final String GET_ALL_STMT = 
 			"SELECT article_no,member_no,article_type,content,article_headline,crt_dt,update_dt,`status`,like_count FROM article order by article_no;";
