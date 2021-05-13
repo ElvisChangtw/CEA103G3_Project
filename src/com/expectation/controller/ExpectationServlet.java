@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import com.expectation.model.*;
 import com.movie.model.*;
+import com.rating.model.RatingVO;
 
 public class ExpectationServlet extends HttpServlet {
 
@@ -171,7 +172,7 @@ public class ExpectationServlet extends HttpServlet {
 //				
 //				/***************************2.開始修改資料*****************************************/
 //				ExpectationService expectationSvc = new ExpectationService();
-//				expectationVO = expectationSvc.updateExpectationtAndUpdateMovieExpectation(memberno, movieno, expectation);
+//				expectationVO = expectationSvc.updateExpectationAndUpdateMovieExpectation(memberno, movieno, expectation);
 //				
 //				/***************************3.修改完成,準備轉交(Send the Success view)*************/				
 ////				DeptService deptSvc = new DeptService();
@@ -226,8 +227,9 @@ public class ExpectationServlet extends HttpServlet {
 				
 				/***************************2.開始新增資料***************************************/
 				ExpectationService expectationSvc = new ExpectationService();
-//				expectationVO = expectationSvc.insertOrUpdateExpectationtAndUpdateMovieExpectation(memberno , movieno , expectation);
-				expectationSvc.insertOrUpdateExpectationtAndUpdateMovieExpectation(memberno , movieno , expectation);
+//				expectationVO = expectationSvc.insertOrUpdateExpectationAndUpdateMovieExpectation(memberno , movieno , expectation);
+				expectationSvc.insertOrUpdateExpectationAndUpdateMovieExpectation(memberno , movieno , expectation);
+				ExpectationVO expectationVO = expectationSvc.getThisMovieToatalExpectation(movieno);
 				
 				//將原本的movievo塞回去
 				MovieService movieSvc = new MovieService();
@@ -239,9 +241,11 @@ public class ExpectationServlet extends HttpServlet {
 				
 				//將最新的期待度丟回去
 				double newExpectation=movieVO.getExpectation();
+				double countExpectation = expectationVO.getExpectation();
 				JSONObject jsonobj = new JSONObject();
 				try {
 					jsonobj.put("newExpectation", newExpectation);
+					jsonobj.put("countExpectation", countExpectation);
 					out.print(jsonobj.toString());
 					System.out.println(jsonobj.toString());
 					return;

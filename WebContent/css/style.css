@@ -2243,7 +2243,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
             text-decoration: none;
         }
         .media-left a img {
-            width: initial;
+/*             width: initial; */
         }
         /*-- //single --*/
         #toTop {

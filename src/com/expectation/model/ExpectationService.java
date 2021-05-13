@@ -2,6 +2,8 @@ package com.expectation.model;
 
 import java.util.List;
 
+import com.rating.model.RatingVO;
+
 public class ExpectationService {
 
 	private ExpectationDAO_interface dao;
@@ -52,7 +54,7 @@ public class ExpectationService {
 		return dao.getAllByMovieNo();
 	}
 	
-	public ExpectationVO insertOrUpdateExpectationtAndUpdateMovieExpectation (Integer memberno, Integer movieno, Double expectation) {
+	public ExpectationVO insertOrUpdateExpectationAndUpdateMovieExpectation (Integer memberno, Integer movieno, Double expectation) {
 		
 		ExpectationVO expectationVO = new ExpectationVO();
 		
@@ -60,9 +62,13 @@ public class ExpectationService {
 		expectationVO.setMovieno(movieno);
 		expectationVO.setExpectation(expectation);	
 		
-		dao.insertOrUpdateExpectationtAndUpdateMovieExpectation(expectationVO);
+		dao.insertOrUpdateExpectationAndUpdateMovieExpectation(expectationVO);
 
 		return expectationVO;
+	}
+	
+	public ExpectationVO getThisMovieToatalExpectation(Integer movieno) {
+		return dao.getThisMovieToatalExpectation(movieno);
 	}
 	
 

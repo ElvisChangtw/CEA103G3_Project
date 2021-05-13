@@ -6,10 +6,13 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.rating.model.*;
+import com.comment.model.CommentService;
+import com.comment.model.CommentVO;
 import com.movie.model.*;
 
 public class RatingServlet extends HttpServlet {
@@ -226,8 +229,8 @@ public class RatingServlet extends HttpServlet {
 				
 				/***************************2.開始新增資料***************************************/
 				RatingService ratingSvc = new RatingService();
-//				ratingVO = ratingSvc.insertOrUpdateRatingtAndUpdateMovieRating(memberno , movieno , rating);
 				ratingSvc.insertOrUpdateRatingtAndUpdateMovieRating(memberno , movieno , rating);
+				RatingVO ratingVO = ratingSvc.getThisMovieToatalRating(movieno);
 				
 				//將原本的movievo塞回去
 				MovieService movieSvc = new MovieService();
@@ -238,10 +241,12 @@ public class RatingServlet extends HttpServlet {
 				req.setAttribute("movieVO", movieVO);
 				
 				//將最新的評分丟回去
-				double newRating=movieVO.getRating();
+				double newRating = movieVO.getRating();
+				double countRating = ratingVO.getRating();
 				JSONObject jsonobj = new JSONObject();
 				try {
 					jsonobj.put("newRating", newRating);
+					jsonobj.put("countRating", countRating);
 					out.print(jsonobj.toString());
 					System.out.println(jsonobj.toString());
 					return;
@@ -304,5 +309,81 @@ public class RatingServlet extends HttpServlet {
 				failureView.forward(req, res);
 			}
 		}
+		
+//		if ("getThisMovieToatalRating_Ajax".equals(action)) { // 來自select_page.jsp的請求
+//
+//			List<String> errorMsgs = new LinkedList<String>();
+//			// Store this set in the request scope, in case we need to
+//			// send the ErrorPage view.
+//			req.setAttribute("errorMsgs", errorMsgs);
+//			PrintWriter out = res.getWriter();
+//
+//			try {
+//				/***************************1.接收請求參數 - 輸入格式的錯誤處理**********************/
+//				String str = req.getParameter("movieno");
+//				if (str == null || (str.trim()).length() == 0) {
+//					errorMsgs.add("請輸入電影編號");
+//				}
+//				// Send the use back to the form, if there were errors
+//				if (!errorMsgs.isEmpty()) {
+//					RequestDispatcher failureView = req
+//							.getRequestDispatcher("/index.jsp");
+//					failureView.forward(req, res);
+//					return;//程式中斷
+//				}
+//				
+//				Integer movieno = null;
+//				try {
+//					movieno = new Integer(str);
+//				} catch (Exception e) {
+//					errorMsgs.add("電影編號格式不正確");
+//				}
+//				// Send the use back to the form, if there were errors
+//				if (!errorMsgs.isEmpty()) {
+//					RequestDispatcher failureView = req
+//							.getRequestDispatcher("/index.jsp");
+//					failureView.forward(req, res);
+//					return;//程式中斷
+//				}
+//				
+//				/***************************2.開始查詢資料*****************************************/
+//				RatingService ratingSvc = new RatingService();
+//				RatingVO ratingVO = ratingSvc.getThisMovieToatalRating(movieno);
+//				
+//				if (ratingVO == null) {
+//					errorMsgs.add("查無資料");
+//				}
+//				// Send the use back to the form, if there were errors
+//				if (!errorMsgs.isEmpty()) {
+//
+//					RequestDispatcher failureView = req
+//							.getRequestDispatcher("/frontend/mem/memberSys.jsp");
+//					failureView.forward(req, res);
+//					return;//程式中斷
+//				}
+//
+//				double countRating = ratingVO.getRating();
+//				JSONObject jsonobj = new JSONObject();
+//				try {
+//					jsonobj.put("countRating", countRating);
+//					out.print(jsonobj.toString());
+//					System.out.println(jsonobj.toString());
+//					return;
+//				}catch(JSONException e) {
+//					e.printStackTrace();
+//				}finally {
+//					out.flush();
+//					out.close();
+//				}
+//				
+//				
+//				/***************************其他可能的錯誤處理*************************************/
+//			} catch (Exception e) {
+//				errorMsgs.add("無法取得資料:" + e.getMessage());
+//				RequestDispatcher failureView = req
+//						.getRequestDispatcher("/frontend/mem/memberSys.jsp");
+//				failureView.forward(req, res);
+//			}
+//		}
 	}
 }

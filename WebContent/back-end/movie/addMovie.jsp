@@ -4,6 +4,7 @@
 
 <%
 	MovieVO movieVO = (MovieVO) request.getAttribute("movieVO");
+System.out.println(movieVO);
 %>
 
 <html>
@@ -156,12 +157,13 @@ th, td {
 				<td><input type="file" name="moviepicture1" size="45" accept="image/*" onchange="readURL(this)" targetID="preview_img"
 					value="<%=(movieVO == null) ? "QAQ" : movieVO.getMoviepicture1()%>" />
 					<img id="preview_img" src="<%=request.getContextPath()%>/images/NoData/none2.jpg" /></td>
+<%-- 					<img id="preview_img" src="<%=(movieVO == null) ? "QAQ" : movieVO.getMoviepicture1()%>" /></td> --%>
 			</tr>
 			<tr>
 				<td>電影照片2:</td>
-				<td><input type="file" name="moviepicture2" size="45" accept="image/*" onchange="readURL(this)" targetID="preview_img"
+				<td><input type="file" name="moviepicture2" size="45" accept="image/*" onchange="readURL(this)" targetID="preview_img2"
 					value="<%=(movieVO == null) ? "QAQ" : movieVO.getMoviepicture2()%>" />
-					<img id="preview_img" src="<%=request.getContextPath()%>/images/NoData/none2.jpg" /></td>
+					<img id="preview_img2" src="<%=request.getContextPath()%>/images/NoData/none2.jpg" /></td>
 			</tr>
 			<tr>
 				<td>導演:</td>
@@ -212,11 +214,11 @@ th, td {
 			</tr>
 			<tr>
 				<td>上映日期:</td>
-				<td><input name="premiredate" id="f_date1" type="text"></td>
+				<td><input name="premiredate" id="f_date1" type="text" value="<%=(movieVO == null) ? "" : movieVO.getPremiredate()%>"></td>
 			</tr>
 			<tr>
 				<td>下檔日期:</td>
-				<td><input name="offdate" id="f_date2" type="text"></td>
+				<td><input name="offdate" id="f_date2" type="text" value="<%=(movieVO == null) ? "" : movieVO.getOffdate()%>"></td>
 			</tr>
 			<tr>
 				<td>預告片:</td>

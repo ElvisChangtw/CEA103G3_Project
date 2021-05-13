@@ -8,12 +8,13 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import javax.sql.DataSource;
 
 import com.movie.model.MovieService;
 import com.movie.model.MovieVO;
-
+@WebServlet("/DBGifReader2")
 public class DBGifReader2 extends HttpServlet {
 
 	Connection con;

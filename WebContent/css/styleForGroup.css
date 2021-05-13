@@ -56,8 +56,8 @@
         div.agile_featured_movies>h3.h3.agile_w3_title.hor-t {
             margin-bottom: 0.5em;
         }
-        div.container.div-add, div.container.div-update, div.container.div-addReport{
-            max-width: 800px;
+        div.container.div-add {
+            max-width: 650px;
         }
         #dd-cntDown>p.counter {
             color: darkblue !important;
@@ -66,18 +66,4 @@
         #dd-cntDown>p.urgentCounter {
             color: #DC143C !important;
             font-style: italic !important;
-        }
-        div.mid-1.agileits_w3layouts_mid_1_home {
-            color: darkgreen;
-        }
-        
-        #reportBtn>a{
-        	background-color:rgb(235, 198, 52);
-        	color:white;
-        }
-        .alpha{
-        	FILTER: Alpha(opacity=60);/*ªí®æ³z©ú*/
-        }
-        #table-listOne>tbody>tr>th, #table-listOne>tbody>tr>td{
-        	font-size:1em;
         }

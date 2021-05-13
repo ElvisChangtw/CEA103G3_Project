@@ -8,6 +8,7 @@ import javax.servlet.http.*;
 
 import com.comment.model.*;
 import com.movie.model.*;
+import com.mem.model.*;
 
 
 
@@ -224,9 +225,18 @@ public class CommentServlet extends HttpServlet {
 			
 			String requestURL = req.getParameter("requestURL");
 
+
 			try {
 				/***********************1.接收請求參數 - 輸入格式的錯誤處理*************************/
 				Integer memberno = new Integer(req.getParameter("memberno").trim());
+				MemService memSvc = new MemService();
+				MemVO memVO = memSvc.getOneMem(memberno);
+				String isMovieReview = memVO.getMb_level();
+				System.out.println("name = " + memVO.getMb_name());
+				System.out.println(isMovieReview);
+				if(!isMovieReview.equals("2")) {
+					errorMsgs.add("只有影評可以寫評論~你只是個會員 懂?");
+				}
 				
 				Integer movieno = new Integer(req.getParameter("movieno").trim());
 				
@@ -249,9 +259,12 @@ public class CommentServlet extends HttpServlet {
 
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
-					req.setAttribute("commentVO", commentVO); // 含有輸入格式錯誤的commentVO物件,也存入req
+					req.setAttribute("commentVO", commentVO);
+					MovieService movieSvc = new MovieService();
+					MovieVO movieVO = movieSvc.getOneMovie(movieno);
+					req.setAttribute("movieVO", movieVO);// 含有輸入格式錯誤的commentVO物件,也存入req
 					RequestDispatcher failureView = req
-							.getRequestDispatcher("/front-end/comment/addComment.jsp");
+							.getRequestDispatcher(requestURL);
 					failureView.forward(req, res);
 					return;
 				}
@@ -323,7 +336,14 @@ public class CommentServlet extends HttpServlet {
 					List<CommentVO> list  = commentSvc.getAll(map);
 					req.setAttribute("listComments_ByCompositeQuery",list); //  複合查詢, 資料庫取出的list物件,存入request
 				}
+				if(requestURL.equals("/front-end/movie/listOneMovie.jsp")){
+					req.setAttribute("listComments_ByMovieno",movieSvc.getCommentsByMovieno(commentVO.getMovieno())); // 資料庫取出的list物件,存入request
+					MovieVO movieVO = movieSvc.getOneMovie(commentVO.getMovieno());
+					req.setAttribute("movieVO", movieVO);
+				}
+				
 				System.out.println(requestURL);
+
 				String url = requestURL;
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 刪除成功後,轉交回送出刪除的來源網頁
 				successView.forward(req, res);
