@@ -29,13 +29,6 @@ public class FriendWS {
 
 	@OnOpen
 	public void onOpen(@PathParam("userName") String userName, Session userSession) throws IOException {
-
-//		list=VO.friend   把這個會員的有哪些好友用VO存到list
-//		friend_memberNO  在VO取memberno的好友出來做比對  
-//		friendMap= (foreach(session)Map=friend_memberNO) 
-//		會員的好友用以存的list跟原本的sessionsMap做比對，正確的話再存成friendMap顯示
-		
-		
 		/* save the new user in the map */
 		sessionsMap.put(userName, userSession);
 		/* Sends all the connected users to the new user */
@@ -81,34 +74,34 @@ public class FriendWS {
 		System.out.println("Message received: " + message);
 	}
 
-	@OnError
-	public void onError(Session userSession, Throwable e) {
-		System.out.println("Error: " + e.toString());
-	}
-
-	@OnClose
-	public void onClose(Session userSession, CloseReason reason) {
-		String userNameClose = null;
-		Set<String> userNames = sessionsMap.keySet();
-		for (String userName : userNames) {
-			if (sessionsMap.get(userName).equals(userSession)) {
-				userNameClose = userName;
-				sessionsMap.remove(userName);
-				break;
-			}
-		}
-
-		if (userNameClose != null) {
-			State stateMessage = new State("close", userNameClose, userNames);
-			String stateMessageJson = gson.toJson(stateMessage);
-			Collection<Session> sessions = sessionsMap.values();
-			for (Session session : sessions) {
-				session.getAsyncRemote().sendText(stateMessageJson);
-			}
-		}
-
-		String text = String.format("session ID = %s, disconnected; close code = %d%nusers: %s", userSession.getId(),
-				reason.getCloseCode().getCode(), userNames);
-		System.out.println(text);
-	}
+//	@OnError
+//	public void onError(Session userSession, Throwable e) {
+//		System.out.println("Error: " + e.toString());
+//	}
+//
+//	@OnClose
+//	public void onClose(Session userSession, CloseReason reason) {
+//		String userNameClose = null;
+//		Set<String> userNames = sessionsMap.keySet();
+//		for (String userName : userNames) {
+//			if (sessionsMap.get(userName).equals(userSession)) {
+//				userNameClose = userName;
+//				sessionsMap.remove(userName);
+//				break;
+//			}
+//		}
+//
+//		if (userNameClose != null) {
+//			State stateMessage = new State("close", userNameClose, userNames);
+//			String stateMessageJson = gson.toJson(stateMessage);
+//			Collection<Session> sessions = sessionsMap.values();
+//			for (Session session : sessions) {
+//				session.getAsyncRemote().sendText(stateMessageJson);
+//			}
+//		}
+//
+//		String text = String.format("session ID = %s, disconnected; close code = %d%nusers: %s", userSession.getId(),
+//				reason.getCloseCode().getCode(), userNames);
+//		System.out.println(text);
+//	}
 }

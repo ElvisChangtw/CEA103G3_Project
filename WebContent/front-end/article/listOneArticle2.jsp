@@ -28,13 +28,17 @@ RelationshipVO relationshipVO = (RelationshipVO) request.getAttribute("relations
 	int count = 0;
 	LikeService likeSvc = new LikeService();
 	
-	ArticleCollectionService articleCollectionSvc = new ArticleCollectionService();
+
 	
-	int myNumber = 3; //到時要換成從session取memVO出來
+	int myNumber = 5; //到時要換成從session取memVO出來
 	pageContext.setAttribute("myNumber", myNumber);
 	//(為了ajax)找此文章有無此會員按讚紀錄
 	
 	MemVO memVO = (MemVO) session.getAttribute("memVO");//取用登入的session
+	
+	ArticleCollectionService articleCollectionSvc = new ArticleCollectionService();
+	ArticleCollectionVO articleCollectionVO = articleCollectionSvc.getOneArticleCollection(articleno, myNumber);
+	pageContext.setAttribute("articleCollectionVO", articleCollectionVO);
 	
 %>
 <jsp:useBean id="topicSvc" scope="page" class="com.topic.model.TopicService" />	
@@ -274,21 +278,6 @@ RelationshipVO relationshipVO = (RelationshipVO) request.getAttribute("relations
 			$("#thumb").css("color","#FF7575");
 			isLiked = !isLiked;
 	   }   
-// 	   -----------------以下收藏----------------------
-		articleCollectionSvc
-	    let isCollection = <%=((likeSvc.getOneLike(articleno, myNumber)==null)? false:true)%>	
-		
-		$(document).ready(function(){
-			console.log("isLiked = " + isLiked);
-			//第一次判斷
-			if(isLiked){
-				console.log("應該要亮");
-				$("#thumb").css("color","#FF7575");
-			} else{
-				console.log("應該要暗");
-				$("#thumb").css("color","black");
-			}
-		});
 	   
 	   let articleno = "${articleVO.articleno}";
 	   let memberno = "${myNumber}";
@@ -308,16 +297,28 @@ RelationshipVO relationshipVO = (RelationshipVO) request.getAttribute("relations
 		   }
 	   });
 	  });
-	 $("#thumb1").click(function(e){
-		    let likeCnt;
-			if(isLiked){
-				likeCnt =${articleVO.likecount};
-				$("#thumb1").css("color","black");
-				isLiked = !isLiked;
-			} else{
-				likeCnt = ${articleVO.likecount};
+	 
+//	   --------------------以下收藏----------------------
+
+		let isCollection = <%=((articleCollectionSvc.getOneArticleCollection(articleno, myNumber)==null)? false:true)%>	
+		$(document).ready(function(){
+			//第一次判斷
+			if(isCollection){
+				console.log("收藏應該要亮");
 				$("#thumb1").css("color","blue");
-				isLiked = !isLiked;
+			} else{
+				console.log("收藏應該要暗");
+				$("#thumb1").css("color","black");
+			}
+		});
+	 
+	 $("#thumb1").click(function(e){
+			if(isCollection){
+				$("#thumb1").css("color","black");
+				isCollection = !isCollection;
+			} else{
+				$("#thumb1").css("color","blue");
+				isCollection = !isCollection;
 		   }   
 		   
 		   let article_no = "${articleVO.articleno}";

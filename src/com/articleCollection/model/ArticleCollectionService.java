@@ -2,6 +2,7 @@ package com.articleCollection.model;
 
 import java.util.List;
 
+import com.like.model.LikeVO;
 import com.notify.model.NotifyVO;
 
 public class ArticleCollectionService {
@@ -35,6 +36,9 @@ public class ArticleCollectionService {
 	
 	public void deleteArticleCollection(Integer article_no, Integer member_no) {
 		dao.delete(article_no, member_no);
+	}
+	public ArticleCollectionVO getOneArticleCollection(Integer article_no, Integer member_no) {
+		return dao.findByPrimaryKey(article_no,member_no);
 	}
 
 }
