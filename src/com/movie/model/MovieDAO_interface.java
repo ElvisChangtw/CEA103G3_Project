@@ -18,8 +18,15 @@ public interface MovieDAO_interface {
     public Set<CommentVO> getCommentsByMovieno(Integer movieno);
     public List<MovieVO> getTopTen(); 
     public List<MovieVO> getTopFive(); 
+    public MovieVO getBestMovie(); 
     public List<MovieVO> getYearMovie(String year); 
     public List<MovieVO> getLatestMovie();
+    public List<MovieVO> getInTheatersMovie();
+    public MovieVO getOneNewestInTheatersMovie();
+    public List<MovieVO> getComingSoonMovie();
+    public MovieVO getOneNewestComingSoonMovie();
+    public List<MovieVO> getAllTopRatingInTheatersMovie(); 
+    public List<MovieVO> getAllTopExpectationComingSoonMovie(); 
     public void updateMovieRating ( MovieVO movieVO , java.sql.Connection con);
     public void updateMovieExpectation ( MovieVO movieVO , java.sql.Connection con);
     

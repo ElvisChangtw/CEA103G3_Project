@@ -102,10 +102,11 @@ ul li{
 
 
 <!-- 測試套版 -->
+<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
 <ul class="nav justify-content-end">  
   <li class="searchbar">   
   
-  <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+
     <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/movie/movie.do" name="form1" class="form-inline my-2 my-lg-0">
        <input type="text" name="MOVIE_NAME" value="" class="form-control" placeholder="請輸入電影" id=li1><br>
        

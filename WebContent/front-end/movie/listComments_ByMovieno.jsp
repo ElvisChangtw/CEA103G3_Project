@@ -12,6 +12,7 @@
 
 
 <%-- <jsp:useBean id="listComments_ByMovieno" scope="request" type="java.util.Set<CommentVO>" /> <!-- 於EL此行可省略 --> --%>
+
 <jsp:useBean id="movieSvc" scope="page"
 	class="com.movie.model.MovieService" />
 <jsp:useBean id="commentSvc" scope="page"
@@ -26,6 +27,7 @@
 	pageContext.setAttribute("list", list);
 	
 %>
+<jsp:useBean id="memVO" scope="session" type="com.mem.model.MemVO" />
 
 <!DOCTYPE html>
 <html>
@@ -72,6 +74,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	rel='stylesheet' type='text/css'>
 <!--//web-fonts-->
 <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
+<style>
+.fa-book{
+color: red;
+}
+.fa-times{
+color: #CE184B
+font-size: 20px;
+}
+</style>
 	
 </head>
 <body>
@@ -90,7 +101,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							<a href="${pageContext.request.contextPath}/comment/comment.do?action=listComments_ByCompositeQuery&MEMBER_NO=${memVO.member_no}">
 							<img class="media-object"
 								src="${pageContext.request.contextPath}/mem/mem.do?action=view_memPic&member_no=${memVO.member_no}"
-								width="80px" height="80px" />
+								width="120px" height="120px" />
 							</a>
 							<h5>
 								<a href="${pageContext.request.contextPath}/comment/comment.do?action=listComments_ByCompositeQuery&MEMBER_NO=${memVO.member_no}">${memVO.mb_name}</a>
@@ -101,10 +112,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				<div class="media-body response-text-right">
 				<p>${commentVO.content}</p>
 					<ul>
+						<c:if test="${commentVO.memberno==memVO.member_no}">
 						<li><FORM METHOD="post"
 								ACTION="<%=request.getContextPath()%>/comment/comment.do"
 								style="margin-bottom: 0px;">
-								<li><i class="fa fa-commenting-o" aria-hidden="true"></i> 
+								<li><i class="fa fa-book fa-lg" aria-hidden="true" style="color:#4194CA"></i> 
 								<input type="submit" value="修改"> 
 								<input type="hidden" name="commentno" value="${commentVO.commentno}"> 
 								<input type="hidden" name="requestURL" value="<%=request.getServletPath()%>">
@@ -115,13 +127,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 						<li><FORM METHOD="post"
 								ACTION="<%=request.getContextPath()%>/comment/comment.do">
-								<li><i class="fa fa-times" aria-hidden="true"></i> 
+								<li><i class="fa fa-times fa-lg" aria-hidden="true" style="color:#D47070"></i> 
 								<input type="submit" value="刪除"> 
 								<input type="hidden" name="commentno" value="${commentVO.commentno}"> 
 								<input type="hidden" name="requestURL" value="<%=request.getServletPath()%>">
 								<!--送出本網頁的路徑給Controller--> 
 								<input type="hidden" name="action" value="delete">
-							</FORM></li>
+							</FORM></li></c:if>
 					</ul>
 					<ul>
 						<li>最後發佈時間: <fmt:formatDate value="${commentVO.modifydate}"
@@ -135,7 +147,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		</div>
 </c:forEach>
 
-
+	<c:if test="${memVO.mb_level.equals('2')}">
 		<div class="all-comments-info">
 			<h5>LEAVE A COMMENT</h5>
 			<div class="agile-info-wthree-box">
@@ -143,9 +155,19 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					ACTION="<%=request.getContextPath()%>/comment/comment.do"
 					name="form1">
 					<div class="col-md-3 form-info">
-						<input type="hidden" name="memberno" size="45" value="1" />
+					<img class="media-object" src="${pageContext.request.contextPath}/mem/mem.do?action=view_memPic&member_no=${memVO.member_no}"
+						width="130px" height="130px" />
+						<input type="hidden" name="memberno" size="45" value="${memVO.member_no}" />
 						<input type="hidden" name="movieno" value="${movieVO.movieno}">
 						<input type="hidden" name="status" value="0">
+						<c:if test="${not empty errorMsgs}">
+							<font style="color:red">請修正以下錯誤:</font>
+							<ul>
+								<c:forEach var="message" items="${errorMsgs}">
+									<li style="color:red">${message}</li>
+								</c:forEach>
+							</ul>
+						</c:if>
 					</div>
 					<div class="col-md-9 form-info">
 					<textarea name="content" rows="5" cols="45" maxlength="300" placeholder="Message"><%=(commentVO == null) ? "" : commentVO.getContent()%></textarea>
@@ -157,6 +179,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				</form>
 			</div>
 		</div>
+		</c:if>
  	</div> <!--include col-md-8 latest-news-agile-left-content的結尾標籤 -->
 
 

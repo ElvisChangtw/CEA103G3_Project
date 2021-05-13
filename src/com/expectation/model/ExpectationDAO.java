@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 
 import com.comment.model.CommentVO;
 import com.movie.model.*;
+import com.rating.model.RatingVO;
 
 public class ExpectationDAO implements ExpectationDAO_interface {
 
@@ -35,7 +36,9 @@ public class ExpectationDAO implements ExpectationDAO_interface {
 	private static final String SELECT_INSERT_OR_UPDATE_STMT = 
 			"select IF(EXISTS(select * from EXPECTATION where MEMBER_NO = ? and MOVIE_NO = ?),'update','insert' )as `action`";
 	private static final String GET_AVGEXPECTATION_BY_MOVIENO_STMT = 
-			"select avg(EXPECTATION) from EXPECTATION where MOVIE_NO = ?";
+			"select format(avg(EXPECTATION),2) as 'avg(EXPECTATION)' from EXPECTATION where MOVIE_NO = ?";
+	private static final String GET_COUNTEXPECTATION_BY_MOVIENO_STMT = 
+			"select count(EXPECTATION) from EXPECTATION where MOVIE_NO = ?";
 	
 	
 
@@ -339,7 +342,7 @@ public class ExpectationDAO implements ExpectationDAO_interface {
 	
 	
 	@Override
-	public void insertOrUpdateExpectationtAndUpdateMovieExpectation(ExpectationVO expectationVO) {
+	public void insertOrUpdateExpectationAndUpdateMovieExpectation(ExpectationVO expectationVO) {
 
 		Connection con = null;
 		PreparedStatement pstmt1 = null;
@@ -441,5 +444,58 @@ public class ExpectationDAO implements ExpectationDAO_interface {
 				}
 			}
 		}
+	}
+	
+	public ExpectationVO getThisMovieToatalExpectation(Integer movieno) {
+		
+		ExpectationVO expectationVO = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_COUNTEXPECTATION_BY_MOVIENO_STMT);
+
+			pstmt.setInt(1, movieno);
+
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// expectationVo ¤]ºÙ¬° Domain objects
+				expectationVO = new ExpectationVO();
+				expectationVO.setExpectation(rs.getDouble("count(EXPECTATION)"));
+			}
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return expectationVO;
 	}
 }

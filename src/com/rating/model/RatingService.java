@@ -65,5 +65,8 @@ public class RatingService {
 		return ratingVO;
 	}
 	
+	public RatingVO getThisMovieToatalRating(Integer movieno) {
+		return dao.getThisMovieToatalRating(movieno);
+	}
 
 }

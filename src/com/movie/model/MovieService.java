@@ -93,6 +93,10 @@ public class MovieService {
 		return dao.getTopFive();
 	}
 	
+	public MovieVO getBestMovie() {
+		return dao.getBestMovie();
+	}
+	
 	public List<MovieVO> getYearMovie(String year) {
 		return dao.getYearMovie(year);
 	}
@@ -100,4 +104,30 @@ public class MovieService {
 	public List<MovieVO> getLatestMovie() {
 		return dao.getLatestMovie();
 	}
+	
+	public List<MovieVO> getInTheatersMovie() {
+		return dao.getInTheatersMovie();
+	}
+	
+	public MovieVO getOneNewestInTheatersMovie() {
+		return dao.getOneNewestInTheatersMovie();
+	}
+	
+	public List<MovieVO> getComingSoonMovie() {
+		return dao.getComingSoonMovie();
+	}
+	
+	public MovieVO getOneNewestComingSoonMovie() {
+		return dao.getOneNewestComingSoonMovie();
+	}
+	
+	public List<MovieVO> getAllTopRatingInTheatersMovie() {
+		return dao.getAllTopRatingInTheatersMovie();
+	}
+	
+	public List<MovieVO> getAllTopExpectationComingSoonMovie() {
+		return dao.getAllTopExpectationComingSoonMovie();
+	}
+	
+	
 }
