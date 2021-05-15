@@ -158,8 +158,6 @@
 
 
 
-
-
 <!-- =========================================以下為 datetimepicker 之相關設定========================================== -->
 
 <% 
@@ -196,7 +194,19 @@ $(document).ready(function(){
 
 
 //電影變動時、場次跟著變動
-$("#movie_selection").change(getOption);
+$("#movie_selection").change(getOption1);
+$("#add-btn").click(function(){
+	Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "修改揪團成功",
+        showConfirmButton: false,
+        timer: 1500,
+    });
+	setTimeout(function(){
+		$("#update-form").submit();
+	}, 1500);
+});
 $("#showtime_selection").change(
 		function(){
 			console.log("現在能選最晚時間: " + $("#showtime_selection").children("option:selected").text());
@@ -239,6 +249,7 @@ function getOption() {
 			let selectValue = <%= (groupVO==null)? "0" : groupVO.getShowtime_no()%>;
 			//append showtime to <select>
 			
+			console.log("selectValue= " + selectValue);
 			//改變預設值
 			if (hasTmpData){
 				$('#showtime_selection').val(selectValue);
@@ -248,6 +259,41 @@ function getOption() {
 // 				console.log("selectedIndex = " + selectValue );
 			}
 			
+			restrictBeforeShow($("#showtime_selection").children("option:selected").text());
+			console.log("測試截止時間: " + $("#showtime_selection").children("option:selected").text());
+			//改變預設值
+			} 
+	});
+}
+
+
+function getOption1() {
+	$('#showtime_selection').text("");
+	$.ajax({
+		url: "<%=request.getContextPath()%>/group/group.do",
+		type:"POST",
+		data: {
+			movie_no:$("#movie_selection").val(),
+			action:"getAllShowtimeByMovie_no"
+		},
+		success: function(json){
+			let jsonobj = JSON.parse(json);
+			var lstShowtime = jsonobj.showtimeByMovie_no;
+			for(let i = 0 ; i < lstShowtime.length; i++){
+// 				console.log("showtime_no = " + lstShowtime[i].showtime_no);		  
+				//append showtime to <select>
+				var option = $('<option/>');
+				option.attr('value', lstShowtime[i].showtime_no);
+// 				option.text("場次" + lstShowtime[i].showtime_no + ": "+ timeFormat(lstShowtime[i].showtime_time));
+				option.text(timeFormat(lstShowtime[i].showtime_time));
+				$('#showtime_selection').append(option);  
+ 			}
+			
+
+			let selectValue = "0";
+			//append showtime to <select>
+			$('#showtime_selection')[0].selectedIndex = selectValue;
+
 			restrictBeforeShow($("#showtime_selection").children("option:selected").text());
 			console.log("測試截止時間: " + $("#showtime_selection").children("option:selected").text());
 			//改變預設值
@@ -293,7 +339,7 @@ function restrictBeforeShow(dt){
     		             ||
     		            date.getYear() >  somedate2.getYear() || 
     		           (date.getYear() == somedate2.getYear() && date.getMonth() >  somedate2.getMonth()) || 
-    		           (date.getYear() == somedate2.getYear() && date.getMonth() == somedate2.getMonth() && date.getDate() > somedate2.getDate())
+    		           (date.getYear() == somedate2.getYear() && date.getMonth() == somedate2.getMonth() && date.getDate() > somedate2.getDate()-1)
                  ) {
                       return [false, ""]
                  }
@@ -301,7 +347,6 @@ function restrictBeforeShow(dt){
          }});
 }
        
-        
 </script>
 
 

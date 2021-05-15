@@ -16,5 +16,8 @@ public interface GroupDAO_interface {
 	    //萬用複合查詢(傳入參數型態Map)(回傳 List)
           public List<GroupVO> getAll(Map<String, String[]> map);
           public List<GroupVO> getAllByMemno(Integer memberno);
+          void failure(Integer group_no);
+		  void gogogo(Integer group_no);
+		  String getGroupStatus(Integer group_no);
 		
 }
