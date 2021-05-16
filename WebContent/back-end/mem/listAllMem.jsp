@@ -54,10 +54,70 @@
 	myimg:expression(onload=function(){
 	this.style.width=(this.offsetWidth > 600)?"600px":"auto"});
   }
+  
+  
+  @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+
+
+.fadeOut {
+  opacity: 0;
+}
+
+#create {
+  border: none;
+  padding: 8px;
+  font-size:15px;
+  color: #FFF;
+  background-color: firebrick;
+  border-radius: 8px;
+}
+
+.alert-container{
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+}
+
+.alert {
+  position: relative;
+  background-color: white;
+  border: 5px solid lightblue;
+  height: 100px;
+  width: 250px;
+  border-radius: 15px;
+  margin-bottom: 15px;
+  color: #40bde6;
+  padding: 20px 15px 0 15px;
+  transition: opacity 2s;
+}
+
+.alert span {
+  font-size: 1.3rem;
+  position: absolute;
+  top: 3px;
+  right: 12px;
+  cursor: pointer;
+
+}
+.alertTxt{
+font-size: 1.1rem;
+  position: absolute;
+  top: 0px;
+  right: 12px;
+  cursor: pointer;
+  margin-top:23px;
+  width:170px;
+
+}
+.alertImg{
+  width:70px;
+
+}
 </style>
 
 </head>
-<body bgcolor='white'>
+<body bgcolor='white' onload="connect();" onunload="disconnection();">
 <%@ include file="page1.file" %> 
 
 <h4>此頁練習採用 EL 的寫法取值:</h4>
@@ -145,9 +205,233 @@
 
 	</c:forEach>
 	
+	<button type="button" class="addFriend" value="addFriend">加好友</button>
+    <input type="hidden" id="friendNO"  value="4">
+	
+	<button type="button" class="addGroup" value="addGroup">加入揪團</button>
+	<input type="hidden" id="groupNO"  value="4">
+	
+	<button type="button" class="buyTicket" value="buyTicket">確認購票</button>
+	<input type="hidden" id="movieNO"  value="4">
+	
+	<input type="text" id="groupName">
+	<button type="button" class="createGroup" value="createGroup">建立揪團</button>
+	
+	<button type="button" class="addfriend_check_btn" value=1>確定</button> &emsp;&emsp; <button type="button" class="addfriend_check_btn" value=0>拒絕</button>
+	我是${memVO.member_no}
+	
 	
 </table>
-
+ <div class="alert-container">
+  </div>
 <%@ include file="page2.file" %> 
 </body>
+<script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
+
+<script>
+	var MyPoint = "/NotifyWS/${memVO.member_no}";
+	var host = window.location.host;
+	var path = window.location.pathname;
+	var webCtx = path.substring(0, path.indexOf('/', 1));
+	var endPointURL = "ws://" + window.location.host + webCtx + MyPoint;
+	var friendNO = document.getElementById("friendNO").value;
+	var groupNO = document.getElementById("groupNO").value;
+	var movieNO = document.getElementById("movieNO").value;
+	var groupName;
+	var self = '${memVO.member_no}';
+	var webSocket;
+	var type;
+
+
+	$(".addFriend").click(function(){
+		sendWebSocket($(this));
+	})
+	$(".addGroup").click(function(){
+		sendWebSocket($(this));
+	})
+// 	$(this).find("input") 這樣不行不知道為啥
+	$(".buyTicket").click(function(){
+		sendWebSocket($(this));
+	})
+	$(".addfriend_check_btn").click(function(){
+		sendWebSocket($(this));
+		//這邊執行insertfriend的code
+	})
+	$(".createGroup").click(function(){
+		groupName = document.getElementById("groupName").value;  //不可放在上面宣告，因為groupname是要click後才會取直，所以要放在click事件內
+		sendWebSocket($(this));
+	})
+	
+	function sendWebSocket(item){
+		let timespan = new Date();
+		let timeStr = timespan.getFullYear() + "-" + (timespan.getMonth()+1).toString().padStart(2, "0") + "-" 
+					+ timespan.getDate() + " " + timespan.getHours().toString().padStart(2, "0") + ":" + timespan.getMinutes().toString().padStart(2, "0");
+		if(item.val()=="addFriend"){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : friendNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.val()=="addGroup"){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : groupNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.val()=="buyTicket"){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : movieNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.val()==1){
+			var jsonObj = {
+				"type" : "response",
+				"sender" : self,
+				"receiver" : friendNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.val()=="createGroup"){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : groupName,
+				"message":"",
+				"time":timeStr
+			};
+		}
+
+		webSocket.send(JSON.stringify(jsonObj));
+	}
+	
+
+	function connect() {
+		// create a websocket
+		webSocket = new WebSocket(endPointURL);
+
+		webSocket.onopen = function(event) {
+			
+
+		};
+
+		webSocket.onmessage = function(event) {
+			var jsonObj = JSON.parse(event.data);
+			if ("addFriend" === jsonObj.type) {
+				var text=jsonObj.message;
+				var time=jsonObj.time;
+				var type=jsonObj.type;
+				console.log(jsonObj)
+				createAlert(text,time,type);
+			} 
+			if ("addGroup" === jsonObj.type) {
+				var text=jsonObj.message;
+				var time=jsonObj.time;
+				var type=jsonObj.type;
+				createAlert(text,time,type);
+			}
+			if ("buyTicket" === jsonObj.type) {
+				var text=jsonObj.message;
+				var time=jsonObj.time;
+				var type=jsonObj.type;
+				createAlert(text,time,type);
+			}
+			if ("response" === jsonObj.type) {
+				var text=jsonObj.message;
+				var time=jsonObj.time;
+				var type=jsonObj.type;
+				createAlert(text,time,type);
+			}
+			if ("createGroup" === jsonObj.type) {
+				var text=jsonObj.message;
+				var time=jsonObj.time;
+				var type=jsonObj.type;
+				createAlert(text,time,type);
+			}
+			if ("close" === jsonObj.type) {
+				
+			}
+			
+		};
+
+		webSocket.onclose = function(event) {
+			console.log("Disconnected!");
+		};
+	}
+	
+	
+	  const alertContainer = document.querySelector('.alert-container');
+	  const btnCreate = document.getElementById('create');
+	  
+	  const createAlert = (text,time,type) => {
+		  
+	  const newAlert = document.createElement('div');
+	  const closeNewAlert = document.createElement('span');
+	  const imgdiv = document.createElement('div');
+	  const img = document.createElement('img');
+	  const txt = document.createElement('div');
+	  const time_str = document.createElement('div');
+	  
+	  if (type==="addFriend"||type==="response"){
+		  img.src="<%=request.getContextPath()%>/images/notify_icons/friend.png"
+	  }
+	  if (type==="addGroup"||type==="createGroup"){
+			img.src="<%=request.getContextPath()%>/images/notify_icons/group.png"
+	  }
+	  if (type==="buyTicket"){
+			img.src="<%=request.getContextPath()%>/images/notify_icons/ticket.png"
+	  }
+		  img.classList.add("alertImg");
+		  imgdiv.append(img);
+		  txt.innerText = text;
+		  txt.classList.add("alertTxt");
+		  time_str.innerText = time;
+		  txt.append(time_str);
+		  newAlert.prepend(imgdiv);
+		  newAlert.append(txt)
+		  closeNewAlert.innerHTML = '&times;';
+		  
+		  newAlert.appendChild(closeNewAlert);
+		  
+		  newAlert.classList.add('alert');
+		  
+		  alertContainer.appendChild(newAlert);
+		  
+		  setTimeout(()=> {
+		    newAlert.classList.add('fadeOut');
+		  },3000)
+		  
+		  setTimeout(()=> {
+		    newAlert.remove();
+		  },5000)
+		  
+		
+	};
+
+
+	alertContainer.addEventListener('click', (e) => {
+	    if(e.target.nodeName == 'SPAN') {
+	        e.target.parentNode.remove();
+	    }
+	})
+
+
+
+
+</script>
+
 </html>
