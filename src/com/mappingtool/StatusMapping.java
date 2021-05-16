@@ -12,7 +12,7 @@ public class StatusMapping {
 	        if("0".equals(group_status))
 	        	resultString = "揪團中";
 	        else if ("1".equals(group_status))
-	        	resultString = "等待團員付款中";
+	        	resultString = "確定出團!等待團員付款中";
 	        else if("2".equals(group_status))
 	        	resultString = "正常出團，結束";
 	        else if("3".equals(group_status))
