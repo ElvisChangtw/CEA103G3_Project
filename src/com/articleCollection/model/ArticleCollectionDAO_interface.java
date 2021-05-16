@@ -11,5 +11,6 @@ public interface ArticleCollectionDAO_interface {
 	public List<ArticleCollectionVO> findByPrimaryKey(Integer member_no);
 	public List<ArticleCollectionVO> getAll();
 	public ArticleCollectionVO findByPrimaryKey(Integer article_no, Integer member_no);
-
+	public void insertArticlCollectionAndDelete(ArticleCollectionVO articleCollectionVO);
+	
 }

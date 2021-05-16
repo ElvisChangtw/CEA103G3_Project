@@ -199,7 +199,7 @@ Integer memberno = new Integer(req.getParameter("memberno").trim());
 				out.print("success");
 			}catch(Exception e) {
 				out.print("fail");
-				errorMsgs.add("電影評分修改失敗");
+				errorMsgs.add("文章點讚修改失敗");
 				RequestDispatcher failureView = req
 						.getRequestDispatcher("/front-end/mem/memberSys.jsp");
 				failureView.forward(req, res);
