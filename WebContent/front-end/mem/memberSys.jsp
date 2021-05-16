@@ -21,7 +21,16 @@
 <%@ page import="com.articleCollection.model.*"%>
 <%@ page import="com.order.model.*"%>
 <%@ page import="com.group.model.*"%>
-<%@ page import="java.util.List"%>
+<%@ page import="java.util.*"%>
+<%@ page import="websocket.jedis.*"%>
+<%@ page import="org.json.JSONArray"%>
+<%@ page import="org.json.JSONObject"%>
+
+
+
+
+
+
 <%
 	MemVO memVO = (MemVO)session.getAttribute("memVO");
 
@@ -30,6 +39,17 @@
 
 	List<OrderVO> ord_list = orderSvc.getAllOrderByMemno(memVO.getMember_no());
     pageContext.setAttribute("ord_list",ord_list);
+    
+// 	List<String> addfriend = JedisHandleMessage.getHistoryMsg("2", "addFriend");
+// 	List<JSONObject> aa = new ArrayList<JSONObject>();
+// 	JSONArray friend = new JSONArray(addfriend);
+	
+// 	for(int i = 0; i< friend.length(); i++) {
+// 		JSONObject obj = friend.getJSONObject(i);
+// 		aa.add(obj);
+// 	}
+// 	pageContext.setAttribute("aa",aa);
+
     
 %>
 <!DOCTYPE html>
@@ -98,7 +118,7 @@ hr{
 	padding:unset;
 }
 
-.info-content .tab-panel #comment-info-form, #ticket-info-form, #group-info-form{
+.info-content .tab-panel #comment-info-form, #ticket-info-form, #group-info-form, #notify-info-form{
 	width:100%;
 }
 .info-content .tab-panel .noCSS{
@@ -151,7 +171,7 @@ text-align:center;
 }
 </style>
 </head>
-<body onload="connect();" onunload="disconnection();">
+<body>
 	<div class="main-wrapper">
 		<div class="info-div">
 			<div class="info-content">
@@ -223,9 +243,20 @@ text-align:center;
 						</section>
 
 						<section id="notify" class="tab-panel">
-						33333
-							<form method="post" id="notify-info-form">
-							</form>
+							<div id="show_notify" class="container-fluid">
+								<div class="row">
+									<form method="post" id="notify-info-form">
+									<h1 class="table-friend">好友通知</h1>
+										<table class="table table-hover">
+									 		<tr class="table-friend"><th>通知時間</th><th>通知內容</th></tr>
+									 		
+<%-- 									 		<c:forEach var="obj" items="${aa}"> --%>
+<%-- 									 		<tr></tr> --%>
+<%-- 									 		</c:forEach> --%>
+									 	</table>
+									</form>
+								</div>
+							</div>
 						</section>
 
 						<section id="comment" class="tab-panel">
@@ -361,70 +392,6 @@ bK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></scrip
 "sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha
 384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-
-
-<script>
-	var MyPoint = "/NotifyWS/{userName}";
-	var host = window.location.host;
-	var path = window.location.pathname;
-	var webCtx = path.substring(0, path.indexOf('/', 1));
-	var endPointURL = "ws://" + window.location.host + webCtx + MyPoint;
-	var friendNO = document.getElementById("friendNO");
-	var self = '${memVO.member_no}';
-	var webSocket;
-
-	function connect() {
-		// create a websocket
-		webSocket = new WebSocket(endPointURL);
-
-		webSocket.onopen = function(event) {
-			console.log(friendNO.value);
-
-		};
-
-		webSocket.onmessage = function(event) {
-			var jsonObj = JSON.parse(event.data);
-			if ("open" === jsonObj.type) {
-				refreshFriendList(jsonObj);
-			} else if ("history" === jsonObj.type) {
-				messagesArea.innerHTML = '';
-				var ul = document.createElement('ul');
-				ul.id = "area";
-				messagesArea.appendChild(ul);
-				// 這行的jsonObj.message是從redis撈出跟好友的歷史訊息，再parse成JSON格式處理
-				var messages = JSON.parse(jsonObj.message);
-				for (var i = 0; i < messages.length; i++) {
-					var historyData = JSON.parse(messages[i]);
-					var showMsg = historyData.message;
-					var li = document.createElement('li');
-					// 根據發送者是自己還是對方來給予不同的class名, 以達到訊息左右區分
-					historyData.sender === self ? li.className += 'me' : li.className += 'friend';
-					li.innerHTML = showMsg;
-					ul.appendChild(li);
-				}
-				messagesArea.scrollTop = messagesArea.scrollHeight;
-			} else if ("chat" === jsonObj.type) {
-				var li = document.createElement('li');
-				jsonObj.sender === self ? li.className += 'me' : li.className += 'friend';
-				li.innerHTML = jsonObj.message;
-				console.log(li);
-				document.getElementById("area").appendChild(li);
-				messagesArea.scrollTop = messagesArea.scrollHeight;
-			} else if ("close" === jsonObj.type) {
-				refreshFriendList(jsonObj);
-			}
-			
-		};
-
-		webSocket.onclose = function(event) {
-			console.log("Disconnected!");
-		};
-	}
-
-
-
-
-</script>
 
 
 
@@ -942,6 +909,39 @@ $(document.body).on("click", ".leave-group",function () {
     }
       
   });
+//------------------------------------------------------------------------------------------------------------------------
+//顯示朋友通知
+$(document).ready(function(){
+	var friend = $("tr.table-friend");
+	var memberno = ${memVO.member_no};
+	 $.ajax({
+		 url:"<%=request.getContextPath()%>/NotifyServlet?action=insert_For_Ajax",
+		 data:{
+			 "member_no":memberno,
+			 "type":"addFriend"	
+		 },
+		 type:"POST",
+		 success:function(json){
+			 let jsonobj = JSON.parse(json);
+			 let friend_list = jsonobj.friend;
+			 let len = jsonobj.friend.length;
+			 let slice;
+			 for(let i = 0 ; i < len ; i++){
+				 let jsono = JSON.parse(friend_list[i]);
+				 if(jsono.sender=="${memVO.member_no}"){
+					 slice += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;
+				 }
+				     slice += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td><td><button type="button" value=1>確定</button>&emsp;&emsp;<button type="button" value=0>拒絕</button></td></tr>`;
+				 	//點了要移除此蘭
+			 }
+			 friend.after(slice);
+		 }
+	
+	
+		})
+});
+
+  
 //-------------------------------------------------------------------------------------------------------------------------
 //評論顯示視窗
 $(document).ready(function(){
@@ -1162,11 +1162,10 @@ $(".hover_movCol").hover(function(){
 		data:{"movieno":movie_no},
 		type:"POST",
 		success:function(json){
-			console.log(json);
 			let jsonobj = JSON.parse(json);
 			let allRating = jsonobj.allRating;
 			let allComment = jsonobj.allComment;
-// 			console.log(allRating);
+// 			console.log(jsonobj);
 // 			console.log(allComment[0].content);
 			let fragment = document.createElement("div");
 				fragment.classList.add("movie_info");
@@ -1544,17 +1543,14 @@ $(".hover_rating").hover(function(){
 	})
 },function(){
 
-
+	 $(this).closest('form').siblings().children().remove();
 
 })
 
 // $(".hover_pointer").mouseleave() why 不能用mouseenter/mouseleave
 
 
-
-
 </script>
-
 </body>
 
 </html>
