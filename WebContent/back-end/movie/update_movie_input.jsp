@@ -6,8 +6,9 @@
 	MovieVO movieVO = (MovieVO) request.getAttribute("movieVO"); //EmpServlet.java (Concroller) 存入req的empVO物件 (包括幫忙取出的empVO, 也包括輸入資料錯誤時的empVO物件)
 %>
 <%-- <%= empVO==null %>--${empVO.deptno}-- --%>
-movieVO.grade === ${movieVO.grade} movieVO.grade.equals("0") ===
+movieVO. === ${movieVO.grade} movieVO.grade.equals("0") ===
 ${movieVO.grade.equals("0")}
+${movieVO.category.contains("動作片")}
 <html>
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -115,9 +116,7 @@ function readURL(input){
 			<tr>
 				<td>電影照片1:</td>
 				<td>
-				<img id="preview_img" src="${pageContext.request.contextPath}/movie/movie.do?action=getPicForDisplay&movieno=<%=movieVO.getMovieno()%>">
-<%-- 				<img src="${pageContext.request.contextPath}/movie/movie.do?action=getPicForDisplay&movieno=${movieVO.movieno}"> --%>
-<%-- 				<img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${movieVO.movieno}"> --%>
+				<img id="preview_img" src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${movieVO.movieno}">
 				<input multiple type="file" name="moviepicture1" accept="image/*" onchange="readURL(this)" targetID="preview_img"
 					value="<%=(movieVO == null) ? "" : movieVO.getMoviepicture1()%>" />
 					</td>
@@ -125,8 +124,8 @@ function readURL(input){
 			<tr>
 				<td>電影照片:</td>
 				<td>
-				<img id="preview_img" src="${pageContext.request.contextPath}/movie/DBGifReader2.do?movieno=${movieVO.movieno}"">
-				<input multiple type="file" name="moviepicture2" accept="image/*" onchange="readURL(this)" targetID="preview_img"
+				<img id="preview_img2" src="${pageContext.request.contextPath}/movie/DBGifReader2.do?movieno=${movieVO.movieno}"">
+				<input multiple type="file" name="moviepicture2" accept="image/*" onchange="readURL(this)" targetID="preview_img2"
 					value="<%=(movieVO == null) ? "" : movieVO.getMoviepicture2()%>" />
 					</td>
 			</tr>	
@@ -143,24 +142,24 @@ function readURL(input){
 			<tr>
 				<td>電影類型:</td>
 				<td>
-				<input type="checkbox" name="category" value="<%=(movieVO == null) ? "" : movieVO.getActor()%>">動作片
-				<input type="checkbox" name="category" value="<%=(movieVO == null) ? "" : movieVO.getActor()%>">冒險片
-				<input type="checkbox" name="category" value="<%=(movieVO == null) ? "" : movieVO.getActor()%>">科幻片
-				<input type="checkbox" name="category" value="<%=(movieVO == null) ? "" : movieVO.getActor()%>">劇情片
-				<input type="checkbox" name="category" value="<%=(movieVO == null) ? "" : movieVO.getActor()%>">戰爭片
-				<input type="checkbox" name="category" value="<%=(movieVO == null) ? "" : movieVO.getActor()%>">史詩片
-				<input type="checkbox" name="category" value="<%=(movieVO == null) ? "" : movieVO.getActor()%>">犯罪片
-				<input type="checkbox" name="category" value="<%=(movieVO == null) ? "" : movieVO.getActor()%>">警匪片
-				<input type="checkbox" name="category" value="<%=(movieVO == null) ? "" : movieVO.getActor()%>">奇幻片
-				<input type="checkbox" name="category" value="<%=(movieVO == null) ? "" : movieVO.getActor()%>">恐怖片
-				<input type="checkbox" name="category" value="<%=(movieVO == null) ? "" : movieVO.getActor()%>">驚悚片
-				<input type="checkbox" name="category" value="<%=(movieVO == null) ? "" : movieVO.getActor()%>">懸疑片
-				<input type="checkbox" name="category" value="<%=(movieVO == null) ? "" : movieVO.getActor()%>">喜劇片
-				<input type="checkbox" name="category" value="<%=(movieVO == null) ? "" : movieVO.getActor()%>">愛情片
-				<input type="checkbox" name="category" value="<%=(movieVO == null) ? "" : movieVO.getActor()%>">文藝片
-				<input type="checkbox" name="category" value="<%=(movieVO == null) ? "" : movieVO.getActor()%>">動畫片
-				<input type="checkbox" name="category" value="<%=(movieVO == null) ? "" : movieVO.getActor()%>">音樂片
-				<input type="checkbox" name="category" value="<%=(movieVO == null) ? "" : movieVO.getActor()%>">歌舞劇
+				<input type="checkbox" name="category" value="動作片" <%= movieVO.getCategory().contains("動作片") ? "checked" : "" %>>動作片
+				<input type="checkbox" name="category" value="冒險片" <%= movieVO.getCategory().contains("冒險片") ? "checked" : "" %>>冒險片
+				<input type="checkbox" name="category" value="科幻片" <%= movieVO.getCategory().contains("科幻片") ? "checked" : "" %>>科幻片
+				<input type="checkbox" name="category" value="劇情片" <%= movieVO.getCategory().contains("劇情片") ? "checked" : "" %>>劇情片
+				<input type="checkbox" name="category" value="戰爭片" <%= movieVO.getCategory().contains("戰爭片") ? "checked" : "" %>>戰爭片
+				<input type="checkbox" name="category" value="史詩片" <%= movieVO.getCategory().contains("史詩片") ? "checked" : "" %>>史詩片
+				<input type="checkbox" name="category" value="犯罪片" <%= movieVO.getCategory().contains("犯罪片") ? "checked" : "" %>>犯罪片
+				<input type="checkbox" name="category" value="警匪片" <%= movieVO.getCategory().contains("警匪片") ? "checked" : "" %>>警匪片
+				<input type="checkbox" name="category" value="奇幻片" <%= movieVO.getCategory().contains("奇幻片") ? "checked" : "" %>>奇幻片
+				<input type="checkbox" name="category" value="恐怖片" <%= movieVO.getCategory().contains("恐怖片") ? "checked" : "" %>>恐怖片
+				<input type="checkbox" name="category" value="驚悚片" <%= movieVO.getCategory().contains("驚悚片") ? "checked" : "" %>>驚悚片
+				<input type="checkbox" name="category" value="懸疑片" <%= movieVO.getCategory().contains("懸疑片") ? "checked" : "" %>>懸疑片
+				<input type="checkbox" name="category" value="喜劇片" <%= movieVO.getCategory().contains("喜劇片") ? "checked" : "" %>>喜劇片
+				<input type="checkbox" name="category" value="愛情片" <%= movieVO.getCategory().contains("愛情片") ? "checked" : "" %>>愛情片
+				<input type="checkbox" name="category" value="文藝片" <%= movieVO.getCategory().contains("文藝片") ? "checked" : "" %>>文藝片
+				<input type="checkbox" name="category" value="動畫片" <%= movieVO.getCategory().contains("動畫片") ? "checked" : "" %>>動畫片
+				<input type="checkbox" name="category" value="音樂片" <%= movieVO.getCategory().contains("音樂片") ? "checked" : "" %>>音樂片
+				<input type="checkbox" name="category" value="歌舞劇" <%= movieVO.getCategory().contains("歌舞劇") ? "checked" : "" %>>歌舞劇
 				</td>
 			</tr>
 			<tr>
@@ -183,11 +182,11 @@ function readURL(input){
 			</tr>
 			<tr>
 				<td>上映日期:</td>
-				<td><input name="premiredate" id="f_date1" type="text"></td>
+				<td><input name="premiredate" id="f_date1" type="text" value="<%=(movieVO == null) ? "" : movieVO.getPremiredate()%>"></td>
 			</tr>
 			<tr>
 				<td>下檔日期:</td>
-				<td><input name="offdate" id="f_date2" type="text"></td>
+				<td><input name="offdate" id="f_date2" type="text"  value="<%=(movieVO == null) ? "" : movieVO.getOffdate()%>"></td>
 			</tr>
 			<tr>
 				<td>預告片:</td>
@@ -220,16 +219,16 @@ function readURL(input){
 						<%-- 				<option value="3" ${movieVO.grade.equals("3")? "selected":""}>限制級</option> --%>
 				</select></td>
 			</tr>
-			<tr>
-				<td>評分:</td>
-				<td><input type="TEXT" name="rating" size="45"
-					value="<%=(movieVO == null) ? "" : movieVO.getRating()%>" /></td>
-			</tr>
-			<tr>
-				<td>期待度:</td>
-				<td><input type="TEXT" name="expectation" size="45"
-					value="<%=(movieVO == null) ? "" : movieVO.getExpectation()%>" /></td>
-			</tr>
+<!-- 			<tr> -->
+<!-- 				<td>評分:</td> -->
+<!-- 				<td><input type="TEXT" name="rating" size="45" -->
+<%-- 					value="<%=(movieVO == null) ? "" : movieVO.getRating()%>" /></td> --%>
+<!-- 			</tr> -->
+<!-- 			<tr> -->
+<!-- 				<td>期待度:</td> -->
+<!-- 				<td><input type="TEXT" name="expectation" size="45" -->
+<%-- 					value="<%=(movieVO == null) ? "" : movieVO.getExpectation()%>" /></td> --%>
+<!-- 			</tr> -->
 		</table>
 		<br> <input type="hidden" name="action" value="update"> 
 		<input type="hidden" name="movieno" value="<%=movieVO.getMovieno()%>">

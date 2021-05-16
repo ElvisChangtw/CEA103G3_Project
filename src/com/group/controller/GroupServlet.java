@@ -4,8 +4,8 @@ import java.io.*;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
 import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
 import org.json.JSONArray;
@@ -17,9 +17,21 @@ import com.group_member.model.*;
 import com.showtime.model.ShowtimeService;
 import com.showtime.model.ShowtimeVO;
 
-
+@WebServlet("/GroupServlet")
 public class GroupServlet extends HttpServlet {
-
+	private GroupTimer groupTimer;
+	//先建立一個繼承自Timer的GroupTimer物件
+	//這邊宣告才可以有servlet的生命週期
+	public void init() throws ServletException{
+		this.groupTimer= new GroupTimer();
+		
+		//init()時建立所有揪團被刪除之排程器
+		GroupService groupSvc = new GroupService();
+		List<GroupVO> list= groupSvc.getAll();
+		for(GroupVO groupVO : list) {
+			groupTimer.addDismissTask(groupVO);
+		}
+	}
 	public void doGet(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException {
 		doPost(req, res);
@@ -83,7 +95,7 @@ public class GroupServlet extends HttpServlet {
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					RequestDispatcher failureView = req
-							.getRequestDispatcher("/front-end/group/select_page.jsp");
+							.getRequestDispatcher("/front-end/group/group_front_page.jsp");
 					failureView.forward(req, res);
 					return;//程式中斷
 				}
@@ -279,7 +291,6 @@ public class GroupServlet extends HttpServlet {
 				//insert不用group_no
 				Integer group_no  = null;
 
-
 				//SHOWTIME_NO
 				Integer showtime_no  = null;
 				try {
@@ -301,7 +312,6 @@ public class GroupServlet extends HttpServlet {
 						errorMsgs.add("主揪會員編號請填>0的數字.");
 					}
 				} catch(NumberFormatException e) {
-					System.out.println("主揪是..." + member_no);
 					errorMsgs.add("主揪會員編號請填數字.");
 				}
 				
@@ -330,21 +340,55 @@ public class GroupServlet extends HttpServlet {
 					desc = "";
 					errorMsgs.add("說明請勿空白");
 				}
-
 				//DEADLINE_DT
 				java.sql.Timestamp deadline_dt = null;
 
 				try {
 //					deadline_dt = java.sql.Timestamp.valueOf(req.getParameter("deadline_dt").trim());
-					SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+					SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 					Date parsedDate = dateFormat.parse(req.getParameter("deadline_dt"));
 					deadline_dt = new java.sql.Timestamp(parsedDate.getTime());
+					
+					
+					//宣告24小時後時間
+			        int day = 1;
+					Timestamp original = new Timestamp(System.currentTimeMillis());
+			        Calendar cal = Calendar.getInstance();
+			        cal.setTimeInMillis(original.getTime());
+			        cal.add(Calendar.DATE, day);
+			        Timestamp twentyFourHoursLater = new Timestamp(cal.getTime().getTime());
+
+			        //宣告場次前一天
+			        ShowtimeService showtimeSvc = new ShowtimeService();
+			        Timestamp showtime_Time = showtimeSvc.getOneShowtime(showtime_no).getShowtime_time();
+			        SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+			        Date parsedDate1 = dateFormat1.parse(showtime_Time.toString());
+			       Timestamp oneDayBefore = new java.sql.Timestamp(parsedDate1.getTime());
+
+			        
+			      //揪團截止時間一定要>現在起算24小時後
+			        if( deadline_dt.before(twentyFourHoursLater)) {
+			        	Timestamp original1 = new Timestamp(System.currentTimeMillis());
+			        	Calendar cal2 = Calendar.getInstance();
+			            cal2.setTimeInMillis(original1.getTime());
+			            cal2.add(Calendar.DATE, 1);
+			            cal2.add(Calendar.MINUTE, 5);
+			            deadline_dt = new Timestamp(cal2.getTime().getTime());
+						errorMsgs.add("截止日期最早為24小時之後!");
+			        }
+			      //揪團截止時間一定要<場次前一天
+			        if( deadline_dt.after(oneDayBefore)) {
+			        	Calendar cal2 = Calendar.getInstance();
+			            cal2.setTimeInMillis(oneDayBefore.getTime());
+			            cal2.add(Calendar.MINUTE, -1);
+			            deadline_dt = new Timestamp(cal2.getTime().getTime());
+						errorMsgs.add("截止日期最晚要在場次前一天");
+			        }
+			        
 				} catch (IllegalArgumentException e) {
-					deadline_dt=new java.sql.Timestamp(System.currentTimeMillis());
+					deadline_dt=new Timestamp(System.currentTimeMillis());
 					errorMsgs.add("請輸入截止日期!");
 				}
-
-				
 				GroupVO groupVO = new GroupVO();
 				groupVO.setGroup_no(group_no);
 				groupVO.setShowtime_no(showtime_no);
@@ -372,9 +416,10 @@ public class GroupServlet extends HttpServlet {
 						desc, deadline_dt);
 				
 				//新增group_member
-				
 				group_memberSvc.addGroup_Member(groupVO.getGroup_no(), member_no);
 				
+				//建立截止排程器
+				groupTimer.addDismissTask(groupVO);
 				/***************************3.新增完成,準備轉交(Send the Success view)***********/
 		
 				String url = "/front-end/group/group_front_page.jsp";
@@ -539,6 +584,7 @@ public class GroupServlet extends HttpServlet {
 				boolean openModal_Group=true;	
 				req.setAttribute("openModal_Group",openModal_Group );
 				String url = requestURL;
+//				String url = "/front-end/group/listOneGroup.jsp";
 				if("/front-end/group/group_SearchResult.jsp".equals(requestURL)) {
 					url = "/front-end/group/group_front_page.jsp";
 				}
@@ -570,6 +616,7 @@ public class GroupServlet extends HttpServlet {
 				//注意:an immutable java.util.Map 
 				//Map<String, String[]> map = req.getParameterMap();
 				HttpSession session = req.getSession();
+				@SuppressWarnings("unchecked")
 				Map<String, String[]> map = (Map<String, String[]>)session.getAttribute("map");
 				
 				// 以下的 if 區塊只對第一次執行時有效
@@ -624,5 +671,235 @@ public class GroupServlet extends HttpServlet {
 			out.close();
 			return;
 		}
+		
+		
+		if ("updateOne_For_Ajax".equals(action)) { 
+			List<String> errorMsgs = new LinkedList<String>();
+			req.setAttribute("errorMsgs", errorMsgs);
+			PrintWriter out = res.getWriter();
+			try {
+				int group_no = new Integer(req.getParameter("group_no"));
+				int member_no = new Integer(req.getParameter("member_no"));
+				String group_title = req.getParameter("group_title");
+				if (group_title == null || group_title.trim().length() == 0) {
+					out.print("title_error");
+					return;
+				}
+				
+				int showtime_no = new Integer(req.getParameter("showtime_no"));
+				int required_cnt = new Integer(req.getParameter("require_no"));
+				String desc = req.getParameter("desc");
+				if (desc == null || desc.trim().length() == 0) {
+					out.print("desc_error");
+					return;
+				}
+				
+				java.sql.Timestamp deadline_dt = null;
+				try {
+					deadline_dt = java.sql.Timestamp.valueOf(req.getParameter("deadline_dt").trim());
+				} catch (IllegalArgumentException e) {
+					deadline_dt=new java.sql.Timestamp(System.currentTimeMillis());
+					errorMsgs.add("請輸入截止日期!");
+				}
+				
+				String group_status = "0";
+				//CRT_DT
+				java.sql.Timestamp crt_dt = new java.sql.Timestamp(System.currentTimeMillis());;
+				//MODIFY_DT
+				java.sql.Timestamp modify_dt= new java.sql.Timestamp(System.currentTimeMillis());
+				//DEADLINE_DT
+				
+				GroupVO groupVO = new GroupVO();
+
+				/***************************2.開始修改資料*****************************************/
+				GroupService groupSvc = new GroupService();
+				groupVO = groupSvc.updateGroup(group_no, showtime_no, 
+						member_no, group_title, required_cnt, 
+						group_status, desc, crt_dt, modify_dt, deadline_dt);
+
+				if (groupVO == null) {
+					errorMsgs.add("查無資料");
+				}
+				// Send the use back to the form, if there were errors
+				if (!errorMsgs.isEmpty()) {
+
+					RequestDispatcher failureView = req
+							.getRequestDispatcher("/front-end/mem/memberSys.jsp");
+					failureView.forward(req, res);
+					return;//程式中斷
+				}	
+				
+				try {
+					out.print("success");
+					return;
+				}catch(Exception e) {
+					out.print("fail");
+					e.printStackTrace();
+				}finally {
+					out.flush();
+					out.close();
+				}
+
+				/***************************其他可能的錯誤處理*************************************/
+			} catch (Exception e) {
+				errorMsgs.add("無法取得資料:" + e.getMessage());
+				RequestDispatcher failureView = req
+						.getRequestDispatcher("/front-end/mem/memberSys.jsp");
+				failureView.forward(req, res);
+			}
+		}
+		
+//		if ("gogogo".equals(action)) { 
+//			List<String> errorMsgs = new LinkedList<String>();
+//			req.setAttribute("errorMsgs", errorMsgs);
+//			
+//			String str = req.getParameter("group_no");
+//			if (str == null || (str.trim()).length() == 0) {
+//				errorMsgs.add("請輸入揪團編號");
+//			}
+//			// Send the use back to the form, if there were errors
+//			if (!errorMsgs.isEmpty()) {
+//				RequestDispatcher failureView = req
+//						.getRequestDispatcher("/front-end/group/group_front_page.jsp");
+//				failureView.forward(req, res);
+//				return;//程式中斷
+//			}
+//			try{
+//				
+//				Integer group_no = null;
+//				try {
+//					group_no = new Integer(str);
+//					
+////					//測試用自己設定timestamp塞入
+//					GroupService groupSvc = new GroupService();
+//					groupSvc.gogogo(group_no);
+//					GroupVO groupVO = groupSvc.getOneGroup(group_no); 
+//					groupTimer.cancelDismissTask(group_no);
+//					groupTimer.addKickOutTask(groupVO);
+//					
+//					
+//				} catch (Exception e) {
+//					errorMsgs.add("揪團編號格式不正確");
+//				}
+//				if (!errorMsgs.isEmpty()) {
+//					RequestDispatcher failureView = req
+//							.getRequestDispatcher("/front-end/group/group_front_page.jsp");
+//					failureView.forward(req, res);
+//					return;//程式中斷
+//				}
+//			
+//			}
+//			catch (Exception e) {
+//				errorMsgs.add("無法取得資料:" + e.getMessage());
+//				RequestDispatcher failureView = req
+//						.getRequestDispatcher("/front-end/group/group_front_page.jsp");
+//				failureView.forward(req, res);
+//			}
+//		}
+		if ("gogogo".equals(action)) { 
+			
+			List<String> errorMsgs = new LinkedList<String>();
+			req.setAttribute("errorMsgs", errorMsgs);
+			String str = req.getParameter("group_no");
+			if (str == null || (str.trim()).length() == 0) {
+				errorMsgs.add("請輸入揪團編號");
+			}
+			// Send the use back to the form, if there were errors
+			if (!errorMsgs.isEmpty()) {
+				RequestDispatcher failureView = req
+						.getRequestDispatcher("/front-end/group/group_front_page.jsp");
+				failureView.forward(req, res);
+				return;//程式中斷
+			}
+			try{
+				
+				Integer group_no = null;
+				try {
+					group_no = new Integer(str);
+//					//測試用自己設定timestamp塞入
+					GroupService groupSvc = new GroupService();
+					groupSvc.gogogo(group_no);
+					GroupVO groupVO = groupSvc.getOneGroup(group_no); 
+					groupTimer.cancelDismissTask(group_no);
+					groupTimer.addKickOutTask(groupVO);
+					
+				} catch (Exception e) {
+					errorMsgs.add("揪團編號格式不正確");
+				}
+				if (!errorMsgs.isEmpty()) {
+					RequestDispatcher failureView = req
+							.getRequestDispatcher("/front-end/group/group_front_page.jsp");
+					failureView.forward(req, res);
+					return;//程式中斷
+				}
+				
+				req.setAttribute("action", "getOne_For_Display");
+				String url = "/group/group.do";
+				
+				//???不加下面3行, getOne_For_Display收不到參數....
+				String a = req.getParameter("action");
+				String b = req.getParameter("requestURL");
+				String c = req.getParameter("group_no");
+				
+				System.out.println(b);
+//				"<%=request.getContextPath()%>/group/group.do?action=getOne_For_Display&group_no=${groupVO.group_no}&requestURL=<%=request.getServletPath()%>"
+				RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交 listOneEmp.jsp
+				successView.forward(req, res);
+			
+			}
+			catch (Exception e) {
+				errorMsgs.add("無法取得資料:" + e.getMessage());
+				RequestDispatcher failureView = req
+						.getRequestDispatcher("/front-end/group/group_front_page.jsp");
+				failureView.forward(req, res);
+			}
+		}
+		
+		
+		
+		if ("getGroupVO_Ajax".equals(action)) { // 來自listAllEmp.jsp
+			System.out.println("收到getGROUPVO請求");
+			res.setCharacterEncoding("utf-8");
+			PrintWriter out = res.getWriter();
+			Integer group_no = new Integer(req.getParameter("group_no"));
+			GroupService groupSvc = new GroupService();
+			GroupVO groupVO = groupSvc.getOneGroup(group_no);
+						
+			JSONObject jsonobj= new JSONObject();
+			try {
+				Date date = new Date();
+				date.setTime(groupVO.getDeadline_dt().getTime());
+				String formattedDate = new SimpleDateFormat("yyyy-MM-dd HH:MM").format(date);
+				System.out.println("deadline_dt = " + formattedDate);
+				jsonobj.put("group_no", groupVO.getGroup_no());
+				jsonobj.put("showtime_no", groupVO.getShowtime_no());
+				jsonobj.put("member_no", groupVO.getMember_no());
+				jsonobj.put("group_title", groupVO.getGroup_title());
+				jsonobj.put("required_cnt", groupVO.getRequired_cnt());
+				jsonobj.put("member_cnt", groupVO.getMember_cnt());
+				jsonobj.put("group_status", new com.mappingtool.StatusMapping().dboGroup_GroupStatus(groupVO.getGroup_status()));
+				jsonobj.put("desc", groupVO.getDesc());
+				jsonobj.put("crt_dt", groupVO.getCrt_dt());
+				jsonobj.put("modify_dt", groupVO.getModify_dt());
+				jsonobj.put("deadline_dt", formattedDate);
+				out.print(jsonobj.toString());
+				return;
+			}catch(JSONException e) {
+				e.printStackTrace();
+			}finally {
+				out.flush();
+				out.close();
+			}
+		}
+		
+		
+		
+		
+		
+		
+	} //doPost結尾
+	public void destroy() {
+		groupTimer.cancel();
 	}
+
 }

@@ -13,6 +13,7 @@ public interface RatingDAO_interface {
     //萬用複合查詢(傳入參數型態Map)(回傳 List)
 //  public List<RatingVo> getAll(Map<String, String[]> map); 
     public void insertOrUpdateRatingtAndUpdateMovieRating (RatingVO ratingVO);
+    public RatingVO getThisMovieToatalRating (Integer movieno);
 
     
 

@@ -12,6 +12,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import com.like.model.LikeVO;
 import com.notify.model.NotifyVO;
 
 public class ArticleCollectionDAO implements ArticleCollectionDAO_interface{
@@ -32,6 +33,8 @@ public class ArticleCollectionDAO implements ArticleCollectionDAO_interface{
 			"DELETE FROM articlecollection where article_no = ? and member_no = ? ";
 	private static final String GET_ONE_STMT = 
 			"SELECT * FROM articlecollection where member_no = ? ";
+	private static final String GET_ONE_STMT1 = 
+			"SELECT * FROM articlecollection where article_no = ? and member_no = ?";
 	private static final String GET_ALL_STMT = 
 			"SELECT * FROM articlecollection order by article_no";
 	@Override
@@ -212,5 +215,59 @@ public class ArticleCollectionDAO implements ArticleCollectionDAO_interface{
 		}
 		return list;
 	}
+	@Override
+	public ArticleCollectionVO findByPrimaryKey(Integer article_no, Integer member_no) {
+		ArticleCollectionVO articleCollectionVO = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_ONE_STMT1);
+
+			pstmt.setInt(1, article_no);
+			pstmt.setInt(2, member_no);
+
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// empVo ¤]ºÙ¬° Domain objects
+				articleCollectionVO = new ArticleCollectionVO();
+				articleCollectionVO.setArticle_no(rs.getInt("article_no"));
+				articleCollectionVO.setMember_no(rs.getInt("member_no"));
+
+			}
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return articleCollectionVO;
+	}
 }

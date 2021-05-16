@@ -19,7 +19,7 @@
             --color-v: black;
             --color: grey;
             flex: 1;
-            width: 100%;
+            width: 100vw;
         }
 
         section.booking_area>div.container-fluid>div.row>div>div.booking-form {

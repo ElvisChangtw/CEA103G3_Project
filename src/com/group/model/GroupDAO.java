@@ -2,7 +2,6 @@ package com.group.model;
 
 import java.util.*;
 import java.sql.*;
-import java.sql.Date;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -12,11 +11,10 @@ import javax.sql.DataSource;
 import com.group_member.model.*;
 
 import jdbc.util.CompositeQuery.jdbcUtil_CompositeQuery_Group;
-import jdbc.util.CompositeQuery.jdbcUtil_CompositeQuery_Group_Member;
 
 public class GroupDAO implements GroupDAO_interface {
 
-	// ä¸€å€‹æ‡‰ç”¨ç¨‹å¼ä¸­,é‡å°ä¸€å€‹è³‡æ–™åº« ,å…±ç”¨ä¸€å€‹DataSourceå³å¯
+	// 
 	private static DataSource ds = null;
 	static {
 		try {
@@ -28,18 +26,25 @@ public class GroupDAO implements GroupDAO_interface {
 	}
 
 	private static final String INSERT_STMT = "INSERT INTO `group` (showtime_no,member_no,group_title,required_cnt,member_cnt, group_status, `desc`, deadline_dt) VALUES (?, ?, ?, ?, 0, 0, ?, ?)";
-	private static final String GET_ALL_STMT = "SELECT * FROM `group` where group_status <> 3 order by group_no";
+//	private static final String GET_ALL_STMT = "SELECT * FROM `group` where group_status <> 3 order by group_no";
+	private static final String GET_ALL_STMT = " SELECT  S0.*  FROM `group` S0 " + 
+			" LEFT JOIN SHOWTIME S1 ON S0.SHOWTIME_NO = S1.SHOWTIME_NO " + 
+			" where S0.group_status in ( 0, 1)  AND DATE(S1.SHOWTIME_TIME) >= DATE_ADD(DATE(NOW()), INTERVAL 1 DAY) " +
+			" order by S0.group_no "; 
 	private static final String GET_ONE_STMT = "SELECT * FROM `group` where group_no = ?";
-	// (æ–°å¢)å¾æªåœ˜ç·¨è™Ÿæ‰¾æˆå“¡
 	private static final String GET_Members_ByGroupno_STMT = "SELECT * FROM group_member where group_no = ? order by member_no";
-
 	private static final String DELETE_MEMBERS = "DELETE FROM `group_member` where group_no = ?";
-
 	private static final String DELETE_GROUP = "DELETE FROM `group` where group_no = ?";
-
 	private static final String UPDATE = "UPDATE `group` set showtime_no = ?, member_no = ?, group_title = ?, required_cnt = ?, group_status=?, `desc` = ?, deadline_dt = ?, modify_dt = default where group_no = ?";
-	
-	private static final String GET_ALL_BY_GROUP_STMT = "SELECT * FROM `group` where member_no=?";
+	private static final String GET_ALL_BY_GROUP_STMT = "SELECT * FROM `group` where member_no=?";	
+	private static final String OVER_DUE_STMT = "UPDATE `GROUP` SET GROUP_STATUS = 3 where GROUP_NO = ?";
+	private static final String GOGO_STMT =
+			  "UPDATE `GROUP` S0  "
+			+ "LEFT JOIN SHOWTIME S1 ON S0.SHOWTIME_NO = S1.SHOWTIME_NO " 
+			+ " SET S0.GROUP_STATUS = 1  "
+			+ ", S0.DEADLINE_DT = DATE_ADD(S1.SHOWTIME_TIME, INTERVAL -1 HOUR) " 
+			+ "where GROUP_NO = ?; ";
+	private static final String GET_ONE_STATUS_STMT = "SELECT GROUP_STATUS FROM `GROUP` where GROUP_NO = ?";
 	
 	@Override
 	public int insert(GroupVO groupVO) {
@@ -142,32 +147,30 @@ public class GroupDAO implements GroupDAO_interface {
 
 	@Override
 	public void delete(Integer group_no) {
-		int updateCount_Members = 0;
 		Connection con = null;
 		PreparedStatement pstmt = null, pstmt2 = null;
 
 		try {
-
 			con = ds.getConnection();
-			// 1â—è¨­å®šæ–¼ pstm.executeUpdate()ä¹‹å‰
+			// ¥æ©ö¶}©l
 			con.setAutoCommit(false);
-			// å…ˆåˆªé™¤æˆå“¡
+			// ¥ı§R°£¦¨­û
 			pstmt = con.prepareStatement(DELETE_MEMBERS);
 			pstmt.setInt(1, group_no);
-			updateCount_Members = pstmt.executeUpdate();
+			pstmt.executeUpdate();
 
-			// å†åˆªé™¤æªåœ˜
+			// ¦A§R°£´ª¹Î
 			pstmt2 = con.prepareStatement(DELETE_GROUP);
 			pstmt2.setInt(1, group_no);
 			pstmt2.executeUpdate();
 
-			
-			// 2â—è¨­å®šæ–¼ pstm.executeUpdate()ä¹‹å¾Œ
+			// 
 			con.commit();
 			con.setAutoCommit(true);
-			System.out.println("åˆªé™¤æªåœ˜ç·¨è™Ÿ" + group_no + "æ™‚,å…±æœ‰æœƒå“¡" + updateCount_Members + "äººåŒæ™‚è¢«åˆªé™¤");
+			//¥æ©öµ²§ô
 			// Handle any driver errors
 		} catch (SQLException se) {
+			
 			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
@@ -193,7 +196,6 @@ public class GroupDAO implements GroupDAO_interface {
 				}
 			}
 		}
-
 	}
 
 	@Override
@@ -214,7 +216,7 @@ public class GroupDAO implements GroupDAO_interface {
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
-				// messageVO ä¹Ÿç¨±ç‚º Domain objects
+				//
 				groupVO = new GroupVO();
 				groupVO.setGroup_no(rs.getInt("group_no"));
 				groupVO.setShowtime_no(rs.getInt("showtime_no"));
@@ -274,7 +276,7 @@ public class GroupDAO implements GroupDAO_interface {
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
-				// messageVO ä¹Ÿç¨±ç‚º Domain objects
+				// 
 				groupVO = new GroupVO();
 				groupVO.setGroup_no(rs.getInt("group_no"));
 				groupVO.setShowtime_no(rs.getInt("showtime_no"));
@@ -374,7 +376,6 @@ public class GroupDAO implements GroupDAO_interface {
 	}
 	
 	
-	
 	@Override
 	public List<GroupVO> getAll(Map<String, String[]> map) {
 		List<GroupVO> list = new ArrayList<GroupVO>();
@@ -383,9 +384,7 @@ public class GroupDAO implements GroupDAO_interface {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-	
 		try {
-			
 			con = ds.getConnection();
 			String finalSQL = 
 					"select S0.GROUP_NO, S0.SHOWTIME_NO,S0.MEMBER_NO, S3.MB_NAME, "
@@ -400,7 +399,7 @@ public class GroupDAO implements GroupDAO_interface {
 					+ " order by group_no";
 			
 			pstmt = con.prepareStatement(finalSQL);
-			System.out.println("â—â—finalSQL(by DAO) = "+finalSQL);
+			System.out.println("finalSQL(by DAO) = "+finalSQL);
 			rs = pstmt.executeQuery();
 	
 			while (rs.next()) {
@@ -465,7 +464,7 @@ public class GroupDAO implements GroupDAO_interface {
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
-				// messageVO ä¹Ÿç¨±ç‚º Domain objects
+				// messageVO 
 				groupVO = new GroupVO();
 				groupVO.setGroup_no(rs.getInt("group_no"));
 				groupVO.setShowtime_no(rs.getInt("showtime_no"));
@@ -509,5 +508,146 @@ public class GroupDAO implements GroupDAO_interface {
 		}
 		return list;
 	}
+	
+
+	//ºI¤î®É¶¡¤º¹Îªø¥¼¥X¹Î, ¥¢±Ñµ²§ô
+	@Override
+	public void failure(Integer group_no) {
+		Connection con = null;
+		PreparedStatement pstmt = null, pstmt2 = null;
+
+		try {
+			con = ds.getConnection();
+			// ¥æ©ö¶}©l
+			con.setAutoCommit(false);
+
+			// ¦A§ó§ï´ª¹Îª¬ºA¬°3(±ø¥ó¥¢±Ñµ²§ô)
+			pstmt2 = con.prepareStatement(OVER_DUE_STMT);
+			pstmt2.setInt(1, group_no);
+			pstmt2.executeUpdate();
+
+			// 
+			con.commit();
+			con.setAutoCommit(true);
+			//¥æ©öµ²§ô
+			// Handle any driver errors
+		} catch (SQLException se) {
+			
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt2 != null) {
+				try {
+					pstmt2.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+
+	}
+	
+	
+	//¹Îªø«ö¤F¥X¹Î, §ó§ï´ª¹Îª¬ºA
+		@Override
+		public void gogogo(Integer group_no) {
+			Connection con = null;
+			PreparedStatement pstmt = null;
+
+			try {
+				con = ds.getConnection();
+				// ¥æ©ö¶}©l
+				con.setAutoCommit(false);
+				// ¦A§ó§ï´ª¹Îª¬ºA¬°3(±ø¥ó¥¢±Ñµ²§ô)
+				pstmt = con.prepareStatement(GOGO_STMT);
+				pstmt.setInt(1, group_no);
+				pstmt.executeUpdate();
+				
+				// 
+				con.commit();
+				con.setAutoCommit(true);
+				//¥æ©öµ²§ô
+				// Handle any driver errors
+			} catch (SQLException se) {
+				
+				throw new RuntimeException("A database error occured. " + se.getMessage());
+				// Clean up JDBC resources
+			} finally {
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (con != null) {
+					try {
+						con.close();
+					} catch (Exception e) {
+						e.printStackTrace(System.err);
+					}
+				}
+			}
+
+		}
+		
+		@Override
+		public String getGroupStatus(Integer group_no) {
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			String str = null;
+			try {
+				con = ds.getConnection();
+				pstmt = con.prepareStatement(GET_ONE_STATUS_STMT);
+				pstmt.setInt(1, group_no);
+				rs = pstmt.executeQuery();
+				while (rs.next()) {
+					str = rs.getString("GROUP_STATUS");
+				}
+				// Handle any driver errors
+			} catch (SQLException se) {
+				throw new RuntimeException("A database error occured. "
+						+ se.getMessage());
+				// Clean up JDBC resources
+			} finally {
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (con != null) {
+					try {
+						con.close();
+					} catch (Exception e) {
+						e.printStackTrace(System.err);
+					}
+				}
+			}
+			return str;
+		}
 
 }

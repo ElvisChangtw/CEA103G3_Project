@@ -81,3 +81,23 @@
         #table-listOne>tbody>tr>th, #table-listOne>tbody>tr>td{
         	font-size:1em;
         }
+        #display.container{
+        	max-width: 100%;
+        }
+        div.jumbotron>div.row>div.div-th{
+        	text-align: end;
+        }
+        #modifyBtn, #reportBtn, #dismissBtn, #joinBtn, #leaveBtn, #backBtn, #gogoBtn{
+        	padding: 8.5px 12px;
+        	border-radius: 10px;
+        }
+        div#display.container{
+        	padding: 50px 20px;
+        }
+        #backBtn{
+        	background-color: darkslateblue;
+        	color:white;
+        }
+        #add-group-btn{
+        	border-radius: 3px;
+        }
