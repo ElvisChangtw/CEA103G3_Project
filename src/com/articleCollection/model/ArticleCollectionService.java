@@ -2,9 +2,6 @@ package com.articleCollection.model;
 
 import java.util.List;
 
-import com.like.model.LikeVO;
-import com.notify.model.NotifyVO;
-
 public class ArticleCollectionService {
 	
 	private ArticleCollectionDAO_interface dao;
@@ -23,11 +20,12 @@ public class ArticleCollectionService {
 		ArticleCollectionVO articleCollectionVO = new ArticleCollectionVO();
 			
 		articleCollectionVO.setMember_no(member_no);
-		articleCollectionVO.setArticle_no(article_no);
+		articleCollectionVO.setArticle_no(article_no);	
+//		articleCollectionVO.setCrt_dt(crt_dt);
+//		dao.insert(articleCollectionVO);
+		dao.insertArticlCollectionAndDelete(articleCollectionVO);
 			
-			dao.insert(articleCollectionVO);
-			
-			return articleCollectionVO;
+		return articleCollectionVO;
 	}
 
 	public List<ArticleCollectionVO> getAllArticleCollection(Integer member_no) {

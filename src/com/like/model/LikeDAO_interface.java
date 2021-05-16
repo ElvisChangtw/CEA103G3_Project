@@ -10,5 +10,5 @@ public interface LikeDAO_interface {
     public List<LikeVO> getAll();
     //萬用複合查詢(傳入參數型態Map)(回傳 List)
 //  public List<LikeVO> getAll(Map<String, String[]> map); 
-	void insertLikeAndUpdateLikeCount(LikeVO likeVO);
+    public void insertLikeAndUpdateLikeCount(LikeVO likeVO);
 }
