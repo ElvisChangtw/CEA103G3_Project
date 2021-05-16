@@ -74,34 +74,34 @@ public class FriendWS {
 		System.out.println("Message received: " + message);
 	}
 
-//	@OnError
-//	public void onError(Session userSession, Throwable e) {
-//		System.out.println("Error: " + e.toString());
-//	}
-//
-//	@OnClose
-//	public void onClose(Session userSession, CloseReason reason) {
-//		String userNameClose = null;
-//		Set<String> userNames = sessionsMap.keySet();
-//		for (String userName : userNames) {
-//			if (sessionsMap.get(userName).equals(userSession)) {
-//				userNameClose = userName;
-//				sessionsMap.remove(userName);
-//				break;
-//			}
-//		}
-//
-//		if (userNameClose != null) {
-//			State stateMessage = new State("close", userNameClose, userNames);
-//			String stateMessageJson = gson.toJson(stateMessage);
-//			Collection<Session> sessions = sessionsMap.values();
-//			for (Session session : sessions) {
-//				session.getAsyncRemote().sendText(stateMessageJson);
-//			}
-//		}
-//
-//		String text = String.format("session ID = %s, disconnected; close code = %d%nusers: %s", userSession.getId(),
-//				reason.getCloseCode().getCode(), userNames);
-//		System.out.println(text);
-//	}
+	@OnError
+	public void onError(Session userSession, Throwable e) {
+		System.out.println("Error: " + e.toString());
+	}
+
+	@OnClose
+	public void onClose(Session userSession, CloseReason reason) {
+		String userNameClose = null;
+		Set<String> userNames = sessionsMap.keySet();
+		for (String userName : userNames) {
+			if (sessionsMap.get(userName).equals(userSession)) {
+				userNameClose = userName;
+				sessionsMap.remove(userName);
+				break;
+			}
+		}
+
+		if (userNameClose != null) {
+			State stateMessage = new State("close", userNameClose, userNames);
+			String stateMessageJson = gson.toJson(stateMessage);
+			Collection<Session> sessions = sessionsMap.values();
+			for (Session session : sessions) {
+				session.getAsyncRemote().sendText(stateMessageJson);
+			}
+		}
+
+		String text = String.format("session ID = %s, disconnected; close code = %d%nusers: %s", userSession.getId(),
+				reason.getCloseCode().getCode(), userNames);
+		System.out.println(text);
+	}
 }
