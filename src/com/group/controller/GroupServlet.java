@@ -127,7 +127,6 @@ public class GroupServlet extends HttpServlet {
 			try {
 				/***************************1.接收請求參數****************************************/
 				Integer group_no = new Integer(req.getParameter("group_no"));
-				
 				/***************************2.開始查詢資料****************************************/
 				GroupService groupSvc = new GroupService();
 				GroupVO groupVO = groupSvc.getOneGroup(group_no);
@@ -223,16 +222,54 @@ public class GroupServlet extends HttpServlet {
 				java.sql.Timestamp crt_dt = new java.sql.Timestamp(System.currentTimeMillis());;
 				//MODIFY_DT
 				java.sql.Timestamp modify_dt= new java.sql.Timestamp(System.currentTimeMillis());
+				
+				
 				//DEADLINE_DT
 				java.sql.Timestamp deadline_dt = null;
-
 				try {
-					SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//					deadline_dt = java.sql.Timestamp.valueOf(req.getParameter("deadline_dt").trim());
+					SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 					Date parsedDate = dateFormat.parse(req.getParameter("deadline_dt"));
 					deadline_dt = new java.sql.Timestamp(parsedDate.getTime());
 					
+					
+					//宣告24小時後時間
+			        int day = 1;
+					Timestamp original = new Timestamp(System.currentTimeMillis());
+			        Calendar cal = Calendar.getInstance();
+			        cal.setTimeInMillis(original.getTime());
+			        cal.add(Calendar.DATE, day);
+			        Timestamp twentyFourHoursLater = new Timestamp(cal.getTime().getTime());
+
+			        //宣告場次前一天
+			        ShowtimeService showtimeSvc = new ShowtimeService();
+			        Timestamp showtime_Time = showtimeSvc.getOneShowtime(showtime_no).getShowtime_time();
+			        SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+			        Date parsedDate1 = dateFormat1.parse(showtime_Time.toString());
+			       Timestamp oneDayBefore = new java.sql.Timestamp(parsedDate1.getTime());
+
+			        
+			      //揪團截止時間一定要>現在起算24小時後
+			        if( deadline_dt.before(twentyFourHoursLater)) {
+			        	Timestamp original1 = new Timestamp(System.currentTimeMillis());
+			        	Calendar cal2 = Calendar.getInstance();
+			            cal2.setTimeInMillis(original1.getTime());
+			            cal2.add(Calendar.DATE, 1);
+			            cal2.add(Calendar.MINUTE, 5);
+			            deadline_dt = new Timestamp(cal2.getTime().getTime());
+						errorMsgs.add("截止日期最早為24小時之後!");
+			        }
+			      //揪團截止時間一定要<場次前一天
+			        if( deadline_dt.after(oneDayBefore)) {
+			        	Calendar cal2 = Calendar.getInstance();
+			            cal2.setTimeInMillis(oneDayBefore.getTime());
+			            cal2.add(Calendar.MINUTE, -1);
+			            deadline_dt = new Timestamp(cal2.getTime().getTime());
+						errorMsgs.add("截止日期最晚要在場次前一天");
+			        }
+			        
 				} catch (IllegalArgumentException e) {
-					deadline_dt=new java.sql.Timestamp(System.currentTimeMillis());
+					deadline_dt=new Timestamp(System.currentTimeMillis());
 					errorMsgs.add("請輸入截止日期!");
 				}
 				
@@ -646,7 +683,7 @@ public class GroupServlet extends HttpServlet {
 		}
 		
 		
-		
+		//複合查詢
 		if ("getAllShowtimeByMovie_no".equals(action)) { // 來自select_page.jsp的請求
 //			res.setContentType("application/json; charset=uft-8");
 			res.setCharacterEncoding("utf-8");
@@ -672,6 +709,44 @@ public class GroupServlet extends HttpServlet {
 			return;
 		}
 		
+		//我的揪團
+		if ("listMyGroups".equals(action)) { // 來自select_page.jsp的複合查詢請求
+
+			List<String> errorMsgs = new LinkedList<String>();
+			// Store this set in the request scope, in case we need to
+			// send the ErrorPage view.
+			req.setAttribute("errorMsgs", errorMsgs);
+
+			try {
+				Integer member_no = null;
+				try {
+					member_no = new Integer(req.getParameter("member_no"));
+				} catch (Exception e) {
+					errorMsgs.add("揪團編號格式不正確");
+				}
+				if (!errorMsgs.isEmpty()) {
+					RequestDispatcher failureView = req
+							.getRequestDispatcher("/front-end/group/select_page.jsp/select_page.jsp");
+					failureView.forward(req, res);
+					return;//程式中斷
+				}
+				/***************************2.開始查詢我的揪團***************************************/
+				GroupService groupSvc = new GroupService();
+				List<GroupVO> list  = groupSvc.getMyGroups(member_no);
+				
+				
+				/***************************3.查詢完成,準備轉交(Send the Success view)************/
+				req.setAttribute("listMyGroups", list); // 資料庫取出的list物件,存入request
+				RequestDispatcher successView = req.getRequestDispatcher("/front-end/group/group_listMyGroups.jsp"); // 成功轉交listEmps_ByCompositeQuery.jsp
+				successView.forward(req, res);
+				/***************************其他可能的錯誤處理**********************************/
+			} catch (Exception e) {
+				errorMsgs.add(e.getMessage());
+				RequestDispatcher failureView = req
+						.getRequestDispatcher("/front-end/group/select_page.jsp");
+				failureView.forward(req, res);
+			}
+		}
 		
 		if ("updateOne_For_Ajax".equals(action)) { 
 			List<String> errorMsgs = new LinkedList<String>();
@@ -836,16 +911,9 @@ public class GroupServlet extends HttpServlet {
 				req.setAttribute("action", "getOne_For_Display");
 				String url = "/group/group.do";
 				
-				//???不加下面3行, getOne_For_Display收不到參數....
-				String a = req.getParameter("action");
-				String b = req.getParameter("requestURL");
-				String c = req.getParameter("group_no");
-				
-				System.out.println(b);
-//				"<%=request.getContextPath()%>/group/group.do?action=getOne_For_Display&group_no=${groupVO.group_no}&requestURL=<%=request.getServletPath()%>"
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交 listOneEmp.jsp
 				successView.forward(req, res);
-			
+			 
 			}
 			catch (Exception e) {
 				errorMsgs.add("無法取得資料:" + e.getMessage());

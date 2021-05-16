@@ -246,13 +246,14 @@ th, td {
 			console.log("¹Îªø!");
 			$("#joinBtn").hide();
 			$("#leaveBtn").hide();
-			$("#modifyBtn").show();
 			$("#reportBtn").show();
 			if ( group_status === 0){
 				$("#gogoBtn")	.show();
 				$("#dismissBtn").show();
+				$("#modifyBtn").show();
 			} else{
 				$("#gogoBtn").hide();
+				$("#modifyBtn").hide();
 				$("#dismissBtn").hide();
 			}
 		}

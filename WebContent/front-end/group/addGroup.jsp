@@ -87,7 +87,7 @@
 	<jsp:useBean id="movieSvc" scope="page" class="com.movie.model.MovieService" />
 	<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/group/group.do" id="add-form" name="form1" class="card p-2" onclick="return false">
 		<div class="form-group font-weight-bold">
-			<label for="member_no">主揪會員:</label>
+			<label for="member_no">主揪:</label>
 			<input id="member_no" type="hidden" name="member_no" value="${memVO.member_no}" class="input-md form-control">
 			${memVO.mb_name}
 		</div>

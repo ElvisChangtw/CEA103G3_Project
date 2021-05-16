@@ -75,6 +75,9 @@ public class GroupService {
 	public List<GroupVO> getAllGroupByMemno(Integer memberno) {
 		return dao.getAllByMemno(memberno);
 	}
+	public List<GroupVO> getMyGroups(Integer member_no) {
+		return dao.getMyGroups(member_no);
+	}
 	public void groupOverDue(Integer group_no) {
 		dao.failure(group_no);
 	}

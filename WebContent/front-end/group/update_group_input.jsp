@@ -115,7 +115,6 @@
 		<div class="form-group">
 			<label for="required_no" class="font-weight-bold">需求人數:</label>
 			<select id="required_no" size="1" name="required_cnt" class="input-md form-control">
-				<option value="1">1</option>
 				<option value="2">2</option>
 				<option value="3">3</option>
 				<option value="4">4</option>
@@ -132,7 +131,7 @@
 			<textarea id="desc" name="desc"  placeholder="請輸入揪團說明" class="input-md form-control"></textarea>
 		</div>
 		<div class="form-group">
-			<label for="f_date1" class="font-weight-bold">截止時間(最晚為場次前一天)</label>
+			<label for="f_date1" class="font-weight-bold">截止時間(最早為24小時後, 最晚為場次前一天)</label>
 			<input name="deadline_dt" id="f_date1" type="text" class="input-md form-control">
 		</div>
 		<div class="form-group">
@@ -288,7 +287,6 @@ function getOption1() {
 				option.text(timeFormat(lstShowtime[i].showtime_time));
 				$('#showtime_selection').append(option);  
  			}
-			
 
 			let selectValue = "0";
 			//append showtime to <select>
@@ -304,7 +302,7 @@ function getOption1() {
 function timeFormat(timeStamp){
 	let time = new Date(timeStamp);
 	var year = time.getFullYear();
-	var month = (time.getMonth()<10)? '0'+time.getMonth(): time.getMonth();
+	var month = (time.getMonth()<10)? '0'+ (time.getMonth()+1) : time.getMonth();
 	var date = (time.getDate()<10)? '0'+time.getDate(): time.getDate();
 	var hour = (time.getHours()<10)? '0'+time.getHours(): time.getHours();
 	var min = (time.getMinutes()<10)? '0'+time.getMinutes(): time.getMinutes();
@@ -315,9 +313,9 @@ function timeFormat(timeStamp){
 $.datetimepicker.setLocale('zh');
 	$('#f_date1').datetimepicker({
 	theme: '',              //theme: 'dark',
-	timepicker:false,       //timepicker:true,
+	timepicker:true,       //timepicker:true,
 	step: 1,                //step: 60 (這是timepicker的預設間隔60分鐘)
-	format:'Y-m-d',         //format:'Y-m-d H:i:s',
+	format:'Y-m-d H:i',         //format:'Y-m-d H:i:s',
 	value: '<%=deadline_dt%>', // value:   new Timestamp(),
    //disabledDates:        ['2017/06/08','2017/06/09','2017/06/10'], // 去除特定不含
    //startDate:	            '2017/07/10',  // 起始日
@@ -329,13 +327,15 @@ $.datetimepicker.setLocale('zh');
 function restrictBeforeShow(dt){
     //      3.以下為兩個日期之外的日期無法選擇 (也可按需要換成其他日期)
 //          var somedate1 = new Date('2017-06-15');
-    	 var somedate1 = new Date();
+    	 var a = new Date();
+    	 var somedate1 = new Date(a.setDate(a.getDate()+1));
          var somedate2 = new Date(dt);
          $('#f_date1').datetimepicker({
              beforeShowDay: function(date) {
            	  if (  date.getYear() <  somedate1.getYear() || 
     		           (date.getYear() == somedate1.getYear() && date.getMonth() <  somedate1.getMonth()) || 
-    		           (date.getYear() == somedate1.getYear() && date.getMonth() == somedate1.getMonth() && date.getDate() < somedate1.getDate())
+    		           (date.getYear() == somedate1.getYear() && date.getMonth() == somedate1.getMonth() && date.getDate() < somedate1.getDate()) ||
+    		           (date.getYear() == somedate1.getYear() && date.getMonth() == somedate1.getMonth() && date.getDate() == somedate2.getDate()+1  && date.getHours() < somedate1.getHours())
     		             ||
     		            date.getYear() >  somedate2.getYear() || 
     		           (date.getYear() == somedate2.getYear() && date.getMonth() >  somedate2.getMonth()) || 

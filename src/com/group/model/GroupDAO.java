@@ -29,14 +29,22 @@ public class GroupDAO implements GroupDAO_interface {
 //	private static final String GET_ALL_STMT = "SELECT * FROM `group` where group_status <> 3 order by group_no";
 	private static final String GET_ALL_STMT = " SELECT  S0.*  FROM `group` S0 " + 
 			" LEFT JOIN SHOWTIME S1 ON S0.SHOWTIME_NO = S1.SHOWTIME_NO " + 
-			" where S0.group_status in ( 0, 1)  AND DATE(S1.SHOWTIME_TIME) >= DATE_ADD(DATE(NOW()), INTERVAL 1 DAY) " +
+			" where S0.group_status = 0  AND DATE(S1.SHOWTIME_TIME) >= DATE_ADD(DATE(NOW()), INTERVAL 1 DAY) " +
 			" order by S0.group_no "; 
+	//
+	private static final String GET_MYGROUP_STMT = 
+			"SELECT  S0.*  FROM `group` S0 " + 
+			"LEFT JOIN SHOWTIME S1 ON S0.SHOWTIME_NO = S1.SHOWTIME_NO " + 
+			"LEFT JOIN GROUP_MEMBER S2 ON S0.GROUP_NO = S2.GROUP_NO " + 
+			"where S0.group_status in ( 0, 1)  AND DATE(S1.SHOWTIME_TIME) >= DATE_ADD(DATE(NOW()), INTERVAL 1 DAY) " + 
+			"and s2.member_no = ? order by S0.group_no ";
 	private static final String GET_ONE_STMT = "SELECT * FROM `group` where group_no = ?";
 	private static final String GET_Members_ByGroupno_STMT = "SELECT * FROM group_member where group_no = ? order by member_no";
 	private static final String DELETE_MEMBERS = "DELETE FROM `group_member` where group_no = ?";
 	private static final String DELETE_GROUP = "DELETE FROM `group` where group_no = ?";
 	private static final String UPDATE = "UPDATE `group` set showtime_no = ?, member_no = ?, group_title = ?, required_cnt = ?, group_status=?, `desc` = ?, deadline_dt = ?, modify_dt = default where group_no = ?";
 	private static final String GET_ALL_BY_GROUP_STMT = "SELECT * FROM `group` where member_no=?";	
+	
 	private static final String OVER_DUE_STMT = "UPDATE `GROUP` SET GROUP_STATUS = 3 where GROUP_NO = ?";
 	private static final String GOGO_STMT =
 			  "UPDATE `GROUP` S0  "
@@ -648,6 +656,67 @@ public class GroupDAO implements GroupDAO_interface {
 				}
 			}
 			return str;
+		}
+		
+		
+		@Override
+		public List<GroupVO> getMyGroups(int member_no) {
+			List<GroupVO> list = new ArrayList<GroupVO>();
+			GroupVO groupVO = null;
+
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			try {
+				con = ds.getConnection();
+				pstmt = con.prepareStatement(GET_MYGROUP_STMT);
+				pstmt.setInt(1, member_no);
+				rs = pstmt.executeQuery();
+
+				while (rs.next()) {
+					// 
+					groupVO = new GroupVO();
+					groupVO.setGroup_no(rs.getInt("group_no"));
+					groupVO.setShowtime_no(rs.getInt("showtime_no"));
+					groupVO.setMember_no(rs.getInt("member_no"));
+					groupVO.setGroup_title(rs.getString("group_title"));
+					groupVO.setRequired_cnt(rs.getInt("required_cnt"));
+					groupVO.setMember_cnt(rs.getInt("member_cnt"));
+					groupVO.setGroup_status(rs.getString("group_status"));
+					groupVO.setDesc(rs.getString("desc"));
+					groupVO.setCrt_dt(rs.getTimestamp("crt_dt"));
+					groupVO.setModify_dt(rs.getTimestamp("modify_dt"));
+					groupVO.setDeadline_dt(rs.getTimestamp("deadline_dt"));
+					list.add(groupVO); // Store the row in the list
+				}
+				// Handle any driver errors
+			} catch (SQLException se) {
+				throw new RuntimeException("A database error occured. " + se.getMessage());
+				// Clean up JDBC resources
+			} finally {
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (con != null) {
+					try {
+						con.close();
+					} catch (Exception e) {
+						e.printStackTrace(System.err);
+					}
+				}
+			}
+			return list;
 		}
 
 }
