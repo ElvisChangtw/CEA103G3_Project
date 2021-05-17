@@ -6,11 +6,10 @@
 
 <%
 	GroupService groupSvc = new GroupService();
-	List<GroupVO> list = groupSvc.getAll();
-	pageContext.setAttribute("list", list);
+	List<GroupVO> list = (List<GroupVO>) request.getAttribute("listMyGroups");
+ 	pageContext.setAttribute("list", list);
 %>
 <jsp:useBean id="memVO" scope="session" type="com.mem.model.MemVO" />
-
 <!--
 author: W3layouts
 author URL: http://w3layouts.com

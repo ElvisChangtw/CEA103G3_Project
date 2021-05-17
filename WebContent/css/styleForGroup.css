@@ -1,6 +1,9 @@
-        .w3l-movie-gride-agile.requested-movies img.img-responsive {
-            width: 227.865px;
+        div.col-md-2.w3l-movie-gride-agile.requested-movies>a.hvr-sweep-to-bottom{
+            width: 100%;
             height: 300px;
+        }
+        div.col-md-2.w3l-movie-gride-agile.requested-movies>a.hvr-sweep-to-bottom>img{
+            height: 100%;
         }
         /*         .w3l-movie-text h6 a.group-title {
             color: #02a388;
@@ -56,8 +59,8 @@
         div.agile_featured_movies>h3.h3.agile_w3_title.hor-t {
             margin-bottom: 0.5em;
         }
-        div.container.div-add {
-            max-width: 650px;
+        div.container.div-add, div.container.div-update, div.container.div-addReport{
+            max-width: 800px;
         }
         #dd-cntDown>p.counter {
             color: darkblue !important;
@@ -66,4 +69,45 @@
         #dd-cntDown>p.urgentCounter {
             color: #DC143C !important;
             font-style: italic !important;
+        }
+        div.mid-1.agileits_w3layouts_mid_1_home {
+            color: darkgreen;
+        }
+        
+        #reportBtn>a{
+        	background-color:rgb(235, 198, 52);
+        	color:white;
+        }
+        .alpha{
+        	FILTER: Alpha(opacity=60);/*ªí®æ³z©ú*/
+        }
+        #table-listOne>tbody>tr>th, #table-listOne>tbody>tr>td{
+        	font-size:1em;
+        }
+        #display.container{
+        	max-width: 100%;
+        }
+        div.jumbotron>div.row>div.div-th{
+        	text-align: end;
+        }
+        #modifyBtn, #reportBtn, #dismissBtn, #joinBtn, #leaveBtn, #backBtn, #gogoBtn{
+        	padding: 8.5px 12px;
+        	border-radius: 10px;
+        }
+        div#display.container{
+        	padding: 50px 20px;
+        }
+        #backBtn{
+        	background-color: darkslateblue;
+        	color:white;
+        }
+        #add-group-btn{
+        	border-radius: 3px;
+        }
+        div.list-btn>button.btn.btn-outline-dark{
+        border-color:#343a40;
+        border: 1px solid transparent;
+        background-color:transparent;
+        line-height: 1.5;
+        border-radius: 0.25rem;
         }

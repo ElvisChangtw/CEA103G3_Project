@@ -3,14 +3,19 @@ package com.group_member.controller;
 import java.io.*;
 import java.util.*;
 import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
 import org.apache.catalina.tribes.MembershipService;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.group.model.GroupService;
+import com.group.model.GroupVO;
 import com.group_member.model.*;
-import com.mem.model.MemService;
 
+@WebServlet("/Group_MemberServlet")
 
 public class Group_MemberServlet extends HttpServlet {
 
@@ -288,6 +293,11 @@ public class Group_MemberServlet extends HttpServlet {
 				/***************************3.新增完成,準備轉交(Send the Success view)***********/
 
 				if("/front-end/group/listAllGroup.jsp".equals(requestURL) || "/front-end/group/group_front_page.jsp".equals(requestURL) ) {
+					
+					req.setAttribute("action", "getOne_From06"); // 資料庫取出的list物件,存入request
+					requestURL = "/group/group.do";
+				} else if ("/front-end/group/listOneGroup.jsp".equals(requestURL)){
+
 //					req.setAttribute("group_no", group_no); // 資料庫取出的list物件,存入request
 					req.setAttribute("action", "getOne_From06"); // 資料庫取出的list物件,存入request
 					requestURL = "/group/group.do";
@@ -319,30 +329,33 @@ public class Group_MemberServlet extends HttpServlet {
 			try {
 				/***************************1.接收請求參數***************************************/
 				Integer group_no = new Integer(req.getParameter("group_no"));
-
 				Integer member_no = new Integer(req.getParameter("member_no"));
-				
 				/***************************2.開始刪除資料***************************************/
 				Group_MemberService group_memberSvc = new Group_MemberService();
 				group_memberSvc.deleteGroup_Member(group_no, member_no);
 				
 				/***************************3.刪除完成,準備轉交(Send the Success view)***********/								
 				GroupService groupSvc = new GroupService();
-				if(requestURL.equals("/front-end/group/listMembers_ByGroupno.jsp") || requestURL.equals("/front-end/group/listAllGroup.jsp")) {
+				if(requestURL.equals("/front-end/group/listMembers_ByGroupno.jsp") || requestURL.equals("/front-end/group/listAllGroup.jsp")
+						|| requestURL.equals("/front-end/group/listOneGroup.jsp")) {
 					req.setAttribute("listMembers_ByGroupno",groupSvc.getMembersByGroupno(group_no)); // 資料庫取出的list物件,存入request
+					req.setAttribute("group_no", group_no);
 				}
-					
-				if(requestURL.equals("/front-end/group_member/listGroups_ByMemberno.jsp") ) {
-					req.setAttribute("listGroups_ByMemberno", group_memberSvc.getGroups(member_no)); // 資料庫取出的list物件,存入request
-				}
+				GroupVO groupVO = groupSvc.getOneGroup(group_no);
+				req.setAttribute("groupVO", groupVO);
+				
+				
+//				if(requestURL.equals("/front-end/group_member/listGroups_ByMemberno.jsp") ) {
+//					req.setAttribute("listGroups_ByMemberno", group_memberSvc.getGroups(member_no)); // 資料庫取出的list物件,存入request
+//				}
 
 				if(requestURL.equals("/front-end/group_member/listMembers_ByCompositeQuery.jsp")){
 					HttpSession session = req.getSession();
 					Map<String, String[]> map = (Map<String, String[]>)session.getAttribute("map");
 					List<Group_MemberVO> list  = group_memberSvc.getAll(map);
 					req.setAttribute("listMembers_ByCompositeQuery",list); //  複合查詢, 資料庫取出的list物件,存入request
-				}
 				
+				}
 				String url = requestURL;
 				RequestDispatcher successView = req.getRequestDispatcher(url);// 刪除成功後,轉交回送出刪除的來源網頁
 				successView.forward(req, res);
@@ -421,7 +434,6 @@ public class Group_MemberServlet extends HttpServlet {
 				failureView.forward(req, res);
 			}
 		}
-		
 
 		if ("listMembers_ByCompositeQuery".equals(action)) { // 來自select_page.jsp的複合查詢請求
 
@@ -475,6 +487,78 @@ public class Group_MemberServlet extends HttpServlet {
 			out.close();
 			return;
 			
+			}
+			
+		if ("getGroup_Member_Ajax".equals(action)) { // 來自listAllEmp.jsp
+			res.setCharacterEncoding("utf-8");
+			PrintWriter out = res.getWriter();
+			Integer group_no = new Integer(req.getParameter("group_no"));
+			GroupService groupSvc = new GroupService();
+			Set<Group_MemberVO> set = groupSvc.getMembersByGroupno(group_no);
+						
+			JSONArray memberByGroup_no = new JSONArray(set);  //
+			JSONObject jsonobj=new JSONObject();
+			try {
+				jsonobj.put("memberByGroup_no", memberByGroup_no);
+				out.print(jsonobj.toString());
+				return;
+			}catch(JSONException e) {
+				e.printStackTrace();
+			}finally {
+				out.flush();
+				out.close();
+			}
+		}
+		
+		
+		if("leave_group_for_Ajax".equals(action)) {
+			List<String> errorMsgs = new ArrayList<String>();
+			req.setAttribute("errorMsgs", errorMsgs);
+			PrintWriter out = res.getWriter();
+			try {
+				int group_no = new Integer(req.getParameter("group_no"));
+				int member_no = new Integer(req.getParameter("member_no"));
+				String status="0";
+				String pay_status="0";
+				Group_MemberService groupMemSvc = new Group_MemberService();
+				groupMemSvc.leaveGroupByMem(status, group_no, member_no, pay_status);
+				out.print("success");
+
+			}
+			catch(Exception e) {
+				out.print("fail");
+				errorMsgs.add("評論刪除失敗");
+				RequestDispatcher failureView = req
+						.getRequestDispatcher("/front-end/mem/memberSys.jsp");
+				failureView.forward(req, res);
+			}finally {
+				out.flush();
+				out.close();
+			}
+		}
+		
+		
+		
+		if("getGroupCount_Ajax".equals(action)) {
+			List<String> errorMsgs = new ArrayList<String>();
+			req.setAttribute("errorMsgs", errorMsgs);
+			PrintWriter out = res.getWriter();
+			try {
+				int group_no = new Integer(req.getParameter("group_no"));
+				Group_MemberService groupMemSvc = new Group_MemberService();
+				int count = groupMemSvc.getGroupCount(group_no);
+				out.print(count);
+			}
+			catch(Exception e) {
+				out.print("fail");
+				errorMsgs.add("取得揪團人數失敗");
+				RequestDispatcher failureView = req
+						.getRequestDispatcher("/front-end/mem/memberSys.jsp");
+				failureView.forward(req, res);
+			}finally {
+				out.flush();
+				out.close();
+			}
 		}
 	}
 }

@@ -25,6 +25,7 @@ import idv.david.websocketchat.model.State;
 @ServerEndpoint("/FriendWS/{userName}")
 public class FriendWS {
 	private static Map<String, Session> sessionsMap = new ConcurrentHashMap<>();
+	//ConcurrentHashMap並行
 	Gson gson = new Gson();
 
 	@OnOpen
@@ -32,7 +33,7 @@ public class FriendWS {
 		/* save the new user in the map */
 		sessionsMap.put(userName, userSession);
 		/* Sends all the connected users to the new user */
-		Set<String> userNames = sessionsMap.keySet();
+		Set<String> userNames = sessionsMap.keySet();  //所有在線上的使用者們
 		State stateMessage = new State("open", userName, userNames);
 		String stateMessageJson = gson.toJson(stateMessage);
 		Collection<Session> sessions = sessionsMap.values();
@@ -56,6 +57,7 @@ public class FriendWS {
 		if ("history".equals(chatMessage.getType())) {
 			List<String> historyData = JedisHandleMessage.getHistoryMsg(sender, receiver);
 			String historyMsg = gson.toJson(historyData);
+			System.out.println(historyMsg);
 			ChatMessage cmHistory = new ChatMessage("history", sender, receiver, historyMsg);
 			if (userSession != null && userSession.isOpen()) {
 				userSession.getAsyncRemote().sendText(gson.toJson(cmHistory));

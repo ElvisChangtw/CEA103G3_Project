@@ -47,19 +47,22 @@ public class ArticleCollectionServlet extends HttpServlet {
 				artcolSvc.addArticleCollection(article_no, member_no);
 
 				//設session傳memVO，有等入系統後刪掉
-				MemService memSvc = new MemService();
-				MemVO memVO = memSvc.getOneMem(member_no);
-				req.getSession().setAttribute("memVO", memVO);
-				RequestDispatcher successView = req.getRequestDispatcher("/front-end/mem/memberSys.jsp");
-				successView.forward(req, res);
-				
+//				MemService memSvc = new MemService();
+//				MemVO memVO = memSvc.getOneMem(member_no);
+//				req.getSession().setAttribute("memVO", memVO);
+				out.print("success");
 			}catch(Exception e) {
-				errorMsgs.add("文章收藏新增失敗");
+				out.print("fail");
+				errorMsgs.add("文章收藏修改失敗");
 				RequestDispatcher failureView = req
 						.getRequestDispatcher("/front-end/mem/memberSys.jsp");
 				failureView.forward(req, res);
+			}finally {
+				out.flush();
+				out.close();
 			}
-		}
+        	
+        }
 		
 		if("delete".equals(action)) {
 			List<String> errorMsgs = new ArrayList<String>();

@@ -28,13 +28,17 @@ RelationshipVO relationshipVO = (RelationshipVO) request.getAttribute("relations
 	int count = 0;
 	LikeService likeSvc = new LikeService();
 	
-	ArticleCollectionService articleCollectionSvc = new ArticleCollectionService();
+
 	
-	int myNumber = 3; //到時要換成從session取memVO出來
+	int myNumber = 6; //到時要換成從session取memVO出來
 	pageContext.setAttribute("myNumber", myNumber);
 	//(為了ajax)找此文章有無此會員按讚紀錄
 	
 	MemVO memVO = (MemVO) session.getAttribute("memVO");//取用登入的session
+	
+	ArticleCollectionService articleCollectionSvc = new ArticleCollectionService();
+	ArticleCollectionVO articleCollectionVO = articleCollectionSvc.getOneArticleCollection(articleno, myNumber);
+	pageContext.setAttribute("articleCollectionVO", articleCollectionVO);
 	
 %>
 <jsp:useBean id="topicSvc" scope="page" class="com.topic.model.TopicService" />	
@@ -108,8 +112,10 @@ RelationshipVO relationshipVO = (RelationshipVO) request.getAttribute("relations
 				<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/article/article.do" style="margin-bottom: 0px;" >
 				<button type="button" class="btn btn-outline-success" onclick="location.href='<%=request.getContextPath()%>/front-end/article/listAllArticle.jsp'">回上一列表</button>
 				<input type="submit" value="修改文章" class="btn btn-danger">
+				<span><i class="fas fa-bookmark" id="thumb1" style="font-size: 30px" ></i></span>
+				<a id="hao2">我是書本可以點我!!</a>
 				<input type="hidden" name="requestURL"	value="<%=request.getServletPath()%>">
-	<!-- 			送出請求到update_article_input.jsp   -->
+	<!-- 			送出請求到update_article_input.jsp   -->				
 				<input type="hidden" name="articleno"  value="${articleVO.articleno}">
 				<input type="hidden" name="action"	value="getOne_For_Update"></FORM>	
  		 	</div>	
@@ -120,7 +126,7 @@ RelationshipVO relationshipVO = (RelationshipVO) request.getAttribute("relations
  		 		<div class="row">
  		 			<div class="col-md-3" style="text-align:center;">
 		 		 		<img src ="<%=request.getContextPath()%>/MemServlet?action=view_memPic&member_no=${articleVO.memberno}" height= "200px" width="200px" style="margin-bottom:8px"/>
-		 		 		<h3><span class="badge badge-pill badge-success" style="font-size:1.5rem">樓主 ${memSvc.getOneMem(articleVO.memberno).mb_name}</span></h3>		 		 		
+		 		 		<h3><span class="badge badge-pill badge-success" style="font-size:1.5rem">樓主 ${memSvc.getOneMem(articleVO.memberno).mb_name}</span></h3>		 		 				 		 		
 		 		 	</div>
 		 		 	<div class="card-title col-md-9">
 		 		 		<p style="font-size:2.50rem;"><font color=orange>【${topicSvc.getOneTopic(articleVO.articletype).topic}】</font>${articleVO.articleheadline}</p>
@@ -136,8 +142,16 @@ RelationshipVO relationshipVO = (RelationshipVO) request.getAttribute("relations
 							<input type="submit" value="送出好友邀請"></FORM>
 <!-- 						加入好友按鈕 -->
 						</div>
-		 		 	</div>
+		 		 	</div>		 		 	
 	 		 	</div>
+				<div  style="text-align:right">
+	 		 		<c:if test="${not empty articleVO.updatedt}">
+						最後編輯時間:<fmt:formatDate value="${articleVO.updatedt}" pattern="yyyy-MM-dd HH:mm:ss"/>
+					</c:if>
+			 		<c:if test="${empty articleVO.updatedt}">
+						發表文章時間:<fmt:formatDate value="${articleVO.crtdt}" pattern="yyyy-MM-dd HH:mm:ss"/>
+					</c:if>	
+				</div>
 			</div>
  		 </div>
   			<div class="card-body ">
@@ -151,14 +165,7 @@ RelationshipVO relationshipVO = (RelationshipVO) request.getAttribute("relations
 						文章點讚數:${articleVO.likecount}											
 					</h4>
 						<div style="text-align:left"><span><i class="fas fa-heart" id="thumb" style="font-size: 50px"></i></span></div>
-						<div style="text-align:left"><span><i class="fas fa-heart" id="thumb1" style="font-size: 20px"></i></span>收藏</div>
-						<div style="text-align:left" id="hao1">我是愛心可以點我喔!!</div>
-					<c:if test="${not empty articleVO.updatedt}">
-						最後編輯時間:<fmt:formatDate value="${articleVO.updatedt}" pattern="yyyy-MM-dd HH:mm:ss"/>
-					</c:if>
-			 		<c:if test="${empty articleVO.updatedt}">
-						發表文章時間:<fmt:formatDate value="${articleVO.crtdt}" pattern="yyyy-MM-dd HH:mm:ss"/>
-					</c:if>					
+						<div style="text-align:left" id="hao1">我是愛心可以點我喔!!</div>				
 			</div>
 			  	<div class="card-footer bg-transparent border-success">
 <%-- 					文章狀態:${articleVO.status} --%>
@@ -193,13 +200,14 @@ RelationshipVO relationshipVO = (RelationshipVO) request.getAttribute("relations
 						</div>
 					</div>	
 						<div class="row">
-					 		<div class="col-md-6">
-						 		<p class="alert alert-light" role="alert" style="padding-top:0px; margin-top:20px; ">
+					 		<div class="col-md-7.5" >
+						 		<p style="padding-top:0px; margin-top:20px; " style="width: 200%;">
+						 			<img src ="<%=request.getContextPath()%>/MemServlet?action=view_memPic&member_no=${replyVO.member_no}" height= "100px" width="100px" style="border-radius:50%" style="margin-bottom:5px"/>
 						 			【<font color=orange>${memSvc.getOneMem(replyVO.member_no).mb_name}</font>】
 						 			${replyVO.content}		 		 					 					 			
 						 		</p>
 					 		</div>
-					 	<div class="col-md-6" style="text-align:right; margin-top:20px;">
+					 	<div class="col-md-4.5" style="text-align:right; margin-top:20px;">
 						 	<c:if test="${not empty replyVO.modify_dt}">
 						 		最後編輯時間
 						 		<fmt:formatDate value="${replyVO.modify_dt}" pattern="yyyy-MM-dd HH:mm:ss"/>
@@ -274,21 +282,6 @@ RelationshipVO relationshipVO = (RelationshipVO) request.getAttribute("relations
 			$("#thumb").css("color","#FF7575");
 			isLiked = !isLiked;
 	   }   
-// 	   -----------------以下收藏----------------------
-		articleCollectionSvc
-	    let isCollection = <%=((likeSvc.getOneLike(articleno, myNumber)==null)? false:true)%>	
-		
-		$(document).ready(function(){
-			console.log("isLiked = " + isLiked);
-			//第一次判斷
-			if(isLiked){
-				console.log("應該要亮");
-				$("#thumb").css("color","#FF7575");
-			} else{
-				console.log("應該要暗");
-				$("#thumb").css("color","black");
-			}
-		});
 	   
 	   let articleno = "${articleVO.articleno}";
 	   let memberno = "${myNumber}";
@@ -308,16 +301,32 @@ RelationshipVO relationshipVO = (RelationshipVO) request.getAttribute("relations
 		   }
 	   });
 	  });
-	 $("#thumb1").click(function(e){
-		    let likeCnt;
-			if(isLiked){
-				likeCnt =${articleVO.likecount};
-				$("#thumb1").css("color","black");
-				isLiked = !isLiked;
-			} else{
-				likeCnt = ${articleVO.likecount};
+	 
+//	   --------------------以下收藏----------------------
+
+		let isCollection = <%=((articleCollectionSvc.getOneArticleCollection(articleno, myNumber)==null)? false:true)%>	
+		$(document).ready(function(){
+			//第一次判斷
+			if(isCollection){
+				console.log("收藏應該要亮");
 				$("#thumb1").css("color","blue");
-				isLiked = !isLiked;
+			} else{
+				console.log("收藏應該要暗");
+				$("#thumb1").css("color","black");
+			}
+		});
+	 
+	 $("#thumb1").click(function(e){
+			if(isCollection){
+				$("#hao2").text("我要收藏");
+				$("#thumb1").css("color","black");
+				
+				isCollection = !isCollection;
+			} else{
+				$("#hao2").text("取消收藏");
+				$("#thumb1").css("color","blue");
+				
+				isCollection = !isCollection;
 		   }   
 		   
 		   let article_no = "${articleVO.articleno}";

@@ -231,7 +231,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
 			<div class="form-group col-2">
 				<input type="hidden" name="action" value="listGroups_ByCompositeQuery">
-		      	<button class="btn btn-danger btn-sm" type="submit" value="送出">搜尋</button>
+		      	<button class="btn btn-danger btn-md" type="submit" value="送出">搜尋</button>
+	      	</div>
+	      	<div class="form-group col-2">
+				<a href="<%=request.getContextPath()%>/front-end/group/addGroup.jsp" 
+								style="margin-bottom: 0px;" class="btn btn-info" id="add-group-btn">建立揪團</a>
 	      	</div>
 		</div>
      </FORM>
@@ -311,7 +315,10 @@ License URL: http://creativecommons.org/licenses/by/3.0/
             </ul>
         </div>
     </div>
-    
+     <div class="list-btn">
+          <button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/front-end/group/group_front_page.jsp'">進行中揪團</button>   
+          <button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}'">我的揪團</button>   
+    </div>
     
     <!-- //breadcrumb -->
     <!--/content-inner-section-->

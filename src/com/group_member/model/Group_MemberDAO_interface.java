@@ -11,5 +11,8 @@ public interface Group_MemberDAO_interface {
           
           public List<Group_MemberVO> getAll();
           //萬用複合查詢(傳入參數型態Map)(回傳 List)
-          public List<Group_MemberVO> getAll(Map<String, String[]> map); 
+          public List<Group_MemberVO> getAll(Map<String, String[]> map);
+		  public void kickUnpaidMemberOut(Integer group_no); 
+		  
+		  public int getGroupCount(Integer group_no);
 }
