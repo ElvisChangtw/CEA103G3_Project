@@ -99,7 +99,8 @@ class TimerTask_KickOut extends TimerTask {
 	@Override
 	public void run() {
 		Group_MemberService group_memberSvc = new Group_MemberService();
-		group_memberSvc.kickUnpaidMemberOut(this.groupVO.getGroup_no());;
+		group_memberSvc.kickUnpaidMemberOut(this.groupVO.getGroup_no());
 		System.out.println("揪團編號: " + this.groupVO.getGroup_no() + "之未付款團員已剔除完成!!!");
+		System.out.println("揪團編號: " + this.groupVO.getGroup_no() + "狀態更改為正常出團，結束!!!");
 	}
 }

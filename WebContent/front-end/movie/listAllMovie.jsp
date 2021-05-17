@@ -381,13 +381,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 											<th align="center">電影名稱</th>
 											<th align="center">電影長度</th>
 											<th align="center">上映日期</th>
+											<th align="center">下映日期</th>
 											<th align="center">狀態</th>
 											<th align="center">分級</th>
 											<th align="center">類型</th>
 											<th align="center">評分</th>
 											<th align="center">期待度</th>
 											<th align="center">預告片</th>
-											<th align="center">操作</th>
+<!-- 											<th align="center">操作</th> -->
 										  </tr>
 										</thead>
 										<tbody>
@@ -400,6 +401,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 											alt="尚無圖片" width="180px;" height="220px" title="${movieVO.moviename}"/> 
 											<span  style="text-align: center; display:block; font-size:20px; font-weight:bold;">${movieVO.moviename}</span></a></td>
 											<c:choose>
+												<c:when test="${movieVO.length == 0}">
+													<td width="110px;">尚無時間</td>
+												</c:when>
 												<c:when test="${((movieVO.length)/60)<1}">
 													<td width="110px;">${movieVO.length}分鐘</td>
 												</c:when>
@@ -418,6 +422,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 											</c:choose>
 											<td width="105px;"><fmt:formatDate value="${movieVO.premiredate}"
 												pattern="yyyy-MM-dd" /></td>
+											<td width="105px;"><fmt:formatDate value="${movieVO.offdate}"
+												pattern="yyyy-MM-dd" /></td>
 											<c:choose>
 												<c:when test="${movieVO.status.equals('0')}">
 													<td width="70px;">上映中</td>
@@ -434,19 +440,19 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 											</c:choose>
 											<c:choose>
 												<c:when test="${movieVO.grade.equals('0')}">
-													<td width="90px;">普遍級</td>
+													<td width="70px;">普遍級</td>
 												</c:when>
 												<c:when test="${movieVO.grade.equals('1')}">
-													<td width="90px;">保護級</td>
+													<td width="70px;">保護級</td>
 												</c:when>
 												<c:when test="${movieVO.grade.equals('2')}">
-													<td width="90px;">輔導級</td>
+													<td width="70px;">輔導級</td>
 												</c:when>
 												<c:when test="${movieVO.grade.equals('3')}">
-													<td width="90px;">限制級</td>
+													<td width="70px;">限制級</td>
 												</c:when>
 												<c:otherwise>
-													<td width="90px;">尚未分級</td>
+													<td width="70px;">尚未分級</td>
 												</c:otherwise>
 											</c:choose>
 												<td width="80px;">${movieVO.category}</td>
@@ -535,27 +541,26 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 											<td width="80px;"><a class="w3_play_icon1" href="#small-dialog_${movieVO.movieno}">觀看</a></td>
 <%-- 												<td width="50px;"><a class="w3_play_icon1" href="${movieVO.trailor}">觀看</a></td> --%>
 											
-											<td width="100px;">
-												<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/movie/movie.do" style="margin-bottom: 0px;">
-													<input type="submit" value="修改"> 
-													<input type="hidden" name="movieno" value="${movieVO.movieno}"> 
-													<input type="hidden" name="requestURL" value="<%=request.getServletPath()%>">
-													<!--送出本網頁的路徑給Controller-->
-													<input type="hidden" name="whichPage" value="<%=whichPage%>">
-													<!--送出當前是第幾頁給Controller-->
-													<input type="hidden" name="action" value="getOne_For_Update">
-												</FORM>
-												<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/movie/movie.do" style="margin-bottom: 0px;">
-													<input type="submit" value="刪除"> 
-													<input type="hidden" name="movieno" value="${movieVO.movieno}"> 
-													<input type="hidden" name="requestURL" value="<%=request.getServletPath()%>">
-													<!--送出本網頁的路徑給Controller-->
-													<input type="hidden" name="whichPage" value="<%=whichPage%>">
-													<!--送出當前是第幾頁給Controller-->
-													<input type="hidden" name="action" value="delete">
-												</FORM>
-												<li><a href='<%=request.getContextPath()%>/back-end/movie/addMovie.jsp'>Add</a></li>
-											</td>
+<!-- 											<td width="100px;"> -->
+<%-- 												<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/movie/movie.do" style="margin-bottom: 0px;"> --%>
+<!-- 													<input type="submit" value="修改">  -->
+<%-- 													<input type="hidden" name="movieno" value="${movieVO.movieno}">  --%>
+<%-- 													<input type="hidden" name="requestURL" value="<%=request.getServletPath()%>"> --%>
+<!-- 													送出本網頁的路徑給Controller -->
+<%-- 													<input type="hidden" name="whichPage" value="<%=whichPage%>"> --%>
+<!-- 													送出當前是第幾頁給Controller -->
+<!-- 													<input type="hidden" name="action" value="getOne_For_Update"> -->
+<!-- 												</FORM> -->
+<%-- 												<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/movie/movie.do" style="margin-bottom: 0px;"> --%>
+<!-- 													<input type="submit" value="刪除">  -->
+<%-- 													<input type="hidden" name="movieno" value="${movieVO.movieno}">  --%>
+<%-- 													<input type="hidden" name="requestURL" value="<%=request.getServletPath()%>"> --%>
+<!-- 													送出本網頁的路徑給Controller -->
+<%-- 													<input type="hidden" name="whichPage" value="<%=whichPage%>"> --%>
+<!-- 													送出當前是第幾頁給Controller -->
+<!-- 													<input type="hidden" name="action" value="delete"> -->
+<!-- 												</FORM> -->
+<!-- 											</td> -->
 											</tr>
 											
 										</c:forEach>

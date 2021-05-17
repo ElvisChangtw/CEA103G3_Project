@@ -316,9 +316,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
         </div>
     </div>
      <div class="list-btn">
-          <button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/front-end/group/group_front_page.jsp'">進行中揪團</button>   
-          <button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}'">我的揪團</button>   
-    </div>
+      	<button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/front-end/group/group_front_page.jsp'">進行中揪團</button>   
+        <button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=0'">我的揪團(尚未出團)</button>
+        <button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=1'">我的歷史揪團(準備出團)</button>
+        <button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=2'">我的歷史揪團(已結束)</button>    
+   </div>
     
     <!-- //breadcrumb -->
     <!--/content-inner-section-->
@@ -341,7 +343,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                         
 <!--複合查詢揪團開始 -->
                 <div class="col-md-2 w3l-movie-gride-agile requested-movies">
-                    <a href="<%=request.getContextPath()%>/group/group.do?action=getOne_From06&group_no=${groupVO.group_no}&requestURL=<%=request.getServletPath()%>" class="hvr-sweep-to-bottom">
+                    <a href="<%=request.getContextPath()%>/group/group.do?action=getOne_For_Display&group_no=${groupVO.group_no}&requestURL=<%=request.getServletPath()%>" class="hvr-sweep-to-bottom">
                     	<img src="${pageContext.request.contextPath}/movie/DBGifReader4.do?movieno=${showtimeSvc.getOneShowtime(groupVO.showtime_no).movie_no}" title="MoviesHit" class="img-responsive" alt="尚無圖片">
                         <div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
                     </a>
