@@ -98,7 +98,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                             <ul class="nav navbar-nav">
                                 <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">會員專區 <b class="caret"></b></a>
+<!--                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">會員專區 <b class="caret"></b></a> -->
+                                    <li><a><img  class="dropdown-toggle"  data-toggle="dropdown" src="${pageContext.request.contextPath}/mem/mem.do?action=view_memPic&member_no=${memVO.member_no}" 
+                                style="border-radius:50%; width:50px; height:50px;"> <b class="caret"></b></a></li>
                                     <ul class="dropdown-menu multi-column columns-2">
                                         <li>
                                             <div class="col-sm-6">
@@ -243,7 +245,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                                     </ul>
                                 </li>
                                 <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">公告<b class="caret"></b></a>
+<!--                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">公告<b class="caret"></b></a> -->
+                                     <li><a><img  class="dropdown-toggle"  data-toggle="dropdown" src="${pageContext.request.contextPath}/mem/mem.do?action=view_memPic&member_no=${memVO.member_no}" 
+                                style="border-radius:50%; width:50px; height:50px;"> <b class="caret"></b></a></li>
                                     <ul class="dropdown-menu multi-column columns-1">
                                         <li>
                                             <div class="col-sm-12">
@@ -265,7 +269,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                                         </li>
                                     </ul>
                                 </li>
-                                <li class="active"><a href="index.html">影城介紹</a></li>
+<!--                                 <li class="active"><a href="index.html">影城介紹</a></li> -->
+                                <li><img  class="media-object" src="${pageContext.request.contextPath}/mem/mem.do?action=view_memPic&member_no=${memVO.member_no}" 
+                                style="border-radius:50%; width:50px; height:50px;"></li>
                             </ul>
                         </div>
 					<div class="clearfix"> </div>	

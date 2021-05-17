@@ -342,10 +342,10 @@ public class MovieServlet extends HttpServlet {
 					errorMsgs.put("premiredate", "有下映日期就要有上映日期");
 				} else if (premiredate != null && offdate != null) {
 					if (offdate.before(premiredate)) {
-						errorMsgs.put("offdate", "下檔日期要比上映日期晚");
+						errorMsgs.put("offdate", "下映日期要比上映日期晚");
 					}
 					if (fmt.format(premiredate).equals(fmt.format(offdate))) {
-						errorMsgs.put("offdate", "上映當天就下映 可以這樣上上下下嗎");
+						errorMsgs.put("offdate", "上映當天就下映,可以這樣上上下下嗎?可以嗎?????");
 					}
 				}
 
@@ -450,7 +450,7 @@ public class MovieServlet extends HttpServlet {
 				/*************************** 3.修改完成,準備轉交(Send the Success view) *************/
 //				req.setAttribute("movieVO", movieVO); // 資料庫update成功後,正確的的movieVO物件,存入req
 
-				if (requestURL.equals("/front-end/movie/listMovies_ByCompositeQuery.jsp")) {
+				if (requestURL.equals("/back-end/movie/backEndlistMovies_ByCompositeQuery.jsp")) {
 					HttpSession session = req.getSession();
 					Map<String, String[]> map = (Map<String, String[]>) session.getAttribute("map");
 					List<MovieVO> list = movieSvc.getAll(map);
@@ -458,8 +458,9 @@ public class MovieServlet extends HttpServlet {
 				}
 
 				String url = requestURL;
-//				RequestDispatcher successView = req.getRequestDispatcher(url); // 修改成功後,轉交listOneMovie.jsp
-				RequestDispatcher successView = req.getRequestDispatcher("/back-end/movie/listAllMovie2.jsp");
+				System.out.println(url);
+				RequestDispatcher successView = req.getRequestDispatcher(url); // 修改成功後,轉交listOneMovie.jsp
+//				RequestDispatcher successView = req.getRequestDispatcher("/back-end/movie/backEndlistAllMovie.jsp");
 				successView.forward(req, res);
 
 				/*************************** 其他可能的錯誤處理 *************************************/
@@ -472,7 +473,7 @@ public class MovieServlet extends HttpServlet {
 
 		if ("insert".equals(action)) { // 來自addMovie.jsp的請求
 
-			List<String> errorMsgs = new LinkedList<String>();
+			Map<String, String> errorMsgs = new LinkedHashMap<String, String>();
 			// Store this set in the request scope, in case we need to
 			// send the ErrorPage view.
 			req.setAttribute("errorMsgs", errorMsgs);
@@ -483,7 +484,7 @@ public class MovieServlet extends HttpServlet {
 				String moviename = req.getParameter("moviename");
 //					String enameReg = "^[(\u4e00-\u9fa5)(a-zA-Z0-9_)]{2,30}$";
 				if (moviename == null || moviename.trim().length() == 0) {
-					errorMsgs.add("電影名稱: 請勿空白");
+					errorMsgs.put("moviename", "電影名稱: 請勿空白");
 //				} else if(!moviename.trim().matches(enameReg)) { //以下練習正則(規)表示式(regular-expression)
 //					errorMsgs.add("電影名稱: 只能是中、英文字母、數字和_ , 且長度必需在2到30之間");
 				}
@@ -500,7 +501,8 @@ public class MovieServlet extends HttpServlet {
 						in.read(moviepicture1);
 						in.close();
 					} else {
-						errorMsgs.add("上傳圖片附檔名必須是.apng,.avif,.gif,.jpg,.jpeg,.jfif,.pjpeg,.pjp,.png,.svg,.webp");
+						errorMsgs.put("moviepicture1",
+								"上傳圖片附檔名必須是.apng,.avif,.gif,.jpg,.jpeg,.jfif,.pjpeg,.pjp,.png,.svg,.webp");
 					}
 				}
 
@@ -516,23 +518,24 @@ public class MovieServlet extends HttpServlet {
 						in2.read(moviepicture2);
 						in2.close();
 					} else {
-						errorMsgs.add("上傳圖片附檔名必須是.apng,.avif,.gif,.jpg,.jpeg,.jfif,.pjpeg,.pjp,.png,.svg,.webp");
+						errorMsgs.put("moviepicture2",
+								"上傳圖片附檔名必須是.apng,.avif,.gif,.jpg,.jpeg,.jfif,.pjpeg,.pjp,.png,.svg,.webp");
 					}
 				}
 
 				String director = req.getParameter("director").trim();
 				if (director == null || director.trim().length() == 0) {
-					errorMsgs.add("導演名字請勿空白");
+					errorMsgs.put("director", "導演名字請勿空白");
 				}
 
 				String actor = req.getParameter("actor").trim();
 				if (actor == null || actor.trim().length() == 0) {
-					errorMsgs.add("演員名字請勿空白");
+					errorMsgs.put("actor", "演員名字請勿空白");
 				}
 
 				String category = "";
 				if (req.getParameterValues("category") == null || req.getParameterValues("category").length == 0) {
-					errorMsgs.add("電影類型請勿空白");
+					errorMsgs.put("category", "電影類型請勿空白");
 				} else {
 					String values[] = req.getParameterValues("category");
 					for (int i = 0; i < values.length; i++) {
@@ -544,43 +547,73 @@ public class MovieServlet extends HttpServlet {
 					}
 				}
 
-				Integer length = new Integer(req.getParameter("length").trim());
+				Integer length = null;
+				try {
+					length = new Integer(req.getParameter("length").trim());
+				} catch (NumberFormatException e) {
+					length = 0;
+					errorMsgs.put("length", "請重新輸入電影長度");
+				}
+//				System.out.println(length.intValue());
 
 				String status = req.getParameter("status").trim();
 				if (status == null || status.trim().length() == 0) {
-					errorMsgs.add("電影狀態請勿空白");// 給input type="TEXT"用的
+					errorMsgs.put("status", "電影狀態請勿空白");// 給input type="TEXT"用的
 				} else if (status.equals("9")) {
-					errorMsgs.add("請選擇電影狀態");// 給select下拉式選單低一個留空白用的
+					errorMsgs.put("status", "請選擇電影狀態");// 給select下拉式選單低一個留空白用的
 				}
 
+				SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
 				java.sql.Date premiredate = null;
-				try {
-					premiredate = java.sql.Date.valueOf(req.getParameter("premiredate").trim());
-				} catch (IllegalArgumentException e) {
-					premiredate = new java.sql.Date(System.currentTimeMillis());
-					errorMsgs.add("請重新輸入上映日期!");
-				}
-
 				java.sql.Date offdate = null;
 				try {
+					premiredate = java.sql.Date.valueOf(req.getParameter("premiredate").trim());
+
+				} catch (Exception e) {
+					premiredate = null;
+				}
+				try {
 					offdate = java.sql.Date.valueOf(req.getParameter("offdate").trim());
+				} catch (Exception e) {
+					offdate = null;
+				}
+				if (premiredate == null && offdate == null) {
+				} else if (premiredate == null && offdate != null) {
+					errorMsgs.put("premiredate", "有下映日期就要有上映日期");
+				} else if (premiredate != null && offdate != null) {
 					if (offdate.before(premiredate)) {
-						errorMsgs.add("下檔日期要比上映日期晚");
+						errorMsgs.put("offdate", "下映日期要比上映日期晚");
 					}
-				} catch (IllegalArgumentException e) {
-					offdate = new java.sql.Date(System.currentTimeMillis());
-					errorMsgs.add("請重新輸入下檔日期!");
+					if (fmt.format(premiredate).equals(fmt.format(offdate))) {
+						errorMsgs.put("offdate", "上映當天就下映,可以這樣上上下下嗎?可以嗎?????");
+					}
 				}
 
 				String trailor = req.getParameter("trailor").trim();
-
 				String embed = req.getParameter("embed").trim();
+				String trailorReg = "^(https?\\:\\/\\/)?(www\\.)?(youtube\\.com|youtu\\.?be)\\/.+$";
+				
+				if(trailor.length() ==0  && embed.length() ==0) {
+					trailor = null;
+					embed = null;
+				}else if(trailor.length() !=0  && embed.length() ==0) {
+					if (!trailor.trim().matches(trailorReg)) {
+						errorMsgs.put("trailor", "請輸入正確格式網址");
+					}
+					errorMsgs.put("embed", "有輸入預告片網址,記得附上短網址");
+				}else if(trailor.length() ==0  && embed.length() !=0) {
+					errorMsgs.put("trailor", "請記得輸入預告片網址");
+				}else if(trailor.length() !=0  && embed.length() !=0) {
+					if (!trailor.trim().matches(trailorReg)) {
+						errorMsgs.put("trailor", "請輸入正確格式網址");
+					}
+				}
 
 				String grade = req.getParameter("grade").trim();
 				if (grade == null || grade.trim().length() == 0) {
-					errorMsgs.add("電影分級請勿空白");// 給input type="TEXT"用的
+					errorMsgs.put("grade", "電影分級請勿空白");// 給input type="TEXT"用的
 				} else if (grade.equals("9")) {
-					errorMsgs.add("請選擇電影分級");// 給select下拉式選單用的
+					errorMsgs.put("grade", "請選擇電影分級");// 給select下拉式選單用的
 				}
 
 				MovieVO movieVO = new MovieVO();
@@ -612,13 +645,13 @@ public class MovieServlet extends HttpServlet {
 						status, premiredate, offdate, trailor, embed, grade);
 
 				/*************************** 3.新增完成,準備轉交(Send the Success view) ***********/
-				String url = "/front-end/movie/listAllMovie.jsp";
+				String url = "/back-end/movie/backEndlistAllMovie.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 新增成功後轉交listAllMovie.jsp
 				successView.forward(req, res);
 
 				/*************************** 其他可能的錯誤處理 **********************************/
 			} catch (Exception e) {
-				errorMsgs.add(e.getMessage());
+				errorMsgs.put("Exception", e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/back-end/movie/addMovie.jsp");
 				failureView.forward(req, res);
 			}
@@ -643,19 +676,19 @@ public class MovieServlet extends HttpServlet {
 
 				/*************************** 3.刪除完成,準備轉交(Send the Success view) ***********/
 
-				String url = "/front-end/movie/listAllMovie.jsp";
+				String url = "/back-end/movie/backEndlistAllMovie.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url);// 刪除成功後,轉交回送出刪除的來源網頁
 				successView.forward(req, res);
 
 				/*************************** 其他可能的錯誤處理 **********************************/
 			} catch (Exception e) {
 				errorMsgs.add("刪除資料失敗:" + e.getMessage());
-				RequestDispatcher failureView = req.getRequestDispatcher("/front-end/movie/listAllMovie.jsp");
+				RequestDispatcher failureView = req.getRequestDispatcher("/back-end/movie/backEndlistAllMovie.jsp");
 				failureView.forward(req, res);
 			}
 		}
 
-		if ("listMovies_ByCompositeQuery".equals(action)) { // 來自select_page.jsp的複合查詢請求
+		if ("listMovies_ByCompositeQuery".equals(action) || "listMovies_ByCompositeQuery_back".equals(action)) { // 來自select_page.jsp的複合查詢請求
 			List<String> errorMsgs = new LinkedList<String>();
 			// Store this set in the request scope, in case we need to
 			// send the ErrorPage view.
@@ -683,14 +716,24 @@ public class MovieServlet extends HttpServlet {
 
 				/*************************** 3.查詢完成,準備轉交(Send the Success view) ************/
 				req.setAttribute("listMovies_ByCompositeQuery", list); // 資料庫取出的list物件,存入request
+				
+				String url = null;
+				if ("listMovies_ByCompositeQuery".equals(action)) {
+					url = "/front-end/movie/listMovies_ByCompositeQuery.jsp"; 
+				}
+				else if ("listMovies_ByCompositeQuery_back".equals(action)) {
+					url = "/back-end/movie/backEndlistMovies_ByCompositeQuery.jsp"; 
+				}//這要改成後端複合查詢
+					
+				
 				RequestDispatcher successView = req
-						.getRequestDispatcher("/front-end/movie/listMovies_ByCompositeQuery.jsp"); // 成功轉交listEmps_ByCompositeQuery.jsp
+						.getRequestDispatcher(url); // 成功轉交listEmps_ByCompositeQuery.jsp
 				successView.forward(req, res);
 
 				/*************************** 其他可能的錯誤處理 **********************************/
 			} catch (Exception e) {
 				errorMsgs.add(e.getMessage());
-				RequestDispatcher failureView = req.getRequestDispatcher("/front-end/movie/select_movie_page.jsp");
+				RequestDispatcher failureView = req.getRequestDispatcher("/back-end/movie/backEndlistAllMovie.jsp");
 				failureView.forward(req, res);
 			}
 		}
