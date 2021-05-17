@@ -1,11 +1,11 @@
 package com.relationship.model;
-import java.sql.Date;
 
 public class RelationshipVO implements java.io.Serializable{
 	private Integer member_no;
 	private Integer friend_no;
 	private String status;
 	private String isblock;
+	
 	public Integer getMember_no() {
 		return member_no;
 	}

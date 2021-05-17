@@ -207,7 +207,7 @@ RelationshipVO relationshipVO = (RelationshipVO) request.getAttribute("relations
 						 			${replyVO.content}		 		 					 					 			
 						 		</p>
 					 		</div>
-					 	<div class="col-md-4.5" style="text-align:right; margin-top:20px;">
+					 	<div class="col-md-4.5" style="text-align:right; margin-top:110px;">
 						 	<c:if test="${not empty replyVO.modify_dt}">
 						 		最後編輯時間
 						 		<fmt:formatDate value="${replyVO.modify_dt}" pattern="yyyy-MM-dd HH:mm:ss"/>

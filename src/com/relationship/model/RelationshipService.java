@@ -1,7 +1,9 @@
 package com.relationship.model;
 
-import java.sql.Date;
 import java.util.List;
+import java.util.Map;
+
+import com.article.model.ArticleVO;
 
 public class RelationshipService {
 
@@ -46,5 +48,12 @@ public class RelationshipService {
 	public List<RelationshipVO> getAll() {
 		return dao.getAll();
 	}
+	public List<RelationshipVO> getAllFriendno(Integer member_no) {
+		return dao.getAllFriendno(member_no);
+	}
+	public List<RelationshipVO> getAll(Map<String, String[]> map) {		
+		return dao.getAll(map);
+	}
+	
 }
 		
