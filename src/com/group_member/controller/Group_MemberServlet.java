@@ -238,7 +238,7 @@ public class Group_MemberServlet extends HttpServlet {
 			}
 		}
 		
-        if ("insert".equals(action)) { // 來自addGroup_Member.jsp的請求  
+        if ("insert".equals(action)) { // 來自`.jsp的請求  
 			
 			List<String> errorMsgs = new LinkedList<String>();
 			// Store this set in the request scope, in case we need to

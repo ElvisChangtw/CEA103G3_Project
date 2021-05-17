@@ -1,5 +1,6 @@
 package com.group.model;
 
+import java.sql.Connection;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
@@ -75,8 +76,8 @@ public class GroupService {
 	public List<GroupVO> getAllGroupByMemno(Integer memberno) {
 		return dao.getAllByMemno(memberno);
 	}
-	public List<GroupVO> getMyGroups(Integer member_no) {
-		return dao.getMyGroups(member_no);
+	public List<GroupVO> getMyGroups(Integer member_no, Integer group_status) {
+		return dao.getMyGroups(member_no, group_status);
 	}
 	public void groupOverDue(Integer group_no) {
 		dao.failure(group_no);
@@ -86,5 +87,11 @@ public class GroupService {
 	}
 	public String getGroupStatus(Integer group_no) {
 		return dao.getGroupStatus(group_no);
+	}
+	public List<GroupVO> getStatusEquals1(){
+		return dao.getStatusEquals1();
+	}
+	public void updateStatusFrom_1_to_2(Integer group_no, Connection con) {
+		dao.updateStatusFrom_1_to_2(group_no, con);
 	}
 }

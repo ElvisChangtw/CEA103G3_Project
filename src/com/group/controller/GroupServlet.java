@@ -25,11 +25,16 @@ public class GroupServlet extends HttpServlet {
 	public void init() throws ServletException{
 		this.groupTimer= new GroupTimer();
 		
-		//init()時建立所有揪團被刪除之排程器
+		//init()時建立所有揪團失敗截止之排程器
 		GroupService groupSvc = new GroupService();
 		List<GroupVO> list= groupSvc.getAll();
 		for(GroupVO groupVO : list) {
 			groupTimer.addDismissTask(groupVO);
+		}
+		//建立揪團成員未付款被踢掉之排程器
+		List<GroupVO> list1= groupSvc.getStatusEquals1();
+		for(GroupVO groupVO : list1) {
+			groupTimer.addKickOutTask(groupVO);
 		}
 	}
 	public void doGet(HttpServletRequest req, HttpServletResponse res)
@@ -49,7 +54,6 @@ public class GroupServlet extends HttpServlet {
 		else {
 			action = req.getParameter("action");
 		}
-
 
 		if ("getOne_For_Display".equals(action)) { // 來自select_page.jsp的請求
 
@@ -299,10 +303,12 @@ public class GroupServlet extends HttpServlet {
 				groupVO = groupSvc.updateGroup(group_no, showtime_no, 
 						member_no, group_title, required_cnt, 
 						group_status, desc, crt_dt, modify_dt, deadline_dt);
-
+				//更新排程器
+				groupTimer.cancelDismissTask(group_no);
+				groupTimer.addDismissTask(groupVO);
 				/***************************3.修改完成,準備轉交(Send the Success view)*************/
 				req.setAttribute("groupVO", groupVO); // 資料庫update成功後,正確的的groupVO物件,存入req
-				
+
 				String url = "/front-end/group/group_front_page.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 修改成功後,轉交listOneEmp.jsp
 				successView.forward(req, res);
@@ -487,6 +493,9 @@ public class GroupServlet extends HttpServlet {
 				/***************************2.開始刪除資料***************************************/
 				GroupService groupSvc = new GroupService();
 				groupSvc.deleteGroup(group_no);
+				
+				//取消截止排程器
+				groupTimer.cancelDismissTask(group_no);
 				
 				/***************************3.刪除完成,準備轉交(Send the Success view)***********/								
 				String url = "/front-end/group/group_front_page.jsp";
@@ -722,7 +731,14 @@ public class GroupServlet extends HttpServlet {
 				try {
 					member_no = new Integer(req.getParameter("member_no"));
 				} catch (Exception e) {
-					errorMsgs.add("揪團編號格式不正確");
+					errorMsgs.add("會員編號格式不正確");
+				}
+				
+				Integer group_status = null;
+				try {
+					group_status = new Integer(req.getParameter("group_status"));
+				} catch (Exception e) {
+					errorMsgs.add("揪團狀態格式不正確");
 				}
 				if (!errorMsgs.isEmpty()) {
 					RequestDispatcher failureView = req
@@ -732,7 +748,7 @@ public class GroupServlet extends HttpServlet {
 				}
 				/***************************2.開始查詢我的揪團***************************************/
 				GroupService groupSvc = new GroupService();
-				List<GroupVO> list  = groupSvc.getMyGroups(member_no);
+				List<GroupVO> list  = groupSvc.getMyGroups(member_no, group_status);
 				
 				
 				/***************************3.查詢完成,準備轉交(Send the Success view)************/
@@ -959,11 +975,7 @@ public class GroupServlet extends HttpServlet {
 				out.close();
 			}
 		}
-		
-		
-		
-		
-		
+
 		
 	} //doPost結尾
 	public void destroy() {

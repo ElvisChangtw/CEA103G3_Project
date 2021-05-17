@@ -30,20 +30,30 @@ public class GroupDAO implements GroupDAO_interface {
 	private static final String GET_ALL_STMT = " SELECT  S0.*  FROM `group` S0 " + 
 			" LEFT JOIN SHOWTIME S1 ON S0.SHOWTIME_NO = S1.SHOWTIME_NO " + 
 			" where S0.group_status = 0  AND DATE(S1.SHOWTIME_TIME) >= DATE_ADD(DATE(NOW()), INTERVAL 1 DAY) " +
-			" order by S0.group_no "; 
+			" AND S0.REQUIRED_CNT > S0.MEMBER_CNT "
+			+ " order by S0.group_no "; 
 	//
 	private static final String GET_MYGROUP_STMT = 
 			"SELECT  S0.*  FROM `group` S0 " + 
 			"LEFT JOIN SHOWTIME S1 ON S0.SHOWTIME_NO = S1.SHOWTIME_NO " + 
 			"LEFT JOIN GROUP_MEMBER S2 ON S0.GROUP_NO = S2.GROUP_NO " + 
-			"where S0.group_status in ( 0, 1)  AND DATE(S1.SHOWTIME_TIME) >= DATE_ADD(DATE(NOW()), INTERVAL 1 DAY) " + 
-			"and s2.member_no = ? order by S0.group_no ";
+			"where S0.group_status = ?  AND DATE(S1.SHOWTIME_TIME) >= DATE_ADD(DATE(NOW()), INTERVAL 1 DAY) " + 
+			"and s2.member_no = ? AND S2.STATUS = 1 "
+			+ "order by S0.group_no ";
 	private static final String GET_ONE_STMT = "SELECT * FROM `group` where group_no = ?";
 	private static final String GET_Members_ByGroupno_STMT = "SELECT * FROM group_member where group_no = ? order by member_no";
 	private static final String DELETE_MEMBERS = "DELETE FROM `group_member` where group_no = ?";
 	private static final String DELETE_GROUP = "DELETE FROM `group` where group_no = ?";
 	private static final String UPDATE = "UPDATE `group` set showtime_no = ?, member_no = ?, group_title = ?, required_cnt = ?, group_status=?, `desc` = ?, deadline_dt = ?, modify_dt = default where group_no = ?";
+	
+	//update時順便踢掉除團長外所有團員
+	private static final String UPDATE_GROUP_AND_DELETE_MEMS_EXCEPT_HOST = "UPDATE `GROUP` S0 " + 
+			"LEFT JOIN `GROUP_MEMBER` S1 " + 
+			"ON S0.GROUP_NO = S1.GROUP_NO AND S0.MEMBER_NO <> S1.MEMBER_NO " + 
+			"SET S1.STATUS = 0 , S0.MEMBER_CNT = 1 " + 
+			"WHERE S0.GROUP_NO = ?";
 	private static final String GET_ALL_BY_GROUP_STMT = "SELECT * FROM `group` where member_no=?";	
+	private static final String GET_STAT_EQUALS_1 = "SELECT * FROM `group` where GROUP_STATUS= 1;";	
 	
 	private static final String OVER_DUE_STMT = "UPDATE `GROUP` SET GROUP_STATUS = 3 where GROUP_NO = ?";
 	private static final String GOGO_STMT =
@@ -53,7 +63,7 @@ public class GroupDAO implements GroupDAO_interface {
 			+ ", S0.DEADLINE_DT = DATE_ADD(S1.SHOWTIME_TIME, INTERVAL -1 HOUR) " 
 			+ "where GROUP_NO = ?; ";
 	private static final String GET_ONE_STATUS_STMT = "SELECT GROUP_STATUS FROM `GROUP` where GROUP_NO = ?";
-	
+	private static final String UPDATE_STAT_FROM_1_TO_2 = "UPDATE `GROUP` SET GROUP_STATUS = 2 WHERE GROUP_NO = ? AND GROUP_STATUS = 1";
 	@Override
 	public int insert(GroupVO groupVO) {
 
@@ -113,10 +123,13 @@ public class GroupDAO implements GroupDAO_interface {
 	public void update(GroupVO groupVO) {
 
 		Connection con = null;
-		PreparedStatement pstmt = null;
+		PreparedStatement pstmt = null, pstmt2 = null;
 
 		try {
 			con = ds.getConnection();
+			con.setAutoCommit(false);
+
+			//更新揪團資訊
 			pstmt = con.prepareStatement(UPDATE);
 			pstmt.setInt(1, groupVO.getShowtime_no());
 			pstmt.setInt(2, groupVO.getMember_no());
@@ -127,9 +140,19 @@ public class GroupDAO implements GroupDAO_interface {
 			pstmt.setString(6, groupVO.getDesc());
 			pstmt.setTimestamp(7, groupVO.getDeadline_dt());
 			pstmt.setInt(8, groupVO.getGroup_no());
-
 			pstmt.executeUpdate();
-
+			
+			
+			//踢掉所有團員(其實是更新group_member表該筆status狀態為1)
+			pstmt2 = con.prepareStatement(UPDATE_GROUP_AND_DELETE_MEMS_EXCEPT_HOST);
+			pstmt2.setInt(1, groupVO.getGroup_no());
+			pstmt2.executeUpdate();
+			
+			
+			
+			
+			con.commit();
+			con.setAutoCommit(true);
 			
 			// Handle any driver errors
 		} catch (SQLException se) {
@@ -139,6 +162,13 @@ public class GroupDAO implements GroupDAO_interface {
 			if (pstmt != null) {
 				try {
 					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt2 != null) {
+				try {
+					pstmt2.close();
 				} catch (SQLException se) {
 					se.printStackTrace(System.err);
 				}
@@ -328,7 +358,66 @@ public class GroupDAO implements GroupDAO_interface {
 		}
 		return list;
 	}
+	
+	//出團中的，到時候給timer取出來，狀態改成正常出團用
+	@Override
+	public List<GroupVO> getStatusEquals1() {
+		List<GroupVO> list = new ArrayList<GroupVO>();
+		GroupVO groupVO = null;
 
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_STAT_EQUALS_1);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// 
+				groupVO = new GroupVO();
+				groupVO.setGroup_no(rs.getInt("group_no"));
+				groupVO.setShowtime_no(rs.getInt("showtime_no"));
+				groupVO.setMember_no(rs.getInt("member_no"));
+				groupVO.setGroup_title(rs.getString("group_title"));
+				groupVO.setRequired_cnt(rs.getInt("required_cnt"));
+				groupVO.setMember_cnt(rs.getInt("member_cnt"));
+				groupVO.setGroup_status(rs.getString("group_status"));
+				groupVO.setDesc(rs.getString("desc"));
+				groupVO.setCrt_dt(rs.getTimestamp("crt_dt"));
+				groupVO.setModify_dt(rs.getTimestamp("modify_dt"));
+				groupVO.setDeadline_dt(rs.getTimestamp("deadline_dt"));
+				list.add(groupVO); // Store the row in the list
+			}
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}
 	@Override
 	public Set<Group_MemberVO> getMembersByGroupno(Integer group_no) {
 		Set<Group_MemberVO> set = new LinkedHashSet<Group_MemberVO>();
@@ -404,7 +493,8 @@ public class GroupDAO implements GroupDAO_interface {
 					+ "LEFT JOIN MOVIE S2 ON S1.MOVIE_NO = S2.MOVIE_NO "
 					+ "LEFT JOIN `MEMBER` S3 ON S0.MEMBER_NO = S3.MEMBER_NO "
 					+ jdbcUtil_CompositeQuery_Group.get_WhereCondition(map)
-					+ " order by group_no";
+					+ " AND S0.REQUIRED_CNT > S0.MEMBER_CNT "
+					+ "order by group_no";
 			
 			pstmt = con.prepareStatement(finalSQL);
 			System.out.println("finalSQL(by DAO) = "+finalSQL);
@@ -516,8 +606,6 @@ public class GroupDAO implements GroupDAO_interface {
 		}
 		return list;
 	}
-	
-
 	//截止時間內團長未出團, 失敗結束
 	@Override
 	public void failure(Integer group_no) {
@@ -660,7 +748,7 @@ public class GroupDAO implements GroupDAO_interface {
 		
 		
 		@Override
-		public List<GroupVO> getMyGroups(int member_no) {
+		public List<GroupVO> getMyGroups(int member_no, int group_status) {
 			List<GroupVO> list = new ArrayList<GroupVO>();
 			GroupVO groupVO = null;
 
@@ -670,7 +758,8 @@ public class GroupDAO implements GroupDAO_interface {
 			try {
 				con = ds.getConnection();
 				pstmt = con.prepareStatement(GET_MYGROUP_STMT);
-				pstmt.setInt(1, member_no);
+				pstmt.setInt(1,  group_status);
+				pstmt.setInt(2, member_no);
 				rs = pstmt.executeQuery();
 
 				while (rs.next()) {
@@ -717,6 +806,40 @@ public class GroupDAO implements GroupDAO_interface {
 				}
 			}
 			return list;
+		}
+		
+		
+		@Override
+		public void updateStatusFrom_1_to_2(Integer group_no, Connection con) {
+//			Connection con = null;
+			PreparedStatement pstmt = null;
+
+			try {
+//				con = ds.getConnection();
+				pstmt = con.prepareStatement(UPDATE_STAT_FROM_1_TO_2);
+				pstmt.setInt(1, group_no);
+				pstmt.executeUpdate();
+				
+				// Handle any driver errors
+			} catch (SQLException se) {
+				throw new RuntimeException("A database error occured. " + se.getMessage());
+				// Clean up JDBC resources
+			} finally {
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+//				if (con != null) {
+//					try {
+//						con.close();
+//					} catch (Exception e) {
+//						e.printStackTrace(System.err);
+//					}
+//				}
+			}
 		}
 
 }
