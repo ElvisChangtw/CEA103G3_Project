@@ -5,7 +5,8 @@ import java.util.*;
 import javax.naming.*;
 import javax.sql.DataSource;
 
-import com.comment.model.CommentVO;
+import com.comment.model.*;
+
 
 public class ReportCommentDAO implements ReportCommentDAO_interface{
 	
@@ -20,15 +21,19 @@ public class ReportCommentDAO implements ReportCommentDAO_interface{
 	}
 	
 	private static final String INSERT_STMT = 
-			"insert into REPORT_COMMENT (COMMENT_NO,CONTENT,MEMBER_NO,EXECUTE_DT,DESC) values (?, ?, ?, null, ?)";
+			"insert into REPORT_COMMENT (COMMENT_NO,CONTENT,CRT_DT=default,MEMBER_NO,STATUS=0) values (?, ?, ?)";
 	private static final String UPDATE_STMT = 
 			"update REPORT_COMMENT set EXECUTE_DT=default, STATUS=?, DESC=? where REPORT_NO = ?";
+	private static final String UPDATE_ALL_REPORT_FROM_THISCOMMENT_STMT = 
+			"update REPORT_COMMENT set EXECUTE_DT=default, STATUS=?, DESC=? where COMMENT_NO = ?";
+	private static final String SELECT_REPORT_OR_NOTREPORT_STMT = 
+			"select IF(EXISTS(select * from REPORT_COMMENT where COMMENT_NO = ? and `STATUS` = 1),'report','notreport') as `action`";
 	private static final String DELETE_STMT = 
 			"delete from REPORT_COMMENT where REPORT_NO = ?";
 	private static final String GET_ONE_STMT = 
 			"select * from REPORT_COMMENT where REPORT_NO = ?";	
 	private static final String GET_ALL_STMT = 
-			"select * from REPORT_COMMENT order by REPORT_NO";
+			"select * from REPORT_COMMENT where STATUS=0  order by REPORT_NO";
 	
 	@Override
 	public void insert(ReportCommentVO reportcommentVO) {
@@ -43,7 +48,6 @@ public class ReportCommentDAO implements ReportCommentDAO_interface{
 			pstmt.setInt(1, reportcommentVO.getCommentno());
 			pstmt.setString(2, reportcommentVO.getContent());
 			pstmt.setInt(3, reportcommentVO.getMemberno());
-			pstmt.setString(4, reportcommentVO.getDesc());
 
 			pstmt.executeUpdate();
 
@@ -95,6 +99,84 @@ public class ReportCommentDAO implements ReportCommentDAO_interface{
 			if (pstmt != null) {
 				try {
 					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+	}
+	
+	@Override
+	public void updateAllReportFromThisComment(ReportCommentVO reportcommentVO) {
+		
+		Connection con = null;
+		PreparedStatement pstmt1 = null;
+		PreparedStatement pstmt2 = null;	
+		ResultSet rs = null;
+
+		try {
+			con = ds.getConnection();
+			
+			con.setAutoCommit(false);
+			//先更新這筆檢舉
+			pstmt1 = con.prepareStatement(UPDATE_ALL_REPORT_FROM_THISCOMMENT_STMT);
+
+			pstmt1.setString(1, reportcommentVO.getStatus());
+			pstmt1.setString(2, reportcommentVO.getDesc());
+			pstmt1.setInt(3, reportcommentVO.getCommentno());
+			pstmt1.executeUpdate();
+			
+			//搜尋是這筆檢舉是否通過
+			pstmt2 = con.prepareStatement(SELECT_REPORT_OR_NOTREPORT_STMT);	
+			pstmt2.setInt(1, reportcommentVO.getCommentno());
+			rs = pstmt2.executeQuery();
+			
+			//再判斷是否要更新評論的狀態
+			rs.next();
+			if(rs.getString("action").equals("report")) {
+				CommentDAO dao = new CommentDAO();
+				CommentVO commentVO = new CommentVO();
+				commentVO.setCommentno(reportcommentVO.getCommentno());
+				dao.updateCommentStatus(commentVO,con);
+			}
+			con.commit();
+			con.setAutoCommit(true);
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			se.printStackTrace();
+			if (con != null) {
+				try {
+					// 3●設定於當有exception發生時之catch區塊內
+					System.err.print("------------------------------------Transaction is being ");
+					System.err.println("rolled back-由-reportcomment");
+					con.rollback();
+				} catch (SQLException excep) {
+					throw new RuntimeException("rollback error occured. "
+							+ excep.getMessage());
+				}
+			}
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt2 != null) {
+				try {
+					pstmt2.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt1 != null) {
+				try {
+					pstmt1.close();
 				} catch (SQLException se) {
 					se.printStackTrace(System.err);
 				}
@@ -176,7 +258,6 @@ public class ReportCommentDAO implements ReportCommentDAO_interface{
 				reportcommentVO.setExecutedate(rs.getTimestamp("EXECUTE_DT"));
 				reportcommentVO.setStatus(rs.getString("STATUS"));
 				reportcommentVO.setDesc(rs.getString("DESC"));
-				
 			}
 
 			// Handle any driver errors

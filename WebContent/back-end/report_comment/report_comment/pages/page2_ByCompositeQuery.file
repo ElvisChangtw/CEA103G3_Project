@@ -1,0 +1,26 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="Big5"%>
+
+<%if (rowsPerPage<rowNumber) {%>
+	<%if(pageIndex>=rowsPerPage){%>
+  	  <li><a class="frist" href="<%=request.getContextPath()%>/movie/movie.do?whichPage=1&action=listMovies_ByCompositeQuery">第一頁</a></li>
+		<li><a class="frist" href="<%=request.getContextPath()%>/movie/movie.do?whichPage=<%=whichPage-1%>&action=listMovies_ByCompositeQuery">上一頁</a></li>
+	<%}%> 
+ 	<%if(pageIndex<pageIndexArray[pageNumber-1]){%>
+		<li><a class="last" href="<%=request.getContextPath()%>/movie/movie.do?whichPage=<%=whichPage+1%>&action=listMovies_ByCompositeQuery">下一頁</a></li>
+		<li><a class="last" href="<%=request.getContextPath()%>/movie/movie.do?whichPage=<%=pageNumber%>&action=listMovies_ByCompositeQuery">最後一頁</a></li>
+	<%}%>
+<%}%> 
+ 
+<br><br>
+
+  <%if ( pageNumber > 1) {%>
+    <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/movie/movie.do">   
+       <select size="1" name="whichPage">
+         <%for (int i=1; i<=pageNumber; i++){%>
+            <option value="<%=i%>">跳至第<%=i%>頁
+         <%}%> 
+       </select>
+       <input type="submit" value="確定" >
+       <input type="hidden" name="action" value="listMovies_ByCompositeQuery">  
+    </FORM>
+  <%}%>

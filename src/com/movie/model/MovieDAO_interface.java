@@ -27,9 +27,10 @@ public interface MovieDAO_interface {
     public MovieVO getOneNewestComingSoonMovie();
     public List<MovieVO> getAllTopRatingInTheatersMovie(); 
     public List<MovieVO> getAllTopExpectationComingSoonMovie(); 
-    public void updateMovieRating ( MovieVO movieVO , java.sql.Connection con);
-    public void updateMovieExpectation ( MovieVO movieVO , java.sql.Connection con);
+    public void updateMovieRating (MovieVO movieVO , java.sql.Connection con);
+    public void updateMovieExpectation (MovieVO movieVO , java.sql.Connection con);
     
 	public void createMovieIdex() ;
+	public List<MovieVO> getAllForGroup();
     
 }

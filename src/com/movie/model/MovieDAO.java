@@ -27,6 +27,8 @@ public class MovieDAO implements MovieDAO_interface{
 			"insert into MOVIE (MOVIE_NAME,MOVIE_PIC1,MOVIE_PIC2,DIRECTOR,ACTOR,CATEGORY,LENGTH,STATUS,PREMIERE_DT,OFF_DT,TRAILOR,EMBED,GRADE) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String UPDATE_STMT = 
 			"update MOVIE set MOVIE_NAME=?, MOVIE_PIC1=?, MOVIE_PIC2=?, DIRECTOR=?, ACTOR=?, CATEGORY=?, LENGTH=?, STATUS=?, PREMIERE_DT=?, OFF_DT=?, TRAILOR=?, EMBED=?, GRADE=? where MOVIE_NO = ?";
+	private static final String DELETE_REPORT_COMMENTS = 
+			"with a as (select S2.REPORT_NO from MOVIE S0 left join COMMENT S1 on S0.MOVIE_NO = S1.MOVIE_NO left join REPORT_COMMENT S2 on S1.COMMENT_NO = S2.COMMENT_NO where S0.MOVIE_NO = ? and S2.REPORT_NO is not null and S1.COMMENT_NO is not null ) delete from REPORT_COMMENT where REPORT_NO in (select REPORT_NO from a)";
 	private static final String DELETE_COMMENTS = 
 			"delete from COMMENT where MOVIE_NO = ?";
 	private static final String DELETE_MOVIE = 
@@ -70,6 +72,16 @@ public class MovieDAO implements MovieDAO_interface{
 	private static final String INSRET_MOVIE_NAME_INDEX = 
 			"INSERT INTO `MOVIE_NAME_INDEX` VALUES  (?, ?);";
 
+	//揪團要取24HR之後有場次的電影列表用
+		private static final String GET_ALL_FOR_GROUP = 
+			"select S0.*  from MOVIE S0 " + 
+			"LEFT JOIN ( " + 
+			"select MOVIE_NO, MAX(SHOWTIME_TIME) SHOWTIME_TIME from SHOWTIME GROUP BY MOVIE_NO " + 
+			")A  ON S0.MOVIE_NO = A.MOVIE_NO " + 
+			"where DATE_ADD(NOW(), interval 1 day ) <  A.SHOWTIME_TIME AND S0.STATUS = 0 " + 
+			"order by S0.MOVIE_NO ";
+	
+	
 	@Override
 	public void insert(MovieVO movieVO) {
 		Connection con = null;
@@ -174,6 +186,7 @@ public class MovieDAO implements MovieDAO_interface{
 	@Override
 	public void delete(Integer movieno) {
 		int updateCount_Comments = 0;
+		int updateCount_ReportComments = 0;
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -184,7 +197,10 @@ public class MovieDAO implements MovieDAO_interface{
 
 			// 1●設定於 pstm.executeUpdate()之前
 			con.setAutoCommit(false);
-
+			//先刪除檢舉評論
+			pstmt = con.prepareStatement(DELETE_REPORT_COMMENTS);
+			pstmt.setInt(1, movieno);
+			updateCount_ReportComments = pstmt.executeUpdate();
 			// 先刪除評論
 			pstmt = con.prepareStatement(DELETE_COMMENTS);
 			pstmt.setInt(1, movieno);
@@ -198,7 +214,7 @@ public class MovieDAO implements MovieDAO_interface{
 			con.commit();
 			con.setAutoCommit(true);
 			System.out.println("刪除電影編號" + movieno + "時,共有評論" + updateCount_Comments
-					+ "則同時被刪除");
+					+ "則同時被刪除,共有檢舉評論 " + updateCount_ReportComments +"則同時被刪除");
 			
 			// Handle any SQL errors
 		} catch (SQLException se) {
@@ -1252,14 +1268,12 @@ public class MovieDAO implements MovieDAO_interface{
 		PreparedStatement pstmt = null;
 
 		try {
-
      		pstmt = con.prepareStatement(UPDATE_MOVIE_RATING_STMT );
 
 			pstmt.setDouble(1, movieVO.getRating());	
 			pstmt.setInt(2, movieVO.getMovieno());
 
 			pstmt.executeUpdate();
-//			System.out.println("11");	
 			// Handle any driver errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
@@ -1282,14 +1296,12 @@ public class MovieDAO implements MovieDAO_interface{
 		PreparedStatement pstmt = null;
 
 		try {
-
      		pstmt = con.prepareStatement(UPDATE_MOVIE_EXPECTATION_STMT );
 
 			pstmt.setDouble(1, movieVO.getExpectation());	
 			pstmt.setInt(2, movieVO.getMovieno());
 
 			pstmt.executeUpdate();
-//			System.out.println("11");	
 			// Handle any driver errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
@@ -1384,6 +1396,73 @@ public class MovieDAO implements MovieDAO_interface{
 					}
 				}
 			}
+		}
+		
+		@Override
+		public List<MovieVO> getAllForGroup() {
+			List<MovieVO> list = new ArrayList<MovieVO>();
+			MovieVO movieVO = null;
+
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			try {
+				con = ds.getConnection();
+				pstmt = con.prepareStatement(GET_ALL_FOR_GROUP);
+				rs = pstmt.executeQuery();
+
+				while (rs.next()) {
+					// movieVO 也稱為 Domain objects
+					movieVO = new MovieVO();
+					movieVO.setMovieno(rs.getInt("MOVIE_NO"));
+					movieVO.setMoviename(rs.getString("MOVIE_NAME"));
+					movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
+					movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
+					movieVO.setDirector(rs.getString("DIRECTOR"));
+					movieVO.setActor(rs.getString("ACTOR"));
+					movieVO.setCategory(rs.getString("CATEGORY"));
+					movieVO.setLength(rs.getInt("LENGTH"));
+					movieVO.setStatus(rs.getString("STATUS"));
+					movieVO.setPremiredate(rs.getDate("PREMIERE_DT"));
+					movieVO.setOffdate(rs.getDate("OFF_DT"));
+					movieVO.setTrailor(rs.getString("TRAILOR"));
+					movieVO.setEmbed(rs.getString("EMBED"));
+					movieVO.setGrade(rs.getString("GRADE"));
+					movieVO.setRating(rs.getDouble("RATING"));
+					movieVO.setExpectation(rs.getDouble("EXPECTATION"));
+					list.add(movieVO); // Store the row in the list
+				}
+
+				// Handle any driver errors
+			} catch (SQLException se) {
+				throw new RuntimeException("A database error occured. "
+						+ se.getMessage());
+				// Clean up JDBC resources
+			} finally {
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (con != null) {
+					try {
+						con.close();
+					} catch (Exception e) {
+						e.printStackTrace(System.err);
+					}
+				}
+			}
+			return list;
 		}
 	
 }

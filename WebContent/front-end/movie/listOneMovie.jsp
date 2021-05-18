@@ -12,7 +12,8 @@
 	MovieService movieSvc = new MovieService();	
 	List<MovieVO> listTopFive = movieSvc.getTopFive();
 	pageContext.setAttribute("listTopFive", listTopFive);
-
+	
+	
 	List<MovieVO> latestMovie = movieSvc.getLatestMovie();
 	pageContext.setAttribute("latestMovie", latestMovie);
 	
@@ -20,6 +21,7 @@
 // 	RatingVO ratingVO = (RatingVO) request.getAttribute("ratingVO");
 	RatingVO ratingCount = (RatingVO) request.getAttribute("ratingCount");
 	ExpectationVO expectationCount = (ExpectationVO)request.getAttribute("expectationCount");
+	
 	
 // 	int memberNumber = 9; //到時要換成從session取memVO出來
 // 	pageContext.setAttribute("memberNumber", memberNumber);
@@ -98,9 +100,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                             <ul class="nav navbar-nav">
                                 <li class="dropdown">
-<!--                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">會員專區 <b class="caret"></b></a> -->
-                                    <li><a><img  class="dropdown-toggle"  data-toggle="dropdown" src="${pageContext.request.contextPath}/mem/mem.do?action=view_memPic&member_no=${memVO.member_no}" 
-                                style="border-radius:50%; width:50px; height:50px;"> <b class="caret"></b></a></li>
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">會員專區 <b class="caret"></b></a>
                                     <ul class="dropdown-menu multi-column columns-2">
                                         <li>
                                             <div class="col-sm-6">
@@ -245,9 +245,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                                     </ul>
                                 </li>
                                 <li class="dropdown">
-<!--                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">公告<b class="caret"></b></a> -->
-                                     <li><a><img  class="dropdown-toggle"  data-toggle="dropdown" src="${pageContext.request.contextPath}/mem/mem.do?action=view_memPic&member_no=${memVO.member_no}" 
-                                style="border-radius:50%; width:50px; height:50px;"> <b class="caret"></b></a></li>
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">公告<b class="caret"></b></a>
                                     <ul class="dropdown-menu multi-column columns-1">
                                         <li>
                                             <div class="col-sm-12">
@@ -277,20 +275,19 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					<div class="clearfix"> </div>	
 				</nav>
 					<div class="w3ls_search">
-									<div class="cd-main-header">
-										<ul class="cd-header-buttons">
-											<li><a class="cd-search-trigger" href="#cd-search"> <span></span></a></li>
-										</ul> <!-- cd-header-buttons -->
-									</div>
-									<div id="cd-search" class="cd-search">
-										<form method="post" action="<%=request.getContextPath()%>/movie/movie.do" >
-											<input type="text" name="MOVIE_NAME" value="" placeholder="請輸入電影名稱" onkeydown="if (event.keyCode == 13) sendMessage();">
-											<input type="hidden" name="action" value="listMovies_ByCompositeQuery">
-										</form>
-									</div>
-								</div>
-	
-			</div> 
+						<div class="cd-main-header">
+							<ul class="cd-header-buttons">
+								<li><a class="cd-search-trigger" href="#cd-search"> <span></span></a></li>
+							</ul> <!-- cd-header-buttons -->
+						</div>
+						<div id="cd-search" class="cd-search">
+							<form method="post" action="<%=request.getContextPath()%>/movie/movie.do" >
+								<input type="text" name="MOVIE_NAME" value="" placeholder="請輸入電影名稱" onkeydown="if (event.keyCode == 13) sendMessage();">
+								<input type="hidden" name="action" value="listMovies_ByCompositeQuery">
+							</form>
+						</div>
+					</div>
+				</div> 
 
 			   </div>
 		<!--//header-w3l-->

@@ -5,6 +5,8 @@ import java.util.*;
 import javax.naming.*;
 import javax.sql.DataSource;
 
+import com.movie.model.MovieVO;
+
 import jdbc.util.CompositeQuery.jdbcUtil_CompositeQuery_Comment;
 
 public class CommentDAO implements CommentDAO_interface{
@@ -23,14 +25,18 @@ public class CommentDAO implements CommentDAO_interface{
 			"insert into COMMENT (MEMBER_NO,MOVIE_NO,CONTENT,STATUS) values (?, ?, ?, ?)";
 	private static final String UPDATE_STMT = 
 			"update COMMENT set CONTENT=?, MOVIE_NO=?, MODIFY_DT=default where COMMENT_NO = ?";
-	private static final String DELETE_STMT = 
+	private static final String UPDATE_COMMENTSTATUS_STMT = 
+			"update COMMENT set STATUS=1 where COMMENT_NO = ?";
+	private static final String DELETE_REPORTCOMMENTS = 
+			"delete from REPORT_COMMENT where COMMENT_NO = ?";	
+	private static final String DELETE_COMMENT = 
 			"delete from COMMENT where COMMENT_NO = ?";
 	private static final String GET_ONE_STMT = 
 			"select * from COMMENT where COMMENT_NO = ?";
 	private static final String GET_ALL_STMT = 
 			"select * from COMMENT order by COMMENT_NO";
 	private static final String GET_MOVIE_COMMENT_STMT = 
-			"select * from COMMENT where MOVIE_NO = ? order by COMMENT_NO desc";
+			"select * from COMMENT where MOVIE_NO = ? and STATUS = 0 order by CRT_DT desc";
 //	private static final String GET_MEMBER_COMMENT_STMT = 
 //	"select * from COMMENT where MEMBER_NO = ?";
 	
@@ -116,25 +122,114 @@ public class CommentDAO implements CommentDAO_interface{
 	}
 	
 	@Override
-	public void delete(Integer commentno) {
+	public void updateCommentStatus(CommentVO commentVO , Connection con) {
 		
+		PreparedStatement pstmt = null;
+
+		try {
+     		pstmt = con.prepareStatement(UPDATE_COMMENTSTATUS_STMT);
+
+			pstmt.setDouble(1, commentVO.getCommentno());	
+			
+			pstmt.executeUpdate();
+//			System.out.println("11");	
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+		}
+	}
+	
+//	@Override
+//	public void delete(Integer commentno) {
+//		
+//		Connection con = null;
+//		PreparedStatement pstmt = null;
+//
+//		try {
+//
+//			con = ds.getConnection();
+//			pstmt = con.prepareStatement(DELETE_STMT);
+//
+//			pstmt.setInt(1, commentno);
+//
+//			pstmt.executeUpdate();
+//
+//			// Handle any driver errors
+//		} catch (SQLException se) {
+//			throw new RuntimeException("A database error occured. "
+//					+ se.getMessage());
+//			// Clean up JDBC resources
+//		} finally {
+//			if (pstmt != null) {
+//				try {
+//					pstmt.close();
+//				} catch (SQLException se) {
+//					se.printStackTrace(System.err);
+//				}
+//			}
+//			if (con != null) {
+//				try {
+//					con.close();
+//				} catch (Exception e) {
+//					e.printStackTrace(System.err);
+//				}
+//			}
+//		}
+//		
+//	}
+	
+	@Override
+	public void delete(Integer commentno) {
+		int updateCount_ReportComments = 0;
+
 		Connection con = null;
 		PreparedStatement pstmt = null;
 
 		try {
 
 			con = ds.getConnection();
-			pstmt = con.prepareStatement(DELETE_STMT);
 
+			// 1●設定於 pstm.executeUpdate()之前
+			con.setAutoCommit(false);
+
+			// 先刪除檢舉評論
+			pstmt = con.prepareStatement(DELETE_REPORTCOMMENTS);
 			pstmt.setInt(1, commentno);
-
+			updateCount_ReportComments = pstmt.executeUpdate();
+			// 再刪除評論
+			pstmt = con.prepareStatement(DELETE_COMMENT);
+			pstmt.setInt(1, commentno);
 			pstmt.executeUpdate();
 
-			// Handle any driver errors
+			// 2●設定於 pstm.executeUpdate()之後
+			con.commit();
+			con.setAutoCommit(true);
+			System.out.println("刪除評論編號" + commentno + "時,共有檢舉評論" + updateCount_ReportComments
+					+ "則同時被刪除");
+			
+			// Handle any SQL errors
 		} catch (SQLException se) {
+			if (con != null) {
+				try {
+					// 3●設定於當有exception發生時之catch區塊內
+					con.rollback();
+				} catch (SQLException excep) {
+					throw new RuntimeException("rollback error occured. "
+							+ excep.getMessage());
+				}
+			}
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
-			// Clean up JDBC resources
 		} finally {
 			if (pstmt != null) {
 				try {
@@ -151,7 +246,6 @@ public class CommentDAO implements CommentDAO_interface{
 				}
 			}
 		}
-		
 	}
 	
 	@Override
