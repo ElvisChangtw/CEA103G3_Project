@@ -79,12 +79,13 @@
 			 value="<%=(relationshipVO==null)? "1" : relationshipVO.getFriend_no()%>" /></td>
 	</tr>
 
-<%-- 	<jsp:useBean id="deptSvc" scope="page" class="com.article.model.ArticleService" /> --%>
 
 </table>
 <br>
 <input type="hidden" name="action" value="insert">
-<input type="submit" value="送出新增"></FORM>
+
+<input type="submit" value="送出新增">
+</FORM>
 </body>
 
 <script>

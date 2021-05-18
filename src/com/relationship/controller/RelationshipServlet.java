@@ -243,8 +243,8 @@ public class RelationshipServlet extends HttpServlet {
 				relationshipVO = relationshipSvc.add(member_no, friend_no);
 				
 				/***************************3.新增完成,準備轉交(Send the Success view)***********/
-				String url = "/front-end/relationship/select_page.jsp";
-//				String url = "/front-end/article/listOneArticle2.jsp?articleno=" + articleno;
+//				String url = "/front-end/relationship/select_page.jsp";
+				String url = "/mem/mem.do?action=listRelationships_ByMemberno_B&member_no=" + member_no;
 //				String url = req.getParameter("requestURL");
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 新增成功後轉交listAllMessage.jsp
 				successView.forward(req, res);				
@@ -273,7 +273,8 @@ public class RelationshipServlet extends HttpServlet {
 				relatioinshipSvc.deleteRelationship(member_no, friend_no);
 				
 				/***************************3.刪除完成,準備轉交(Send the Success view)***********/								
-				String url = "/front-end/relationship/listAllRelationship.jsp";
+//				String url = "/front-end/relationship/listAllRelationship.jsp";
+				String url = "/mem/mem.do?action=listRelationships_ByMemberno_B&member_no=" + member_no;
 				RequestDispatcher successView = req.getRequestDispatcher(url);// 刪除成功後,轉交回送出刪除的來源網頁
 				successView.forward(req, res);
 				

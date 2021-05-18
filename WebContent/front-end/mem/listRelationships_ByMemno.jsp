@@ -17,12 +17,17 @@
 <head><title>會員好友 - listRelationships_ByMemno.jsp</title>
 
 <style>
-  table#table-2 {
+   body {  
+     width: 800px;  
+     margin: 0 auto;  
+     padding: 10px 20px 20px 20px;  
+ 	        }  
+  table#table-1 {
 	background-color: #CCCCFF;
     border: 2px solid black;
     text-align: center;
   }
-  table#table-2 h4 {
+  table#table-1 h4 {
     color: red;
     display: block;
     margin-bottom: 1px;
@@ -34,31 +39,24 @@
 </style>
 
 <style>
-  table {
-	width: 100%;
-	background-color: white;
-	margin-top: 5px;
-	margin-bottom: 5px;
-  }
-  table, th, td {
-    border: 1px solid #CCCCFF;
-  }
-  th, td {
-    padding: 5px;
-    text-align: center;
-  }
+   table { 
+ 	width: 100%; 
+ 	background-color: white; 
+ 	margin-top: 5px; 
+ 	margin-bottom: 5px; 
+	
+   } 
+   table, th, td { 
+/*       border: 1px solid #CCCCFF;  */
+   } 
+   th, td { 
+     padding: 5px; 
+     text-align: center; 
+   } 
 </style>
 
 </head>
 <body bgcolor='white'>
-
-<h4>此頁練習採用 EL 的寫法取值:</h4>
-<table id="table-2">
-	<tr><td>
-		 <h3>會員好友 - listRelationships_ByMemno.jsp</h3>
-		 <h4><a href="<%=request.getContextPath()%>/front-end/relationship/select_page.jsp"><img src="<%=request.getContextPath()%>/front-end/relationship/images/back1.gif" width="100" height="32" border="0">回首頁</a></h4>
-	</td></tr>
-</table>
 
 <%-- 錯誤表列 --%>
 <c:if test="${not empty errorMsgs}">
@@ -70,62 +68,61 @@
 	</ul>
 </c:if>
 
-<table>
-	<tr>
-		<th>會員照片*</th>
-		<th>會員姓名*</th>
-		<th>會員好友照片*</th>
-		<th>會員好友編號*</th>
-		<th>好友狀態</th>
-		<th>黑名單狀態</th>
-		<th>修改</th>
-		<th>刪除</th>
-	</tr>
+
+<table class="table table-bordered table-dark">
+	 <thead>
+		<tr>
+			<th>我的好友名稱</th>
+			<th>刪除好友</th>
+		</tr>
+	</thead>
 
 	<c:forEach var="relationshipVO" items="${listRelationships_ByMemno}" >		
-<%-- 		<tr ${(replyVO.reply_no==param.reply_no) ? 'bgcolor = blue':''}><!--將修改的那一筆加入對比色而已--> --%>
-		<tr>
-			<td>
-			<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${relationshipVO.member_no}"
-					alt="尚無圖片" width="96px;" height="108px" title="" style="border: groove;"/>
-			</td>	
-			<td><c:forEach var="memVO" items="${memSvc.all}">
-                    <c:if test="${relationshipVO.member_no==memVO.member_no}">
-	                   	 【<font color=orange>${memVO.mb_name}</font>】
-                    </c:if>
-                </c:forEach>
-			</td>
+		<tbody>	
+			<tr>
+<!-- 			<td> -->
+<%-- 			<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${relationshipVO.member_no}" --%>
+<!-- 					alt="尚無圖片" width="96px;" height="108px" title="" style="border: groove;"/> -->
+<!-- 			</td>	 -->
+<%-- 			<td><c:forEach var="memVO" items="${memSvc.all}"> --%>
+<%--                     <c:if test="${relationshipVO.member_no==memVO.member_no}"> --%>
+<%-- 	                   	 【<font color=orange>${memVO.mb_name}</font>】 --%>
+<%--                     </c:if> --%>
+<%--                 </c:forEach> --%>
+<!-- 			</td> -->
 			<td>
 			<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${relationshipVO.friend_no}"
 					alt="尚無圖片" width="96px;" height="108px" title="" style="border: groove;"/>
-			</td>		
-			<td><c:forEach var="memVO" items="${memSvc.all}">
-                    <c:if test="${relationshipVO.friend_no==memVO.member_no}">
+							
+							<c:forEach var="memVO" items="${memSvc.all}">
+                   			 <c:if test="${relationshipVO.friend_no==memVO.member_no}">
 	                    	【<font color=orange>${memVO.mb_name}</font>】
                     </c:if>
                 </c:forEach>
-			</td>	
+			</td>		
 						
-			<td>${relationshipVO.status}</td>
-			<td>${relationshipVO.isblock}</td>
+<%-- 			<td>${relationshipVO.status}</td> --%>
+<%-- 			<td>${relationshipVO.isblock}</td> --%>
 
-			<td>
+<!-- 			<td> -->
+<%-- 			  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/relationship/relationship.do" style="margin-bottom: 0px;"> --%>
+<!-- 			    <input type="submit" value="修改">  -->
+<%-- 			    <input type="hidden" name="member_no"   value="${relationshipVO.member_no}"> --%>
+<%-- 			    <input type="hidden" name="friend_no"   value="${relationshipVO.friend_no}"> --%>
+<%-- 			    <input type="hidden" name="requestURL" value="<%=request.getServletPath()%>"><!--送出本網頁的路徑給Controller--><!-- 目前尚未用到  --> --%>
+<!-- 			    <input type="hidden" name="action"	   value="getOne_For_Update"></FORM> -->
+<!-- 			</td> -->
+				<td style="vertical-align:middle;">
 			  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/relationship/relationship.do" style="margin-bottom: 0px;">
-			    <input type="submit" value="修改"> 
-			    <input type="hidden" name="member_no"   value="${relationshipVO.member_no}">
-			    <input type="hidden" name="friend_no"   value="${relationshipVO.friend_no}">
-			    <input type="hidden" name="requestURL" value="<%=request.getServletPath()%>"><!--送出本網頁的路徑給Controller--><!-- 目前尚未用到  -->
-			    <input type="hidden" name="action"	   value="getOne_For_Update"></FORM>
-			</td>
-			<td>
-			  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/relationship/relationship.do" style="margin-bottom: 0px;">
-			    <input type="submit" value="刪除">
-			    <input type="hidden" name="member_no"   value="${relationshipVO.member_no}">
-			    <input type="hidden" name="friend_no"   value="${relationshipVO.friend_no}">			    
-			    <input type="hidden" name="requestURL" value="<%=request.getServletPath()%>"><!--送出本網頁的路徑給Controller-->
-			    <input type="hidden" name="action"     value="delete"></FORM>
-			</td>
-		</tr>
+				    <input type="submit" value="刪除好友">
+				    <input type="hidden" name="member_no"   value="${relationshipVO.member_no}">
+				    <input type="hidden" name="friend_no"   value="${relationshipVO.friend_no}">			    
+				    <input type="hidden" name="requestURL" value="<%=request.getServletPath()%>"><!--送出本網頁的路徑給Controller-->
+				    <input type="hidden" name="action"     value="delete">
+				</FORM>
+				</td>
+			</tr>
+		</tbody>
 	</c:forEach>
 </table>
 
