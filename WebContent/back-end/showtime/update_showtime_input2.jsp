@@ -7,6 +7,9 @@
 	ShowtimeService showtimeSvc = new ShowtimeService();
 	ShowtimeVO showtimeVO = showtimeSvc.getOneShowtime(showtime_no);
 	pageContext.setAttribute("showtimeVO", showtimeVO);
+	
+	int count = (Integer)session.getAttribute("count");
+	System.out.println(count);
 %>
 
 
@@ -209,7 +212,7 @@
 	<h2>座位 </h2>
 	<div id="div1">
 		<div id="d3">
-		</div>&nbsp&nbsp座位
+		</div>&nbsp&nbsp可選擇
 		<div id="d4">
 		</div>&nbsp&nbsp已售出
 		<div id="d5">
@@ -225,12 +228,12 @@
 
 
 <%-- <input type="hidden" name="seat_no" value="${showtimeVO.seat_no}" /> --%>
-<input type="hidden" name="action" value="insertOrd">
+<input type="hidden" name="action" value="checkOrd">
 <input type="hidden" name="showtime_no" value="${showtimeVO.showtime_no}">
 <input type="hidden" name="movie_no" value="${showtimeVO.movie_no}">
 <input type="hidden" name="theater_no" value="${showtimeVO.theater_no}">
 <input type="hidden" name="showtime_time" value="${showtimeVO.showtime_time}">
-<input type="submit" id="submit" value="送出修改"></FORM>
+<input type="button" id="submit" value="送出修改"></FORM>
 
 <script>
 	let id = 0;
@@ -305,15 +308,18 @@
 			if((seat_no.charAt(id) == "1")){
 				label.style.visibility = "hidden";
 				seat.value = 1;
-				seat.checked = true;
+// 				seat.checked = true;
 				seat.disabled = true;
 			}else if(seat_no.charAt(id) == "2"){
 // 				seat.disabled = true;
 				seat.value = "2";
+				label.style.cursor= "not-allowed";
 // 				seat.checked = true;
 				seat_name.style.backgroundColor = "red";
 				seat.addEventListener("click", function(){
-					alert("提醒您，此座位不能點選")
+					alert("提醒您，此座位不能點選");
+					seat.cheacked = false;
+					console.log(seat.cheacked == true);
 				},false);
 				
 			}
@@ -324,12 +330,36 @@
 	}
 	
 	let submit = document.getElementById("submit");
+	let count = <%=count%>;
+	let countSeat = 0;
+	console.log(count);
 	submit.addEventListener("click", function(){
+		// 確認選擇座位數量要等於購買的電影票張數
+		for(let i = 0; i < 400; i++){
+			let seat = document.getElementById(i);
+			if(seat.checked==true){
+				countSeat++;
+				console.log(i);
+			}
+		}
+		console.log(countSeat);
+		console.log(count==countSeat);
+		if(count != countSeat){
+			countSeat = 0;
+			return false;
+		}
+		
 		for(let i = 0; i <=399; i++){
 			let seat = document.getElementById(i);
-			
-			if(seat.checked === false){
-				seat.checked = true;
+			if(seat.checked == false){
+				if(seat.value == 0 ){
+					seat.checked = true;
+// 					$("#").next("span").css("background-color", "lightgreen");
+					seat.nextSibling.style.backgroundColor = "lightgreen";
+				}else{
+					seat.checked = true;
+				}
+// 				seat.checked = true;
 			}else if(seat.checked === true && seat.disabled === false){
 				seat.value = 2;
 				let seatName = document.createElement("input");
@@ -341,9 +371,11 @@
 			
 			if(seat.disabled == true){
 				seat.disabled = false;
+				seat.cheacked = true;
 			}
-
+			submit.setAttribute("type", "submit")
 		}
+		
 	},false);
 
 </script>
@@ -437,6 +469,13 @@
         //              }
         //              return [true, ""];
         //      }});
+        
+        //限制只能選擇前一頁面選擇的數量
+        
+        
+        
+        
+        
         
 </script>
 
