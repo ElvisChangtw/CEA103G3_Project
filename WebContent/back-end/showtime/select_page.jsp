@@ -1,8 +1,15 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="Big5"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="com.showtime.model.*"%>
+<%@ page import="java.text.SimpleDateFormat"%>
+
+<%
+	SimpleDateFormat sft = new SimpleDateFormat("yyyy-MM-dd");
+%>
+
 
 <jsp:useBean id="movieSvc" scope="page" class="com.movie.model.MovieService" />
+
 
 <html>
 <head>
@@ -28,7 +35,7 @@
     display: inline;
   }
 </style>
-
+<script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
 </head>
 <body bgcolor='white'>
 
@@ -81,21 +88,40 @@
 
 <ul>  
   <li>   
-    <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/showtime/showtime.do" name="form1">
+    <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/order/order.do" name="form1">
         <b><font color=blue>萬用複合查詢:</font></b> <br>
         <b>請選擇電影:</b>
-       <select size="1" name="movie_no" >
-         <c:forEach var="movieVO" items="${movieSvc.all}" > 
-          <option value="${movieVO.movieno}">${movieVO.moviename}
-         </c:forEach>   
+       <select size="1" id="movie" name="movie_no"  style="width:150px; font-size: 10px;" class="required">
+       		   <option value="">請選擇電影</option>
+<%--          <c:forEach var="movieVO" items="${movieSvc.all}" >  --%>
+<%--           <option value="${movieVO.movieno}">${movieVO.moviename} --%>
+<%--          </c:forEach>    --%>
        </select><br>
            
        <b>請選擇日期:</b>
-	   <input name="showtime_time" id="f_date1" type="text">
-<!-- 	   <input name="showtime_time" type="date"> -->
-		        
-        <input type="submit" value="送出">
-        <input type="hidden" name="action" value="listShowtimes_ByCompositeQuery">
+	       	<select size="1" id="date" name="movie_date" style="width:150px; font-size: 10px;" class="required">
+	       		   <option value="">請選擇日期</option>
+	<%--          <c:forEach var="movieVO" items="${movieSvc.all}" >  --%>
+	<%--           <option value="${movieVO.movieno}">${movieVO.moviename} --%>
+	<%--          </c:forEach>    --%>
+	       </select><br>
+	       
+       <b>請選擇場次:</b>
+	       	<select size="1" id="showtime" name="showtime_no" style="width:150px; font-size: 10px;" class="required">
+	       		   <option value="">請選擇場次</option>
+	<%--          <c:forEach var="movieVO" items="${movieSvc.all}" >  --%>
+	<%--           <option value="${movieVO.movieno}">${movieVO.moviename} --%>
+	<%--          </c:forEach>    --%>
+	       </select><br>
+       
+       
+<!-- 	   <input name="showtime_time" id="f_date1" type="text"> -->
+<!-- <!-- 	   <input name="showtime_time" type="date"> --> 
+
+	
+		      
+        <input type="submit" id="btn" value="送出">
+        <input type="hidden" name="action" value="sendToFT">
      </FORM>
   </li>
 </ul>
@@ -178,6 +204,91 @@
         //              }
         //              return [true, ""];
         //      }});
+//         	$.ajax({
+<%--         		url: "<%=request.getContextPath()%>/MovieServlet?action=testAjax", --%>
+//         		type: "POST",
+//         		success: function(data){
+//         			let movieNames = data.split(",");
+//         			for(i in movieNames){
+//         				let opt = $("<option>").val(movieNames[i]).text(movieNames[i]);
+//         				$("#movie").append(opt);
+//         			}
+//         		}
+//         	});
+        	
+        	$.ajax({
+        		url: "<%=request.getContextPath()%>/showtime/showtime.do?action=getMovieFromHibernate",
+        		type: "POST",
+        		success: function(json){
+						let jsonobj = JSON.parse(json);
+						for(let i = 0; i < jsonobj['movie_no'].length; i++){
+							let opt = $("<option>").val(jsonobj['movie_no'][i]).text(jsonobj['movie_name'][i]);
+	         				$("#movie").append(opt);
+						}
+        			}
+        	});
+        	
+        	$("#movie").change(function(){
+            	$.ajax({
+            		url: "<%=request.getContextPath()%>/showtime/showtime.do?action=getDateFromHibernate&movie_no=" + $("#movie>option:selected:eq(0)").val(),
+            		type: "POST",
+            		success: function(json){
+    						let jsonobj = JSON.parse(json);
+//     						console.log(jsonobj);
+    						$("#date").html("<option>請選擇日期</option>");
+    						for(let i = 0; i < jsonobj['showtime_date'].length; i++){
+    							let opt = $("<option>").val(jsonobj['showtime_date'][i]).text(jsonobj['showtime_date'][i]);
+    	         				$("#date").append(opt);
+    						}
+            			}
+            	});
+        	});
+            	
+            	$("#date").change(function(){
+                	$.ajax({
+                		url: "<%=request.getContextPath()%>/showtime/showtime.do?action=getTimeFromHibernate",
+                		type: "POST",
+                		data: {	movie_no: $("#movie>option:selected:eq(0)").val(), 
+                			   	showtime_date: $("#date>option:selected:eq(0)").val(),
+                		},
+                		success: function(json){
+        						let jsonobj = JSON.parse(json);
+//         						console.log(jsonobj);
+        						$("#showtime").html("<option>請選擇場次</option>");
+        						for(let i = 0; i < jsonobj['showtime_no'].length; i++){
+        							let opt = $("<option>").val(jsonobj['showtime_no'][i]).text(jsonobj['showtime_time'][i]);
+        	         				$("#showtime").append(opt);
+        						}
+                			}
+                	});
+        	});
+            	
+            	$("#btn").click(function(){
+                	$.ajax({
+<%--                 		url: "<%=request.getContextPath()%>/order/order.do", --%>
+                		url: "/CEA103G3/order/order.do",
+                		type: "POST",
+                		data: {	action:	"sendToFT",
+                				showtime_no: $("#showtime>option:selected:eq(0)").val(), 
+                		},
+                		success: function(date){
+                			console.log("導入訂票頁面");
+                		}
+//                 			function(json){
+//         						let jsonobj = JSON.parse(json);
+// //         						console.log(jsonobj);
+//         						$("#showtime").html("<option>請選擇場次</option>");
+//         						for(let i = 0; i < jsonobj['showtime_no'].length; i++){
+//         							let opt = $("<option>").val(jsonobj['showtime_no'][i]).text(jsonobj['showtime_time'][i]);
+//         	         				$("#showtime").append(opt);
+//         						}
+//                 			}
+                	});
+        	});
+        	
+        	
+        	
+
         
 </script>
 </html>

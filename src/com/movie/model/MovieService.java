@@ -128,6 +128,8 @@ public class MovieService {
 	public List<MovieVO> getAllTopExpectationComingSoonMovie() {
 		return dao.getAllTopExpectationComingSoonMovie();
 	}
-	
+	public List<MovieVO> getAllForGroup(){
+		return dao.getAllForGroup();
+	}
 	
 }

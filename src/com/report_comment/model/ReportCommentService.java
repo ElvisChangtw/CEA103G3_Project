@@ -10,14 +10,13 @@ public class ReportCommentService {
 		dao = new ReportCommentDAO();
 	}
 
-	public ReportCommentVO addReportComment(Integer commentno, String content, Integer memberno, String desc) {
+	public ReportCommentVO addReportComment(Integer commentno, String content, Integer memberno) {
 
 		ReportCommentVO reportcommentVO = new ReportCommentVO();
 
 		reportcommentVO.setCommentno(commentno);
 		reportcommentVO.setContent(content);
 		reportcommentVO.setMemberno(memberno);
-		reportcommentVO.setDesc(desc);
 		
 		dao.insert(reportcommentVO);
 

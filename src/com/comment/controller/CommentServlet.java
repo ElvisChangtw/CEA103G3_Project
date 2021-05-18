@@ -7,7 +7,11 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import com.comment.model.*;
+import com.expectation.model.ExpectationService;
+import com.expectation.model.ExpectationVO;
 import com.movie.model.*;
+import com.rating.model.RatingService;
+import com.rating.model.RatingVO;
 import com.mem.model.*;
 
 
@@ -25,20 +29,20 @@ public class CommentServlet extends HttpServlet {
 		res.setContentType("text/html; charset=UTF-8");
 		String action = req.getParameter("action");
 
-		if ("getAll".equals(action)) {
-			/***************************開始查詢資料 ****************************************/
-			CommentService commentSvc = new CommentService();
-			List<CommentVO> list= commentSvc.getAll();
-			
-			/***************************查詢完成,準備轉交(Send the Success view)*************/
-			HttpSession session = req.getSession();
-			session.setAttribute("list", list);    // 資料庫取出的list物件,存入session
-			// Send the Success view
-			String url = "/front-end/comment/listAllComment.jsp";
-			RequestDispatcher successView = req.getRequestDispatcher(url);// 成功轉交listAllComment2_getFromSession.jsp
-			successView.forward(req, res);
-			return;
-		}
+//		if ("getAll".equals(action)) {
+//			/***************************開始查詢資料 ****************************************/
+//			CommentService commentSvc = new CommentService();
+//			List<CommentVO> list= commentSvc.getAll();
+//			
+//			/***************************查詢完成,準備轉交(Send the Success view)*************/
+//			HttpSession session = req.getSession();
+//			session.setAttribute("list", list);    // 資料庫取出的list物件,存入session
+//			// Send the Success view
+//			String url = "/front-end/comment/listAllComment.jsp";
+//			RequestDispatcher successView = req.getRequestDispatcher(url);// 成功轉交listAllComment2_getFromSession.jsp
+//			successView.forward(req, res);
+//			return;
+//		}
 
 
 		if ("getOne_For_Display".equals(action)) { // 來自select_comment_page.jsp的請求 //比對寫在前面 所小除錯範圍
@@ -180,10 +184,15 @@ public class CommentServlet extends HttpServlet {
 				
 				MovieService movieSvc = new MovieService();
 				MovieVO movieVO = movieSvc.getOneMovie(movieno);
-				if (movieVO == null) {
-					errorMsgs.add("查無資料");
-				}
 				req.setAttribute("movieVO", movieVO);
+				
+				RatingService ratingSvc = new RatingService();
+				RatingVO ratingCount = ratingSvc.getThisMovieToatalRating(commentVO.getMovieno());
+				req.setAttribute("ratingCount", ratingCount);
+
+				ExpectationService expectationSvc = new ExpectationService();
+				ExpectationVO expectationCount = expectationSvc.getThisMovieToatalExpectation(commentVO.getMovieno());
+				req.setAttribute("expectationCount", expectationCount);
 				
 				/***************************3.修改完成,準備轉交(Send the Success view)*************/
 				req.setAttribute("commentVO", commentVO); // 資料庫update成功後,正確的的commentVO物件,存入req
@@ -225,21 +234,17 @@ public class CommentServlet extends HttpServlet {
 			
 			String requestURL = req.getParameter("requestURL");
 
-
 			try {
 				/***********************1.接收請求參數 - 輸入格式的錯誤處理*************************/
 				Integer memberno = new Integer(req.getParameter("memberno").trim());
 				MemService memSvc = new MemService();
 				MemVO memVO = memSvc.getOneMem(memberno);
 				String isMovieReview = memVO.getMb_level();
-				System.out.println("name = " + memVO.getMb_name());
-				System.out.println(isMovieReview);
 				if(!isMovieReview.equals("2")) {
 					errorMsgs.add("只有影評可以寫評論~你只是個會員 懂?");
 				}
 				
 				Integer movieno = new Integer(req.getParameter("movieno").trim());
-				
 				
 				String content = req.getParameter("content").trim();
 				if (content == null || content.trim().length() == 0) {
@@ -260,9 +265,18 @@ public class CommentServlet extends HttpServlet {
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					req.setAttribute("commentVO", commentVO);
+					
 					MovieService movieSvc = new MovieService();
 					MovieVO movieVO = movieSvc.getOneMovie(movieno);
 					req.setAttribute("movieVO", movieVO);// 含有輸入格式錯誤的commentVO物件,也存入req
+					
+					RatingService ratingSvc = new RatingService();
+					RatingVO ratingCount = ratingSvc.getThisMovieToatalRating(movieno);
+					req.setAttribute("ratingCount", ratingCount);
+
+					ExpectationService expectationSvc = new ExpectationService();
+					ExpectationVO expectationCount = expectationSvc.getThisMovieToatalExpectation(movieno);
+					req.setAttribute("expectationCount", expectationCount);
 					RequestDispatcher failureView = req
 							.getRequestDispatcher(requestURL);
 					failureView.forward(req, res);
@@ -275,10 +289,15 @@ public class CommentServlet extends HttpServlet {
 				
 				MovieService movieSvc = new MovieService();
 				MovieVO movieVO = movieSvc.getOneMovie(movieno);
-				if (movieVO == null) {
-					errorMsgs.add("查無資料");
-				}
 				req.setAttribute("movieVO", movieVO);
+				
+				RatingService ratingSvc = new RatingService();
+				RatingVO ratingCount = ratingSvc.getThisMovieToatalRating(movieno);
+				req.setAttribute("ratingCount", ratingCount);
+
+				ExpectationService expectationSvc = new ExpectationService();
+				ExpectationVO expectationCount = expectationSvc.getThisMovieToatalExpectation(movieno);
+				req.setAttribute("expectationCount", expectationCount);
 				
 				/***************************3.新增完成,準備轉交(Send the Success view)***********/
 				
@@ -327,22 +346,29 @@ public class CommentServlet extends HttpServlet {
 //				successView.forward(req, res);
 				
 				MovieService movieSvc = new MovieService();
-				if(requestURL.equals("/front-end/movie/listComments_ByMovieno.jsp") || requestURL.equals("/front-end/movie/listAllMovie.jsp"))
-					req.setAttribute("listComments_ByMovieno",movieSvc.getCommentsByMovieno(commentVO.getMovieno())); // 資料庫取出的list物件,存入request
-				
-				if(requestURL.equals("/front-end/comment/listComments_ByCompositeQuery.jsp")){
-					HttpSession session = req.getSession();
-					Map<String, String[]> map = (Map<String, String[]>)session.getAttribute("map");
-					List<CommentVO> list  = commentSvc.getAll(map);
-					req.setAttribute("listComments_ByCompositeQuery",list); //  複合查詢, 資料庫取出的list物件,存入request
-				}
+//				if(requestURL.equals("/front-end/movie/listComments_ByMovieno.jsp") || requestURL.equals("/front-end/movie/listAllMovie.jsp"))
+//					req.setAttribute("listComments_ByMovieno",movieSvc.getCommentsByMovieno(commentVO.getMovieno())); // 資料庫取出的list物件,存入request
+//				
+//				if(requestURL.equals("/front-end/comment/listComments_ByCompositeQuery.jsp")){
+//					HttpSession session = req.getSession();
+//					Map<String, String[]> map = (Map<String, String[]>)session.getAttribute("map");
+//					List<CommentVO> list  = commentSvc.getAll(map);
+//					req.setAttribute("listComments_ByCompositeQuery",list); //  複合查詢, 資料庫取出的list物件,存入request
+//				}
 				if(requestURL.equals("/front-end/movie/listOneMovie.jsp")){
 					req.setAttribute("listComments_ByMovieno",movieSvc.getCommentsByMovieno(commentVO.getMovieno())); // 資料庫取出的list物件,存入request
 					MovieVO movieVO = movieSvc.getOneMovie(commentVO.getMovieno());
 					req.setAttribute("movieVO", movieVO);
+					
+					RatingService ratingSvc = new RatingService();
+					RatingVO ratingCount = ratingSvc.getThisMovieToatalRating(commentVO.getMovieno());
+					req.setAttribute("ratingCount", ratingCount);
+
+					ExpectationService expectationSvc = new ExpectationService();
+					ExpectationVO expectationCount = expectationSvc.getThisMovieToatalExpectation(commentVO.getMovieno());
+					req.setAttribute("expectationCount", expectationCount);
 				}
 				
-				System.out.println(requestURL);
 
 				String url = requestURL;
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 刪除成功後,轉交回送出刪除的來源網頁

@@ -6,7 +6,6 @@ import java.util.*;
 import javax.naming.*;
 import javax.sql.DataSource;
 
-import com.comment.model.CommentVO;
 import com.movie.model.*;
 
 public class RatingDAO implements RatingDAO_interface {
