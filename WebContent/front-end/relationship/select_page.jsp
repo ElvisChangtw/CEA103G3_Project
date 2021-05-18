@@ -3,6 +3,10 @@
 <%@ page import="com.relationship.model.*"%>
 <%@ page import="com.mem.model.*"%>
 
+<% 
+	MemVO memVO = (MemVO) session.getAttribute("memVO");
+%>
+
 <html>
 <head>
 <title>IBM relationship: Home</title>
@@ -52,6 +56,7 @@
 		<jsp:useBean id="memSvc" scope="page" class="com.mem.model.MemService" />
 <ul>
     <li>
+    	<%="現在是哪個會員=" + memVO.getMember_no()%>
      <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/mem/mem.do" >
        <b><font color=orange>選擇會員姓名查該會員的好友(0403):</font></b>
        <select size="1" name="member_no">
@@ -63,6 +68,17 @@
 	       <input type="hidden" name="action" value="listRelationships_ByMemberno_A">
      </FORM>
   </li>
+  <li>
+	<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/mem/mem.do" name="form1">   
+       <b><font color=blue>搜尋會員加好友:</font></b> 
+        <b>選擇會員編號:</b>
+			<input type="text" name="member_no" value="">     
+        <b>輸入會員姓名加好友:</b>
+       		<input type="text" name="mb_name" value="">		        
+        <input type="submit" value="送出" class="btn btn-primary">
+        <input type="hidden" name="action" value="listMems_ByCompositeQuery">
+     </FORM>
+   </li>
 </ul>		
 <%-- 			<c:forEach var="memVO" items="${memSvc.all}">	 --%>
 <%-- 				<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/mem/mem.do" style="margin-bottom: 0px;">			     --%>
@@ -71,7 +87,7 @@
 <!-- 				<input type="hidden" name="action" value="listRelationships_ByMemberno_B"></FORM> -->
 <%-- 			</c:forEach>	 --%>
 			
-<%-- 			<button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/mem/mem.do?action=listRelationships_ByMemberno_B&member_no=1'">查詢</button> --%>
+			<button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/mem/mem.do?action=listRelationships_ByMemberno_B&member_no=${memVO.member_no}'">查詢</button>
 	
 <h3>會員好友管理:</h3>
 

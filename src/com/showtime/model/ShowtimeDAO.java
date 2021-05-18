@@ -1,6 +1,7 @@
 package com.showtime.model;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,9 +14,14 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import org.hibernate.Session;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.query.Query;
+
 import com.showtime.model.ShowtimeVO;
 
 import jdbc.util.CompositeQuery.jdbcUtil_CompositeQuery_Showtime;
+import util.HibernateUtil;
 
 public class ShowtimeDAO implements ShowtimeDAO_interface {
 
@@ -79,7 +85,46 @@ public class ShowtimeDAO implements ShowtimeDAO_interface {
 			}
 		}
 	}
+	
+	@Override
+	public void insert_showtimes(List<ShowtimeVO> list) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
 
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(INSERT_STMT);
+			
+			for(ShowtimeVO showtimeVO : list) {
+				pstmt.setInt(1, showtimeVO.getMovie_no());
+				pstmt.setInt(2, showtimeVO.getTheater_no());
+				pstmt.setString(3, showtimeVO.getSeat_no());
+				pstmt.setTimestamp(4, showtimeVO.getShowtime_time());
+				pstmt.executeUpdate();
+			}
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+	}
+	
 	@Override
 	public void update(ShowtimeVO showtimeVO) {
 		Connection con = null;
@@ -427,7 +472,61 @@ public class ShowtimeDAO implements ShowtimeDAO_interface {
 		}
 		return list;
 	}
+
+	@Override
+	public List<Object[]> getAllByDate() {
+		List<Object[]> list = null;
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		try {
+			session.beginTransaction();
+			@SuppressWarnings("unchecked")
+			NativeQuery<Object[]> query2 = session.createNativeQuery("select distinct s.movie_no, m.movie_name, m.off_dt from showtime s" 
+						+ "	join movie m where m.movie_no = s.movie_no and s.showtime_time >= now() order by movie_no;");
+			list = query2.getResultList();
+//			System.out.println(list2.size());
+//	 		for (Object[] aArray : list2) {
+//	 			for (Object aColumn : aArray) {
+//	 				System.out.println(aArray.length);
+//	 				System.out.print(aColumn + " ");
+//	 			}
+//	 			System.out.println();
+//	 		}
+			for(int i = 0; i < list.size(); i++) {
+				for(int j = 0; j < list.get(i).length; j++) {
+					System.out.println(list.get(i)[j]);
+				}
+			}
+			session.getTransaction().commit();
+		} catch (RuntimeException ex) {
+			session.getTransaction().rollback();
+			throw ex;
+		}
+		return list;
+		
+	}
 	
-	
+	@Override
+	public List<Object[]> getByHibernate(String sql) {
+		List<Object[]> list = null;
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		try {
+			session.beginTransaction();
+			
+			@SuppressWarnings("unchecked")
+			NativeQuery<Object[]> query2 = session.createNativeQuery(sql);
+			list = query2.getResultList();
+			System.out.println(list.size());
+			System.out.println(list.get(0));
+			for(int i = 0; i < list.size(); i++) {
+					System.out.println(list.get(i));
+			}
+			session.getTransaction().commit();
+		} catch (RuntimeException ex) {
+			session.getTransaction().rollback();
+			throw ex;
+		}
+		return list;
+		
+	}
 
 }

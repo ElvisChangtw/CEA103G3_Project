@@ -11,7 +11,7 @@
 <html>
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-<title>場次資料修改 - update_ticket_type_input.jsp</title>
+<title>票種資料修改 - update_ticket_type_input.jsp</title>
 
 <style>
   table#table-1 {
@@ -51,7 +51,7 @@
 
 <table id="table-1">
 	<tr><td>
-		 <h3>場次資料修改 - update_ticket_type_input.jsp</h3>
+		 <h3>票種資料修改 - update_ticket_type_input.jsp</h3>
 		 <h4><a href="<%=request.getContextPath()%>/back-end/ticket_type/select_page.jsp"><img src="<%=request.getContextPath()%>/back-end/theater/images/back1.gif" width="100" height="32" border="0">回首頁</a></h4>
 	</td></tr>
 </table>

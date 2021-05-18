@@ -2,6 +2,8 @@ package com.relationship.model;
 
 import java.util.*;
 
+import com.article.model.ArticleVO;
+
 public interface RelationshipDAO_interface {
           public void insert(RelationshipVO relationshipVO);
           public void update(RelationshipVO relationshipVO);
@@ -10,4 +12,7 @@ public interface RelationshipDAO_interface {
           public List<RelationshipVO> getAll();
           //萬用複合查詢(傳入參數型態Map)(回傳 List)
 //        public List<EmpVO> getAll(Map<String, String[]> map); 
+          public List<RelationshipVO> getAllFriendno(Integer member_no);
+
+      	  public List<RelationshipVO> getAll(Map<String, String[]> map);
 }

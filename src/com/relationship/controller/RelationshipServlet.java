@@ -6,8 +6,8 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-import org.omg.CORBA.PUBLIC_MEMBER;
-
+import com.article.model.ArticleService;
+import com.article.model.ArticleVO;
 import com.relationship.model.*;
 
 public class RelationshipServlet extends HttpServlet {
@@ -39,7 +39,7 @@ public class RelationshipServlet extends HttpServlet {
 				}
 				
 				String str2 = req.getParameter("friend_no");
-				if (str == null || (str.trim()).length() == 0) {
+				if (str2 == null || (str2.trim()).length() == 0) {
 					errorMsgs.add("請輸入訊息編號");
 				}
 				// Send the use back to the form, if there were errors
@@ -201,6 +201,8 @@ public class RelationshipServlet extends HttpServlet {
 
 			try {
 				/***********************1.接收請求參數 - 輸入格式的錯誤處理*************************/
+			
+				
 				Integer member_no =null;
 				try {
 					member_no = new Integer(req.getParameter("member_no").trim());
@@ -209,7 +211,10 @@ public class RelationshipServlet extends HttpServlet {
 					errorMsgs.add("請填入正確之會員編號");
 				}
 				
-				
+//Integer friend_no = new Integer(req.getParameter("friend_no").trim());	
+
+//Integer articleno = new Integer(req.getParameter("articleno").trim());	
+
 				Integer friend_no =null;
 				try {
 					friend_no = new Integer(req.getParameter("friend_no").trim());
@@ -238,7 +243,9 @@ public class RelationshipServlet extends HttpServlet {
 				relationshipVO = relationshipSvc.add(member_no, friend_no);
 				
 				/***************************3.新增完成,準備轉交(Send the Success view)***********/
-				String url = "/front-end/relationship/listAllRelationship.jsp";
+				String url = "/front-end/relationship/select_page.jsp";
+//				String url = "/front-end/article/listOneArticle2.jsp?articleno=" + articleno;
+//				String url = req.getParameter("requestURL");
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 新增成功後轉交listAllMessage.jsp
 				successView.forward(req, res);				
 				
@@ -277,6 +284,45 @@ public class RelationshipServlet extends HttpServlet {
 						.getRequestDispatcher("/front-end/relationship/listAllRelationship.jsp");
 				failureView.forward(req, res);
 			}	
+		}
+		if ("listRelationships_ByCompositeQuery".equals(action)) { // 來自select_page.jsp的複合查詢請求
+			List<String> errorMsgs = new LinkedList<String>();
+			// Store this set in the request scope, in case we need to
+			// send the ErrorPage view.
+			req.setAttribute("errorMsgs", errorMsgs);
+
+			try {
+				
+				/***************************1.將輸入資料轉為Map**********************************/ 
+				//採用Map<String,String[]> getParameterMap()的方法 
+				//注意:an immutable java.util.Map 
+				//Map<String, String[]> map = req.getParameterMap();
+				HttpSession session = req.getSession();
+				Map<String, String[]> map = (Map<String, String[]>)session.getAttribute("map");
+				
+				// 以下的 if 區塊只對第一次執行時有效
+				if (req.getParameter("whichPage") == null){
+					Map<String, String[]> map1 = new HashMap<String, String[]>(req.getParameterMap());
+					session.setAttribute("map",map1);
+					map = map1;
+				} 
+				
+				/***************************2.開始複合查詢***************************************/
+				RelationshipService relationshipSvc = new RelationshipService();
+				List<RelationshipVO> list  = relationshipSvc.getAll(map);
+				
+				/***************************3.查詢完成,準備轉交(Send the Success view)************/
+				req.setAttribute("listRelationships_ByCompositeQuery", list); // 資料庫取出的list物件,存入request
+				RequestDispatcher successView = req.getRequestDispatcher("/front-end/relationship/listRelationships_ByCompositeQuery.jsp"); // 成功轉交listEmps_ByCompositeQuery.jsp
+				successView.forward(req, res);
+				
+				/***************************其他可能的錯誤處理**********************************/
+			} catch (Exception e) {
+				errorMsgs.add(e.getMessage());
+				RequestDispatcher failureView = req
+						.getRequestDispatcher("/front-end/relationship/select_page.jsp");
+				failureView.forward(req, res);
+			}
 		}
 	}
 }

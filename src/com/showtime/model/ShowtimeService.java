@@ -1,5 +1,6 @@
 package com.showtime.model;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,10 @@ public class ShowtimeService {
 		dao.insert(showtimeVO);
 		
 		return showtimeVO;
+	}
+	
+	public void addShowtimes(List<ShowtimeVO> list) {
+		dao.insert_showtimes(list);
 	}
 	
 	public ShowtimeVO updateShowtime(Integer showtime_no, Integer movie_no, Integer theater_no, String seat_no,
@@ -57,5 +62,12 @@ public class ShowtimeService {
 	
 	public List<ShowtimeVO> getAllShowtimeByMovie_no(Integer movie_no) {
 		return dao.getAllByMovie_no(movie_no);
+	}
+	
+	public List<Object[]> getAllShowtimeByDate() {
+		return dao.getAllByDate();
+	}
+	public List<Object[]> getByHibernate(String sql) {
+		return dao.getByHibernate(sql);
 	}
 }
