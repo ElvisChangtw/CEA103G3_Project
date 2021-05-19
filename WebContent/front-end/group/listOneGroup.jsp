@@ -144,10 +144,12 @@ th, td {
 					  	<div class="col-md-2 lead div-th">
 					  	成員:
 			  			</div>
-					  	<div class="col-md-10 lead" id="member"> 
+					  	<div class="col-md-10 lead group-mem-pic" id="member"> 
 						  	<c:forEach var="group_memberVO" items="${groupSvc.getMembersByGroupno(groupVO.getGroup_no())}">
 								<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${group_memberVO.member_no}"  id="${groupVO.group_no}-${group_memberVO.member_no}"
-								alt="尚無圖片" width="90px;" height="90px" title=" ${memSvc.getOneMem(group_memberVO.member_no).mb_name}" style="border: groove;"/>
+								alt="尚無圖片" width="90px;" height="90px" style="border-radius:50%;"
+								class="clickable" />
+<!-- 								onmouseenter="displayImg()" onmouseout="vanishImg()" onmousemove="displayImg()" -->
 							</c:forEach>
 					  	</div>
 				  	 </div>
@@ -157,11 +159,14 @@ th, td {
 			  			<div class="col-md-2 lead div-th">
 					  	已付款成員:
 			  			</div>
-			  			<div class="col-md-10 lead" id="member"> 
+			  			<div class="col-md-10 lead group-mem-pic" id="member"> 
 						  	<c:forEach var="group_memberVO" items="${groupSvc.getMembersByGroupno(groupVO.getGroup_no())}">
 						  		<c:if test="${group_memberVO.pay_status==1 }">
 									<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${group_memberVO.member_no}"  id="${groupVO.group_no}-${group_memberVO.member_no}"
-									alt="尚無圖片" width="90px;" height="90px" title=" ${memSvc.getOneMem(group_memberVO.member_no).mb_name}" style="border: groove;"/>
+									alt="尚無圖片" width="90px;" height="90px"
+<%-- 									 title=" ${memSvc.getOneMem(group_memberVO.member_no).mb_name}"  --%>
+									style="border-radius:50%;" class="clickable"
+									/>
 								</c:if>
 							</c:forEach>
 				  		</div>
@@ -170,11 +175,11 @@ th, td {
 			  			<div class="col-md-2 lead div-th">
 					  	未付款成員:
 			  			</div>
-			  			<div class="col-md-10 lead" id="member"> 
+			  			<div class="col-md-10 lead group-mem-pic" id="member"> 
 						  	<c:forEach var="group_memberVO" items="${groupSvc.getMembersByGroupno(groupVO.getGroup_no())}">
 						  		<c:if test="${group_memberVO.pay_status==0 }">
 									<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${group_memberVO.member_no}"  id="${groupVO.group_no}-${group_memberVO.member_no}"
-									alt="尚無圖片" width="90px;" height="90px" title=" ${memSvc.getOneMem(group_memberVO.member_no).mb_name}" style="border: groove;"/>
+									alt="尚無圖片" width="90px;" height="90px" style="border-radius:50%; " class="clickable" />
 								</c:if>
 							</c:forEach>
 				  		</div>
@@ -218,19 +223,25 @@ th, td {
 					<a id="gogoBtn" style="margin-bottom: 0px;" class="btn btn-lg btn-primary">出團(團長)</a>
 			    </div>
 			  </div>
-
-<!-- 			  <hr class="my-4"> -->
-			  
-<!-- 			  <p>It uses utility classes for typography and spacing to space content out within the larger container.</p> -->
-<!-- 			  <p class="lead"> -->
-<!-- 			    <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a> -->
-<!-- 			  </p> -->
 			</div>
 		</div>
-
-		</div>
+			 <p class="hint"><!-- Hint text will be displayed here --></p>
 	</div>
 	
+	<!--動態顯示的div-->
+	<div id="pop-out-div">
+		<button id="add-friend" type="button" class="btn btn-primary"><i class="fa fa-plus-circle " aria-hidden="true"></i>加好友</button>
+		<button id="already-friends" type="button" class="btn btn-info"  style="display:none;" disabled>已是朋友</button>
+		<button id="retrieve-invitation" type="button" class="btn btn-info"  style="display:none;">收回邀請</button>
+		<button id="myself" type="button" class="btn btn-info" style="display:none;" disabled>本人</button>
+		<button id="kick-out" type="button" class="btn btn-danger"><i class="fa fa-times" aria-hidden="true"></i>踢掉</button>
+		
+		
+<!-- 		<span class="label label-warning"><a  id="add-friend" href="#">加他好友</a></span> -->
+<!-- 		<span class="label label-danger"><a id="kick-out"  href="#" onclick="kickMember(target_member_no)">踢掉他</a></span> -->
+	</div>
+	<!--動態顯示的div-->
+
 	<script>
 	
 	//起始動作
@@ -342,11 +353,20 @@ th, td {
 				success: function(data){
 					$("#joinBtn").hide();
 					$("#member").append(
-
 						 '<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${memVO.member_no}" id="${groupVO.group_no}-${memVO.member_no}" '
-						+ 'alt="尚無圖片" width="90px;" height="90px" title=" ${memVO.mb_name}"'
-						+ 'style="border: groove;"/>'
+						+ 'alt="尚無圖片" width="90px;" height="90px" '
+						+ 'style="border-radius:50%;" class="clickable" />'
 						);
+					//動態繫結
+					$(".clickable").off("mouseenter").on("mouseenter",function(){
+						cancelTimer();
+						displayImg();
+					});
+					
+					$(".clickable").off("mouseleave").on("mouseleave", function(){
+						setTimer();
+					});
+					//動態繫結
 					 Swal.fire({
 	                        position: "center",
 	                        icon: "success",
@@ -478,6 +498,210 @@ th, td {
             return   + dayLeft + 'day' + hourLeft + 'hr' + minuteLeft + 'min' + secondLeft + 'sec';
         }
 
+        let target_member_no;
+		//顯示圖片
+		function displayImg() {
+			var img = document.getElementById("pop-out-div");
+			console.log("通過 " + event.target.id + "元素觸發");
+			target_member_no = event.target.id.split("-")[1];
+			console.log("target_member_no = " + target_member_no);
+			console.log("${groupVO.member_no}");
+			console.log("${memVO.member_no}");
+			//判斷是否為團長
+			if(${memVO.member_no == groupVO.member_no}){
+				//是團長
+// 				console.log("這是我的團");
+				if(target_member_no == "${groupVO.member_no}"){
+// 					console.log("選到團長");
+					$("#kick-out").hide();
+				}
+				else{
+					$("#kick-out").show();
+				}
+			} else{ 
+				//不是團長
+// 				console.log("這不是我的團");
+				$("#kick-out").hide();
+			}
+			
+			//判斷是否為本人或好友，決定要不要顯示加好友按鈕
+			if( target_member_no =="${memVO.member_no}"){
+				$("#add-friend").hide();
+				$("#myself").show();
+				$("#retrieve-invitation").hide();
+				$("#already-friends").hide();
+			} else{
+				let relationshipVO = getRelationship_Ajax(target_member_no);
+				$("#myself").hide();
+				$("#add-friend").show();
+				$("#retrieve-invitation").hide();
+				$("#already-friends").hide();
+				if (relationshipVO == null){ //對方沒有你的好友
+					console.log("對方未加你為好友");
+				} else if(relationshipVO.status == 0){ //對方未接受邀請，可收回邀請
+					$("#add-friend").hide();
+					$("#retrieve-invitation").show();
+					$("#already-friends").hide();
+				} else if(relationshipVO.status == 1){ //對方與你已是好友
+					$("#already-friends").show();
+					$("#retrieve-invitation").hide();
+					$("#add-friend").hide();
+				}
+			}
+				
+			var x = event.clientX + document.body.scrollLeft -20;
+			var y = event.clientY + document.body.scrollTop  +10; 
+
+			img.style.left = x + "px";
+			img.style.top = y + "px";
+// 			img.style.display = "block";
+			$("#pop-out-div").fadeIn();
+		}
+		
+// 		//圖片消失
+		function vanishImg(){
+			var img = document.getElementById("pop-out-div");
+			$("#pop-out-div").fadeOut("slow");
+		}
+		
+		let timer1;
+		function setTimer(){
+			timer1 = setTimeout(function(){
+			vanishImg();     
+			}, 600);
+		}
+		function cancelTimer(){
+			clearTimeout(timer1);
+		}
+		$(".clickable").mouseenter(function(){
+			cancelTimer();
+			displayImg();
+		});
+
+		$(".clickable").mouseleave(function(){
+			setTimer();
+		});
+		
+		$("#pop-out-div").mouseenter(function(){
+			cancelTimer();
+		});
+		$("#pop-out-div").mouseleave(function(){
+			setTimer();
+		});
+		$("#kick-out").click(function(){
+			kickMember(target_member_no);
+		});
+		$("#add-friend").click(function(){
+			var relationshipVO = addFriend(target_member_no);
+			$("#retrieve-invitation").show();
+			$("#add-friend").hide();
+		});
+		$("#retrieve-invitation").click(function(){
+			deleteRelationship_Ajax(target_member_no);
+			$("#retrieve-invitation").hide();
+			$("#add-friend").show();
+		});
+		function kickMember(target_member_no){
+				$.ajax({
+					url: "<%=request.getContextPath()%>/group_member/group_member.do",
+					type:"POST",
+					data: {
+						group_no:"${groupVO.group_no}",
+						member_no: target_member_no,
+						action:"delete",
+						requestURL:"<%=request.getServletPath()%>"
+					},
+					success: function(data){
+						Swal.fire({
+	                        position: "center",
+	                        icon: "success",
+	                        title: "已成功踢出揪團",
+	                        showConfirmButton: false,
+	                        timer: 1000,
+	                    });
+						$("#${groupVO.group_no}-"+ target_member_no).remove();
+					}
+				}).done(function(){
+					$.ajax({
+						url: "<%=request.getContextPath()%>/group_member/group_member.do",
+						type:"POST",
+						data: {
+							group_no:"${groupVO.group_no}",
+							action:"getGroupCount_Ajax",
+							requestURL:"<%=request.getServletPath()%>"
+						},
+						success: function(data){
+							 $("#groupCnt").text('' +data + " / ${groupVO.required_cnt}");
+							 let joinBtnTxt = (data < ${groupVO.required_cnt}) ? '現在加入' : '人數已滿';
+							 $("#joinBtn").text(joinBtnTxt);
+						}
+					});
+				});
+		}
+		
+		function addFriend(target_member_no){
+			var relationshipVO = null;
+				$.ajax({
+					url: "<%=request.getContextPath()%>/relationship/relationship.do",
+					type:"POST",
+					data: {
+						member_no:"${memVO.member_no}",
+						friend_no:target_member_no,
+						action:"addFriend_Ajax"
+					},
+					async: false,
+					success: function(data){
+						console.log(data);
+						json = JSON.parse(data);
+						console.log("已成功增加會員編號: " + json.friend_no + "為好友");
+						relationshipVO = json;
+					}
+				});
+			return relationshipVO;
+		}
+		
+		function getRelationship_Ajax(target_member_no){
+			var relationshipVO = null;
+				$.ajax({
+					url: "<%=request.getContextPath()%>/relationship/relationship.do",
+					type:"POST",
+					data: {
+						member_no:"${memVO.member_no}",
+						friend_no:target_member_no,
+						action:"getRelationship_Ajax"
+					},
+					async: false,
+					success: function(data){
+						console.log(data);
+						json = JSON.parse(data);
+						console.log("已成功取得會員編號: " + json.friend_no + "之資料");
+						relationshipVO = json;
+					}
+				});
+			return relationshipVO;
+		}
+		
+		function deleteRelationship_Ajax(target_member_no){
+			var relationshipVO = null;
+			$.ajax({
+				url: "<%=request.getContextPath()%>/relationship/relationship.do",
+				type:"POST",
+				data: {
+					member_no:"${memVO.member_no}",
+					friend_no:target_member_no,
+					action:"deleteRelationship_Ajax"
+				},
+				async: false,
+				success: function(data){
+					if(data == "success")
+						console.log(member_no + "與" + friend_no + "的好友關係(單向)刪除完畢!");
+					else{
+						console.log("刪除失敗");
+					}
+				}
+			});
+		}
+		
  	</script> 
 </body>
 </html>

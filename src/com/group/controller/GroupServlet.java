@@ -85,7 +85,7 @@ public class GroupServlet extends HttpServlet {
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					RequestDispatcher failureView = req
-							.getRequestDispatcher("/front-end/group/select_page.jsp");
+							.getRequestDispatcher("/front-end/group/group_front_page.jsp");
 					failureView.forward(req, res);
 					return;//程式中斷
 				}
@@ -114,7 +114,7 @@ public class GroupServlet extends HttpServlet {
 			} catch (Exception e) {
 				errorMsgs.add("無法取得資料:" + e.getMessage());
 				RequestDispatcher failureView = req
-						.getRequestDispatcher("/front-end/group/select_page.jsp");
+						.getRequestDispatcher("/front-end/group/group_front_page.jsp");
 				failureView.forward(req, res);
 			}
 		}
@@ -753,6 +753,7 @@ public class GroupServlet extends HttpServlet {
 				
 				/***************************3.查詢完成,準備轉交(Send the Success view)************/
 				req.setAttribute("listMyGroups", list); // 資料庫取出的list物件,存入request
+				req.setAttribute("group_status", group_status);
 				RequestDispatcher successView = req.getRequestDispatcher("/front-end/group/group_listMyGroups.jsp"); // 成功轉交listEmps_ByCompositeQuery.jsp
 				successView.forward(req, res);
 				/***************************其他可能的錯誤處理**********************************/
