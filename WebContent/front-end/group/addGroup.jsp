@@ -210,8 +210,7 @@ function getInitValue(){
 	} else{
 		$('#movie_selection').val(<%= (groupVO==null)? "90" : showtimeSvc.getOneShowtime(groupVO.getShowtime_no()).getMovie_no()%>);
 	}
-	
-	
+
 	$('#required_no').val(<%= (groupVO==null)? 2 : groupVO.getRequired_cnt()%>);
 	$('#group_title').val("<%= (groupVO==null)? "" : groupVO.getGroup_title()%>");
 	$("#desc").val("<%= (groupVO==null)? "" : groupVO.getDesc()%>");
@@ -256,10 +255,13 @@ function getOption() {
 			//改變預設值
 			if (hasTmpData){
 				$('#showtime_selection').val(selectValue);
-// 				console.log("val() = " + selectValue );
+				console.log("val() = " + selectValue );
+				if( $('#showtime_selection').val() == null){
+					$('#showtime_selection')[0].selectedIndex = "0";
+				}
 			} else{
 				$('#showtime_selection')[0].selectedIndex =selectValue;
-// 				console.log("selectedIndex = " + selectValue );
+				console.log("selectedIndex = " + selectValue );
 			}
 			
 			restrictBeforeShow($("#showtime_selection").children("option:selected").text());
@@ -268,6 +270,7 @@ function getOption() {
 			} 
 	});
 }
+
 
 function timeFormat(timeStamp){
 	let time = new Date(timeStamp);

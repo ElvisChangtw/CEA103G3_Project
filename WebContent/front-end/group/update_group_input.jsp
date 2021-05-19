@@ -103,7 +103,7 @@
 		<div class="form-group">
 			<label for="movie_selection" class="font-weight-bold">請選擇電影:</label>
 				<select id="movie_selection" size="1" name="movie_no" class="input-md form-control">
-					<c:forEach var="movieVO" items="${movieSvc.all}"><option value="${movieVO.movieno}">電影${movieVO.movieno}: ${movieVO.moviename}
+					<c:forEach var="movieVO" items="${movieSvc.getAllForGroup()}"><option value="${movieVO.movieno}">電影${movieVO.movieno}: ${movieVO.moviename}
 					</c:forEach>
 				</select>
 		</div>
@@ -193,7 +193,7 @@ $(document).ready(function(){
 
 
 //電影變動時、場次跟著變動
-$("#movie_selection").change(getOption1);
+$("#movie_selection").change(getOption);
 $("#add-btn").click(function(){
 	Swal.fire({
         position: "center",
@@ -253,6 +253,9 @@ function getOption() {
 			if (hasTmpData){
 				$('#showtime_selection').val(selectValue);
 // 				console.log("val() = " + selectValue );
+					if( $('#showtime_selection').val() == null){
+						$('#showtime_selection')[0].selectedIndex = "0";
+					}
 			} else{
 				$('#showtime_selection')[0].selectedIndex =selectValue;
 // 				console.log("selectedIndex = " + selectValue );
@@ -266,38 +269,38 @@ function getOption() {
 }
 
 
-function getOption1() {
-	$('#showtime_selection').text("");
-	$.ajax({
-		url: "<%=request.getContextPath()%>/group/group.do",
-		type:"POST",
-		data: {
-			movie_no:$("#movie_selection").val(),
-			action:"getAllShowtimeByMovie_no"
-		},
-		success: function(json){
-			let jsonobj = JSON.parse(json);
-			var lstShowtime = jsonobj.showtimeByMovie_no;
-			for(let i = 0 ; i < lstShowtime.length; i++){
-// 				console.log("showtime_no = " + lstShowtime[i].showtime_no);		  
-				//append showtime to <select>
-				var option = $('<option/>');
-				option.attr('value', lstShowtime[i].showtime_no);
-// 				option.text("場次" + lstShowtime[i].showtime_no + ": "+ timeFormat(lstShowtime[i].showtime_time));
-				option.text(timeFormat(lstShowtime[i].showtime_time));
-				$('#showtime_selection').append(option);  
- 			}
+// function getOption1() {
+// 	$('#showtime_selection').text("");
+// 	$.ajax({
+<%-- 		url: "<%=request.getContextPath()%>/group/group.do", --%>
+// 		type:"POST",
+// 		data: {
+// 			movie_no:$("#movie_selection").val(),
+// 			action:"getAllShowtimeByMovie_no"
+// 		},
+// 		success: function(json){
+// 			let jsonobj = JSON.parse(json);
+// 			var lstShowtime = jsonobj.showtimeByMovie_no;
+// 			for(let i = 0 ; i < lstShowtime.length; i++){
+// // 				console.log("showtime_no = " + lstShowtime[i].showtime_no);		  
+// 				//append showtime to <select>
+// 				var option = $('<option/>');
+// 				option.attr('value', lstShowtime[i].showtime_no);
+// // 				option.text("場次" + lstShowtime[i].showtime_no + ": "+ timeFormat(lstShowtime[i].showtime_time));
+// 				option.text(timeFormat(lstShowtime[i].showtime_time));
+// 				$('#showtime_selection').append(option);  
+//  			}
 
-			let selectValue = "0";
-			//append showtime to <select>
-			$('#showtime_selection')[0].selectedIndex = selectValue;
+// 			let selectValue = "0";
+// 			//append showtime to <select>
+// 			$('#showtime_selection')[0].selectedIndex = selectValue;
 
-			restrictBeforeShow($("#showtime_selection").children("option:selected").text());
-			console.log("測試截止時間: " + $("#showtime_selection").children("option:selected").text());
-			//改變預設值
-			} 
-	});
-}
+// 			restrictBeforeShow($("#showtime_selection").children("option:selected").text());
+// 			console.log("測試截止時間: " + $("#showtime_selection").children("option:selected").text());
+// 			//改變預設值
+// 			} 
+// 	});
+// }
 
 function timeFormat(timeStamp){
 	let time = new Date(timeStamp);

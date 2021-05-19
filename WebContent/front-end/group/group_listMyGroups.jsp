@@ -8,6 +8,9 @@
 	GroupService groupSvc = new GroupService();
 	List<GroupVO> list = (List<GroupVO>) request.getAttribute("listMyGroups");
  	pageContext.setAttribute("list", list);
+ 	
+ 	int group_status = (int) request.getAttribute("group_status");
+ 	
 %>
 <jsp:useBean id="memVO" scope="session" type="com.mem.model.MemVO" />
 <!--
@@ -311,20 +314,26 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     </div>
     <!-- //Modal1 -->
     <!-- breadcrumb -->
-    <div class="w3_breadcrumb">
-        <div class="breadcrumb-inner">
-            <ul>
-                <li><a href="<%=request.getContextPath()%>/front-end/group/select_page.jsp">Home</a><i>//</i></li>
-                <li>Groups</li>
-            </ul>
-        </div>
-    </div>
+<!--     <div class="w3_breadcrumb"> -->
+<!--         <div class="breadcrumb-inner"> -->
+<!--             <ul> -->
+<%--                 <li><a href="<%=request.getContextPath()%>/front-end/group/select_page.jsp">Home</a><i>//</i></li> --%>
+<!--                 <li>Groups</li> -->
+<!--             </ul> -->
+<!--         </div> -->
+<!--     </div> -->
     
     <div class="list-btn">
-        <button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/front-end/group/group_front_page.jsp'">進行中揪團</button>   
-        <button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=0'">我的揪團(尚未出團)</button>
-        <button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=1'">我的歷史揪團(準備出團)</button>
-        <button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=2'">我的歷史揪團(已結束)</button>       
+<%--         <button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/front-end/group/group_front_page.jsp'">進行中揪團</button>    --%>
+<%--         <button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=0'">我的揪團(尚未出團)</button> --%>
+<%--         <button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=1'">我的歷史揪團(準備出團)</button> --%>
+<%--         <button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=2'">我的歷史揪團(已結束)</button>        --%>
+		<ul class="nav nav-tabs">
+		  <li role="presentation"><a href="<%=request.getContextPath()%>/front-end/group/group_front_page.jsp">所有揪團</a></li>
+		  <li id="tabs0" role="presentation"><a href="<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=0">我的揪團(尚未出團)</a></li>
+		  <li id="tabs1" role="presentation"><a href="<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=1">我的揪團(已成行)</a></li>
+		  <li id="tabs2" role="presentation"><a href="<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=2">我的歷史揪團</a></li>
+		</ul>
     </div>
     <!-- //breadcrumb -->
     <!--/content-inner-section-->
@@ -536,7 +545,14 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                     $(this).toggleClass('open');
                 }
             );
+            
+            group_status = <%= group_status %>;
+            console.log(group_status);
+            selector = "#tabs"+group_status;
+            $(selector).addClass("active");
         });
+        
+        
     </script>
     <!-- //Dropdown-Menu-JavaScript -->
     <!-- search-jQuery -->
