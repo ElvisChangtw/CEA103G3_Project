@@ -15,7 +15,7 @@
 
 <style>
    body {  
-     width: 800px;  
+     width: 500px;  
      margin: 0 auto;  
      padding: 10px 20px 20px 20px;  
 
@@ -93,7 +93,7 @@
 <!--         <b>輸入會員編號:</b> -->
 <!-- 			<input type="text" name="member_no" value="">      -->
         <b></b>
-       		<input type="text" name="mb_name" value="" placeholder="請輸入會員姓名">		        
+       		<input type="text" name="mb_name" value="" placeholder="請輸入會員名稱">		        
         <input type="submit" value="送出" class="btn btn-primary">
         <input type="hidden" name="action" value="listMems_ByCompositeQuery">
      	<br>

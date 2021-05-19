@@ -8,11 +8,6 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import com.article.model.ArticleVO;
-
-import jdbc.util.CompositeQuery.jdbcUtil_CompositeQuery_Article;
-import jdbc.util.CompositeQuery.jdbcUtil_CompositeQuery_Relationship;
-
 public class RelationshipDAO implements RelationshipDAO_interface {
 
 	// 一個應用程式中,針對一個資料庫 ,共用一個DataSource即可
@@ -139,12 +134,9 @@ public class RelationshipDAO implements RelationshipDAO_interface {
 			pstmt2 = con.prepareStatement(UPDATE_STATUS_TO_ONE);
 			pstmt2.setInt(1, member_no);
 			pstmt2.setInt(2, friend_no);
-			System.out.println("我有印到1");
 			pstmt2.setInt(3, member_no);
 			pstmt2.setInt(4, friend_no);
-			System.out.println("我有印到2");
 			pstmt2.executeUpdate();
-			System.out.println("我有印到3");
 			con.commit();
 			con.setAutoCommit(true);
 			// Handle any driver errors
@@ -380,69 +372,6 @@ public class RelationshipDAO implements RelationshipDAO_interface {
 		}
 		return list;
 	}
-
-	@Override
-	public List<RelationshipVO> getAll(Map<String, String[]> map) {
-		List<RelationshipVO> list = new ArrayList<RelationshipVO>();
-		RelationshipVO relationshipVO = null;
-	
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-	
-		try {			
-			con = ds.getConnection();
-			String finalSQL = "select S0.MEMBER_NO, S1.MB_NAME, S0.FRIEND_NO,"
-					+ "S2.MB_NAME, S0.STATUS, S0.ISBLOCK from relationship S0 "
-					+ "LEFT JOIN `MEMBER` S1 ON S0.MEMBER_NO = S1.MEMBER_NO "
-					+ "LEFT JOIN `MEMBER` S2 ON S0.FRIEND_NO = S2.MEMBER_NO "
-					+ jdbcUtil_CompositeQuery_Relationship.get_WhereCondition(map)
-					+ "order by S0.member_no, S0.friend_no";
-			pstmt = con.prepareStatement(finalSQL);
-			System.out.println("●●finalSQL(by DAO) = "+finalSQL);
-			rs = pstmt.executeQuery();
-	
-			while (rs.next()) {
-				relationshipVO = new RelationshipVO();
-				relationshipVO.setMember_no(rs.getInt("member_no"));
-				relationshipVO.setFriend_no(rs.getInt("friend_no"));
-				relationshipVO.setStatus(rs.getString("status"));
-				relationshipVO.setIsblock(rs.getString("isblock"));
-
-				list.add(relationshipVO); // Store the row in the List
-			}
-			
-	
-			// Handle any SQL errors
-		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
-		} finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException se) {
-					se.printStackTrace(System.err);
-				}
-			}
-			if (pstmt != null) {
-				try {
-					pstmt.close();
-				} catch (SQLException se) {
-					se.printStackTrace(System.err);
-				}
-			}
-			if (con != null) {
-				try {
-					con.close();
-				} catch (Exception e) {
-					e.printStackTrace(System.err);
-				}
-			}
-		}
-		return list;
-	}
-	
 	
 	@Override
 	public void addOneWay(RelationshipVO relationshipVO) {
