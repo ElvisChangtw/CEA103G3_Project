@@ -51,9 +51,7 @@ public class RelationshipService {
 	public List<RelationshipVO> getAllFriendno(Integer member_no) {
 		return dao.getAllFriendno(member_no);
 	}
-	public List<RelationshipVO> getAll(Map<String, String[]> map) {		
-		return dao.getAll(map);
-	}
+
 	public void acceptInvitation(Integer member_no, Integer friend_no) {
 		dao.update_status(member_no, friend_no);
 	}
