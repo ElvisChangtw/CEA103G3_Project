@@ -218,6 +218,13 @@ font-size: 1.1rem;
 	<button type="button" class="createGroup" value="createGroup">建立揪團</button>
 	
 	<button type="button" class="addfriend_check_btn" value=1>確定</button> &emsp;&emsp; <button type="button" class="addfriend_check_btn" value=0>拒絕</button>
+	
+	<button type="button" class="goGroup" value="goGroup">出團</button>
+	<input type="hidden" id="goGroupName"  value="4">
+	
+	<button type="button" class="kickoffGroup" value="kickoffGroup">修改出團條件</button>
+	<input type="hidden" id="kickGroupName"  value="4">
+	
 	我是${memVO.member_no}
 	
 	
@@ -238,6 +245,8 @@ font-size: 1.1rem;
 	var groupNO = document.getElementById("groupNO").value;
 	var movieNO = document.getElementById("movieNO").value;
 	var groupName;
+	var goGroupName = document.getElementById("goGroupName").value;
+	var kickGroupName = document.getElementById("kickGroupName").value;
 	var self = '${memVO.member_no}';
 	var webSocket;
 	var type;
@@ -258,7 +267,13 @@ font-size: 1.1rem;
 		//這邊執行insertfriend的code
 	})
 	$(".createGroup").click(function(){
-		groupName = document.getElementById("groupName").value;  //不可放在上面宣告，因為groupname是要click後才會取直，所以要放在click事件內
+		groupName = document.getElementById("groupName").value;  //不可放在上面宣告，因為groupname是使用者自己打要click後才會取直，所以要放在click事件內
+		sendWebSocket($(this));
+	})
+	$(".goGroup").click(function(){
+		sendWebSocket($(this));
+	})
+	$(".kickoffGroup").click(function(){
 		sendWebSocket($(this));
 	})
 	
@@ -315,12 +330,33 @@ font-size: 1.1rem;
 				"time":timeStr
 			};
 		}
+		if(item.val()=="goGroup"){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : goGroupName,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.val()=="kickoffGroup"){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : kickGroupName,
+				"message":"",
+				"time":timeStr
+			};
+		}
 
 		webSocket.send(JSON.stringify(jsonObj));
 	}
 	
 
 	function connect() {
+		console.log(endPointURL);
 		// create a websocket
 		webSocket = new WebSocket(endPointURL);
 
@@ -330,41 +366,13 @@ font-size: 1.1rem;
 		};
 
 		webSocket.onmessage = function(event) {
+			console.log(event.data);
 			var jsonObj = JSON.parse(event.data);
-			if ("addFriend" === jsonObj.type) {
-				var text=jsonObj.message;
-				var time=jsonObj.time;
-				var type=jsonObj.type;
-				console.log(jsonObj)
-				createAlert(text,time,type);
-			} 
-			if ("addGroup" === jsonObj.type) {
-				var text=jsonObj.message;
-				var time=jsonObj.time;
-				var type=jsonObj.type;
-				createAlert(text,time,type);
-			}
-			if ("buyTicket" === jsonObj.type) {
-				var text=jsonObj.message;
-				var time=jsonObj.time;
-				var type=jsonObj.type;
-				createAlert(text,time,type);
-			}
-			if ("response" === jsonObj.type) {
-				var text=jsonObj.message;
-				var time=jsonObj.time;
-				var type=jsonObj.type;
-				createAlert(text,time,type);
-			}
-			if ("createGroup" === jsonObj.type) {
-				var text=jsonObj.message;
-				var time=jsonObj.time;
-				var type=jsonObj.type;
-				createAlert(text,time,type);
-			}
-			if ("close" === jsonObj.type) {
-				
-			}
+			var text = jsonObj.message;
+			var time = jsonObj.time;
+			var type = jsonObj.type;
+			console.log(jsonObj)
+			createAlert(text,time,type);
 			
 		};
 
@@ -373,9 +381,19 @@ font-size: 1.1rem;
 		};
 	}
 	
+	function disconnect() {
+		webSocket.close();
+		document.getElementById('sendMessage').disabled = true;
+		document.getElementById('connect').disabled = false;
+		document.getElementById('disconnect').disabled = true;
+	}
 	
+	
+// 	產生通知block在視窗右下角
 	  const alertContainer = document.querySelector('.alert-container');
 	  const btnCreate = document.getElementById('create');
+	  
+	  
 	  
 	  const createAlert = (text,time,type) => {
 		  
@@ -389,7 +407,7 @@ font-size: 1.1rem;
 	  if (type==="addFriend"||type==="response"){
 		  img.src="<%=request.getContextPath()%>/images/notify_icons/friend.png"
 	  }
-	  if (type==="addGroup"||type==="createGroup"){
+	  if (type==="addGroup"||type==="createGroup"||type==="dismissGroup"||type==="goGroup"||type==="kickoffGroup"||type==="kickUnpaid"){
 			img.src="<%=request.getContextPath()%>/images/notify_icons/group.png"
 	  }
 	  if (type==="buyTicket"){
