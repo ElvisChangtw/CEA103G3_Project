@@ -15,4 +15,6 @@ public interface RelationshipDAO_interface {
           public List<RelationshipVO> getAllFriendno(Integer member_no);
 
       	  public List<RelationshipVO> getAll(Map<String, String[]> map);
+		  public void update_status(Integer member_no, Integer friend_no);
+		  public void addOneWay(RelationshipVO relationshipVO);
 }

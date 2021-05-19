@@ -54,6 +54,19 @@ public class RelationshipService {
 	public List<RelationshipVO> getAll(Map<String, String[]> map) {		
 		return dao.getAll(map);
 	}
+	public void acceptInvitation(Integer member_no, Integer friend_no) {
+		dao.update_status(member_no, friend_no);
+	}
 	
+	public RelationshipVO addOneWay(Integer member_no, 
+			Integer friend_no) {
+
+		RelationshipVO relationshipVO = new RelationshipVO();
+		relationshipVO = new RelationshipVO();
+		relationshipVO.setMember_no(member_no);
+		relationshipVO.setFriend_no(friend_no);
+		dao.addOneWay(relationshipVO);
+		return relationshipVO;
+	}
 }
 		

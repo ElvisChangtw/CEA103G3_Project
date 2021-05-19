@@ -15,7 +15,7 @@
 
 <style>
    body {  
-     width: 1200px;  
+     width: 800px;  
      margin: 0 auto;  
      padding: 10px 20px 20px 20px;  
 
@@ -65,6 +65,12 @@
 		</c:forEach>
 	</ul>
 </c:if>
+		<h1 class="shadow p-3 mb-1 bg-white rounded">
+			<span class="badge badge-secondary">
+				MoviesHit好友專區
+			</span>
+				<button type="button" class="btn btn-dark" onclick="location.href='<%=request.getContextPath()%>/mem/mem.do?action=listRelationships_ByMemberno_B&member_no=${memVO.member_no}'">我的好友</button>       			
+		</h1>
  		
 		<jsp:useBean id="memSvc" scope="page" class="com.mem.model.MemService" />
 
@@ -90,24 +96,9 @@
        		<input type="text" name="mb_name" value="" placeholder="請輸入會員姓名">		        
         <input type="submit" value="送出" class="btn btn-primary">
         <input type="hidden" name="action" value="listMems_ByCompositeQuery">
-        <button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/mem/mem.do?action=listRelationships_ByMemberno_B&member_no=${memVO.member_no}'">我的好友</button>       
+     	<br>
      	<%="目前登入會員=" + memVO.getMember_no() + " " +memVO.getMb_name()%>     
      </FORM>
-
-	
-<%-- 			<c:forEach var="memVO" items="${memSvc.all}">	 --%>
-<%-- 				<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/mem/mem.do" style="margin-bottom: 0px;">			     --%>
-<!-- 				<input type="submit" value="查詢" class="btn btn-success">  -->
-<%-- 				<input type="hidden" name="member_no" value="${memVO.member_no}"> --%>
-<!-- 				<input type="hidden" name="action" value="listRelationships_ByMemberno_B"></FORM> -->
-<%-- 			</c:forEach>	 --%>
-			
-	
-<!-- <h3>會員好友管理:</h3> -->
-
-<!-- <ul> -->
-<%--   <li><a href='<%=request.getContextPath()%>/front-end/relationship/addRelationship.jsp'>Add</a> a new Relationship.</li> --%>
-<!-- </ul> -->
 
 <%if (request.getAttribute("listRelationships_ByMemno")!=null){%>
       <jsp:include page="/front-end/mem/listRelationships_ByMemno.jsp" />

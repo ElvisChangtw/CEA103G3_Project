@@ -6,6 +6,9 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.article.model.ArticleService;
 import com.article.model.ArticleVO;
 import com.relationship.model.*;
@@ -271,6 +274,7 @@ public class RelationshipServlet extends HttpServlet {
 				/***************************2.開始刪除資料***************************************/
 				RelationshipService relatioinshipSvc = new RelationshipService();
 				relatioinshipSvc.deleteRelationship(member_no, friend_no);
+				relatioinshipSvc.deleteRelationship(friend_no, member_no);
 				
 				/***************************3.刪除完成,準備轉交(Send the Success view)***********/								
 //				String url = "/front-end/relationship/listAllRelationship.jsp";
@@ -323,6 +327,119 @@ public class RelationshipServlet extends HttpServlet {
 				RequestDispatcher failureView = req
 						.getRequestDispatcher("/front-end/relationship/select_page.jsp");
 				failureView.forward(req, res);
+			}
+		}
+		if ("accept".equals(action)) { // 來自update_message_input.jsp的請求
+			
+			List<String> errorMsgs = new LinkedList<String>();
+			// Store this set in the request scope, in case we need to
+			// send the ErrorPage view.
+			req.setAttribute("errorMsgs", errorMsgs);
+
+			try {
+				/***************************1.接收請求參數 - 輸入格式的錯誤處理**********************/
+				Integer member_no = new Integer(req.getParameter("member_no").trim());
+				Integer friend_no = new Integer(req.getParameter("friend_no").trim());
+				
+				// Send the use back to the form, if there were errors
+				if (!errorMsgs.isEmpty()) {
+					RequestDispatcher failureView = req
+							.getRequestDispatcher("/front-end/relationship/update_relationship_input.jsp");
+					failureView.forward(req, res);
+					return; //程式中斷
+				}
+
+				/***************************2.開始修改資料*****************************************/
+				RelationshipService relationshipSvc = new RelationshipService();
+				relationshipSvc.acceptInvitation(member_no, friend_no);
+				
+				/***************************3.修改完成,準備轉交(Send the Success view)*************/
+				
+				String url = "/mem/mem.do?action=listRelationships_ByMemberno_B&member_no=" + member_no;
+				RequestDispatcher successView = req.getRequestDispatcher(url); // 修改成功後,轉交listOneMessage.jsp
+				successView.forward(req, res);
+
+				/***************************其他可能的錯誤處理*************************************/
+			} catch (Exception e) {
+				
+				errorMsgs.add("修改資料失敗:"+e.getMessage());
+				RequestDispatcher failureView = req
+						.getRequestDispatcher("/front-end/relationship/update_relationship_input.jsp");
+				failureView.forward(req, res);
+			}
+		}
+		
+		if ("addFriend_Ajax".equals(action)) { // 來自listAllEmp.jsp
+			res.setCharacterEncoding("utf-8");
+			PrintWriter out = res.getWriter();
+			Integer member_no = new Integer(req.getParameter("member_no"));
+			Integer friend_no = new Integer(req.getParameter("friend_no"));
+			
+//			RelationshipVO relationshipVO = new RelationshipService().addOneWay(member_no, friend_no);
+			String status = "0";
+			String isBlock = "0";
+			JSONObject jsonobj=new JSONObject();
+			try {
+				jsonobj.put("member_no", member_no);
+				jsonobj.put("friend_no", friend_no);
+				jsonobj.put("status", status);
+				jsonobj.put("isBlock", isBlock);
+				out.print(jsonobj.toString());
+				return;
+			}catch(JSONException e) {
+				e.printStackTrace();
+			}finally {
+				out.flush();
+				out.close();
+			}
+		}
+		
+		if ("getRelationship_Ajax".equals(action)) { // 來自listAllEmp.jsp
+			res.setCharacterEncoding("utf-8");
+			PrintWriter out = res.getWriter();
+			Integer member_no = new Integer(req.getParameter("member_no"));
+			Integer friend_no = new Integer(req.getParameter("friend_no"));
+			
+			
+			RelationshipService relationshipSvc = new RelationshipService();
+			RelationshipVO relationshipVO = relationshipSvc.getOneRelationship(member_no, friend_no);
+			
+			String status = relationshipVO.getStatus();
+			String isBlock = relationshipVO.getIsblock();
+
+			JSONObject jsonobj=new JSONObject();
+			try {
+				jsonobj.put("member_no", member_no);
+				jsonobj.put("friend_no", friend_no);
+				jsonobj.put("status", status);
+				jsonobj.put("isBlock", isBlock);
+				out.print(jsonobj.toString());
+				return;
+			}catch(JSONException e) {
+				e.printStackTrace();
+			}finally {
+				out.flush();
+				out.close();
+			}
+		}
+		
+		if ("deleteRelationship_Ajax".equals(action)) { // 來自listAllEmp.jsp
+			res.setCharacterEncoding("utf-8");
+			PrintWriter out = res.getWriter();
+			Integer member_no = new Integer(req.getParameter("member_no"));
+			Integer friend_no = new Integer(req.getParameter("friend_no"));
+			
+			
+			RelationshipService relationshipSvc = new RelationshipService();
+			relationshipSvc.deleteRelationship(member_no, friend_no);
+			
+			try {
+				out.print("success");
+				System.out.println(member_no + "與" + friend_no + "的好友關係(單向)刪除完畢!");
+				return;
+			}finally {
+				out.flush();
+				out.close();
 			}
 		}
 	}

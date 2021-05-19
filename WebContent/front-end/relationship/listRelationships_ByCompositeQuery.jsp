@@ -62,6 +62,7 @@
 </head>
 <body bgcolor='white'>
 
+
 <!-- <h4> -->
 <!-- ☆萬用複合查詢  - 可由客戶端 listAllArticle.jsp 隨意增減任何想查詢的欄位<br> -->
 <!-- ☆此頁作為複合查詢時之結果練習，<font color=red>已增加分頁、送出修改、刪除之功能</font></h4> -->

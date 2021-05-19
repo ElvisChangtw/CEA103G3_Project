@@ -28,8 +28,6 @@ public class RelationshipDAO implements RelationshipDAO_interface {
 
 	private static final String INSERT_STMT = 
 		"INSERT INTO relationship (member_no,friend_no) VALUES (?, ?)";
-	private static final String INSERT2_STMT = 
-		"INSERT INTO relationship (member_no, friend_no) VALUES (?, ?)";
 	private static final String GET_ALL_STMT = 
 		"SELECT * FROM relationship order by member_no, friend_no";
 	private static final String GET_ONE_STMT = 
@@ -38,17 +36,21 @@ public class RelationshipDAO implements RelationshipDAO_interface {
 		"DELETE FROM relationship where member_no = ? and friend_no = ?";
 	private static final String UPDATE = 
 		"UPDATE relationship set isblock=? where member_no = ? and friend_no = ?";
-	
 	private static final String GET_ALL_FRIENDNO = 
-			"SELECT * FROM relationship where member_no = ?";
+			"SELECT * FROM relationship where member_no = ?";	
+	
+	private static final String UPDATE_STATUS_TO_ONE = 
+			"UPDATE relationship set `status`=1 "
+			+ "where (member_no = ? and friend_no = ?) or "
+			+ "(friend_no = ? and member_no = ?)";
+		
 	
 	@Override
 	public void insert(RelationshipVO relationshipVO) {
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
-		PreparedStatement pstmt2 = null;
-
+		
 		try {
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(INSERT_STMT);
@@ -56,10 +58,6 @@ public class RelationshipDAO implements RelationshipDAO_interface {
 			pstmt.setInt(2, relationshipVO.getFriend_no());
 			pstmt.executeUpdate();
 			
-			pstmt2 = con.prepareStatement(INSERT2_STMT);
-			pstmt2.setInt(1, relationshipVO.getFriend_no());
-			pstmt2.setInt(2, relationshipVO.getMember_no());
-			pstmt2.executeUpdate();
 			
 			// Handle any SQL errors
 		} catch (SQLException se) {
@@ -109,6 +107,62 @@ public class RelationshipDAO implements RelationshipDAO_interface {
 			if (pstmt != null) {
 				try {
 					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+	}
+	@Override
+	public void update_status(Integer member_no, Integer friend_no) {
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		PreparedStatement pstmt2 = null;
+
+		try {
+			con = ds.getConnection();
+			con.setAutoCommit(false);
+			
+			pstmt = con.prepareStatement(INSERT_STMT);
+			pstmt.setInt(1, member_no);
+			pstmt.setInt(2, friend_no);
+
+			pstmt.executeUpdate();
+			pstmt2 = con.prepareStatement(UPDATE_STATUS_TO_ONE);
+			pstmt2.setInt(1, member_no);
+			pstmt2.setInt(2, friend_no);
+			System.out.println("我有印到1");
+			pstmt2.setInt(3, member_no);
+			pstmt2.setInt(4, friend_no);
+			System.out.println("我有印到2");
+			pstmt2.executeUpdate();
+			System.out.println("我有印到3");
+			con.commit();
+			con.setAutoCommit(true);
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt2 != null) {
+				try {
+					pstmt2.close();
 				} catch (SQLException se) {
 					se.printStackTrace(System.err);
 				}
@@ -387,5 +441,42 @@ public class RelationshipDAO implements RelationshipDAO_interface {
 			}
 		}
 		return list;
+	}
+	
+	
+	@Override
+	public void addOneWay(RelationshipVO relationshipVO) {
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(INSERT_STMT);
+			pstmt.setInt(1, relationshipVO.getMember_no());
+			pstmt.setInt(2, relationshipVO.getFriend_no());
+			pstmt.executeUpdate();
+
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
 	}
 }
