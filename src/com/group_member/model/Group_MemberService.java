@@ -16,13 +16,10 @@ public class Group_MemberService {
 	public Group_MemberVO addGroup_Member(Integer group_no, Integer member_no) {
 
 		Group_MemberVO group_memberVO = new Group_MemberVO();
-		
 		group_memberVO = new Group_MemberVO();
 		group_memberVO.setGroup_no(group_no);
 		group_memberVO.setMember_no(member_no);
-
 		dao.insert(group_memberVO);
-
 		return group_memberVO;
 	}
 
@@ -35,8 +32,6 @@ public class Group_MemberService {
 		group_memberVO.setPay_status(pay_status);
 		group_memberVO.setCrt_dt(crt_dt);
 		group_memberVO.setStatus(status);
-		
-		
 		dao.update(group_memberVO);
 		return group_memberVO;
 	}
@@ -60,6 +55,22 @@ public class Group_MemberService {
 	
 	public List<Group_MemberVO> getAll(Map<String, String[]> map) {
 		return dao.getAll(map);
+	}
+	
+	public Group_MemberVO leaveGroupByMem(String status, Integer group_no, Integer member_no, String pay_status) {
+		Group_MemberVO group_memberVO = new Group_MemberVO();
+		group_memberVO.setGroup_no(group_no);
+		group_memberVO.setMember_no(member_no);
+		group_memberVO.setStatus(status);
+		group_memberVO.setPay_status(pay_status);
+		dao.update(group_memberVO);
+		return group_memberVO;
+	}
+	public void kickUnpaidMemberOut(Integer group_no) {
+		dao.kickUnpaidMemberOut(group_no);
+	}
+	public int getGroupCount(Integer group_no) {
+		return dao.getGroupCount(group_no);
 	}
 }
 		

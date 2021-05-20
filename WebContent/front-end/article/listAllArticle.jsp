@@ -6,7 +6,7 @@
 <%@ page import="com.article.model.*"%>
 <%@ page import="com.topic.model.*"%>
 <%-- 此頁練習採用 EL 的寫法取值 --%>
-
+	
 <%-- <% --%>
 <!-- ArticleService articleSvc = new ArticleService(); -->
 <!-- List<ArticleVO> list = ArticleSvc.getAll(); -->
@@ -16,26 +16,21 @@
 	<jsp:useBean id="memSvc" scope="page" class="com.mem.model.MemService" />
 	<jsp:useBean id="topicSvc" scope="page" class="com.topic.model.TopicService" />
 	<jsp:useBean id="replyDAO"  scope="page" class="com.reply.model.ReplyDAO" />
-	<jsp:useBean id="articleDAO" scope="page" class="com.article.model.ArticleDAO" />
-
-
+	<jsp:useBean id="articleDAO" scope="page" class="com.article.model.ArticleDAO" />	
+	
+	<jsp:useBean id="memVO" scope="session" class="com.mem.model.MemVO" />
 <html>
 <head>
+<link href="https://i2.bahamut.com.tw/css/basic.css?v=1618977484" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
 <title>所有文章資料 - listAllArticle.jsp</title>
-<!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
-<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
-<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
-<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous"> -->
-<!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script> -->
 
 <style>
    body {  
      width: 1200px;  
      margin: 0 auto;  
-     padding: 10px 20px 20px 20px;  
+     padding: 10px 20px 20px 20px;   
 
  	        }  
   table#table-1 {
@@ -103,27 +98,28 @@
 <%--   <li><a href='<%=request.getContextPath()%>/article/listAllArticle.jsp'>查看全部文章</a></li> --%>
 <!-- </ul> -->
 <div class="shadow-none p-2 mb-2 bg-light rounded">	
- 	<%-- 萬用複合查詢-以下欄位-可隨意增減 --%>
-    <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/article/article.do" name="form1">      
+ 	<%-- 萬用複合查詢-以下欄位-可隨意增減 --%>   
     <button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/front-end/article/listAllArticle.jsp'">HOME</button>
 	<button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/topic/topic.do?action=listArticles_ByTopicno_B&topicno=1'">電影情報</button>
 	<button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/topic/topic.do?action=listArticles_ByTopicno_B&topicno=2'">劇情討論</button>
 	<button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/topic/topic.do?action=listArticles_ByTopicno_B&topicno=3'">影城活動</button>   
-       <b><font color=blue>萬用複合查詢:</font></b> 
-        <b>選擇會員編號:</b>
+ 	<b>●符 合 查 詢 條 件 如 下 所 示:</b>
+</div>
+   <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/article/article.do" name="form1">   
+       <b><font color=blue>搜尋本站的作者或文章主題:</font></b> 
+        <b>選擇文章作者:</b>
         <select size="1" name="member_no" >
           <option value="">
          <c:forEach var="memberVO" items="${memSvc.all}" > 
           <option value="${memberVO.member_no}">${memberVO.mb_name}
          </c:forEach>   
         </select>       
-        <b>輸入文章標題:</b>
+        <b>輸入文章主題:</b>
         <input type="text" name="article_headline" value="">
 		        
-        <input type="submit" value="送出">
+        <input type="submit" value="送出" class="btn btn-primary">
         <input type="hidden" name="action" value="listArticles_ByCompositeQuery">
      </FORM>
-</div>
 
 <!-- <table> -->
 <!-- 	<tr> -->
@@ -150,24 +146,23 @@
 <!-- 		</tr> -->
 <%-- 	</c:forEach> --%>
 <!-- </table> -->
-
 <table class="table table-hover">
 	 <thead style="background-color:#F0F0F0">
-	<tr>		
-		<th>文章編號</th>
-		<th>發文者</th>
-		<th>文章類型</th>
-<!-- 	<th>文章內容</th> -->
-		<th>文章主題</th>
-		<th>發表文章時間</th>
-<!-- 		<th>更新文章時間</th> -->
-		<th>文章狀態</th>
-		<th>點讚數</th>
-<!-- 		<th>修改</th> -->
-<!-- 		<th>刪除</th> -->
-<!-- 	<th>查詢回覆</th> -->
-	</tr>
-	 <thead>
+		<tr>		
+			<th>文章編號</th>
+			<th>發文者</th>
+			<th>文章類型</th>
+	<!-- 	<th>文章內容</th> -->
+			<th>文章主題</th>
+			<th>發表文章時間</th>
+	<!-- 		<th>更新文章時間</th> -->
+			<th>文章狀態</th>
+			<th>點讚數</th>
+	<!-- 		<th>修改</th> -->
+	<!-- 		<th>刪除</th> -->
+	<!-- 	<th>查詢回覆</th> -->
+		</tr>
+	</thead>
 <%-- 	<%@ include file="page1.file" %>  --%>
 	<c:forEach var="articleVO" items="${articleSvc.all}">		
 		<tbody>
@@ -213,30 +208,10 @@
 <!-- 			    <input type="hidden" name="action" value="listReplys_ByArticleno_B"></FORM> -->
 <!-- 			</td>			 -->
 			</tr>
-		<tbody>			
+		</tbody>			
 	</c:forEach>
 </table>
-<%-- 萬用複合查詢-以下欄位-可隨意增減 --%>
-<ul>  
-  <li>   
-    <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/article/article.do" name="form1">
-        <b><font color=blue>萬用複合查詢:</font></b> <br>
-        <b>選擇會員編號:</b>
-        <select size="1" name="member_no" >
-          <option value="">
-         <c:forEach var="memberVO" items="${memSvc.all}" > 
-          <option value="${memberVO.member_no}">${memberVO.mb_name}
-         </c:forEach>   
-        </select><br>
-        
-        <b>輸入文章標題:</b>
-        <input type="text" name="article_headline" value=""><br>
-		        
-        <input type="submit" value="送出">
-        <input type="hidden" name="action" value="listArticles_ByCompositeQuery">
-     </FORM>
-  </li>
-</ul>
+
 <%-- <%@ include file="page2.file" %> --%>
 
 <%-- <%if (request.getAttribute("listReplys_ByArticleno")!=null){%> --%>

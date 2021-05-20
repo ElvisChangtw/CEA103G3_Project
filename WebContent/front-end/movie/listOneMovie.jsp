@@ -6,24 +6,30 @@
 <%@ page import="com.comment.model.*"%>
 <%@ page import="com.rating.model.*"%>
 <%@ page import="com.expectation.model.*"%>
+<%@ page import="java.sql.Date"%>
 
 
 <%
 	MovieService movieSvc = new MovieService();	
 	List<MovieVO> listTopFive = movieSvc.getTopFive();
 	pageContext.setAttribute("listTopFive", listTopFive);
-
+	
+	
 	List<MovieVO> latestMovie = movieSvc.getLatestMovie();
 	pageContext.setAttribute("latestMovie", latestMovie);
 	
 	MovieVO movieVO = (MovieVO) request.getAttribute("movieVO"); //MovieServlet.java(Concroller), 存入req的movieVO物件
-	RatingVO ratingVO = (RatingVO) request.getAttribute("ratingVO");
+	RatingVO ratingCount = (RatingVO) request.getAttribute("ratingCount");
+	ExpectationVO expectationCount = (ExpectationVO)request.getAttribute("expectationCount");
 	
-	int memberNumber = 5; //到時要換成從session取memVO出來
-	pageContext.setAttribute("memberNumber", memberNumber);
+	java.sql.Date today = new java.sql.Date(System.currentTimeMillis());
+	pageContext.setAttribute("today", today);
 	
-	
+// 	int memberNumber = 9; //到時要換成從session取memVO出來
+// 	pageContext.setAttribute("memberNumber", memberNumber);
+
 %>
+<jsp:useBean id="memVO" scope="session" type="com.mem.model.MemVO" />
 <%-- <jsp:useBean id="listComments_ByMovieno" scope="request" type="java.util.Set<CommentVO>" /> --%>
 <%-- <jsp:useBean id="movieSvc" scope="page" class="com.movie.model.MovieService" /> --%>
 <!DOCTYPE html>
@@ -54,6 +60,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!--//web-fonts-->
 <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>	
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+
+<script src="<%=request.getContextPath()%>/js/jquery-1.11.1.min.js"></script>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <style>
 #chart{
   width:50px;
@@ -62,6 +72,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 </style>
 </head>
 <body>
+<c:choose>
+<c:when test="${movieVO.offdate < today}">
+<p>1</p>
+</c:when>
+<c:when test="${movieVO.offdate > today}">
+<p>1</p>
+</c:when>
+</c:choose>
+
+
 <!--/main-header-->
   <!--/banner-section-->
 	<div id="demo-1" class="banner-inner">
@@ -250,26 +270,27 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                                         </li>
                                     </ul>
                                 </li>
-                                <li class="active"><a href="index.html">影城介紹</a></li>
+<!--                                 <li class="active"><a href="index.html">影城介紹</a></li> -->
+                                <li><img  class="media-object" src="${pageContext.request.contextPath}/mem/mem.do?action=view_memPic&member_no=${memVO.member_no}" 
+                                style="border-radius:50%; width:50px; height:50px;"></li>
                             </ul>
                         </div>
 					<div class="clearfix"> </div>	
 				</nav>
 					<div class="w3ls_search">
-									<div class="cd-main-header">
-										<ul class="cd-header-buttons">
-											<li><a class="cd-search-trigger" href="#cd-search"> <span></span></a></li>
-										</ul> <!-- cd-header-buttons -->
-									</div>
-									<div id="cd-search" class="cd-search">
-										<form method="post" action="<%=request.getContextPath()%>/movie/movie.do" >
-											<input type="text" name="MOVIE_NAME" value="" placeholder="請輸入電影名稱" onkeydown="if (event.keyCode == 13) sendMessage();">
-											<input type="hidden" name="action" value="listMovies_ByCompositeQuery">
-										</form>
-									</div>
-								</div>
-	
-			</div> 
+						<div class="cd-main-header">
+							<ul class="cd-header-buttons">
+								<li><a class="cd-search-trigger" href="#cd-search"> <span></span></a></li>
+							</ul> <!-- cd-header-buttons -->
+						</div>
+						<div id="cd-search" class="cd-search">
+							<form method="post" action="<%=request.getContextPath()%>/movie/movie.do" >
+								<input type="text" name="MOVIE_NAME" value="" placeholder="請輸入電影名稱" onkeydown="if (event.keyCode == 13) sendMessage();">
+								<input type="hidden" name="action" value="listMovies_ByCompositeQuery">
+							</form>
+						</div>
+					</div>
+				</div> 
 
 			   </div>
 		<!--//header-w3l-->
@@ -377,52 +398,28 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 														<div data-video="${movieVO.embed}" id="video"> <img src="${pageContext.request.contextPath}/movie/DBGifReader2.do?movieno=${movieVO.movieno}" alt="" > </div>
 													</div>
 													 <h4>Official Trailer | ${movieVO.actor}</h4>
-													 <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/rating/rating.do" name="form1">
-													 
-													 	<tr>
-															<td>會員編號:</td>
-															<td><input type="TEXT" name="memberno" size="45"
-																value="<%=(ratingVO == null) ? "" : ratingVO.getMemberno()%>" /></td>
-														</tr>
-														<tr>
-															<td><input type="hidden" name="movieno" size="45" value="${movieVO.movieno}" /></td>
-														</tr>
-													 <tr>
-														<td>評分:</td>
-														<td><input type="hidden" name="rating" value="" id="con"/>
-															<ion-icon name="star" class="all-star" id="s1"></ion-icon>
-															<ion-icon name="star" class="all-star" id="s2"></ion-icon>
-															<ion-icon name="star" class="all-star" id="s3"></ion-icon>
-															<ion-icon name="star" class="all-star" id="s4"></ion-icon>
-															<ion-icon name="star" class="all-star" id="s5"></ion-icon>
-														</td>
-													 </tr>
-													<input type="hidden" name="action" value="insertOrUpdate"> 
- 													<input type="hidden" name="requestURL"	value="<%=request.getServletPath()%>">	
-													<input type="submit" value="送出">
-													</FORM>
+													 <c:if test="${today.before(movieVO.offdate)}">
+													 	<c:if test="${today.after(movieVO.premiredate)}">
+													 		<tr>
+																<td><span style="color:#524066; font-weight:1000; font-size:30px;">評分:&emsp;</span></td>
+																<td><input type="hidden" name="rating" value="" id="con"/>
+																	<i class="fa fa-star fa-2x all-star" id="s1" style="color:gray"></i>
+																	<i class="fa fa-star fa-2x all-star" id="s2" style="color:gray"></i>
+																	<i class="fa fa-star fa-2x all-star" id="s3" style="color:gray"></i>
+																	<i class="fa fa-star fa-2x all-star" id="s4" style="color:gray"></i>
+																	<i class="fa fa-star fa-2x all-star" id="s5" style="color:gray"></i>
+																</td>
+													 		</tr>
+														 </c:if>
 													
-													<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/expectation/expectation.do" name="form1">
-													 
-													 	<tr>
-															<td>會員編號:</td>
-															<td><input type="TEXT" name="memberno" size="45"
-																value="<%=(ratingVO == null) ? "" : ratingVO.getMemberno()%>" /></td>
-														</tr>
-														<tr>
-															<td><input type="hidden" name="movieno" size="45" value="${movieVO.movieno}" /></td>
-														</tr>
-													 <tr>
-														<td>期待度:</td>
-														<td><input type="hidden" name="expectation" value="" id="con1" size="50"/>
-															<ion-icon name="thumbs-up-outline" class="thumbsup" id="t1"></ion-icon>
-															<ion-icon name="thumbs-down-outline" class="thumbsdown" id="t2"></ion-icon>
-														</td>
-													 </tr>
-													<input type="hidden" name="action" value="insertOrUpdate"> 
- 													<input type="hidden" name="requestURL"	value="<%=request.getServletPath()%>">	
-													<input type="submit" value="送出">
-													</FORM>
+														 <c:if test="${today.before(movieVO.premiredate)}">													 
+															 <tr>
+																<td><span style="color:#524066; font-weight:1000; font-size:30px;">期待度:&emsp;</span></td>
+																	<i class="fa fa-thumbs-up fa-2x thumbsup" id="t1" style="color:gray"></i>
+																	<i class="fa fa-thumbs-down fa-2x thumbsdown" id="t2" style="color:gray"></i>
+															 </tr>
+													 	</c:if>
+													 </c:if>
 										    </div>
 									    
 
@@ -540,7 +537,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<span>電影評分<label>:</label></span> 
 					</p>
 					<div id="ratingValue" style="display:none;">${movieVO.rating}</div>
-					<div id="rating" class="fexi_header_para fexi_header_para1"> </div>
+					<p id="rating" class="fexi_header_para fexi_header_para1"> </p>
 					<p id="noRating" class="fexi_header_para "></p>
 					
 					
@@ -610,8 +607,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					<p class="fexi_header_para ">
 						<span>電影期待度<label>:</label></span>
 					</p>
-					<div id="expectationValue" style="display:none;">${movieVO.expectation}</div>					
-					<div id="expectation" class="fexi_header_para ">
+					<div id="expectationValue" style="display:none;">${movieVO.expectation}</div>
+<%-- 					<td><fmt:formatNumber type="number" value="${movieVO.expectation*100}"/>測試數字格式化</td>					 --%>
+					<p id="expectation" class="fexi_header_para ">
 <%-- 						<c:choose> --%>
 <%-- 							<c:when test="${movieVO.expectation != null}"> --%>
 <%-- 								<canvas id="chart"></canvas> --%>
@@ -620,7 +618,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!-- 								<td>尚無期待度</td> -->
 <%-- 							</c:otherwise> --%>
 <%-- 						</c:choose> --%>
-					</div>
+					</p>
 					<p id="noExpectation" class="fexi_header_para "></p>
 			</div>
 			
@@ -682,7 +680,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByYear&year=2020" title="Release 2020">2020</a></li>
                         <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByYear&year=2019" title="Release 2019">2019</a></li>
                         <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByYear&year=2018" title="Release 2018">2018</a></li>
-                        <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByYear&year=2017" title="Release 2017">2017</a></li>
+                        <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByYear&year=2017" title="Release 2017">2017--${openModal}--</a></li>
                     </ul>
                 </div>
                 <div class="col-md-2 footer-grid">
@@ -814,9 +812,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     </div>
     <a href="#home" id="toTop" class="scroll" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
 
-<script src="<%=request.getContextPath()%>/js/jquery-1.11.1.min.js"></script>
 <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 	<!-- Dropdown-Menu-JavaScript -->
+			
 			<script>
 				$(document).ready(function(){
 					$(".dropdown").hover(            
@@ -834,8 +832,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<!-- //Dropdown-Menu-JavaScript -->
 		<!-- search-jQuery -->
 				<script src="<%=request.getContextPath()%>/js/main.js"></script>
-			
-			<script src="<%=request.getContextPath()%>/js/simplePlayer.js"></script>
+			<script src="http://localhost:8081/CEA103G3_Work/js/simplePlayer.js"></script>
+<%-- 			<script src="<%=request.getContextPath()%>/js/simplePlayer.js"></script> --%>
+<%-- 			<%System.out.print(request.getContextPath() + "/js/simplePlayer.js") %> --%>
 			<script>
 				$("document").ready(function() {
 					$("#video").simplePlayer();
@@ -975,31 +974,20 @@ fit: true
 <!--end-smooth-scrolling-->
 <script src="<%=request.getContextPath()%>/js/bootstrap.js"></script>
 
-<script src="<%=request.getContextPath()%>/js/jquery-1.11.1.min.js"></script>
+
 <script>
 $(document).ready(drawPieChart);
 
 
-<% ExpectationService expectationSvc = new ExpectationService();
-   List<ExpectationVO> expectationList = expectationSvc.findByMovieNo(movieVO.getMovieno());
-   int n = expectationList.size();
-%>
-
-let n = <%=n%>;
-let a = ${movieVO.expectation} * n;
-
-// (a/ n ) = >  (a + 1 / n+ 1)
-// n = list.size() ;
-
 function drawPieChart() {
 	var canvas = document.createElement('canvas');
 	canvas.id     = "chart";
-	canvas.width  = 50;
-	canvas.height = 50;
+	canvas.style.width  = 50;
+	canvas.style.height = 50;
 	canvas.style.zIndex   = 99;
-	if($("#expectationValue").text() > 0){
+	if(${movieVO.expectation} != 0){
 		$("#expectation").html("");//先將畫面清除 再畫圖層
-		$("#expectation").append(canvas);
+		$("#expectation").append("<td><fmt:formatNumber type="number" value="${movieVO.expectation*100}"/> % 想看</td>"+"<td> (已有 <fmt:formatNumber type="number" value="  ${expectationCount.expectation}"/> 人投票)</td>").append(canvas);
 		var ctx = document.getElementById("chart").getContext('2d');
 		var chart = new Chart(ctx, {
 			type: 'pie',
@@ -1021,22 +1009,26 @@ function drawPieChart() {
 			} 
 		});
 	}else{
-			$("#noExpectation").text("尚無期待度");
-		}
+		$("#noExpectation").text("尚無期待度");
 	}
+}
 	
 
 
-function thumbsUpDrawPieChart(newExpectation) {
+function thumbsUpDrawPieChart(newExpectation,countExpectation) {
+	
+	let nowExpectation = Math.round(newExpectation*100);
+	let totalExpectation = countExpectation;
 	
 	var canvas = document.createElement('canvas');
 	canvas.id     = "chart";
-	canvas.width  = 50;
-	canvas.height = 50;
+	canvas.style.width  = 50;
+	canvas.style.height = 50;
 	canvas.style.zIndex   = 99;
-	if($("#expectationValue").text() > 0){
+	if(totalExpectation != 0){
 		$("#expectation").html("");//先將畫面清除 再畫圖層
-		$("#expectation").append(canvas);
+		$("#noExpectation").html("");
+		$("#expectation").append("<td> "+nowExpectation+"% 想看  </td>"+"<td> (已有 "+ totalExpectation + " 人投票)</td>").append(canvas);
 		var ctx = document.getElementById("chart").getContext('2d');
 		var chart = new Chart(ctx, {
 			type: 'pie',
@@ -1063,15 +1055,20 @@ function thumbsUpDrawPieChart(newExpectation) {
 	}
 	
 	
-function thumbsDownDrawPieChart(newExpectation) {
+function thumbsDownDrawPieChart(newExpectation, countExpectation) {
+	
+	let nowExpectation = Math.round(newExpectation*100);
+	let totalExpectation = countExpectation;
+	
 	var canvas = document.createElement('canvas');
 	canvas.id     = "chart";
-	canvas.width  = 50;
-	canvas.height = 50;
+	canvas.style.width  = 50;
+	canvas.style.height = 50;
 	canvas.style.zIndex   = 99;
-	if($("#expectationValue").text() > 0){
+	if(totalExpectation != 0){
 		$("#expectation").html("");//先將畫面清除 再畫圖層
-		$("#expectation").append(canvas);
+		$("#noExpectation").html("");
+		$("#expectation").append("<td> "+nowExpectation+"% 想看  </td>"+"<td> (已有 "+ totalExpectation + " 人投票)</td>").append(canvas);
 		var ctx = document.getElementById("chart").getContext('2d');
 		var chart = new Chart(ctx, {
 			type: 'pie',
@@ -1101,12 +1098,12 @@ function thumbsDownDrawPieChart(newExpectation) {
 $(document).ready(function(){
 	$("#t1").click(function(){
 		$(".thumbsup").css("color","gray");
-		$("#t1").css("color","blue");
+		$("#t1").css("color","#4194CA");	
 		$("#t2").css("color","gray");
 		$("#con1").val("1.0");
 		
 		let movieno = "${movieVO.movieno}";
-		let memberno = "${memberNumber}";
+		let memberno = "${memVO.member_no}";
 		let expectation = "1.0";
 		
 		$.ajax({
@@ -1122,18 +1119,30 @@ $(document).ready(function(){
 				console.log("json = " + json);
 				console.log(jsonobj);
 				let newExpectation = jsonobj.newExpectation;
-				thumbsUpDrawPieChart(newExpectation);
+				let countExpectation = jsonobj.countExpectation;
+				thumbsUpDrawPieChart(newExpectation , countExpectation);
+				
 			}
 		 });
+		
+		Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "我好期待RRRRR",
+            showConfirmButton: false,
+            timer: 1000,
+        });
+		 $("#leaveBtn").show();
+		 
 	})
 	$("#t2").click(function(){
 		$(".thumbsdown").css("color","gray");
-		$("#t2").css("color","blue");
+		$("#t2").css("color","#D66B75");
 		$("#t1").css("color","gray");
 		$("#con1").val("0.0");
 		
 		let movieno = "${movieVO.movieno}";
-		let memberno = "${memberNumber}";
+		let memberno = "${memVO.member_no}";
 		let expectation = "0.0";
 		
 		$.ajax({
@@ -1149,36 +1158,196 @@ $(document).ready(function(){
 				console.log("json = " + json);
 				console.log(jsonobj);
 				let newExpectation = jsonobj.newExpectation;
-				thumbsDownDrawPieChart(newExpectation);
+				let countExpectation = jsonobj.countExpectation;
+				thumbsDownDrawPieChart(newExpectation , countExpectation);
 			}
 		 });
+		
+		Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "我好失望RRRRR",
+            showConfirmButton: false,
+            timer: 1000,
+        });
+		 $("#leaveBtn").show();
+		
 	})
 })
 
 </script>	
 <script>
+$(document).ready(initialDrawRating);
 
-$(document).ready(drawRating);
-
-// console.log("ratingValue" + $("#ratingValue").text());
-function drawRating() {
-	if($("#ratingValue").text() > 0){
-		console.log("ratingValue2" + $("#ratingValue").text());
-		$("#rating").html("");
-		$("#rating").append(
-				
-			"<a><i class=\"fa fa-star\" aria-hidden=\"true\"></i></a>"+
-			"<a><i class=\"fa fa-star\" aria-hidden=\"true\"></i></a>"+
-			"<a><i class=\"fa fa-star\" aria-hidden=\"true\"></i></a>"+
-			"<a><i class=\"fa fa-star\" aria-hidden=\"true\"></i></a>"+
-			"<a><i class=\"fa fa-star\" aria-hidden=\"true\"></i></a>"
+function initialDrawRating() {
+	if($("#ratingValue").text() <= 0){
+		$("#noRating").text("尚無評分");
+	}else if($("#ratingValue").text() < 1.0){
+// 		$("#rating").html("");
+		$("#rating").append(				
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<td> ${movieVO.rating} 分</td>"+
+			"<td> (已有<fmt:formatNumber type="number" value=" ${ratingCount.rating}"/> 人投票)</td>"
+		);
+	}else if($("#ratingValue").text() < 2.0){
+		$(".all-star").css("color","gray");
+// 		$("#s1").css("color","yellow");
+// 		$("#rating").html("");
+		$("#rating").append(				
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<td> ${movieVO.rating} 分</td>"+
+			"<td> (已有<fmt:formatNumber type="number" value=" ${ratingCount.rating}"/> 人投票)</td>"
+		);
+	}else if($("#ratingValue").text() < 3.0){
+		$(".all-star").css("color","gray");
+// 		$("#s1,#s2").css("color","yellow");
+// 		$("#rating").html("");
+		$("#rating").append(				
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<td> ${movieVO.rating} 分</td>"+
+			"<td> (已有<fmt:formatNumber type="number" value=" ${ratingCount.rating}"/> 人投票)</td>"
+		);
+	}else if($("#ratingValue").text() < 4.0){
+		$(".all-star").css("color","gray");
+// 		$("#s1,#s2,#s3").css("color","yellow");
+// 		$("#rating").html("");
+		$("#rating").append(				
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<td> ${movieVO.rating} 分</td>"+
+			"<td> (已有<fmt:formatNumber type="number" value=" ${ratingCount.rating}"/> 人投票)</td>"
+		); 
+	}else if($("#ratingValue").text() < 5.0){
+		$(".all-star").css("color","gray");
+// 		$("#s1,#s2,#s3,#s4").css("color","yellow");
+// 		$("#rating").html("");
+		$("#rating").append(				
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<td> ${movieVO.rating} 分</td>"+
+			"<td> (已有<fmt:formatNumber type="number" value=" ${ratingCount.rating}"/> 人投票)</td>"
+		);
+	}else if($("#ratingValue").text() === "5.0"){
+		$(".all-star").css("color","gray");
+// 		$("#s1,#s2,#s3,#s4,#s5").css("color","yellow");
+// 		$("#rating").html("");
+		$("#rating").append(				
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<td> ${movieVO.rating} 分</td>"+
+			"<td> (已有<fmt:formatNumber type="number" value=" ${ratingCount.rating}"/> 人投票)</td>"
 		);
 	}else{
-			$("#noRating").text("尚無評分");
-		}
+		$("#noRating").text("錯誤評分");
 	}
+}
 
 
+// console.log("ratingValue" + $("#ratingValue").text());
+function drawRating(newRating,countRating) {
+	console.log("newRating="+newRating);
+	console.log("countRating="+countRating);
+	let nowRating = newRating;
+	let totalRating = countRating;
+	if(totalRating <= 0){
+		$("#noRating").text("尚無評分");
+	}else if(newRating < 1.0){
+		$("#rating").html("");
+		$("#noRating").html("");
+		$("#rating").append(				
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<td> "+nowRating+" 分</td>"+
+			"<td> (已有 "+totalRating+" 人評分)</td>"
+		);
+	}else if(newRating < 2.0){
+		$("#rating").html("");
+		$("#noRating").html("");
+		$("#rating").append(				
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<td> "+nowRating+" 分</td>"+
+			"<td> (已有 "+totalRating+" 人評分)</td>"
+		);
+	}else if(newRating < 3.0){
+		$("#rating").html("");
+		$("#noRating").html("");
+		$("#rating").append(				
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<td> "+nowRating+" 分</td>"+
+			"<td> (已有 "+totalRating+" 人評分)</td>"
+		);
+	}else if(newRating < 4.0){
+		$("#rating").html("");
+		$("#noRating").html("");
+		$("#rating").append(				
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<td> "+nowRating+" 分</td>"+
+			"<td> (已有 "+totalRating+" 人評分)</td>"
+		);
+	}else if(newRating < 5.0){
+		$("#rating").html("");
+		$("#noRating").html("");
+		$("#rating").append(				
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<td> "+nowRating+" 分</td>"+
+			"<td> (已有 "+totalRating+" 人評分)</td>"
+		);
+	}else if(newRating == 5.0){
+		$("#rating").html("");
+		$("#noRating").html("");
+		$("#rating").append(				
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<a><i class=\"fa fa-star fa-lg\" aria-hidden=\"true\"></i></a>"+
+			"<td> "+nowRating+" 分</td>"+
+			"<td> (已有 "+totalRating+" 人評分)</td>"
+		);
+	}else{
+		$("#noRating").text("錯誤評分");
+	}
+}
 
 $(document).ready(function(){
 	$("#s1").click(function(){
@@ -1187,7 +1356,7 @@ $(document).ready(function(){
 		$("#con").val("1.0");
 		
 		let movieno = "${movieVO.movieno}";
-		let memberno = "${memberNumber}";
+		let memberno = "${memVO.member_no}";
 		let rating = "1.0";
 		
 		$.ajax({
@@ -1200,150 +1369,179 @@ $(document).ready(function(){
 			type:"POST",
 			success:function(json){
 				let jsonobj = JSON.parse(json);
-				console.log("jsonrating = " + json);
-				console.log(jsonobj);
 				let newRating = jsonobj.newRating;
-				let fragment = document.createElement("div");
-				fragment.innerHTML = `
-		 			<a><i class="fa fa-star" aria-hidden="true"></i></a>
-		 			<a><i class="fa fa-star" aria-hidden="true"></i></a>	
-		 			<a><i class="fa fa-star" aria-hidden="true"></i></a>
-		 			<a><i class="fa fa-star" aria-hidden="true"></i></a>
-		 			<a><i class="fa fa-star" aria-hidden="true"></i></a>`
-		 		$("#rating").append(fragment);
+				let countRating = jsonobj.countRating;
+				$('#ratingValue').text(newRating);
+				drawRating(newRating,countRating); 
 			}
 		 });
-	})
-
-
-
-		$("#s2").click(function(){
-			$(".all-star").css("color","gray");
-			$("#s1,#s2").css("color","yellow");
-			$("#con").val("2.0");
-			
-			let movieno = "${movieVO.movieno}";
-			let memberno = "${memberNumber}";
-			let rating = "2.0";
-			
-			$.ajax({
-				url:"<%=request.getContextPath()%>/rating/rating.do?action=insertOrUpdate",
-				data:{
-					"memberno":memberno,	
-					"movieno":movieno,
-					"rating":rating		   
-				},
-				type:"POST",
-				success:function(msg){
-// 					thumbsUpDrawPieChart();
-				}
-			 });
-		})
-		$("#s3").click(function(){
-			$(".all-star").css("color","gray");
-			$("#s1,#s2,#s3").css("color","yellow");
-			$("#con").val("3.0");
-			
-			let movieno = "${movieVO.movieno}";
-			let memberno = "${memberNumber}";
-			let rating = "3.0";
-			
-			$.ajax({
-				url:"<%=request.getContextPath()%>/rating/rating.do?action=insertOrUpdate",
-				data:{
-					"memberno":memberno,	
-					"movieno":movieno,
-					"rating":rating		   
-				},
-				type:"POST",
-				success:function(msg){
-// 					thumbsUpDrawPieChart();
-				}
-			 });
-		})
-		$("#s4").click(function(){
-			$(".all-star").css("color","gray");
-			$("#s1,#s2,#s3,#s4").css("color","yellow");
-			$("#con").val("4.0");
-			
-			let movieno = "${movieVO.movieno}";
-			let memberno = "${memberNumber}";
-			let rating = "4.0";
-			
-			$.ajax({
-				url:"<%=request.getContextPath()%>/rating/rating.do?action=insertOrUpdate",
-				data:{
-					"memberno":memberno,	
-					"movieno":movieno,
-					"rating":rating		   
-				},
-				type:"POST",
-				success:function(msg){
-// 					thumbsUpDrawPieChart();
-				}
-			 });
-		})
-		$("#s5").click(function(){
-			$(".all-star").css("color","gray");
-			$(".all-star").css("color","yellow");
-			$("#con").val("5.0");
-			
-			let movieno = "${movieVO.movieno}";
-			let memberno = "${memberNumber}";
-			let rating = "5.0";
-			
-			$.ajax({
-				url:"<%=request.getContextPath()%>/rating/rating.do?action=insertOrUpdate",
-				data:{
-					"memberno":memberno,	
-					"movieno":movieno,
-					"rating":rating		   
-				},
-				type:"POST",
-				success:function(msg){
-// 					thumbsUpDrawPieChart();
-				}
-			 });
-		})
 		
+		Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "一星摳摳",
+            showConfirmButton: false,
+            timer: 1500,
+        });
+		 $("#leaveBtn").show();
+	})
 	
+	$("#s2").click(function(){
+		$(".all-star").css("color","gray");
+		$("#s1,#s2").css("color","yellow");
+		$("#con").val("2.0");
+		
+		let movieno = "${movieVO.movieno}";
+		let memberno = "${memVO.member_no}";
+		let rating = "2.0";
+		
+		$.ajax({
+			url:"<%=request.getContextPath()%>/rating/rating.do?action=insertOrUpdate",
+			data:{
+				"memberno":memberno,	
+				"movieno":movieno,
+				"rating":rating		   
+			},
+			type:"POST",
+			success:function(json){
+				let jsonobj = JSON.parse(json);
+				let newRating = jsonobj.newRating;
+				let countRating = jsonobj.countRating;
+				$('#ratingValue').text(newRating);
+				drawRating(newRating,countRating); 
+			}
+		 });
+		
+		Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "二星舔舔",
+            showConfirmButton: false,
+            timer: 1500,
+        });
+		 $("#leaveBtn").show();
+	})
+	
+	$("#s3").click(function(){
+		$(".all-star").css("color","gray");
+		$("#s1,#s2,#s3").css("color","yellow");
+		$("#con").val("3.0");
+		
+		let movieno = "${movieVO.movieno}";
+		let memberno = "${memVO.member_no}";
+		let rating = "3.0";
+		
+		$.ajax({
+			url:"<%=request.getContextPath()%>/rating/rating.do?action=insertOrUpdate",
+			data:{
+				"memberno":memberno,	
+				"movieno":movieno,
+				"rating":rating		   
+			},
+			type:"POST",
+			success:function(json){
+				let jsonobj = JSON.parse(json);
+				let newRating = jsonobj.newRating;
+				let countRating = jsonobj.countRating;
+				$('#ratingValue').text(newRating);
+				drawRating(newRating,countRating); 
+				
+			}
+		 });
+		
+		Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "三星吸吸",
+            showConfirmButton: false,
+            timer: 1500,
+        });
+		 $("#leaveBtn").show();
+	})
+	
+	$("#s4").click(function(){
+		$(".all-star").css("color","gray");
+		$("#s1,#s2,#s3,#s4").css("color","yellow");
+		$("#con").val("4.0");
+		
+		let movieno = "${movieVO.movieno}";
+		let memberno = "${memVO.member_no}";
+		let rating = "4.0";
+		
+		$.ajax({
+			url:"<%=request.getContextPath()%>/rating/rating.do?action=insertOrUpdate",
+			data:{
+				"memberno":memberno,	
+				"movieno":movieno,
+				"rating":rating		   
+			},
+			type:"POST",
+			success:function(json){
+				let jsonobj = JSON.parse(json);
+				let newRating = jsonobj.newRating;
+				let countRating = jsonobj.countRating;
+				$('#ratingValue').text(newRating);
+				drawRating(newRating,countRating); 
+			}
+		 });
+		
+		Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "四星含含",
+            showConfirmButton: false,
+            timer: 1500,
+        });
+		 $("#leaveBtn").show();
+	})
+	
+	$("#s5").click(function(){
+// 		$(".all-star").css("color","gray");
+// 		$(".all-star").css("color","yellow");
+// 		$("#con").val("5.0");
+		
+// 		let movieno = "${movieVO.movieno}";
+// 		let memberno = "${memVO.member_no}";
+// 		let rating = "5.0";
+		
+		$(".all-star").css("color","gray");
+		$("#s1,#s2,#s3,#s4,#s5").css("color","yellow");
+		$("#con").val("5.0");
+		
+		let movieno = "${movieVO.movieno}";
+		let memberno = "${memVO.member_no}";
+		let rating = "5.0";
+		
+		$.ajax({
+			url:"<%=request.getContextPath()%>/rating/rating.do?action=insertOrUpdate",
+			data:{
+				"memberno":memberno,	
+				"movieno":movieno,
+				"rating":rating		   
+			},
+			type:"POST",
+			success:function(json){
+				let jsonobj = JSON.parse(json);
+				let newRating = jsonobj.newRating;
+				let countRating = jsonobj.countRating;
+				$('#ratingValue').text(newRating);
+				drawRating(newRating,countRating); 
+			}
+		 });
+		
+		Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "五星吹吹",
+            showConfirmButton: false,
+            timer: 1500,
+        });
+		 $("#leaveBtn").show();
+	})
 })
-</script>
-	<script>
-	
+</script> 
 
-	
-	
-		$(document).ready(function() {
-			$("#s1").click(function() {
-				$(".all-star").css("color", "gray");
-				$("#s1").css("color", "yellow");
-				$("#con").val("1.0");
-			})
-			$("#s2").click(function() {
-				$(".all-star").css("color", "gray");
-				$("#s1,#s2").css("color", "yellow");
-				$("#con").val("2.0");
-			})
-			$("#s3").click(function() {
-				$(".all-star").css("color", "gray");
-				$("#s1,#s2,#s3").css("color", "yellow");
-				$("#con").val("3.0");
-			})
-			$("#s4").click(function() {
-				$(".all-star").css("color", "gray");
-				$("#s1,#s2,#s3,#s4").css("color", "yellow");
-				$("#con").val("4.0");
-			})
-			$("#s5").click(function() {
-				$(".all-star").css("color", "gray");
-				$(".all-star").css("color", "yellow");
-				$("#con").val("5");
-			})
-		})
-	</script>
 
-	
 
 </body>
 </html>

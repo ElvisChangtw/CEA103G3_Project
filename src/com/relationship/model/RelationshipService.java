@@ -1,7 +1,9 @@
 package com.relationship.model;
 
-import java.sql.Date;
 import java.util.List;
+import java.util.Map;
+
+import com.article.model.ArticleVO;
 
 public class RelationshipService {
 
@@ -45,6 +47,24 @@ public class RelationshipService {
 
 	public List<RelationshipVO> getAll() {
 		return dao.getAll();
+	}
+	public List<RelationshipVO> getAllFriendno(Integer member_no) {
+		return dao.getAllFriendno(member_no);
+	}
+
+	public void acceptInvitation(Integer member_no, Integer friend_no) {
+		dao.update_status(member_no, friend_no);
+	}
+	
+	public RelationshipVO addOneWay(Integer member_no, 
+			Integer friend_no) {
+
+		RelationshipVO relationshipVO = new RelationshipVO();
+		relationshipVO = new RelationshipVO();
+		relationshipVO.setMember_no(member_no);
+		relationshipVO.setFriend_no(friend_no);
+		dao.addOneWay(relationshipVO);
+		return relationshipVO;
 	}
 }
 		

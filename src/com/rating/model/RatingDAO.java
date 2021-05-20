@@ -6,7 +6,6 @@ import java.util.*;
 import javax.naming.*;
 import javax.sql.DataSource;
 
-import com.comment.model.CommentVO;
 import com.movie.model.*;
 
 public class RatingDAO implements RatingDAO_interface {
@@ -35,7 +34,9 @@ public class RatingDAO implements RatingDAO_interface {
 	private static final String SELECT_INSERT_OR_UPDATE_STMT = 
 			"select IF(EXISTS(select * from RATING where MEMBER_NO = ? and MOVIE_NO = ?),'update','insert' )as `action`";
 	private static final String GET_AVGRATING_BY_MOVIENO_STMT = 
-			"select avg(RATING) from RATING where MOVIE_NO = ?";
+			"select format(avg(RATING),1) as 'avg(RATING)' from RATING where MOVIE_NO = ?";
+	private static final String GET_COUNTRATING_BY_MOVIENO_STMT = 
+			"select count(RATING) from RATING where MOVIE_NO = ?";
 	
 	
 
@@ -381,7 +382,7 @@ public class RatingDAO implements RatingDAO_interface {
 			pstmt3.setInt(1, ratingVO.getMovieno());
 	
 			rs = pstmt3.executeQuery();
-	
+			
 			// 再同時更新電影表格的評分
 			rs.next();
 				MovieDAO dao = new MovieDAO();
@@ -442,4 +443,59 @@ public class RatingDAO implements RatingDAO_interface {
 			}
 		}
 	}
+	
+	
+	public RatingVO getThisMovieToatalRating(Integer movieno) {
+		
+		RatingVO ratingVO = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_COUNTRATING_BY_MOVIENO_STMT);
+
+			pstmt.setInt(1, movieno);
+
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// commentVo 也稱為 Domain objects
+				ratingVO = new RatingVO();
+				ratingVO.setRating(rs.getDouble("count(RATING)"));
+			}
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return ratingVO;
+	}
+
 }

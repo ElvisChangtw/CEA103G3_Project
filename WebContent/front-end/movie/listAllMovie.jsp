@@ -22,6 +22,7 @@
 	int z = 0;
 	pageContext.setAttribute("z", z);
 %>
+<jsp:useBean id="memVO" scope="session" type="com.mem.model.MemVO" />
 <%-- <jsp:useBean id="movieSvc1" scope="page" class="com.movie.model.MovieService" /> --%>
 <!DOCTYPE html>
 <html>
@@ -58,6 +59,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
 </head>
 <body>
+<h1>==================${memVO.mb_name}=================================</h1>
 <!--/main-header-->
   <!--/banner-section-->
 	<div id="demo-1" class="banner-inner">
@@ -368,24 +370,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								<p class="w3ls_head_para">Add short Description</p>
 							</div>
 				            <div class="bs-example bs-example-tabs" role="tabpanel" data-example-id="togglable-tabs">
-<!-- 						<ul id="myTab" class="nav nav-tabs" role="tablist"> -->
-<!-- 							<li role="presentation" class="active"><a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">ALL</a></li> -->
-<!-- 							<li role="presentation"><a href="#動作片" role="tab" id="動作片-tab" data-toggle="tab" aria-controls="動作片">動作片</a></li> -->
-<!-- 							<li role="presentation"><a href="#冒險片" role="tab" id="冒險片-tab" data-toggle="tab" aria-controls="冒險片">冒險片</a></li> -->
-<!-- 							<li role="presentation"><a href="#科幻片" role="tab" id="科幻片-tab" data-toggle="tab" aria-controls="科幻片">科幻片</a></li> -->
-<!-- 							<li role="presentation"><a href="#劇情片" role="tab" id="劇情片-tab" data-toggle="tab" aria-controls="劇情片">劇情片</a></li> -->
-<!-- 							<li role="presentation"><a href="#戰爭片" role="tab" id="戰爭片-tab" data-toggle="tab" aria-controls="戰爭片">戰爭片</a></li> -->
-<!-- 							<li role="presentation"><a href="#史詩片" role="tab" id="史詩片-tab" data-toggle="tab" aria-controls="史詩片">史詩片</a></li> -->
-<!-- 							<li role="presentation"><a href="#恐怖片" role="tab" id="恐怖片-tab" data-toggle="tab" aria-controls="恐怖片">恐怖片</a></li> -->
-<!-- 							<li role="presentation"><a href="#驚悚片" role="tab" id="驚悚片-tab" data-toggle="tab" aria-controls="驚悚片">驚悚片</a></li> -->
-<!-- 							<li role="presentation"><a href="#懸疑片" role="tab" id="懸疑片-tab" data-toggle="tab" aria-controls="懸疑片">懸疑片</a></li> -->
-<!-- 							<li role="presentation"><a href="#喜劇片" role="tab" id="喜劇片-tab" data-toggle="tab" aria-controls="喜劇片">喜劇片</a></li> -->
-<!-- 							<li role="presentation"><a href="#愛情片" role="tab" id="愛情片-tab" data-toggle="tab" aria-controls="愛情片">愛情片</a></li> -->
-<!-- 							<li role="presentation"><a href="#奇幻片" role="tab" id="奇幻片-tab" data-toggle="tab" aria-controls="奇幻片">奇幻片</a></li> -->
-<!-- 							<li role="presentation"><a href="#動畫片" role="tab" id="動畫片-tab" data-toggle="tab" aria-controls="動畫片">動畫片</a></li> -->
-<!-- 							<li role="presentation"><a href="#音樂片" role="tab" id="音樂片-tab" data-toggle="tab" aria-controls="音樂片">音樂片</a></li> -->
-<!-- 							<li role="presentation"><a href="#歌舞劇" role="tab" id="歌舞劇-tab" data-toggle="tab" aria-controls="歌舞劇">歌舞劇</a></li> -->
-<!-- 						</ul> -->
 						<div id="myTabContent" class="tab-content">
 							<div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
 								<div class="agile-news-table">
@@ -397,12 +381,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 											<th align="center">電影名稱</th>
 											<th align="center">電影長度</th>
 											<th align="center">上映日期</th>
+											<th align="center">下映日期</th>
 											<th align="center">狀態</th>
-											<th align="center">電影分級</th>
-											<th align="center">電影類型</th>
+											<th align="center">分級</th>
+											<th align="center">類型</th>
 											<th align="center">評分</th>
 											<th align="center">期待度</th>
 											<th align="center">預告片</th>
+<!-- 											<th align="center">操作</th> -->
 										  </tr>
 										</thead>
 										<tbody>
@@ -412,9 +398,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 										  <tr>
 											<td width="150px;"><a href="${pageContext.request.contextPath}/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}">
 											<img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${movieVO.movieno}" 
-											alt="尚無圖片" width="200px;" height="240px" title="${movieVO.moviename}"/> 
+											alt="尚無圖片" width="180px;" height="220px" title="${movieVO.moviename}"/> 
 											<span  style="text-align: center; display:block; font-size:20px; font-weight:bold;">${movieVO.moviename}</span></a></td>
 											<c:choose>
+												<c:when test="${movieVO.length == 0}">
+													<td width="110px;">尚無時間</td>
+												</c:when>
 												<c:when test="${((movieVO.length)/60)<1}">
 													<td width="110px;">${movieVO.length}分鐘</td>
 												</c:when>
@@ -433,6 +422,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 											</c:choose>
 											<td width="105px;"><fmt:formatDate value="${movieVO.premiredate}"
 												pattern="yyyy-MM-dd" /></td>
+											<td width="105px;"><fmt:formatDate value="${movieVO.offdate}"
+												pattern="yyyy-MM-dd" /></td>
 											<c:choose>
 												<c:when test="${movieVO.status.equals('0')}">
 													<td width="70px;">上映中</td>
@@ -449,23 +440,26 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 											</c:choose>
 											<c:choose>
 												<c:when test="${movieVO.grade.equals('0')}">
-													<td width="90px;">普遍級</td>
+													<td width="70px;">普遍級</td>
 												</c:when>
 												<c:when test="${movieVO.grade.equals('1')}">
-													<td width="90px;">保護級</td>
+													<td width="70px;">保護級</td>
 												</c:when>
 												<c:when test="${movieVO.grade.equals('2')}">
-													<td width="90px;">輔導級</td>
+													<td width="70px;">輔導級</td>
 												</c:when>
 												<c:when test="${movieVO.grade.equals('3')}">
-													<td width="90px;">限制級</td>
+													<td width="70px;">限制級</td>
 												</c:when>
 												<c:otherwise>
-													<td width="90px;">尚未分級</td>
+													<td width="70px;">尚未分級</td>
 												</c:otherwise>
 											</c:choose>
-												<td width="120px;">${movieVO.category}</td>
+												<td width="80px;">${movieVO.category}</td>
 											<c:choose>
+												<c:when test="${movieVO.rating == 0.0}">
+ 													<td width="100px;">尚無評分</td> 
+												</c:when>
 												<c:when test="${movieVO.rating <= 1.0}">
 												<div class="block-stars">
 													<td width="100px;">
@@ -544,40 +538,29 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 											<td width="30px;" id="expectation_${movieVO.movieno}"> 
 													
 											</td>
+											<td width="80px;"><a class="w3_play_icon1" href="#small-dialog_${movieVO.movieno}">觀看</a></td>
+<%-- 												<td width="50px;"><a class="w3_play_icon1" href="${movieVO.trailor}">觀看</a></td> --%>
 											
-											
-<%-- 											<c:choose> --%>
-<%-- 												<c:when test="${movieVO.expectation eq null}"> --%>
-<!-- 													<td width="30px;">尚無期待度</td> -->
-<%-- 												</c:when> --%>
-<%-- 												<c:when test="${empty movieVO.expectation}"> --%>
-<!-- 													<td width="30px;">尚無期待度</td> -->
-<%-- 												</c:when> --%>
-<%-- 												<c:when test="${movieVO.expectation == null}"> --%>
-<!-- 													<td width="30px;">尚無期待度</td> -->
-<%-- 												</c:when> --%>
-<%-- 												<c:when test="${movieVO.expectation != null}"> --%>
-<!-- 													<td width="30px;" > -->
-<%-- 													===${movieVO.expectation}=== --%>
-<%-- 													<canvas id="chart_${movieVO.movieno}"  width="100" height="100"></canvas> --%>
-<!-- 													</td> -->
-<!-- 													<div class="clearfix"></div> -->
-<%-- 												</c:when> --%>
-<%-- 												<c:otherwise> --%>
-<!-- 													<td width="30px;">尚無期待度</td> -->
-<%-- 												</c:otherwise> --%>
-<%-- 											</c:choose>	 --%>
-<%-- 												<td width="70px;">${movieVO.expectation}</td> --%>
-												<td width="100px;"><a href="${movieVO.trailor}">${movieVO.moviename}</a></td>
-<!-- 												<td width="100px;"> -->
-<!-- 													<FORM METHOD="post" -->
-<%-- 														ACTION="<%=request.getContextPath()%>/movie/movie.do" --%>
-<!-- 														style="margin-bottom: 0px;"> -->
-<!-- 														<input type="submit" value="送出查詢"> <input type="hidden" -->
-<%-- 															name="movieno" value="${movieVO.movieno}"> 													 --%>
-<!-- 														<input type="hidden" name="action" value="listComments_ByMovieno_B"> -->
-<!-- 													</FORM> -->
-<!-- 												</td> -->
+<!-- 											<td width="100px;"> -->
+<%-- 												<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/movie/movie.do" style="margin-bottom: 0px;"> --%>
+<!-- 													<input type="submit" value="修改">  -->
+<%-- 													<input type="hidden" name="movieno" value="${movieVO.movieno}">  --%>
+<%-- 													<input type="hidden" name="requestURL" value="<%=request.getServletPath()%>"> --%>
+<!-- 													送出本網頁的路徑給Controller -->
+<%-- 													<input type="hidden" name="whichPage" value="<%=whichPage%>"> --%>
+<!-- 													送出當前是第幾頁給Controller -->
+<!-- 													<input type="hidden" name="action" value="getOne_For_Update"> -->
+<!-- 												</FORM> -->
+<%-- 												<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/movie/movie.do" style="margin-bottom: 0px;"> --%>
+<!-- 													<input type="submit" value="刪除">  -->
+<%-- 													<input type="hidden" name="movieno" value="${movieVO.movieno}">  --%>
+<%-- 													<input type="hidden" name="requestURL" value="<%=request.getServletPath()%>"> --%>
+<!-- 													送出本網頁的路徑給Controller -->
+<%-- 													<input type="hidden" name="whichPage" value="<%=whichPage%>"> --%>
+<!-- 													送出當前是第幾頁給Controller -->
+<!-- 													<input type="hidden" name="action" value="delete"> -->
+<!-- 												</FORM> -->
+<!-- 											</td> -->
 											</tr>
 											
 										</c:forEach>
@@ -593,184 +576,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								<%@ include file="pages/page2.file"%>
 								</ul>
 							</div>	
-							
-							
-											
-<!-- 							<div role="tabpanel" class="tab-pane fade" id="動作片" aria-labelledby="動作片-tab"> -->
-<!-- 								<div class="agile-news-table"> -->
-<!-- 									<div class="w3ls-news-result"> -->
-<!-- 										<h4>Search Results : <span>17</span></h4> -->
-<!-- 									</div> -->
-<!-- 									<table id="table-breakpoint1"> -->
-<!-- 										<thead> -->
-<!-- 										  <tr> -->
-<!-- 											<th>No.</th> -->
-<!-- 											<th>Movie Name</th> -->
-<!-- 											<th>Year</th> -->
-<!-- 											<th>Status</th> -->
-<!-- 											<th>Country</th> -->
-<!-- 											<th>Genre</th> -->
-<!-- 											<th>Rating</th> -->
-<!-- 										  </tr> -->
-<!-- 										</thead> -->
-<!-- 										<tbody> -->
-<!-- 										  <tr> -->
-<!-- 											<td>1</td> -->
-<!-- 											<td class="w3-list-img"><a href="single.html"><img src="images/m3.jpg" alt="" /> <span>Deadpool</span></a></td> -->
-<!-- 											<td>2016</td> -->
-<!-- 											<td>HD</td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">United Kingdom</a></td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">Comedy, Drama</a></td> -->
-<!-- 											<td>7.0</td> -->
-<!-- 										  </tr> -->
-<!-- 										  <tr> -->
-<!-- 											<td>2</td> -->
-<!-- 											<td class="w3-list-img"><a href="single.html"><img src="images/m4.jpg" alt="" /> <span>Rogue One</span></a></td> -->
-<!-- 											<td>2016</td> -->
-<!-- 											<td>HD</td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">United States</a></td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">Action</a></td> -->
-<!-- 											<td>7.1</td> -->
-<!-- 										  </tr> -->
-<!-- 										  <tr> -->
-<!-- 											<td>3</td> -->
-<!-- 											<td class="w3-list-img"><a href="single.html"><img src="images/m5.jpg" alt="" /> <span>Storks</span></a></td> -->
-<!-- 											<td>2016</td> -->
-<!-- 											<td>HD</td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">India</a></td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">Thriller, Drama</a></td> -->
-<!-- 											<td>9.0</td> -->
-<!-- 										  </tr> -->
-<!-- 										  <tr> -->
-<!-- 											<td>4</td> -->
-<!-- 											<td class="w3-list-img"><a href="single.html"><img src="images/m6.jpg" alt="" /> <span>Hopeless</span></a></td> -->
-<!-- 											<td>2016</td> -->
-<!-- 											<td>HD</td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">Euro, France</a></td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">Thriller, Crime, Drama</a></td> -->
-<!-- 											<td>8.2</td> -->
-<!-- 										  </tr> -->
-<!-- 										  <tr> -->
-<!-- 											<td>5</td> -->
-<!-- 											<td class="w3-list-img"><a href="single.html"><img src="images/m7.jpg" alt="" /> <span>Mechanic</span></a></td> -->
-<!-- 											<td>2016</td> -->
-<!-- 											<td>HD</td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">China</a></td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">Comedy</a></td> -->
-<!-- 											<td>8.9</td> -->
-<!-- 										  </tr> -->
-<!-- 										  <tr> -->
-<!-- 											<td>6</td> -->
-<!-- 											<td class="w3-list-img"><a href="single.html"><img src="images/m8.jpg" alt="" /> <span>Timeless</span></a></td> -->
-<!-- 											<td>2016</td> -->
-<!-- 											<td>HD</td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">United Kingdom</a></td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">Comedy, Drama</a></td> -->
-<!-- 											<td>7.0</td> -->
-<!-- 										  </tr> -->
-<!-- 										  <tr> -->
-<!-- 											<td>7</td> -->
-<!-- 											<td class="w3-list-img"><a href="single.html"><img src="images/m9.jpg" alt="" /> <span>Inferno</span></a></td> -->
-<!-- 											<td>2016</td> -->
-<!-- 											<td>HD</td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">Japan</a></td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">Action</a></td> -->
-<!-- 											<td>7.1</td> -->
-<!-- 										  </tr> -->
-<!-- 										  <tr> -->
-<!-- 											<td>8</td> -->
-<!-- 											<td class="w3-list-img"><a href="single.html"><img src="images/m10.jpg" alt="" /> <span>Now You See Me 2</span></a></td> -->
-<!-- 											<td>2016</td> -->
-<!-- 											<td>HD</td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">United Kingdom</a></td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">Comedy, Drama</a></td> -->
-<!-- 											<td>7.0</td> -->
-<!-- 										  </tr> -->
-<!-- 										  <tr> -->
-<!-- 											<td>9</td> -->
-<!-- 											<td class="w3-list-img"><a href="single.html"><img src="images/m1.jpg" alt="" /> <span>Swiss Army Man</span></a></td> -->
-<!-- 											<td>2016</td> -->
-<!-- 											<td>HD</td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">United Kingdom</a></td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">Comedy, Drama</a></td> -->
-<!-- 											<td>7.0</td> -->
-<!-- 										  </tr> -->
-<!-- 										  <tr> -->
-<!-- 											<td>10</td> -->
-<!-- 											<td class="w3-list-img"><a href="single.html"><img src="images/m2.jpg" alt="" /> <span>Me Before you</span></a></td> -->
-<!-- 											<td>2016</td> -->
-<!-- 											<td>HD</td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">Korea</a></td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">Drama</a></td> -->
-<!-- 											<td>7.5</td> -->
-<!-- 										  </tr> -->
-<!-- 										  <tr> -->
-<!-- 											<td>11</td> -->
-<!-- 											<td class="w3-list-img"><a href="single.html"><img src="images/m11.jpg" alt="" /> <span>Warcraft</span></a></td> -->
-<!-- 											<td>2016</td> -->
-<!-- 											<td>SD</td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">United Kingdom</a></td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">Comedy</a></td> -->
-<!-- 											<td>6.5</td> -->
-<!-- 										  </tr> -->
-<!-- 										  <tr> -->
-<!-- 											<td>12</td> -->
-<!-- 											<td class="w3-list-img"><a href="single.html"><img src="images/m3.jpg" alt="" /> <span>Deadpool</span></a></td> -->
-<!-- 											<td>2016</td> -->
-<!-- 											<td>HD</td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">United Kingdom</a></td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">Comedy, Drama</a></td> -->
-<!-- 											<td>7.0</td> -->
-<!-- 										  </tr> -->
-<!-- 										  <tr> -->
-<!-- 											<td>13</td> -->
-<!-- 											<td class="w3-list-img"><a href="single.html"><img src="images/m4.jpg" alt="" /> <span>Rogue One</span></a></td> -->
-<!-- 											<td>2016</td> -->
-<!-- 											<td>HD</td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">United States</a></td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">Action</a></td> -->
-<!-- 											<td>7.1</td> -->
-<!-- 										  </tr> -->
-<!-- 										  <tr> -->
-<!-- 											<td>14</td> -->
-<!-- 											<td class="w3-list-img"><a href="single.html"><img src="images/m5.jpg" alt="" /> <span>Storks</span></a></td> -->
-<!-- 											<td>2016</td> -->
-<!-- 											<td>HD</td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">India</a></td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">Thriller, Drama</a></td> -->
-<!-- 											<td>9.0</td> -->
-<!-- 										  </tr> -->
-<!-- 										  <tr> -->
-<!-- 											<td>15</td> -->
-<!-- 											<td class="w3-list-img"><a href="single.html"><img src="images/m6.jpg" alt="" /> <span>Hopeless</span></a></td> -->
-<!-- 											<td>2016</td> -->
-<!-- 											<td>HD</td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">Euro, France</a></td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">Thriller, Crime, Drama</a></td> -->
-<!-- 											<td>8.2</td> -->
-<!-- 										  </tr> -->
-<!-- 										  <tr> -->
-<!-- 											<td>16</td> -->
-<!-- 											<td class="w3-list-img"><a href="single.html"><img src="images/m7.jpg" alt="" /> <span>Mechanic</span></a></td> -->
-<!-- 											<td>2016</td> -->
-<!-- 											<td>HD</td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">China</a></td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">Comedy</a></td> -->
-<!-- 											<td>8.9</td> -->
-<!-- 										  </tr> -->
-<!-- 										  <tr> -->
-<!-- 											<td>17</td> -->
-<!-- 											<td class="w3-list-img"><a href="single.html"><img src="images/m8.jpg" alt="" /> <span>Timeless</span></a></td> -->
-<!-- 											<td>2016</td> -->
-<!-- 											<td>HD</td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">United Kingdom</a></td> -->
-<!-- 											<td class="w3-list-info"><a href="genre.html">Comedy, Drama</a></td> -->
-<!-- 											<td>7.0</td> -->
-<!-- 										  </tr> -->
-<!-- 										</tbody> -->
-<!-- 									</table> -->
-<!-- 								</div> -->
-<!-- 							</div> -->
 						</div>
 					</div>
 				</div>
@@ -980,9 +785,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<!-- pop-up-box -->  
 		<script src="<%=request.getContextPath()%>/js/jquery.magnific-popup.js" type="text/javascript"></script>
 	<!--//pop-up-box -->
-
-			<div id="small-dialog1" class="mfp-hide">
-	<iframe src="https://player.vimeo.com/video/165197924?color=ffffff&title=0&byline=0&portrait=0"></iframe>
+	<c:forEach var="movieVO" items="${list}" begin="<%=pageIndex%>" end="<%=pageIndex+rowsPerPage-1%>">
+		<div id="small-dialog_${movieVO.movieno}" class="mfp-hide">
+			<iframe src="https://www.youtube.com/embed/${movieVO.embed}"></iframe>
+		</div>
+	</c:forEach>
+	
+	<div id="small-dialog1" class="mfp-hide">
+		<iframe src="https://player.vimeo.com/video/165197924?color=ffffff&title=0&byline=0&portrait=0"></iframe>
 	</div>
 	<div id="small-dialog2" class="mfp-hide">
 		<iframe src="https://player.vimeo.com/video/165197924?color=ffffff&title=0&byline=0&portrait=0"></iframe>
@@ -990,6 +800,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<script>
 		$(document).ready(function() {
 		$('.w3_play_icon,.w3_play_icon1,.w3_play_icon2').magnificPopup({
+			console.log("check");
 			type: 'inline',
 			fixedContentPos: false,
 			fixedBgPos: true,
@@ -1000,7 +811,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			removalDelay: 300,
 			mainClass: 'my-mfp-zoom-in'
 		});
-																		
 		});
 	</script>
 <script src="<%=request.getContextPath()%>/js/easy-responsive-tabs.js"></script>

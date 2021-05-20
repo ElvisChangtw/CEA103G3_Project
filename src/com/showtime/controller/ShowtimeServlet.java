@@ -1,6 +1,8 @@
 package com.showtime.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,6 +17,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.showtime.model.ShowtimeService;
 import com.showtime.model.ShowtimeVO;
@@ -37,6 +43,7 @@ public class ShowtimeServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		req.setCharacterEncoding("UTF-8");
+		res.setContentType("text/html; charset=UTF-8");
 		String action = req.getParameter("action");
 		
 		if ("getOne_For_Display".equals(action)) { // 來自select_page.jsp的請求
@@ -174,38 +181,22 @@ public class ShowtimeServlet extends HttpServlet {
 		
 			try {
 				/***************************1.接收請求參數 - 輸入格式的錯誤處理**********************/
-//				String[] seat_name = req.getParameterValues("seat_name");
-//				
-//				for(int i = 0; i < seat_name.length; i++) {
-//					System.out.println(seat_name[i]);
-//				}
-				
-				
 				Integer showtime_no = new Integer(req.getParameter("showtime_no"));
-				System.out.println(showtime_no);
 				Integer	movie_no = new Integer(req.getParameter("movie_no"));
-				System.out.println(movie_no);
 				Integer	theater_no = new Integer(req.getParameter("theater_no"));
-				System.out.println(theater_no);
-				String s[] = req.getParameterValues("seat_no");
-//				String seat_no = "";
-//				for(int i = 0; i < s.length; i++) {
-//					seat_no = seat_no + s[i];
-//				}
-//				System.out.println(seat_no);
 				
-				TheaterService theaterSvc = new TheaterService();
-				TheaterVO theaterVO = theaterSvc.getOneTheater(theater_no);
-				String seat_no = theaterVO.getSeat_no();
+				String s[] = req.getParameterValues("seat_no");
+				String seat_no = "";
+				for(int i = 0; i < s.length; i++) {
+					seat_no = seat_no + s[i];
+				}
 				
 				Timestamp showtime_time = java.sql.Timestamp.valueOf(req.getParameter("showtime_time"));
 				if (showtime_time == null) {
 					errorMsgs.add("場次時間請勿空白");
 				}
-				System.out.println(showtime_time);
 				
 				ShowtimeVO showtimeVO = new ShowtimeVO();
-				
 				showtimeVO.setShowtime_no(showtime_no);
 				showtimeVO.setMovie_no(movie_no);
 				showtimeVO.setTheater_no(theater_no);
@@ -250,15 +241,8 @@ public class ShowtimeServlet extends HttpServlet {
 				/***************************1.接收請求參數 - 輸入格式的錯誤處理**********************/
 				
 				Integer	movie_no = new Integer(req.getParameter("movie_no"));
-				
 				Integer	theater_no = new Integer(req.getParameter("theater_no"));
-				
 				String seat_no = new TheaterService().getOneTheater(theater_no).getSeat_no();
-//				String s[] = req.getParameterValues("seat_no");
-//				String seat_no = "";
-//				for(int i = 0; i < s.length; i++) {
-//					seat_no = seat_no + s[i];
-//				}
 				
 				Timestamp showtime_time;
 				try {
@@ -267,15 +251,12 @@ public class ShowtimeServlet extends HttpServlet {
 					showtime_time = new Timestamp(System.currentTimeMillis()); 
 					errorMsgs.add("請輸入日期時間!");
 				}
-				System.out.println(showtime_time);
-
 				ShowtimeVO showtimeVO = new ShowtimeVO();
 				
 				showtimeVO.setMovie_no(movie_no);
 				showtimeVO.setTheater_no(theater_no);
 				showtimeVO.setSeat_no(seat_no);
 				showtimeVO.setShowtime_time(showtime_time);
-
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					req.setAttribute("showtimeVO", showtimeVO); // 含有輸入格式錯誤的empVO物件,也存入req
@@ -311,68 +292,88 @@ public class ShowtimeServlet extends HttpServlet {
         	
         	try {
         		/***************************1.接收請求參數 - 輸入格式的錯誤處理**********************/
-        		
         		Integer	movie_no = new Integer(req.getParameter("movie_no"));
-        		
         		Integer	theater_no = new Integer(req.getParameter("theater_no"));
-        		
         		String seat_no = new TheaterService().getOneTheater(theater_no).getSeat_no();
-//				String s[] = req.getParameterValues("seat_no");
-//				String seat_no = "";
-//				for(int i = 0; i < s.length; i++) {
-//					seat_no = seat_no + s[i];
-//				}
         		
         		Timestamp showtime_time;
         		String st;
-        		ShowtimeService showtimeSvc = new ShowtimeService();
         		
         		String[] showtime_date = req.getParameterValues("showtime_date");
         		String[] showtime =req.getParameterValues("showtime");
         		List<String> result = new ArrayList<>();
         		
         		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        		Date from_date = format.parse(showtime_date[0]);
-        		Date to_date = format.parse(showtime_date[1]);
-        		Calendar cd = Calendar.getInstance();
-        		cd.setTime(from_date);
-        		result.add(format.format(from_date));
+        		Date from_date = format.parse(showtime_date[0]); //開始日期
+        		Date to_date = format.parse(showtime_date[1]); //結束日期
+        		Calendar cd = Calendar.getInstance(); 
+        		cd.setTime(from_date); //設定開始日期
+        		result.add(format.format(from_date)); //把開始日期新增至result
         		
+        		//新增開始日期+1天到結束的日期至result
         		while(cd.getTime().before(to_date)) {
         			cd.add(Calendar.DATE, 1);
         			String str = format.format(cd.getTime());
         			result.add(str);
-                    System.out.println(str);
         		}
-        		
+        		ShowtimeService showtimeSvc = new ShowtimeService();
+//        		List<ShowtimeVO> list_showtime = showtimeSvc.getAllShowtimeByMovie_no(movie_no);
+//        		for(int i = 0; i < list_showtime.size(); i++) {
+//        			ShowtimeVO showtimeVO2 = list_showtime.get(i);
+//        			if(showtimeVO2.getTheater_no() != theater_no) {
+//        				list_showtime.remove(showtimeVO2);
+//        				i--;
+//        			}
+//        		}
+//        		for(int i = 0; i < result.size(); i++) {
+//        			for(int j = 0; j < showtime.length; j++) {
+//        				
+//        			}
+//        		}
+        		//把各個VO存在list_showtimeVO裡面 在一起新增
+        		List<ShowtimeVO> list_showtimeVO = new ArrayList<ShowtimeVO>();
         		for(int i = 0; i < result.size(); i++) {
         			for(int j = 0; j < showtime.length; j++) {
 	        			st = result.get(i) + " " + showtime[j];
-	        			System.out.println("st = " + st);
 	            		showtime_time = java.sql.Timestamp.valueOf(st);
-	        			
-	            		showtimeSvc.addShowtime(movie_no, theater_no, seat_no, showtime_time);
+//	            		for(ShowtimeVO showtimeVO1 : list_showtime) {
+//	            			System.out.println(showtimeVO1.getShowtime_time().getTime());
+//	            			System.out.println(showtime_time.getTime());
+//	            			System.out.println(showtimeVO1.getShowtime_time().getTime() - showtime_time.getTime());
+//	            			long dur = showtimeVO1.getShowtime_time().getTime() - showtime_time.getTime();
+//	            			int twoHour = 2 * 60 * 60 * 1000;
+//	            			int dur_hour = (int) Math.abs(dur/twoHour);
+//	            			System.out.println(dur_hour);
+//	            			if(dur_hour < 2) {
+//	            				errorMsgs.add("場次時間間格少於2小時,請重新確認!!");
+//	            				break;
+//	            			}else {
+//	            			}
+	            				ShowtimeVO showtimeVO = new ShowtimeVO();
+	            				showtimeVO.setMovie_no(movie_no);
+	            				showtimeVO.setTheater_no(theater_no);
+	            				showtimeVO.setSeat_no(seat_no);
+	            				showtimeVO.setShowtime_time(showtime_time);
+	            				list_showtimeVO.add(showtimeVO);
+	            			
+//	            		}
+//        				showtimeVO.setMovie_no(movie_no);
+//        				showtimeVO.setTheater_no(theater_no);
+//        				showtimeVO.setSeat_no(seat_no);
+//        				showtimeVO.setShowtime_time(showtime_time);
+//        				list_showtimeVO.add(showtimeVO);
         			}
         		}
-        		
-//        		ShowtimeVO showtimeVO = new ShowtimeVO();
-//        		
-//        		showtimeVO.setMovie_no(movie_no);
-//        		showtimeVO.setTheater_no(theater_no);
-//        		showtimeVO.setSeat_no(seat_no);
-//        		showtimeVO.setShowtime_time(showtime_time);
-//        		
-//        		// Send the use back to the form, if there were errors
-//        		if (!errorMsgs.isEmpty()) {
+        		// Send the use back to the form, if there were errors
+        		if (!errorMsgs.isEmpty()) {
 //        			req.setAttribute("showtimeVO", showtimeVO); // 含有輸入格式錯誤的empVO物件,也存入req
-//        			RequestDispatcher failureView = req
-//        					.getRequestDispatcher("/back-end/showtime/addShowtime.jsp");
-//        			failureView.forward(req, res);
-//        			return; //程式中斷
-//        		}
-//        		/***************************2.開始新增資料***************************************/
-//        		ShowtimeService showtimeSvc = new ShowtimeService();
-//        		showtimeVO = showtimeSvc.addShowtime(movie_no, theater_no, seat_no, showtime_time);
+        			RequestDispatcher failureView = req
+        					.getRequestDispatcher("/back-end/showtime/addShowtime.jsp");
+        			failureView.forward(req, res);
+        			return; //程式中斷
+        		}
+        		/***************************2.開始新增資料***************************************/
+        		showtimeSvc.addShowtimes(list_showtimeVO);
         		
         		/***************************3.新增完成,準備轉交(Send the Success view)***********/
         		String url = "/back-end/showtime/listAllShowtime.jsp";
@@ -381,6 +382,7 @@ public class ShowtimeServlet extends HttpServlet {
         		
         		/***************************其他可能的錯誤處理**********************************/
         	} catch (Exception e) {
+        		System.out.println("123");
         		errorMsgs.add(e.getMessage());
         		RequestDispatcher failureView = req
         				.getRequestDispatcher("/back-end/showtime/addShowtime.jsp");
@@ -468,8 +470,97 @@ public class ShowtimeServlet extends HttpServlet {
 			}
 		}
 		
+		//ajax
+		if("getMovieFromHibernate".equals(action)) {
+			PrintWriter out = res.getWriter();
+			
+			ShowtimeService showtimeSvc = new ShowtimeService();
+			
+			List<Object[]> list = showtimeSvc.getAllShowtimeByDate();
+			List<Integer> list_movie_no = new ArrayList<Integer>();
+			List<String> list_movie_name =  new ArrayList<String>();
+			
+			for(Object[] object : list) {
+				list_movie_no.add((Integer)object[0]);
+				list_movie_name.add((String)object[1]);
+			}
+			
+			JSONArray movie_no = new JSONArray(list_movie_no);
+			JSONArray movie_name = new JSONArray(list_movie_name);
+			JSONObject jsonobj=new JSONObject();
+			try {
+				jsonobj.put("movie_no", movie_no);
+				jsonobj.put("movie_name", movie_name);
+				out.println(jsonobj);
+				return;
+			}catch(JSONException e) {
+				e.printStackTrace();
+			}finally {
+				out.flush();
+				out.close();
+			}
+			
+		}
 		
+		if("getDateFromHibernate".equals(action)) {
+			
+			PrintWriter out = res.getWriter();
+			
+			Integer movie_no = new Integer(req.getParameter("movie_no"));
+			
+			String sql = "select distinct date(showtime_time) from showtime"
+					+ " where movie_no = " + movie_no + " order by date(showtime_time)";
+			ShowtimeService showtimeSvc = new ShowtimeService();
+			List<Object[]> list = showtimeSvc.getByHibernate(sql);
+			
+			JSONArray showtime_date = new JSONArray(list);
+			JSONObject jsonobj=new JSONObject();
+			try {
+				jsonobj.put("showtime_date", showtime_date);
+				out.println(jsonobj);
+				return;
+			}catch(JSONException e) {
+				e.printStackTrace();
+			}finally {
+				out.flush();
+				out.close();
+			}
+			
+		}
 		
+		if("getTimeFromHibernate".equals(action)) {
+			PrintWriter out = res.getWriter();
+			
+			Integer movie_no = new Integer(req.getParameter("movie_no"));
+			String showtime_date =req.getParameter("showtime_date");
+			String sql = "select showtime_no, time(showtime_time) from showtime where movie_no = " + movie_no 
+					+ " and date(showtime_time) =" + "'" + showtime_date + "'" + " order by time(showtime_time)";
+			
+			ShowtimeService showtimeSvc = new ShowtimeService();
+			List<Object[]> list = showtimeSvc.getByHibernate(sql);
+			List<Integer> list_showtimeno = new ArrayList<Integer>();
+			List<java.sql.Time> list_showtime_time = new ArrayList<java.sql.Time>();
+			
+			for(Object[] object : list) {
+				list_showtimeno.add((Integer) object[0]);
+				list_showtime_time.add((Time) object[1]);
+			}
+			
+			JSONArray showtime_no = new JSONArray(list_showtimeno);
+			JSONArray showtime_time = new JSONArray(list_showtime_time);
+			JSONObject jsonobj=new JSONObject();
+			try {
+				jsonobj.put("showtime_no", showtime_no);
+				jsonobj.put("showtime_time", showtime_time);
+				out.println(jsonobj);
+				return;
+			}catch(JSONException e) {
+				e.printStackTrace();
+			}finally {
+				out.flush();
+				out.close();
+			}
+		}
 		
 	}
 }

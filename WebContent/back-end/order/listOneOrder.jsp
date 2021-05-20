@@ -123,7 +123,19 @@
 				</c:choose>
 			</td>
 			<td>${orderVO.order_type == 0 ? "²{³õ" : "½u¤W"}</td>
-			<td>${orderVO.payment_type == 0 ? "«H¥Î¥d" : "²{ª÷" }</td>
+			<td>
+				<c:choose>
+					<c:when test="${orderVO.payment_type == 0 }">
+						«H¥Î¥d
+					</c:when>
+					<c:when test="${orderVO.payment_type == 1 }">
+						²{ª÷
+					</c:when>
+					<c:when test="${orderVO.payment_type == 2 }">
+						²{³õ¥I´Ú
+					</c:when>
+				</c:choose>
+			</td>
 			<td>${orderVO.total_price }</td>
 			<td>${orderVO.seat_name }</td>
 		</tr>

@@ -9,13 +9,14 @@
 <%-- 	<%= articleVO==null %>--${articleVO.articleno} --%>
 <html>
 <head>
+<link href="https://i2.bahamut.com.tw/css/basic.css?v=1618977484" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 <title>文章資料新增 - addArticle.jsp</title>
 
 <style>
   body {   
-      width: 600px;   
+      width: 640px;   
       margin: 0 auto;   
       padding: 20px 20px 20px 20px;   
      
@@ -63,7 +64,7 @@
 <!-- 	</td></tr> -->
 <!-- </table> -->
 
-<h1 class="shadow p-3 mb-1 bg-white rounded">
+<h1 class="shadow p-3 mb-2 bg-white rounded">
 	<span class="badge badge-secondary">
 		新增文章
 	</span>
@@ -80,7 +81,7 @@
 	</ul>
 </c:if>
 
-<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/article/article.do" name="form1">
+<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/front-end/article/article.do" name="form1">
 <table>
 
 <!-- 	<tr> -->
@@ -106,8 +107,7 @@
 	</tr>
 	<tr>
 		<td><h4>文章內容:</h4></td>
-			<td><textarea cols="60" name="content" rows="15"
-			 value="<%= (articleVO==null)? "" : articleVO.getContent()%>" /></textarea></td>
+			<td><textarea cols="60" name="content" rows="15"><%= (articleVO==null)? "" : articleVO.getContent()%></textarea></td>
 	</tr>	
 	<tr>
 		<td><h4>文章類型:</h4><font color=red><b>*</b></font></td>

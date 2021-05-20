@@ -45,11 +45,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!--//web-fonts-->
 <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>	
 <style>
-div>div>div>div>a>img{
-width:10px;
-height:10px;
-}
-
 .footer-directorAndActor {
 width:40px;
 height:50px;
@@ -399,7 +394,19 @@ height:50px;
 																		下映日期: <fmt:formatDate value="${movieVO.offdate}" pattern="yyyy-MM-dd" /></p>
 		
 																<c:choose>
-																	<c:when test="${movieVO.rating <= 1.0}">
+																	<c:when test="${movieVO.rating < 1.0}">
+																		<div class="block-stars">
+																			<ul class="w3l-ratings">	
+																				<li><i class="fa fa-star-o" aria-hidden="true"></i></li>
+																				<li><i class="fa fa-star-o" aria-hidden="true"></i></li>
+																				<li><i class="fa fa-star-o" aria-hidden="true"></i></li>
+																				<li><i class="fa fa-star-o" aria-hidden="true"></i></li>
+																				<li><i class="fa fa-star-o" aria-hidden="true"></i></li>
+																			</ul> 
+	 																	</div>
+																		<div class="clearfix"></div>
+																	</c:when>
+																	<c:when test="${movieVO.rating < 2.0}">
 																		<div class="block-stars">
 																			<ul class="w3l-ratings">	
 																				<li><i class="fa fa-star" aria-hidden="true"></i></li>
@@ -411,7 +418,7 @@ height:50px;
 	 																	</div>
 																		<div class="clearfix"></div>
 																	</c:when>
-																	<c:when test="${movieVO.rating <= 2.0}">
+																	<c:when test="${movieVO.rating < 3.0}">
 																		<div class="block-stars">
 																			<ul class="w3l-ratings">	
 																				<li><i class="fa fa-star" aria-hidden="true"></i></li>
@@ -423,7 +430,7 @@ height:50px;
 	 																	</div>
 																		<div class="clearfix"></div>
 																	</c:when>
-																	<c:when test="${movieVO.rating <= 3.0}">
+																	<c:when test="${movieVO.rating < 4.0}">
 																		<div class="block-stars">
 																			<ul class="w3l-ratings">
 																				<li><i class="fa fa-star" aria-hidden="true"></i></li>
@@ -435,7 +442,7 @@ height:50px;
 	 																	</div>
 																		<div class="clearfix"></div>
 																	</c:when>
-																	<c:when test="${movieVO.rating <= 4.0}">
+																	<c:when test="${movieVO.rating < 5.0}">
 																		<div class="block-stars">
 																			<ul class="w3l-ratings">
 																				<li><i class="fa fa-star" aria-hidden="true"></i></li>
@@ -447,7 +454,7 @@ height:50px;
 	 																	</div>
 																		<div class="clearfix"></div>
 																	</c:when>
-																	<c:when test="${movieVO.rating <= 5.0}">
+																	<c:when test="${movieVO.rating == 5.0}">
 																		<div class="block-stars">
 																			<ul class="w3l-ratings">
 																				<li><i class="fa fa-star" aria-hidden="true"></i></li>
@@ -493,13 +500,14 @@ height:50px;
 			<c:forEach var="movieVO" items="${listTopTen}">	
 					<div class="item">
 						<div class="w3l-movie-gride-agile w3l-movie-gride-slider ">
-							<a href="single.html" class="hvr-sweep-to-bottom"><img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${movieVO.movieno}"
+							<a href="<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}" class="hvr-sweep-to-bottom">
+							<img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${movieVO.movieno}"
 							 title="${movieVO.moviename}" class="img-responsive" alt=" " style="width:255px; height:300px;"/>
 								<div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
 							</a>
 							<div class="mid-1 agileits_w3layouts_mid_1_home">
 								<div class="w3l-movie-text">
-									<h6><a href="single.html">${movieVO.moviename}</a></h6>							
+									<h6><a href="<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}">${movieVO.moviename}</a></h6>							
 								</div>
 								<div class="mid-2 agile_mid_2_home">
 									<p>上映日期: <fmt:formatDate value="${movieVO.premiredate}" pattern="yyyy-MM-dd" /><br>						

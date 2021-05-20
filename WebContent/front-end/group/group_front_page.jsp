@@ -232,12 +232,12 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
 			<div class="form-group col-2">
 				<input type="hidden" name="action" value="listGroups_ByCompositeQuery">
-		      	<button class="btn btn-danger btn-sm" type="submit" value="送出">搜尋</button>
+		      	<button class="btn btn-danger btn-md" type="submit" value="送出">搜尋</button>
 	      	</div>
 	      	
 	      	<div class="form-group col-2">
 				<a href="<%=request.getContextPath()%>/front-end/group/addGroup.jsp" 
-								style="margin-bottom: 0px;" class="btn btn-info">新增揪團</a>
+								style="margin-bottom: 0px;" class="btn btn-info" id="add-group-btn">建立揪團</a>
 	      	</div>
 	      	
 		</div>
@@ -312,13 +312,27 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     </div>
     <!-- //Modal1 -->
     <!-- breadcrumb -->
-    <div class="w3_breadcrumb">
-        <div class="breadcrumb-inner">
-            <ul>
-                <li><a href="<%=request.getContextPath()%>/front-end/group/select_page.jsp">Home</a><i>//</i></li>
-                <li>Groups</li>
-            </ul>
-        </div>
+<!--     <div class="w3_breadcrumb"> -->
+<!--         <div class="breadcrumb-inner"> -->
+<!--             <ul> -->
+<%--                 <li><a href="<%=request.getContextPath()%>/front-end/group/select_page.jsp">Home</a><i>//</i></li> --%>
+<!--                 <li>Groups</li> -->
+<!--             </ul> -->
+<!--         </div> -->
+<!--     </div> -->
+
+    
+    <div class="list-btn">
+<%--           <button type="button" class="btn bˊn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/front-end/group/group_front_page.jsp'">進行中揪團</button>    --%>
+<%--           <button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=0'">我的揪團(尚未出團)</button> --%>
+<%--           <button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=1'">我的歷史揪團(準備出團)</button> --%>
+<%--           <button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=2'">我的歷史揪團(已結束)</button>     --%>
+		<ul class="nav nav-tabs">
+		  <li role="presentation" class="active"><a href="<%=request.getContextPath()%>/front-end/group/group_front_page.jsp">所有揪團</a></li>
+		  <li role="presentation"><a href="<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=0">我的揪團(尚未出團)</a></li>
+		  <li role="presentation"><a href="<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=1">我的揪團(已成行)</a></li>
+		  <li role="presentation"><a href="<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=2">我的歷史揪團</a></li>
+		</ul>
     </div>
     <!-- //breadcrumb -->
     <!--/content-inner-section-->
@@ -343,14 +357,14 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                         
 <!--單一揪團開始 -->
                 <div class="col-md-2 w3l-movie-gride-agile requested-movies">
-                    <a href="<%=request.getContextPath()%>/group/group.do?action=getOne_From06&group_no=${groupVO.group_no}&requestURL=<%=request.getServletPath()%>" class="hvr-sweep-to-bottom">
+                    <a href="<%=request.getContextPath()%>/group/group.do?action=getOne_For_Display&group_no=${groupVO.group_no}&requestURL=<%=request.getServletPath()%>" class="hvr-sweep-to-bottom">
                     	<img src="${pageContext.request.contextPath}/movie/DBGifReader4.do?movieno=${showtimeSvc.getOneShowtime(groupVO.showtime_no).movie_no}" title="MoviesHit" class="img-responsive" alt="尚無圖片"
                     	 ${(groupVO.group_no==param.group_no) ? 'style="background-color:rgb(2, 163, 136, 0.3);"':''}>
                         <div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
                     </a>
                     <div class="mid-1 agileits_w3layouts_mid_1_home" ${(groupVO.group_no==param.group_no) ? 'style="background-color:rgb(2, 163, 136, 0.3);"':''}>
                         <div class="w3l-movie-text">
-                            <h6><a href="<%=request.getContextPath()%>/group/group.do?action=getOne_From06&group_no=${groupVO.group_no}&requestURL=<%=request.getServletPath()%>" class="group-title">${groupVO.group_title}</a></h6>
+                            <h6><a href="<%=request.getContextPath()%>/group/group.do?action=getOne_For_Display&group_no=${groupVO.group_no}&requestURL=<%=request.getServletPath()%>" class="group-title">${groupVO.group_title}</a></h6>
                         </div>
                         
                         <div class="mid-2 agile_mid_2_home">
@@ -667,46 +681,8 @@ fit: true
     <!--end-smooth-scrolling-->
     <script src="<%=request.getContextPath()%>/js/bootstrap.js"></script>
 
-<c:if test="${openModal_Group!=null}">
-  <!-- The Modal -->
-  <div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
-	<div class="modal-dialog modal-xl">
-		<div class="modal-content">
-			<div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-<!--                 <h3 class="modal-title" id="myModalLabel">揪團成員</h3> -->
-            </div>
-			
-			<div class="modal-body">
-<!-- =========================================以下為原listOneEmp.jsp的內容========================================== -->
-               <jsp:include page="listOneGroup.jsp" />
-<!-- =========================================以上為原listOneEmp.jsp的內容========================================== -->
-	<!-- Modal footer -->
-          </div>
-			<div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>
-		</div>
-	</div>
-</div>
-        <script>
-    		 $("#basicModal").modal({show: true});
-        </script>
- </c:if>
-  <!-- The Modal -->
   
 </body>
-	<script>
-// 	 jQuery(document).ready(function($) {
-//          $("#testswal").click(function(event) {
-//         	 Swal.fire(
-//         			  'Good job!',
-//         			  'You clicked the button!',
-//         			  'success'
-//         			)
-//          });
-//      });
-	</script>
 	
 <% 
   java.sql.Timestamp crt_dt = null;

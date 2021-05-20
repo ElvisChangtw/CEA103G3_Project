@@ -26,7 +26,9 @@ public class MovieDAO implements MovieDAO_interface{
 	private static final String INSERT_STMT = 
 			"insert into MOVIE (MOVIE_NAME,MOVIE_PIC1,MOVIE_PIC2,DIRECTOR,ACTOR,CATEGORY,LENGTH,STATUS,PREMIERE_DT,OFF_DT,TRAILOR,EMBED,GRADE) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String UPDATE_STMT = 
-			"update MOVIE set MOVIE_NAME=?, MOVIE_PIC1=?, MOVIE_PIC2=? DIRECTOR=?, ACTOR=?, CATEGORY=?, LENGTH=?, STATUS=?, PREMIERE_DT=?, OFF_DT=?, TRAILOR=?, EMBED=?, GRADE=? where MOVIE_NO = ?";
+			"update MOVIE set MOVIE_NAME=?, MOVIE_PIC1=?, MOVIE_PIC2=?, DIRECTOR=?, ACTOR=?, CATEGORY=?, LENGTH=?, STATUS=?, PREMIERE_DT=?, OFF_DT=?, TRAILOR=?, EMBED=?, GRADE=? where MOVIE_NO = ?";
+	private static final String DELETE_REPORT_COMMENTS = 
+			"with a as (select S2.REPORT_NO from MOVIE S0 left join COMMENT S1 on S0.MOVIE_NO = S1.MOVIE_NO left join REPORT_COMMENT S2 on S1.COMMENT_NO = S2.COMMENT_NO where S0.MOVIE_NO = ? and S2.REPORT_NO is not null and S1.COMMENT_NO is not null ) delete from REPORT_COMMENT where REPORT_NO in (select REPORT_NO from a)";
 	private static final String DELETE_COMMENTS = 
 			"delete from COMMENT where MOVIE_NO = ?";
 	private static final String DELETE_MOVIE = 
@@ -34,17 +36,32 @@ public class MovieDAO implements MovieDAO_interface{
 	private static final String GET_ONE_STMT = 
 			"select * from MOVIE where MOVIE_NO = ?";
 	private static final String GET_ALL_STMT = 
-			"select * from MOVIE order by MOVIE_NO desc";
+			"select * from MOVIE order by PREMIERE_DT desc";
 	private static final String GET_Comments_ByMovieno_STMT = 
 			"select * from COMMENT where MOVIE_NO = ? order by COMMENT_NO";
 	private static final String GET_TOP_TEN_STMT = 
-			"select * from MOVIE order by RATING desc limit 10";
+			"select * from MOVIE order by RATING desc limit 12";
 	private static final String GET_TOP_FIVE_STMT = 
 			"select * from MOVIE order by RATING desc limit 5";
+	private static final String GET_BEST_STMT = 
+			"select * from MOVIE order by RATING desc limit 1";
 	private static final String GET_YEAR_MOVIE_STMT = 
 			"select * from MOVIE where YEAR(PREMIERE_DT) = ";
 	private static final String GET_LATEST_STMT = 
-			"select * from MOVIE order by PREMIERE_DT desc limit 6";	
+			"select * from MOVIE order by PREMIERE_DT desc limit 6";
+	private static final String GET_INTHEATERS_MOVIE_STMT = 
+			"select * from MOVIE where now() between PREMIERE_DT and OFF_DT order by PREMIERE_DT desc";
+	private static final String GET_ONE_NEWEST_INTHEATERS_MOVIE_STMT = 
+			"select * from MOVIE where now() between PREMIERE_DT and OFF_DT order by PREMIERE_DT desc limit 1";
+	private static final String GET_COMINGSOON_MOVIE_STMT = 
+			"select * from MOVIE where PREMIERE_DT between now() and date_sub(now(),interval -30 day)";	
+	private static final String GET_ONE_NEWEST_COMINGSOON_MOVIE_STMT = 
+			"select * from MOVIE where PREMIERE_DT between now() and date_sub(now(),interval -30 day) order by PREMIERE_DT desc limit 1";	
+	private static final String GET_ALL_TOPRATING_INTHEATERS_MOVIE_STMT = 
+			"select * from MOVIE where now() between PREMIERE_DT and OFF_DT order by RATING desc";
+	private static final String GET_ALL_TOPEXPECTATION_COMINGSOON_MOVIE_STMT = 
+			"select * from MOVIE where PREMIERE_DT between now() and date_sub(now(),interval -30 day) order by EXPECTATION desc";		
+	
 	private static final String UPDATE_MOVIE_RATING_STMT = 
 			"update MOVIE set RATING=? where MOVIE_NO = ?";
 	private static final String UPDATE_MOVIE_EXPECTATION_STMT = 
@@ -55,6 +72,16 @@ public class MovieDAO implements MovieDAO_interface{
 	private static final String INSRET_MOVIE_NAME_INDEX = 
 			"INSERT INTO `MOVIE_NAME_INDEX` VALUES  (?, ?);";
 
+	//揪團要取24HR之後有場次的電影列表用
+		private static final String GET_ALL_FOR_GROUP = 
+			"select S0.*  from MOVIE S0 " + 
+			"LEFT JOIN ( " + 
+			"select MOVIE_NO, MAX(SHOWTIME_TIME) SHOWTIME_TIME from SHOWTIME GROUP BY MOVIE_NO " + 
+			")A  ON S0.MOVIE_NO = A.MOVIE_NO " + 
+			"where DATE_ADD(NOW(), interval 1 day ) <  A.SHOWTIME_TIME AND S0.STATUS = 0 " + 
+			"order by S0.MOVIE_NO ";
+	
+	
 	@Override
 	public void insert(MovieVO movieVO) {
 		Connection con = null;
@@ -159,6 +186,7 @@ public class MovieDAO implements MovieDAO_interface{
 	@Override
 	public void delete(Integer movieno) {
 		int updateCount_Comments = 0;
+		int updateCount_ReportComments = 0;
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -169,7 +197,10 @@ public class MovieDAO implements MovieDAO_interface{
 
 			// 1●設定於 pstm.executeUpdate()之前
 			con.setAutoCommit(false);
-
+			//先刪除檢舉評論
+			pstmt = con.prepareStatement(DELETE_REPORT_COMMENTS);
+			pstmt.setInt(1, movieno);
+			updateCount_ReportComments = pstmt.executeUpdate();
 			// 先刪除評論
 			pstmt = con.prepareStatement(DELETE_COMMENTS);
 			pstmt.setInt(1, movieno);
@@ -183,7 +214,7 @@ public class MovieDAO implements MovieDAO_interface{
 			con.commit();
 			con.setAutoCommit(true);
 			System.out.println("刪除電影編號" + movieno + "時,共有評論" + updateCount_Comments
-					+ "則同時被刪除");
+					+ "則同時被刪除,共有檢舉評論 " + updateCount_ReportComments +"則同時被刪除");
 			
 			// Handle any SQL errors
 		} catch (SQLException se) {
@@ -631,6 +662,71 @@ public class MovieDAO implements MovieDAO_interface{
 		}
 		return listTopFive;
 	}
+	
+	public MovieVO getBestMovie() {
+		MovieVO bestMovie = null;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_BEST_STMT);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// movieVO 也稱為 Domain objects
+				bestMovie = new MovieVO();
+				bestMovie.setMovieno(rs.getInt("MOVIE_NO"));
+				bestMovie.setMoviename(rs.getString("MOVIE_NAME"));
+				bestMovie.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
+				bestMovie.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
+				bestMovie.setDirector(rs.getString("DIRECTOR"));
+				bestMovie.setActor(rs.getString("ACTOR"));
+				bestMovie.setCategory(rs.getString("CATEGORY"));
+				bestMovie.setLength(rs.getInt("LENGTH"));
+				bestMovie.setStatus(rs.getString("STATUS"));
+				bestMovie.setPremiredate(rs.getDate("PREMIERE_DT"));
+				bestMovie.setOffdate(rs.getDate("OFF_DT"));
+				bestMovie.setTrailor(rs.getString("TRAILOR"));
+				bestMovie.setEmbed(rs.getString("EMBED"));
+				bestMovie.setGrade(rs.getString("GRADE"));
+				bestMovie.setRating(rs.getDouble("RATING"));
+				bestMovie.setExpectation(rs.getDouble("EXPECTATION"));
+			}
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return bestMovie;
+	}
 
 	@Override
 	public List<MovieVO> getYearMovie(String year) {
@@ -768,20 +864,416 @@ public class MovieDAO implements MovieDAO_interface{
 		return latestMovie;
 	}
 	
+	public List<MovieVO> getInTheatersMovie() {
+		List<MovieVO> inTheatersMovie = new ArrayList<MovieVO>();
+		MovieVO movieVO = null;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_INTHEATERS_MOVIE_STMT);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// movieVO 也稱為 Domain objects
+				movieVO = new MovieVO();
+				movieVO.setMovieno(rs.getInt("MOVIE_NO"));
+				movieVO.setMoviename(rs.getString("MOVIE_NAME"));
+				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
+				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
+				movieVO.setDirector(rs.getString("DIRECTOR"));
+				movieVO.setActor(rs.getString("ACTOR"));
+				movieVO.setCategory(rs.getString("CATEGORY"));
+				movieVO.setLength(rs.getInt("LENGTH"));
+				movieVO.setStatus(rs.getString("STATUS"));
+				movieVO.setPremiredate(rs.getDate("PREMIERE_DT"));
+				movieVO.setOffdate(rs.getDate("OFF_DT"));
+				movieVO.setTrailor(rs.getString("TRAILOR"));
+				movieVO.setEmbed(rs.getString("EMBED"));
+				movieVO.setGrade(rs.getString("GRADE"));
+				movieVO.setRating(rs.getDouble("RATING"));
+				movieVO.setExpectation(rs.getDouble("EXPECTATION"));
+				inTheatersMovie.add(movieVO); // Store the row in the list
+			}
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return inTheatersMovie;
+	}
+	
+	public MovieVO getOneNewestInTheatersMovie() {
+		MovieVO oneNewestInTheatersMovie = null;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_ONE_NEWEST_INTHEATERS_MOVIE_STMT);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// movieVO 也稱為 Domain objects
+				oneNewestInTheatersMovie = new MovieVO();
+				oneNewestInTheatersMovie.setMovieno(rs.getInt("MOVIE_NO"));
+				oneNewestInTheatersMovie.setMoviename(rs.getString("MOVIE_NAME"));
+				oneNewestInTheatersMovie.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
+				oneNewestInTheatersMovie.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
+				oneNewestInTheatersMovie.setDirector(rs.getString("DIRECTOR"));
+				oneNewestInTheatersMovie.setActor(rs.getString("ACTOR"));
+				oneNewestInTheatersMovie.setCategory(rs.getString("CATEGORY"));
+				oneNewestInTheatersMovie.setLength(rs.getInt("LENGTH"));
+				oneNewestInTheatersMovie.setStatus(rs.getString("STATUS"));
+				oneNewestInTheatersMovie.setPremiredate(rs.getDate("PREMIERE_DT"));
+				oneNewestInTheatersMovie.setOffdate(rs.getDate("OFF_DT"));
+				oneNewestInTheatersMovie.setTrailor(rs.getString("TRAILOR"));
+				oneNewestInTheatersMovie.setEmbed(rs.getString("EMBED"));
+				oneNewestInTheatersMovie.setGrade(rs.getString("GRADE"));
+				oneNewestInTheatersMovie.setRating(rs.getDouble("RATING"));
+				oneNewestInTheatersMovie.setExpectation(rs.getDouble("EXPECTATION"));
+			}
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return oneNewestInTheatersMovie;
+	}
+	
+	public List<MovieVO> getComingSoonMovie() {
+		List<MovieVO> comingSoonMovie = new ArrayList<MovieVO>();
+		MovieVO movieVO = null;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_COMINGSOON_MOVIE_STMT);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// movieVO 也稱為 Domain objects
+				movieVO = new MovieVO();
+				movieVO.setMovieno(rs.getInt("MOVIE_NO"));
+				movieVO.setMoviename(rs.getString("MOVIE_NAME"));
+				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
+				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
+				movieVO.setDirector(rs.getString("DIRECTOR"));
+				movieVO.setActor(rs.getString("ACTOR"));
+				movieVO.setCategory(rs.getString("CATEGORY"));
+				movieVO.setLength(rs.getInt("LENGTH"));
+				movieVO.setStatus(rs.getString("STATUS"));
+				movieVO.setPremiredate(rs.getDate("PREMIERE_DT"));
+				movieVO.setOffdate(rs.getDate("OFF_DT"));
+				movieVO.setTrailor(rs.getString("TRAILOR"));
+				movieVO.setEmbed(rs.getString("EMBED"));
+				movieVO.setGrade(rs.getString("GRADE"));
+				movieVO.setRating(rs.getDouble("RATING"));
+				movieVO.setExpectation(rs.getDouble("EXPECTATION"));
+				comingSoonMovie.add(movieVO); // Store the row in the list
+			}
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return comingSoonMovie;
+	}
+	
+	public MovieVO getOneNewestComingSoonMovie() {
+		MovieVO oneNewestComingSoonMovie = null;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_ONE_NEWEST_COMINGSOON_MOVIE_STMT);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// movieVO 也稱為 Domain objects
+				oneNewestComingSoonMovie = new MovieVO();
+				oneNewestComingSoonMovie.setMovieno(rs.getInt("MOVIE_NO"));
+				oneNewestComingSoonMovie.setMoviename(rs.getString("MOVIE_NAME"));
+				oneNewestComingSoonMovie.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
+				oneNewestComingSoonMovie.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
+				oneNewestComingSoonMovie.setDirector(rs.getString("DIRECTOR"));
+				oneNewestComingSoonMovie.setActor(rs.getString("ACTOR"));
+				oneNewestComingSoonMovie.setCategory(rs.getString("CATEGORY"));
+				oneNewestComingSoonMovie.setLength(rs.getInt("LENGTH"));
+				oneNewestComingSoonMovie.setStatus(rs.getString("STATUS"));
+				oneNewestComingSoonMovie.setPremiredate(rs.getDate("PREMIERE_DT"));
+				oneNewestComingSoonMovie.setOffdate(rs.getDate("OFF_DT"));
+				oneNewestComingSoonMovie.setTrailor(rs.getString("TRAILOR"));
+				oneNewestComingSoonMovie.setEmbed(rs.getString("EMBED"));
+				oneNewestComingSoonMovie.setGrade(rs.getString("GRADE"));
+				oneNewestComingSoonMovie.setRating(rs.getDouble("RATING"));
+				oneNewestComingSoonMovie.setExpectation(rs.getDouble("EXPECTATION"));
+			}
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return oneNewestComingSoonMovie;
+	}
+	
+	public List<MovieVO> getAllTopRatingInTheatersMovie() {
+		List<MovieVO> allTopRatingInTheatersMovie = new ArrayList<MovieVO>();
+		MovieVO movieVO = null;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_ALL_TOPRATING_INTHEATERS_MOVIE_STMT);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// movieVO 也稱為 Domain objects
+				movieVO = new MovieVO();
+				movieVO.setMovieno(rs.getInt("MOVIE_NO"));
+				movieVO.setMoviename(rs.getString("MOVIE_NAME"));
+				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
+				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
+				movieVO.setDirector(rs.getString("DIRECTOR"));
+				movieVO.setActor(rs.getString("ACTOR"));
+				movieVO.setCategory(rs.getString("CATEGORY"));
+				movieVO.setLength(rs.getInt("LENGTH"));
+				movieVO.setStatus(rs.getString("STATUS"));
+				movieVO.setPremiredate(rs.getDate("PREMIERE_DT"));
+				movieVO.setOffdate(rs.getDate("OFF_DT"));
+				movieVO.setTrailor(rs.getString("TRAILOR"));
+				movieVO.setEmbed(rs.getString("EMBED"));
+				movieVO.setGrade(rs.getString("GRADE"));
+				movieVO.setRating(rs.getDouble("RATING"));
+				movieVO.setExpectation(rs.getDouble("EXPECTATION"));
+				allTopRatingInTheatersMovie.add(movieVO); // Store the row in the list
+			}
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return allTopRatingInTheatersMovie;
+	}
+	
+	public List<MovieVO> getAllTopExpectationComingSoonMovie() {
+		List<MovieVO> allTopExpectationComingSoonMovie = new ArrayList<MovieVO>();
+		MovieVO movieVO = null;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_ALL_TOPEXPECTATION_COMINGSOON_MOVIE_STMT);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// movieVO 也稱為 Domain objects
+				movieVO = new MovieVO();
+				movieVO.setMovieno(rs.getInt("MOVIE_NO"));
+				movieVO.setMoviename(rs.getString("MOVIE_NAME"));
+				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
+				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
+				movieVO.setDirector(rs.getString("DIRECTOR"));
+				movieVO.setActor(rs.getString("ACTOR"));
+				movieVO.setCategory(rs.getString("CATEGORY"));
+				movieVO.setLength(rs.getInt("LENGTH"));
+				movieVO.setStatus(rs.getString("STATUS"));
+				movieVO.setPremiredate(rs.getDate("PREMIERE_DT"));
+				movieVO.setOffdate(rs.getDate("OFF_DT"));
+				movieVO.setTrailor(rs.getString("TRAILOR"));
+				movieVO.setEmbed(rs.getString("EMBED"));
+				movieVO.setGrade(rs.getString("GRADE"));
+				movieVO.setRating(rs.getDouble("RATING"));
+				movieVO.setExpectation(rs.getDouble("EXPECTATION"));
+				allTopExpectationComingSoonMovie.add(movieVO); // Store the row in the list
+			}
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return allTopExpectationComingSoonMovie;
+	}
+	
 	@Override
 	public void updateMovieRating(MovieVO movieVO , Connection con) {
 		
 		PreparedStatement pstmt = null;
 
 		try {
-
      		pstmt = con.prepareStatement(UPDATE_MOVIE_RATING_STMT );
 
 			pstmt.setDouble(1, movieVO.getRating());	
 			pstmt.setInt(2, movieVO.getMovieno());
 
 			pstmt.executeUpdate();
-//			System.out.println("11");	
 			// Handle any driver errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
@@ -804,14 +1296,12 @@ public class MovieDAO implements MovieDAO_interface{
 		PreparedStatement pstmt = null;
 
 		try {
-
      		pstmt = con.prepareStatement(UPDATE_MOVIE_EXPECTATION_STMT );
 
 			pstmt.setDouble(1, movieVO.getExpectation());	
 			pstmt.setInt(2, movieVO.getMovieno());
 
 			pstmt.executeUpdate();
-//			System.out.println("11");	
 			// Handle any driver errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
@@ -906,6 +1396,73 @@ public class MovieDAO implements MovieDAO_interface{
 					}
 				}
 			}
+		}
+		
+		@Override
+		public List<MovieVO> getAllForGroup() {
+			List<MovieVO> list = new ArrayList<MovieVO>();
+			MovieVO movieVO = null;
+
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			try {
+				con = ds.getConnection();
+				pstmt = con.prepareStatement(GET_ALL_FOR_GROUP);
+				rs = pstmt.executeQuery();
+
+				while (rs.next()) {
+					// movieVO 也稱為 Domain objects
+					movieVO = new MovieVO();
+					movieVO.setMovieno(rs.getInt("MOVIE_NO"));
+					movieVO.setMoviename(rs.getString("MOVIE_NAME"));
+					movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
+					movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
+					movieVO.setDirector(rs.getString("DIRECTOR"));
+					movieVO.setActor(rs.getString("ACTOR"));
+					movieVO.setCategory(rs.getString("CATEGORY"));
+					movieVO.setLength(rs.getInt("LENGTH"));
+					movieVO.setStatus(rs.getString("STATUS"));
+					movieVO.setPremiredate(rs.getDate("PREMIERE_DT"));
+					movieVO.setOffdate(rs.getDate("OFF_DT"));
+					movieVO.setTrailor(rs.getString("TRAILOR"));
+					movieVO.setEmbed(rs.getString("EMBED"));
+					movieVO.setGrade(rs.getString("GRADE"));
+					movieVO.setRating(rs.getDouble("RATING"));
+					movieVO.setExpectation(rs.getDouble("EXPECTATION"));
+					list.add(movieVO); // Store the row in the list
+				}
+
+				// Handle any driver errors
+			} catch (SQLException se) {
+				throw new RuntimeException("A database error occured. "
+						+ se.getMessage());
+				// Clean up JDBC resources
+			} finally {
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (con != null) {
+					try {
+						con.close();
+					} catch (Exception e) {
+						e.printStackTrace(System.err);
+					}
+				}
+			}
+			return list;
 		}
 	
 }

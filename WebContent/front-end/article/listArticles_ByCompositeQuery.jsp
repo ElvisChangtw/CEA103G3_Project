@@ -16,8 +16,8 @@
 
 <html>
 <head><title>複合查詢 - listArticles_ByCompositeQuery.jsp</title>
+<link href="https://i2.bahamut.com.tw/css/basic.css?v=1618977484" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-
 
 <style>
    body {  
@@ -65,12 +65,12 @@
 <!-- <h4> -->
 <!-- ☆萬用複合查詢  - 可由客戶端 listAllArticle.jsp 隨意增減任何想查詢的欄位<br> -->
 <!-- ☆此頁作為複合查詢時之結果練習，<font color=red>已增加分頁、送出修改、刪除之功能</font></h4> -->
-<table id="table-1">
+<!-- <table id="table-1"> -->
 <!-- 	<tr><td> -->
 <!-- 		 <h3>所有員工資料 - listAllArticle.jsp</h3> -->
 <%-- 		 <h4><a href="<%=request.getContextPath()%>/front-end/article/listAllArticle.jsp"><img src="<%=request.getContextPath()%>/front-end/article/images/back1.gif" width="100" height="32" border="0">回首頁</a></h4> --%>
 <!-- 	</td></tr> -->
-</table>
+<!-- </table> -->
 <h1 class="shadow p-3 mb-1 bg-white rounded">
 	<span class="badge badge-secondary">
 		MoviesHit討論區
@@ -82,30 +82,46 @@
  	<button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/front-end/article/listAllArticle.jsp'">HOME</button>
 	<button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/topic/topic.do?action=listArticles_ByTopicno_B&topicno=1'">電影情報</button>
 	<button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/topic/topic.do?action=listArticles_ByTopicno_B&topicno=2'">劇情討論</button>
-	<button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/topic/topic.do?action=listArticles_ByTopicno_B&topicno=3'">影城活動</button>   
-</div>
-
+	<button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/topic/topic.do?action=listArticles_ByTopicno_B&topicno=3'">影城活動</button>   	
+	<%@ include file="pages/page1_ByCompositeQuery.file" %>
+</div>	
+	   <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/article/article.do" name="form1">   
+       <b><font color=blue>搜尋本站的作者或文章主題:</font></b> 
+        <b>選擇文章作者:</b>
+        <select size="1" name="member_no" >
+          <option value="">
+         <c:forEach var="memberVO" items="${memSvc.all}" > 
+          <option value="${memberVO.member_no}">${memberVO.mb_name}
+         </c:forEach>   
+        </select>       
+        <b>輸入文章主題:</b>
+        <input type="text" name="article_headline" value="">
+		        
+        <input type="submit" value="送出" class="btn btn-primary">
+        <input type="hidden" name="action" value="listArticles_ByCompositeQuery">
+     </FORM>
+	
 <table class="table table-hover">
 	 <thead style="background-color:#F0F0F0">
-	<tr>
-		<th>文章編號</th>
-		<th>發文者</th>
-		<th>文章類型</th>
-<!-- 		<th>文章內容</th> -->
-		<th>文章主題</th>
-		<th>發表文章時間</th>
-<!-- 		<th>更新回復時間</th> -->
-		<th>文章狀態</th>
-		<th>點讚數</th>
-<!-- 		<th>修改</th> -->
-<!-- 		<th>刪除</th> -->
-	</tr>
+		<tr>
+			<th>文章編號</th>
+			<th>發文者</th>
+			<th>文章類型</th>
+	<!-- 		<th>文章內容</th> -->
+			<th>文章主題</th>
+			<th>發表文章時間</th>
+	<!-- 		<th>更新回復時間</th> -->
+			<th>文章狀態</th>
+			<th>點讚數</th>
+	<!-- 		<th>修改</th> -->
+	<!-- 		<th>刪除</th> -->
+		</tr>
 	</thead>
-<%-- 	<%@ include file="pages/page1_ByCompositeQuery.file" %> --%>
 	<c:forEach var="articleVO" items="${listArticles_ByCompositeQuery}">
 <%-- 	 begin="<%=pageIndex%>" end="<%=pageIndex+rowsPerPage-1%>" --%>
 <%-- 		<tr align='center' valign='middle' ${(ArticleVO.reply_no==param.reply_no) ? 'bgcolor=#CCCCFF':''}><!--將修改的那一筆加入對比色而已--> --%>
-		<tr>	
+		<tbody>	
+			<tr>	
 				<td>${articleVO.articleno}</td>
 <%-- 			<tr ${(articleVO.articleno==param.articleno) ? 'bgcolor = green':''}><!--將修改的那一筆加入對比色而已--> --%>
 <%-- 			<td>${articleVO.articleno}</td> --%>
@@ -142,7 +158,8 @@
 <%-- 			     <input type="hidden" name="whichPage"	value="<%=whichPage%>">               <!--送出當前是第幾頁給Controller--> --%>
 <!-- 			     <input type="hidden" name="action"     value="delete"></FORM> -->
 <!-- 			</td> -->
-		</tr>
+			</tr>
+		</tbody>
 	</c:forEach>
 </table>
 <%-- <%@ include file="pages/page2_ByCompositeQuery.file" %> --%>

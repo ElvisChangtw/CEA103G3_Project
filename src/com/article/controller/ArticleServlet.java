@@ -320,7 +320,7 @@ String articleheadline = req.getParameter("articleheadline").trim();
 				/***********************1.接收請求參數 - 輸入格式的錯誤處理*************************/
 //Integer articleno = new Integer(req.getParameter("articleno").trim());
 
-				Integer memberno = 2;
+				Integer memberno = 3;
 //				try {
 //memberno = new Integer(req.getParameter("memberno").trim());
 //				} catch (NumberFormatException e) {
@@ -387,7 +387,9 @@ String articleheadline = req.getParameter("articleheadline").trim();
 				articleVO.setUpdatedt(updatedt);
 				articleVO.setStatus(status);
 				articleVO.setLikecount(likecount);
-
+				
+				System.out.println("content =" + content);
+				System.out.println("articleheadline =" +articleheadline);
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					req.setAttribute("articleVO", articleVO); // 含有輸入格式錯誤的articleVO物件,也存入req
@@ -402,6 +404,7 @@ String articleheadline = req.getParameter("articleheadline").trim();
 				articleVO = articleSvc.addArticle(memberno, articletype, content, articleheadline, crtdt, updatedt, status, likecount);				
 				/***************************3.新增完成,準備轉交(Send the Success view)***********/
 				String url = "/front-end/article/listAllArticle.jsp";
+//				String url = req.getParameter("requestURL");
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 新增成功後轉交listAllArticle.jsp
 				successView.forward(req, res);				
 				

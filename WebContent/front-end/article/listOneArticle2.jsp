@@ -3,6 +3,9 @@
 <%@ page import="com.reply.model.*"%>
 <%@ page import="com.topic.model.*"%>
 <%@ page import="com.like.model.*"%>
+<%@ page import="com.articleCollection.model.*"%>
+<%@ page import="com.mem.model.*"%>
+<%@ page import="com.relationship.model.*"%>
 
 <%@ page import="java.util.*"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -12,6 +15,7 @@
 
 <%
 // ArticleVO articleVO = (ArticleVO) request.getAttribute("articleVO"); //ArticleServlet.java(Concroller), 存入req的ArticleVO物件 
+RelationshipVO relationshipVO = (RelationshipVO) request.getAttribute("relationshipVO"); //EmpServlet.java (Concroller) 存入req的empVO物件 (包括幫忙取出的empVO, 也包括輸入資料錯誤時的empVO物件)
 
 	Integer articleno = new Integer(request.getParameter("articleno"));
 	ArticleService articleSvc = new ArticleService();
@@ -24,15 +28,26 @@
 	int count = 0;
 	LikeService likeSvc = new LikeService();
 	
-	int myNumber = 3; //到時要換成從session取memVO出來
+
+	
+	int myNumber = 6; //到時要換成從session取memVO出來
 	pageContext.setAttribute("myNumber", myNumber);
 	//(為了ajax)找此文章有無此會員按讚紀錄
+	
+	MemVO memVO = (MemVO) session.getAttribute("memVO");//取用登入的session
+	
+	ArticleCollectionService articleCollectionSvc = new ArticleCollectionService();
+	ArticleCollectionVO articleCollectionVO = articleCollectionSvc.getOneArticleCollection(articleno, myNumber);
+	pageContext.setAttribute("articleCollectionVO", articleCollectionVO);
 	
 %>
 <jsp:useBean id="topicSvc" scope="page" class="com.topic.model.TopicService" />	
 <jsp:useBean id="memSvc" scope="page" class="com.mem.model.MemService" />
+
+
 <html>
 <head>
+<link href="https://i2.bahamut.com.tw/css/basic.css?v=1618977484" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
@@ -52,41 +67,11 @@
              padding: 10px 20px 20px 20px; 
 /*              border: 1px solid black;  */
 	        } 
-/*         h1 { */
-/*             margin: 0; */
-/*             padding: 8px 0; */
-/*             color: #00000;           */
-/*         } */
-
-/* 		div.card-header{ */
-/* 			padding:  5rem 5rem; */
-/* 		} */
-
-
-/* 		.button1 { */
-/* 		  display: inline-block; */
-/* 		  padding: 5px 20px; */
-/* 		  font-size: 24px; */
-/* 		  cursor: pointer; */
-/* 		  text-align: center; */
-/* 		  text-decoration: none; */
-/* 		  outline: none; */
-/* 		  color: #fff; */
-/* 		  background-color: #FF77FF; */
-/* 		  border: none; */
-/* 		  border-radius: 15px; */
-/* 		  box-shadow: 0 9px #999; */
-/* 		} */
-		
-/* 		.button1:hover {background-color: #FF9797} */
-		
-/* 		.button1:active { */
-/* 		  background-color: #FF77FF; */
-/* 		  box-shadow: 0 5px #666; */
-/* 		  transform: translateY(4px); */
-/* 		} */
-
-		
+	     .alert-dark {
+    		color: #1b1e21;
+    		background-color: rgb(0 0 0 / 10%);
+   			border-color: white;
+}
 
     </style>
 
@@ -110,35 +95,62 @@
 		</c:forEach>
 	</ul>
 </c:if>	
-	 <div class="card-header bg-transparent border-success" > 		 	
- 		 	 		 	
+
+	<div>
+		<%="目前登入會員=" + memVO.getMember_no() + " " +memVO.getMb_name()%>     
+	</div>
+
+	 <div class="card-header bg-transparent border-success" > 		 			 	 		 	
  		 	<div>
-				<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/article/article.do" style="margin-bottom: 0px;" >
-				<button type="button" class="btn btn-outline-success" onclick="location.href='<%=request.getContextPath()%>/front-end/article/listAllArticle.jsp'">回上一列表</button>
-				<input type="submit" value="修改文章" class="btn btn-danger">
+				<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/front-end/article/article.do" style="margin-bottom: 0px;" >
+					<button type="button" class="btn btn-outline-success" onclick="location.href='<%=request.getContextPath()%>/front-end/article/listAllArticle.jsp'">回上一列表</button>
+						<input type="submit" value="修改文章" class="btn btn-danger">
+						<span><i class="fas fa-bookmark" id="thumb1" style="font-size: 30px" ></i></span>
+					<a id="hao2">我是書本可以點我!!</a>
 				<input type="hidden" name="requestURL"	value="<%=request.getServletPath()%>">
-	<!-- 			送出請求到update_article_input.jsp   -->
+	<!-- 			送出請求到update_article_input.jsp   -->				
 				<input type="hidden" name="articleno"  value="${articleVO.articleno}">
 				<input type="hidden" name="action"	value="getOne_For_Update"></FORM>	
- 		 	</div>		 	
+ 		 	</div>	
+	 		
  		 	<br>
  		 	
  		 	<div class="container">
  		 		<div class="row">
  		 			<div class="col-md-3" style="text-align:center;">
 		 		 		<img src ="<%=request.getContextPath()%>/MemServlet?action=view_memPic&member_no=${articleVO.memberno}" height= "200px" width="200px" style="margin-bottom:8px"/>
-		 		 		<h3><span class="badge badge-pill badge-success" style="font-size:1.5rem">樓主 ${memSvc.getOneMem(articleVO.memberno).mb_name}</span></h3>		 		 		
+		 		 		<h3><span class="badge badge-pill badge-success" style="font-size:1.5rem">樓主 ${memSvc.getOneMem(articleVO.memberno).mb_name}</span></h3>		 		 				 		 		
 		 		 	</div>
 		 		 	<div class="card-title col-md-9">
 		 		 		<p style="font-size:2.50rem;"><font color=orange>【${topicSvc.getOneTopic(articleVO.articletype).topic}】</font>${articleVO.articleheadline}</p>
 <%-- 			 		 	文章編號:${articleVO.articleno}  --%>
-		 		 	</div>
+ 		 	<!-- 			加入好友按鈕 -->
+				<div>
+		 		 <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/relationship/relationship.do" name="form2">
+							<input type="hidden" name="member_no" value="<%=myNumber%>">
+							<input type="hidden" name="friend_no" value="${articleVO.memberno}">
+			<%-- 			<input type="hidden" name="articleno" value="${articleVO.articleno}"> --%>
+			<%-- 			<input type="hidden" name="requestURL"	value="<%=request.getServletPath()%>"> --%>
+							<input type="hidden" name="action" value="insert">
+							<input type="submit" value="送出好友邀請"></FORM>
+<!-- 						加入好友按鈕 -->
+						</div>
+		 		 	</div>		 		 	
 	 		 	</div>
+				<div  style="text-align:right">
+	 		 		<c:if test="${not empty articleVO.updatedt}">
+						最後編輯時間:<fmt:formatDate value="${articleVO.updatedt}" pattern="yyyy-MM-dd HH:mm:ss"/>
+					</c:if>
+			 		<c:if test="${empty articleVO.updatedt}">
+						發表文章時間:<fmt:formatDate value="${articleVO.crtdt}" pattern="yyyy-MM-dd HH:mm:ss"/>
+					</c:if>	
+				</div>
 			</div>
  		 </div>
   			<div class="card-body ">
-    		
+  		
     		<p class="card-text" style="font-size:1.45rem;  text-indent:2em;">${articleVO.content}</p>
+  			
   		</div>
   			<div class="card-footer bg-transparent border-success" style="text-align:right">
 <%--   						新增文章時間:<fmt:formatDate value="${articleVO.crtdt}" pattern="yyyy-MM-dd HH:mm:ss"/> --%>
@@ -146,17 +158,11 @@
 						文章點讚數:${articleVO.likecount}											
 					</h4>
 						<div style="text-align:left"><span><i class="fas fa-heart" id="thumb" style="font-size: 50px"></i></span></div>
-						<div style="text-align:left" id="hao1">我是愛心可以點我喔!!</div>
-					<c:if test="${not empty articleVO.updatedt}">
-						最後編輯時間:<fmt:formatDate value="${articleVO.updatedt}" pattern="yyyy-MM-dd HH:mm:ss"/>
-					</c:if>
-			 		<c:if test="${empty articleVO.updatedt}">
-						發表文章時間:<fmt:formatDate value="${articleVO.crtdt}" pattern="yyyy-MM-dd HH:mm:ss"/>
-					</c:if>					
+						<div style="text-align:left" id="hao1">我是愛心可以點我喔!!</div>				
 			</div>
 			  	<div class="card-footer bg-transparent border-success">
 <%-- 					文章狀態:${articleVO.status} --%>
-										
+											
 					<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/like/like.do">
 					<input type="hidden" name="expectation" id="con1" size="50" value=""/>						
 <!-- 					<input type="submit" value="LIKE" class="button1">	 -->
@@ -166,6 +172,7 @@
 					<input type="hidden" name="action" value="insert"></FORM>
 
 			</div>
+			
  		<jsp:useBean id="replySvc" scope="page" class="com.reply.model.ReplyService" /> 
 <!-- 			<hr> -->
 		<%@ include file="pages/page1.file" %> 	
@@ -186,13 +193,14 @@
 						</div>
 					</div>	
 						<div class="row">
-					 		<div class="col-md-6">
-						 		<p class="alert alert-light" role="alert" style="padding-top:0px; margin-top:20px; ">
+					 		<div class="col-md-7.5" >
+						 		<p style="padding-top:0px; margin-top:20px; " style="width: 200%;">
+						 			<img src ="<%=request.getContextPath()%>/MemServlet?action=view_memPic&member_no=${replyVO.member_no}" height= "100px" width="100px" style="border-radius:50%" style="margin-bottom:5px"/>
 						 			【<font color=orange>${memSvc.getOneMem(replyVO.member_no).mb_name}</font>】
 						 			${replyVO.content}		 		 					 					 			
 						 		</p>
 					 		</div>
-					 	<div class="col-md-6" style="text-align:right; margin-top:20px;">
+					 	<div class="col-md-4.5" style="text-align:right; margin-top:110px;">
 						 	<c:if test="${not empty replyVO.modify_dt}">
 						 		最後編輯時間
 						 		<fmt:formatDate value="${replyVO.modify_dt}" pattern="yyyy-MM-dd HH:mm:ss"/>
@@ -221,7 +229,7 @@
 				<input type="button" value="送出回覆" class="btn btn-info" onclick="fun1()" >
 			</div>
 		</FORM>
-
+		<hr>
 
 
 
@@ -251,8 +259,6 @@
 		}
 // 		 $("#thumb").val("1");
 	});
-   
-	
 	
 	 $("#thumb").click(function(e){
 	    let likeCnt;
@@ -283,12 +289,56 @@
 			   if(msg === "success"){
 // 				   $("#thumb").css("color","#F0AD4E");
 			   } else{
-				   alert("按讚失敗");
+// 				   alert("按讚失敗");
 			   }
 		   }
 	   });
 	  });
-	
+	 
+//	   --------------------以下收藏----------------------
+
+		let isCollection = <%=((articleCollectionSvc.getOneArticleCollection(articleno, myNumber)==null)? false:true)%>	
+		$(document).ready(function(){
+			//第一次判斷
+			if(isCollection){
+				console.log("收藏應該要亮");
+				$("#thumb1").css("color","blue");
+			} else{
+				console.log("收藏應該要暗");
+				$("#thumb1").css("color","black");
+			}
+		});
+	 
+	 $("#thumb1").click(function(e){
+			if(isCollection){
+				$("#hao2").text("我要收藏");
+				$("#thumb1").css("color","black");
+				
+				isCollection = !isCollection;
+			} else{
+				$("#hao2").text("取消收藏");
+				$("#thumb1").css("color","blue");
+				
+				isCollection = !isCollection;
+		   }   
+		   
+		   let article_no = "${articleVO.articleno}";
+		   let member_no = "${myNumber}";
+		   $.ajax({
+			   url:"<%=request.getContextPath()%>/ArticleCollectionServlet?action=insert",
+			   data:{				   
+				   "article_no":article_no,	
+				   "member_no":member_no
+			   },
+			   type:"POST",
+			   success:function(msg){
+				   if(msg === "success"){
+				   } else{
+					   
+				   }
+			   }
+		   });
+		  });
 	
 </script>
 

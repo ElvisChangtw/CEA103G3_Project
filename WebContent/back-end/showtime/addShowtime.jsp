@@ -89,19 +89,19 @@
 
 <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/showtime/showtime.do" name="form1">
 <table>
-	<tr>
+	<tr style="height:50px">
 		<td>電影</td>
 		<td>
 			<select name="movie_no">
 				<c:forEach var="movieVO" items="${movieSvc.all}" >
 					<c:if test="${movieVO.offdate.compareTo(date)>(-1)}">
-						<option value= "${movieVO.movieno}">${movieVO.moviename}</option>
+						<option name = "${movieVO.length}" value= "${movieVO.movieno}">${movieVO.moviename}</option>
 					</c:if>
 				</c:forEach>
 			</select>
 		</td>
 	</tr>
-	<tr>
+	<tr style="height:50px">
 		
 		<td>廳院</td>
 		
@@ -113,7 +113,7 @@
 			</select>
 		</td>
 	</tr>
-	<tr>
+	<tr style="height:50px">
 		<td>日期</td>
 		<td>
 			<input name="showtime_date" class="f_date1" type="text">
@@ -121,7 +121,7 @@
 			<input name="showtime_date" class="f_date1" type="text">
 		</td>
 	</tr>
-	<tr>
+	<tr style="height:50px">
 		<td>
 			<div id="insert_time"
 			style="background-color: lightslategray; border: 1px solid lightslategray; 
@@ -155,7 +155,7 @@
   try {
 	  showtime_time = showtimeVO.getShowtime_time();
    } catch (Exception e) {
-	   showtime_time = new java.sql.Timestamp(System.currentTimeMillis());
+	   showtime_time = new java.sql.Timestamp(System.currentTimeMillis() + 5 * 24 * 60 * 60 * 1000);
    }
 %>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/datetimepicker/jquery.datetimepicker.css" />
@@ -178,12 +178,20 @@
 	       timepicker:false,       //timepicker:true,
 	       step: 1,                //step: 60 (這是timepicker的預設間隔60分鐘)
 	       format:'Y-m-d',         //format:'Y-m-d H:i:s',
-		   value: '', // value:   new Date(),
+		   value: '<%=showtime_time%>', // value:   new Date(),
            //disabledDates:        ['2017/06/08','2017/06/09','2017/06/10'], // 去除特定不含
            //startDate:	            '2017/07/10',  // 起始日
-           minDate:               '-1970-01-01', // 去除今日(不含)之前	
+            minDate:               '<%=showtime_time%>', // 去除今日(不含)之前	
            //maxDate:               '+1970-01-01'  // 去除今日(不含)之後
-        });
+           
+            onChangeDateTime:function(dp, $dom){
+			   if((Date.parse($dom.parent().find("input").eq(1).val())).valueOf() 
+					   < (Date.parse($dom.parent().find("input").eq(0).val())).valueOf()){
+		    	   alert("錯誤:後面日期不得為前面日期之前")	
+				   $dom.parent().find("input").eq(0).val($dom.parent().find("input").eq(1).val());
+           		}
+            }
+           });
         
         
         
@@ -236,11 +244,24 @@
         //              }
         //              return [true, ""];
         //      }});
+        	
         
+        	$("#table").hide()
+        
+			let option = document.getElementsByName("movie_no").item(0).children;
+		 	let length = 0;
+		 	for(var x = 0; x < option.length; x++){
+		 		if(option.item(x).selected == true){
+		 			length = option.item(x).getAttribute(name);
+		 		}
+		 	}
+        	
         	let i = 0;
 			let hour = 10;
+			let date = "2016-11-25T";
 			let insert_time = document.getElementById("insert_time");
 			insert_time.addEventListener("click",function(){
+				$("#table").show();
 				let table = document.getElementById("table");
 				let tr = document.createElement("tr");
 				let no = document.createElement("td")
@@ -260,7 +281,13 @@
 					this.parentElement.remove();
 				})
 				
-				time.appendChild(input);
+			 	for(var x = 0; x < option.length; x++){
+			 		if(option.item(x).selected == true){
+			 			length = parseInt(option.item(x).getAttribute("name"),10) + 30 +  5 - (parseInt(option.item(x).getAttribute("name"),10) % 5);
+// 			 			console.log(length); 
+			 		}
+			 	}
+				
 				time.appendChild(input);
 				tr.appendChild(no);
 				tr.appendChild(time);
@@ -270,13 +297,14 @@
 					input.value = hour + ":00:00";
 				}else{
 					let time = $("#table").find("input").eq(i-1).val();
-				 	let date = "2016-11-25T";
+// 				 	let date = "2016-11-25T";
 				 	let date_time = date + time;
-				 	let s = Date.parse(date_time) + 90 * 60 * 1000;
+				 	
+				 	let s = Date.parse(date_time) + length * 60 * 1000;
 				 	let new_time = new Date(s);
 				 	let newTime = "";
 				 	let hours = "";
-				 	let minutes = ""
+				 	let minutes = "";
 				 	if(new_time.getHours() < 10){
 				 		hours = "0" + new_time.getHours();
 				 	}else{
@@ -305,6 +333,72 @@
 			           //startDate:	            '2017/07/10',  // 起始日
 //			            minDate:               '-1970-01-01', // 去除今日(不含)之前
 			           //maxDate:               '+1970-01-01'  // 去除今日(不含)之後
+			           
+					   onChangeDateTime:function(dp, $dom){
+// 					       console.log(dp)
+// 					       console.log($dom.val())
+// 						let prevtime = $dom.parent().parent().prev().find("input").get(0).value;
+// 						let nextTime = $dom.parent().parent().next().find("input").get(0).value;
+					    let time = $dom.val();
+// 					    let prevdatetime = date + prevtime;
+// 					    let nextdatetime = date + nextTime;
+					    let datetime = date + time;
+					    
+					    if($dom.parent().parent().prev().find("input").get(0) != undefined){
+					    	let prevtime = $dom.parent().parent().prev().find("input").get(0).value;
+					    	let prevdatetime = date + prevtime;
+						    if((Date.parse(datetime) - Date.parse(prevdatetime)) / (2 * 60 * 60 * 1000) < 1){
+						    	alert("間距不得少於2小時");
+							 	let s = Date.parse(prevdatetime) + 120 * 60 * 1000;
+							 	let new_time = new Date(s);
+							 	let newTime = "";
+							 	let hours = "";
+							 	let minutes = "";
+							 	if(new_time.getHours() < 10){
+							 		hours = "0" + new_time.getHours();
+							 	}else{
+							 		hours = new_time.getHours();
+							 	}
+	
+							 	if(new_time.getMinutes() < 10){
+							 		minutes = "0" + new_time.getMinutes();
+							 	}else{
+							 		minutes = new_time.getMinutes();
+							 	}
+	
+							 	newTime = hours + ":" + minutes + ":00";
+								$dom.val(newTime);
+						    }
+					    }
+					    if($dom.parent().parent().next().find("input").get(0) != undefined){
+					    	let nextTime = $dom.parent().parent().next().find("input").get(0).value;
+					    	let nextdatetime = date + nextTime;
+						    if((Date.parse(nextdatetime) - Date.parse(datetime)) / (2 * 60 * 60 * 1000) < 1){
+						    	alert("間距不得少於2小時");
+						    	let s = Date.parse(nextdatetime) - 120 * 60 * 1000;
+							 	let new_time = new Date(s);
+							 	let newTime = "";
+							 	let hours = "";
+							 	let minutes = "";
+							 	if(new_time.getHours() < 10){
+							 		hours = "0" + new_time.getHours();
+							 	}else{
+							 		hours = new_time.getHours();
+							 	}
+	
+							 	if(new_time.getMinutes() < 10){
+							 		minutes = "0" + new_time.getMinutes();
+							 	}else{
+							 		minutes = new_time.getMinutes();
+							 	}
+	
+							 	newTime = hours + ":" + minutes + ":00";
+								$dom.val(newTime);
+					    	}
+					    }
+// 						console.log(datetime);
+// 						console.log(prevdatetime);
+					   }
 			        });
 	});
         
