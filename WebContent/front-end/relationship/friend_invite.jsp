@@ -15,6 +15,7 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
 
+
 <style>
    body {  
      width: 500px;  
@@ -81,12 +82,8 @@
 			            <a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/relationship/friend_invite.jsp">好友邀請</a>
 		        	</div>
 	      	 </div>
-		</div>	
-		
-		 <Form id="myForm" action="<%=request.getContextPath()%>/chat.do" method="POST">
-			<input type="hidden" name="userName"  value="${memVO.mb_name}">
-			<input type="submit" value="開啟聊天室">			
-		 </Form>
+		</div>		
+
  		
 		<jsp:useBean id="memSvc" scope="page" class="com.mem.model.MemService" />
 		<jsp:useBean id="relationshipSvc" scope="page" class="com.relationship.model.RelationshipService" />
@@ -117,6 +114,34 @@
      	<%="目前登入會員=" + memVO.getMember_no() + " " +memVO.getMb_name()%>     
      </FORM>
      
+     <table class="table table-hover">
+	 <thead style="background-color:#F0F0F0">
+		<tr>
+			<th>會員名稱</th>
+			<th>好友的邀請</th>
+		</tr>
+	</thead>
+			<c:forEach var="mem1VO" items="${memSvc.all}">
+			<c:if test="${relationshipSvc.getOneRelationship(mem1VO.member_no, memVO.member_no).status == 0}">
+     	<tbody>	
+     		<tr>
+     			<td>
+     				【<font color=orange>${mem1VO.mb_name}</font>】
+     			</td>    			
+     			<td>
+					<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/relationship/relationship.do" name="form3">
+						<input type="hidden" name="member_no" value="${memVO.member_no}">
+						<input type="hidden" name="friend_no" value="${mem1VO.member_no}">
+						<input type="hidden" name="action" value="accept">			
+						<input type="submit" value="接受好友邀請" class="btn btn-success">
+					</FORM>
+     			</td>   		
+     		</tr>
+     	</tbody>
+     	</c:if>
+     	</c:forEach>
+	</table>
+	
 <%if (request.getAttribute("listRelationships_ByMemno")!=null){%>
       <jsp:include page="/front-end/mem/listRelationships_ByMemno.jsp" />
 <%} %>
