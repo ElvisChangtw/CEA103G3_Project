@@ -60,4 +60,12 @@ public class EmployeeService {
 	public List<EmployeeVO> getAll() {
 		return dao.getAll();
 	}
-}
+
+	public EmployeeVO loginCheck(String email, String emppwd) {
+		return dao.login_check(email, emppwd);
+	}
+
+	public void updateRandomPws(String email, String randomPwd) {
+		dao.updateRandomPws(email, randomPwd);
+	}
+} 
