@@ -9,9 +9,9 @@
 <%
 	java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:00");; 
 	pageContext.setAttribute("df",df);
-// 	HttpSession session1 = request.getSession();
-// 	String member_no = "1";
-// 	session1.setAttribute("member_no", member_no);
+	
+	int count = (Integer)session.getAttribute("count");
+	System.out.println(count);
 %>
 
 
@@ -31,22 +31,6 @@
 body{
 	box-sizing: border-box;
 }
-table {
-	width: 600px;
-	background-color: white;
-	margin-top: 20px;
-	/* 	margin-bottom: 1px; */
-}
-
-table, th, td {
-	border: 0px;
-}
-
-th {
-	background-color: #337ab7;
-	text-align: left;
-	color: white;
-}
 
 td {
 	line-height: 30px;
@@ -56,9 +40,7 @@ td {
 	margin-left:20px;
 }
 #div1, #div6 {
-	width: 600px;
-/* 	height: 150px; */
-/* 	background-color: rgba(0, 0, 0, 0.5); */
+/* 	width: 600px; */
 	padding-top: 10px;
 	padding-bottom: 10px;
 }
@@ -67,17 +49,14 @@ td {
 	padding-top: 10px;
 	padding-bottom: 10px;
 }
-
 FORM {
 	margin-bottom: 20px;
 }
-
 #h2, #h3 {
 	text-align: center;
 	margin-top: 20px;
 	color: white; 
 }
-
 #p1, #p2 {
 	text-align: center;
 	color: white;
@@ -103,13 +82,97 @@ FORM {
 	font-size:10px;
 	margin-bottom:0px;
 }
+		label {
+			padding: 0;
+			margin: 2px 2px 0px 0px;
+			cursor: pointer;
+/* 			background-color: lightgreen;  */
+		}
+		input[type=checkbox] {
+			display: none;
+			background-color: lightgreen;
+		}
+		span{
+			font-size: 8px;
+			font-family: Arial;
+			text-align: center;
+			/*  */
+			line-height: 25px;
+			/* background-color: lightgreen; */
+		}
 
-img{
-  	width: 115px;
-  	height: 100px;
-  	margin: 0 auto;
-  }
+		input[type=checkbox]+span {
+			display: inline-block;
+			vertical-align:middle;
+			background-color: lightgreen;
+			/* 			padding: 3px ; */
+			border: 1px solid; /* gray; */
+			color: #444;
+			user-select: none; /* 防止文字被滑鼠選取反白 */
+			width: 25px;
+			height: 25px;		
+			margin: 2px 2px;
+		}
 
+		input[type=checkbox]:checked+span {
+			/* 			color: yellow; */
+			background-color: #ADD8E6;
+
+		}
+
+		input[type=checkbox]+span:first-child {
+			visibility: hidden;
+		}
+
+		#d1{
+			margin: 10px 20px;
+			font-size: 27px;
+		}
+		input#submit{
+			margin-left: 330px;
+		}
+		button{
+			width: 25px;
+			height: 25px;
+		}
+		#d1 > label:nth-child(2){
+			visibility:  hidden;
+			width: 20px;
+			height: 20px;
+		}
+		#d2{
+			border: 1px solid black;
+			width: 690px;
+			height: 30px;
+			text-align: center;
+			background: orange;
+			font-size: 20px;
+			line-height: 30px;
+		}
+		#d3, #d4, #d5{
+			width:25px;
+			height:25px;
+			border: 1px solid black;
+			display:inline-block;
+		}
+		#d3{
+			margin-left:300px;
+			background-color:lightgreen;
+			
+		}
+		#d4{
+			margin-left:20px;
+			background-color: red;
+		}
+		#d5{
+			margin-left:20px;
+			background-color: #ADD8E6;
+		}
+		#d0{
+			display:inline-block;
+			display: flex;
+			align-items:center;
+		}
 
 </style>
 <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
@@ -117,16 +180,6 @@ img{
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
 </head>
 <body bgcolor='white'>
-
-	<%-- 錯誤表列 --%>
-	<c:if test="${not empty errorMsgs}">
-		<font style="color: red">請修正以下錯誤:</font>
-		<ul>
-			<c:forEach var="message" items="${errorMsgs}">
-				<li style="color: red">${message}</li>
-			</c:forEach>
-		</ul>
-	</c:if>
 
 <FORM METHOD="post"	ACTION="<%=request.getContextPath()%>/order/order.do" name="form1">
 	<div id="main" class="container" >
@@ -191,68 +244,32 @@ img{
 				</p>
 			</div>
 			<div id="div2" >
-				<h2 id="h2">選擇電影票</h2>
+				<h2 id="h2">選擇座位</h2>
 				<p id="p1">選擇您希望購買的電影票張數和類型.請注意系統將自動為您保留可訂的最佳座位, 每筆交易最多可購買10張電影票</p>
 			</div>
-			<table>
-				<tr>
-					<th>票種</th>
-					<th>價格</th>
-					<th>數量</th>
-				</tr>
-				<c:forEach var="ticket_typeVO" items="${ticket_typeSvc.all}">
-					<c:if test="${theaterSvc.getOneTheater(showtimeSvc.
-					getOneShowtime(param.showtime_no).theater_no).theater_type == ticket_typeVO.ticket_type}">
-						<tr>
-							<td>${ticket_typeVO.ticket_desc}</td>
-							<td>$ ${ticket_typeVO.ticket_price}</td>
-							<td><select name="ticket_count">
-									<option value="0">0</option>
-									<option value="1">1</option>
-									<option value="2">2</option>
-									<option value="3">3</option>
-									<option value="4">4</option>
-									<option value="5">5</option>
-							</select>
-						</tr>
-						<input type="hidden" name="ticket_type_no"
-							value="${ticket_typeVO.ticket_type_no}">
-						<input type="hidden" name="ticket_price"
-							value="${ticket_typeVO.ticket_price}">
-					</c:if>
-				</c:forEach>
 			
-			</table>
-			
-			<div id="div7" style="margin-top:20px;">
-				<h2 id="h3">選擇餐飲</h2>
-				<p id="p2">請選擇販賣部商品並結帳</p>
+			<div id="d0">
+				<div id="d3">
+				</div>&nbsp&nbsp可選擇
+				<div id="d4">
+				</div>&nbsp&nbsp已售出
+				<div id="d5">
+				</div>&nbsp&nbsp您的座位
 			</div>
-				<c:forEach var="foodVO" items = "${foodSvc.all}">
-					<div style="display: inline-block; margin-top: 20px; text-align:center;">
-						<img src="<%=request.getContextPath()%>/food/food.do?action=getPic&food_no=${foodVO.food_no}" >
-						<p>${foodVO.food_name}</p>
-						<p>$ ${foodVO.food_price}</p>
-						<select name="food_count">
-							<option value="0">0</option>
-							<option value="1">1</option>
-							<option value="2">2</option>
-							<option value="3">3</option>
-							<option value="4">4</option>
-							<option value="5">5</option>
-						</select>
-						<input type="hidden" name="food_no"  value="${foodVO.food_no}">
-						<input type="hidden" name="food_price"  value="${foodVO.food_price}">
-					</div>
-				</c:forEach>
-			<input type="hidden" name="action" value="sendToST">
-			<input type="hidden" name="showtime_no" value="${param.showtime_no}">
+		
+			<div id="d1" style="width:700px;">
+				<div id="d2">
+					螢幕位置
+				</div>
+			</div>
+			
+			<input type="hidden" name="action" value="checkOrd">
 			<input type="button"  id="btn" value="繼續   →"  style="margin-top: 20px; background-color: #337ab7; 
 			color: white; border: white; width:100px; height:50px; margin-left: 80%;">
 			
 		</div>
 		<div class="col-0.5"></div>
-		<div class="col-2" style="margin-top:150px; over"  >
+		<div class="col-2" style="margin-top:150px;"  >
 			<div class="row" >
 				<div class="col-12" style="padding:0;border: 1px solid black;">
 					<div style="height:40px;background-color: #337ab7; border: 1px solid black;">
@@ -284,8 +301,150 @@ img{
 	  </div>
 	</div>
 </FORM>
+
 <script>
-	$("#btn").click(test);
+	
+	let id = 0;
+	let seat_no = "${showtimeVO.seat_no}";
+	
+	for(let i = 0; i <= 20; i++){
+		let num = 64 + i;
+		let word = String.fromCharCode(num);
+		let label = document.createElement("label");
+		let walkway = document.createElement("input");
+		walkway.setAttribute("type", "checkbox");
+	
+		let span = document.createElement("span");
+		span.style.border = " 1px solid white";
+		span.style.backgroundColor = "white";
+		span.style.color = 'black';
+		span.innerText = i;
+		label.appendChild(walkway);
+		label.appendChild(span);
+		document.getElementById("d1").appendChild(label);
+		
+		walkway.setAttribute("class",word);
+	}
+	document.getElementById("d1").appendChild(document.createElement("br"));
+	
+	for(let i = 1; i <= 20; i++){
+		let num1 = 64 + i;
+		let word2 = String.fromCharCode(num1);
+		let label1 = document.createElement("label");
+		let walkway = document.createElement("input");
+		let span1 = document.createElement("span");
+		span1.innerText = word2;
+		span1.style.border="1px solid white";
+		span1.style.backgroundColor = "white";
+		span1.style.color = "black";
+		walkway.setAttribute("type", "checkbox");
+		walkway.setAttribute("class", i);
+		label1.appendChild(walkway);
+		label1.appendChild(span1);
+		document.getElementById("d1").appendChild(label1);
+		for(let j = 1; j<= 20; j++){
+			let num = 64 + i;
+			let word = String.fromCharCode(num);
+			let word1 = String.fromCharCode(64+j);
+			let string = "";
+	
+			if(j < 10) {
+				string = word + "0" + j;
+			}
+			else {
+				string = word + "" + j;
+			}
+			let label = document.createElement("label");
+			let seat = document.createElement("input");
+			seat.setAttribute("type", "checkbox");
+			seat.setAttribute("id", id);
+			seat.setAttribute("class", i);
+			seat.classList.add(word1);
+			seat.classList.add(string);
+			seat.setAttribute("value", "0");
+			seat.setAttribute("name", "seat_no");
+	
+			let seat_name = document.createElement("span");
+			seat_name.innerText = string;
+	
+			label.appendChild(seat);
+			label.appendChild(seat_name);
+			if(j % 20 === 0 ){
+				label.appendChild(document.createElement("br"));
+			}
+			
+			if((seat_no.charAt(id) == "1")){
+				label.style.visibility = "hidden";
+				seat.value = 1;
+	//				seat.checked = true;
+				seat.disabled = true;
+			}else if(seat_no.charAt(id) == "2"){
+	//				seat.disabled = true;
+				seat.value = "2";
+				label.style.cursor= "not-allowed";
+	//				seat.checked = true;
+				seat_name.style.backgroundColor = "red";
+				seat.addEventListener("click", function(){
+					alert("提醒您，此座位不能點選");
+					seat.cheacked = false;
+					console.log(seat.cheacked == true);
+				},false);
+				
+			}
+	
+			document.getElementById("d1").appendChild(label);
+			id++;
+		}
+	}
+	
+	let submit = document.getElementById("submit");
+	let count = <%=count%>;
+	let countSeat = 0;
+	console.log(count);
+	submit.addEventListener("click", function(){
+		// 確認選擇座位數量要等於購買的電影票張數
+		for(let i = 0; i < 400; i++){
+			let seat = document.getElementById(i);
+			if(seat.checked==true){
+				countSeat++;
+				console.log(i);
+			}
+		}
+		console.log(countSeat);
+		console.log(count==countSeat);
+		if(count != countSeat){
+			countSeat = 0;
+			return false;
+		}
+		
+		for(let i = 0; i <=399; i++){
+			let seat = document.getElementById(i);
+			if(seat.checked == false){
+				if(seat.value == 0 ){
+					seat.checked = true;
+	//					$("#").next("span").css("background-color", "lightgreen");
+					seat.nextSibling.style.backgroundColor = "lightgreen";
+				}else{
+					seat.checked = true;
+				}
+	//				seat.checked = true;
+			}else if(seat.checked === true && seat.disabled === false){
+				seat.value = 2;
+				let seatName = document.createElement("input");
+				seatName.setAttribute("type", "hidden");
+				seatName.setAttribute("name", "seat_name");
+				seatName.setAttribute("value", seat.className.slice(-3));
+				document.getElementById("d1").appendChild(seatName);
+			}
+			
+			if(seat.disabled == true){
+				seat.disabled = false;
+				seat.cheacked = true;
+			}
+			submit.setAttribute("type", "submit")
+		}
+		
+	},false);
 	
 	$("select[name=ticket_count]").change(function(){
 		let productPrice = $(this).parent().prev().text().substr(1);
@@ -372,33 +531,6 @@ img{
 		$("#total_price").text("合計: " + totalPrice);
 		
 	});
-	
-	
-	
-	
-	
-	
-	function test(){
-		
-		let option = $("[name='ticket_count']").children("option");
-// 		alert(option.length);
-		tmp = true;
-		let count = 0;
-		for(let a = 0; a < option.length; a++){
-// 			alert(option.eq(a).prop("selected"));
-			if(option.eq(a).prop("selected") == true){
-				count += parseInt(option.eq(a).val(),10);
-				
-			}
-		}
-// 		alert("count = " + count);
-		if(count==0){
-			alert("請至少選一張票");
-		}else{
-				$(this).attr("type", "submit");
-		}
-		
-	}
 
 </script>
 

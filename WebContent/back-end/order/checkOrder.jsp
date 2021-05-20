@@ -32,9 +32,12 @@
 <html>
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<title>訂單票種資料新增 - addOrd_ticket_type2.jsp</title>
+<title>確認訂單</title>
 
 <style>
+body{
+	box-sizing: border-box;
+}
 table {
 	width: 600px;
 	background-color: white;
@@ -94,6 +97,7 @@ img{
 </style>
 <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
 <script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
 </head>
 <body bgcolor='white'>
 
@@ -107,8 +111,10 @@ img{
 		</ul>
 	</c:if>
 
-	<FORM METHOD="post"	ACTION="<%=request.getContextPath()%>/order/order.do" name="form1">
-		<div id="div1">
+	<div id="main" class="container-fluid">
+	  <div class="row">
+		<div id="div1" class="col-6">
+		  <FORM METHOD="post"	ACTION="<%=request.getContextPath()%>/order/order.do" name="form1">
 			<div style="margin-bottom:5px; padding: 10px 0px;">
 				<c:choose>
 					<c:when test="${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(param.showtime_no)
@@ -206,14 +212,63 @@ img{
 							<td colspan="1">${total_price}</td>
 						</tr>
 			</table>
+			<div>
+			<br>
+				付款方式:<br>
+				<input id="payByCredit"style="width:20px;" type="radio" name="payment_type" value="0">信用卡
+				<input id="payAtCounter"style="width:20px;" type="radio" name="payment_type" value="2">現場付款
+			</div>
+			<div id="creditCard">
+				<%@ include file="creditcard.jsp" %>
+			</div>	
 			<input type="hidden" name="action" value="insertOrd">
+			<input type="hidden" name="order_type" value="1">
 			<input type="hidden" name="seat_no" value="${seat_no}">
 			<input type="hidden" name="seat_name" value="${seat_name}">
 			<input type="hidden" name="showtime_no" value="${param.showtime_no}">
-			<input type="submit" value="結帳"  style="margin-top: 20px; background-color: #337ab7; 
+			<input id="submit" type="button" value="結帳"  style="margin-top: 20px; background-color: #337ab7; 
 			color: white; border: white; width:100px; height:50px; margin-left: 83%;">
-		</div>
-	</FORM>
-
+		    </FORM>
+		  </div>
+			  <div class="col-2" style="margin-top:195px;"  >
+				<div class="row" >
+					<div class="col-12" style="padding:0;border: 1px solid black;">
+						<div style="height:40px;background-color: #337ab7; border: 1px solid black;">
+							<div style="margin-top: 7px; margin-left:40px; color:white;">會員專區</div>
+						</div>
+						<div style="height:50px; margin-top:10px; font-size:10px; color:#777777; padding-left:10px;">
+							${sessionScope.member_no == null ? "尚未登入" : '嗨!TONY 您好'}
+						</div>
+					</div>
+				</div>
+			</div>
+	  	</div>
+	</div>
+		
+	
+	
+	<script>
+		$("#creditCard").hide();
+		$("#payByCredit").click(function(){
+			$("#creditCard").show();
+		})
+		$("#payAtCounter").click(function(){
+			$("#creditCard").hide();
+		})
+		$("#submit").click(function(){
+			if($("#payByCredit").prop("checked") == false && $("#payAtCounter").prop("checked") == false){
+				alert("請選擇付款方式");
+			}else{
+				$("#submit").attr("type","submit")
+			}
+		});
+		
+	
+	
+	
+	
+	
+	</script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

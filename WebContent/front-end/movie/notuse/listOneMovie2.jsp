@@ -118,6 +118,6 @@ th, td {
 			<td><%=movieVO.getExpectation()%></td>
 		</tr>
 	</table>
-<jsp:include page ="listComments_ByMovieno.jsp"/>
+<jsp:include page ="listComments_ByMovieno2.jsp"/>
 </body>
 </html>

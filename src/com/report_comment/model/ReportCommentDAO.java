@@ -21,11 +21,11 @@ public class ReportCommentDAO implements ReportCommentDAO_interface{
 	}
 	
 	private static final String INSERT_STMT = 
-			"insert into REPORT_COMMENT (COMMENT_NO,CONTENT,CRT_DT=default,MEMBER_NO,STATUS=0) values (?, ?, ?)";
+			"insert into REPORT_COMMENT (COMMENT_NO,CONTENT,CRT_DT,MEMBER_NO,EXECUTE_DT,STATUS) values (?, ?, default, ?, null, 0)";
 	private static final String UPDATE_STMT = 
-			"update REPORT_COMMENT set EXECUTE_DT=default, STATUS=?, DESC=? where REPORT_NO = ?";
+			"update REPORT_COMMENT set EXECUTE_DT=default, STATUS=?, `DESC`=? where REPORT_NO = ?";
 	private static final String UPDATE_ALL_REPORT_FROM_THISCOMMENT_STMT = 
-			"update REPORT_COMMENT set EXECUTE_DT=default, STATUS=?, DESC=? where COMMENT_NO = ?";
+			"update REPORT_COMMENT set EXECUTE_DT=default, STATUS=?, `DESC`=? where COMMENT_NO = ?";
 	private static final String SELECT_REPORT_OR_NOTREPORT_STMT = 
 			"select IF(EXISTS(select * from REPORT_COMMENT where COMMENT_NO = ? and `STATUS` = 1),'report','notreport') as `action`";
 	private static final String DELETE_STMT = 
@@ -33,7 +33,9 @@ public class ReportCommentDAO implements ReportCommentDAO_interface{
 	private static final String GET_ONE_STMT = 
 			"select * from REPORT_COMMENT where REPORT_NO = ?";	
 	private static final String GET_ALL_STMT = 
-			"select * from REPORT_COMMENT where STATUS=0  order by REPORT_NO";
+			"select * from REPORT_COMMENT";
+	private static final String GET_ALL_OrderByReport_STMT = 
+			"select * from REPORT_COMMENT";
 	
 	@Override
 	public void insert(ReportCommentVO reportcommentVO) {
@@ -144,10 +146,16 @@ public class ReportCommentDAO implements ReportCommentDAO_interface{
 				CommentDAO dao = new CommentDAO();
 				CommentVO commentVO = new CommentVO();
 				commentVO.setCommentno(reportcommentVO.getCommentno());
-				dao.updateCommentStatus(commentVO,con);
+				dao.updateCommentStatusOff(commentVO,con);
+			}else {
+				CommentDAO dao = new CommentDAO();
+				CommentVO commentVO = new CommentVO();
+				commentVO.setCommentno(reportcommentVO.getCommentno());
+				dao.updateCommentStatusOn(commentVO,con);
 			}
 			con.commit();
 			con.setAutoCommit(true);
+
 
 			// Handle any driver errors
 		} catch (SQLException se) {
@@ -304,6 +312,66 @@ public class ReportCommentDAO implements ReportCommentDAO_interface{
 
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ALL_STMT);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// reportcommentVO ¤]ºÙ¬° Domain objects
+				reportcommentVO = new ReportCommentVO();
+				reportcommentVO.setReportno(rs.getInt("REPORT_NO"));
+				reportcommentVO.setCommentno(rs.getInt("COMMENT_NO"));
+				reportcommentVO.setContent(rs.getString("CONTENT"));
+				reportcommentVO.setCreatdate(rs.getTimestamp("CRT_DT"));
+				reportcommentVO.setMemberno(rs.getInt("MEMBER_NO"));
+				reportcommentVO.setExecutedate(rs.getTimestamp("EXECUTE_DT"));
+				reportcommentVO.setStatus(rs.getString("STATUS"));
+				reportcommentVO.setDesc(rs.getString("DESC"));
+				list.add(reportcommentVO); // Store the row in the list
+			}
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}
+	
+	@Override
+	public List<ReportCommentVO> getAllOrderByReportno() {
+		List<ReportCommentVO> list = new ArrayList<ReportCommentVO>();
+		ReportCommentVO reportcommentVO = null;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_ALL_OrderByReport_STMT);
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
