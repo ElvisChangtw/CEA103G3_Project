@@ -157,16 +157,13 @@
         #search-results{
         	width:100%;
         	height:inherit;
-        	background-color:rgb(18, 18, 18);
+        	background-color:rgb(18, 18, 18, 0.8);
         }
         .rslt{
         	font-family:inherit;
         	line-height:inherit;
         	margin:0;
-        	padding-top:1em;
-        	padding-right:2em;
-        	padding-bottom:1em;
-        	padding-left:2em;
+        	padding:1em 2em;
         }
         .rslt:hover{
         	background-color:rgb(49, 49, 49);
@@ -189,8 +186,8 @@
 			text-overflow: ellipsis;
         }
         hr.hrhr {
-		  margin-top: 1rem;
-		  margin-bottom: 1rem;
+		  margin-top: 0;
+		  margin-bottom: 0;
 		  border: 0;
 		  border-top: 1px solid rgba(0, 0, 0, 0.5);
 		  background-color:aquamarine;

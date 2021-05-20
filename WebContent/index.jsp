@@ -2032,7 +2032,7 @@ function drawPieChart2() {
 <script>
 
     	$("#search-context").on('input propertychange', function(){
-    		$("#search-results").html("");
+    		$("#search-results").html('<hr class="hrhr">');
     		if(!$(this).val() == ""){
     			var result;
     			console.log("°e¥X·j´M = " + $(this).val());
@@ -2046,8 +2046,9 @@ function drawPieChart2() {
 	        			console.log(movieVO.premiredate);
 	        			console.log(movieVO.movieno);
 	        			let link = '<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=' + movieVO.movieno  + '' ;
-	        			console.log(link);
-		        		result = 
+	        			var dt = new Date(movieVO.premiredate);
+	        			var yr = 1900 + dt.getYear();
+	        			result = 
 		    				'<div class="rslt row" onclick="location.href=\'' + link+ '\'" > ' +
 		    				'	<div class="col-md-4"> ' +
 		    		   		'			<img src="<%=request.getContextPath()%>/movie/DBGifReader2.do?movieno=' + movieVO.movieno + '" title=" " width="260px" height="120px"> ' +
@@ -2079,7 +2080,6 @@ function drawPieChart2() {
 					},
 					async: false,
 					success: function(data){
-						console.log("data==");
 						console.log(data);
 						json = JSON.parse(data).results;
 					}
