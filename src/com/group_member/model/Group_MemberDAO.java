@@ -39,7 +39,6 @@ public class Group_MemberDAO implements Group_MemberDAO_interface {
 	private static final String GET_GROUP_BY_MEMBER_STMT = 
 			"SELECT * FROM group_member where member_no = ? order by group_no, crt_dt";
 	private static final String KICKOUT__STMT = "UPDATE `group_member` set STATUS = 0 where PAY_STATUS = 0 and GROUP_NO = ?";
-	
 	private static final String GET_COUNT = "SELECT COUNT(*) CNT from GROUP_MEMBER WHERE GROUP_NO = ? AND STATUS = 1; ";
 	
 	@Override
@@ -62,7 +61,6 @@ public class Group_MemberDAO implements Group_MemberDAO_interface {
 				cnt = rs.getInt("CNT");
 				if(cnt == 0) {
 					pstmt = con.prepareStatement(INSERT_STMT);
-					System.out.println(INSERT_STMT);
 					pstmt.setInt(1, group_memberVO.getGroup_no());
 					pstmt.setInt(2, group_memberVO.getMember_no());
 				}

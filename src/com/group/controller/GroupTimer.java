@@ -45,7 +45,7 @@ public class GroupTimer extends Timer{
 		this.schedule( timerTask  , groupVO.getDeadline_dt()); 
 	}
 	//取得剔除未付款團員排程器
-	public TimerTask_KickOut getKickTask(int group_no) {
+	public TimerTask_KickOut getKickTask(int group_no) { 
 		return this.kickOutMap.get(group_no);
 	}
 	//取消揪團失敗排程器
