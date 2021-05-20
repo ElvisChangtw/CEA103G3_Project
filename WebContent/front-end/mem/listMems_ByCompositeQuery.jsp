@@ -3,25 +3,30 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page import="com.reply.model.*"%>
 <%@ page import="com.article.model.*"%>
-<%@ page import="com.relationship.model.*"%>
+<%@ page import="com.mem.model.*"%>
 
+<% 
+	MemVO memVO = (MemVO) session.getAttribute("memVO");
+
+// 	MemVO memVO1 = (MemVO) request.getAttribute("memVO");
+%>
 
 <%-- 萬用複合查詢-可由客戶端select_page.jsp隨意增減任何想查詢的欄位 --%>
 <%-- 此頁只作為複合查詢時之結果練習，可視需要再增加分頁、送出修改、刪除之功能--%>
 
-<jsp:useBean id="listRelationships_ByCompositeQuery" scope="request" type="java.util.List<RelationshipVO>" /> <!-- 於EL此行可省略 -->
+<jsp:useBean id="listMems_ByCompositeQuery" scope="request" type="java.util.List<MemVO>" /> <!-- 於EL此行可省略 -->
 <jsp:useBean id="articleSvc" scope="page" class="com.article.model.ArticleService" />
 <jsp:useBean id="memSvc" scope="page" class="com.mem.model.MemService" />
 <jsp:useBean id="articleDAO" scope="page" class="com.article.model.ArticleDAO" />
 
 <html>
-<head><title>複合查詢 - listArticles_ByCompositeQuery.jsp</title>
+<head><title>複合查詢 - listMems_ByCompositeQuery.jsp</title>
 <link href="https://i2.bahamut.com.tw/css/basic.css?v=1618977484" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 
 <style>
    body {  
-     width: 1200px;  
+     width:800px;  
      margin: 0 auto;  
      padding: 10px 20px 20px 20px;  
 
@@ -62,7 +67,6 @@
 </head>
 <body bgcolor='white'>
 
-
 <!-- <h4> -->
 <!-- ☆萬用複合查詢  - 可由客戶端 listAllArticle.jsp 隨意增減任何想查詢的欄位<br> -->
 <!-- ☆此頁作為複合查詢時之結果練習，<font color=red>已增加分頁、送出修改、刪除之功能</font></h4> -->
@@ -79,54 +83,58 @@
 <!-- 	</span> -->
 <%-- 	<button type="button" class="btn btn-info" onclick="location.href='<%=request.getContextPath()%>/front-end/article/addArticle.jsp'">新增文章</button> --%>
 <!-- </h1> -->
-	
-	  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/relationship/relationship.do" name="form1">   
-       <b><font color=blue>搜尋會員加好友:</font></b> 
 
-        <b>輸入會員姓名:</b>
-        <input type="text" name="mb_name" value="">
-		        
+	 <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/mem/mem.do" name="form1">   
+       <b><font color=blue>搜尋會員加好友:</font></b> 
+<!--         <b>輸入會員編號:</b> -->
+<!-- 			<input type="text" name="member_no" value="">      -->
+        <b></b>
+       		<input type="text" name="mb_name" value="" placeholder="請輸入會員姓名">		        
         <input type="submit" value="送出" class="btn btn-primary">
-        <input type="hidden" name="action" value="listRelationships_ByCompositeQuery">
-     </FORM>
+        <input type="hidden" name="action" value="listMems_ByCompositeQuery">
+        <button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/mem/mem.do?action=listRelationships_ByMemberno_B&member_no=${memVO.member_no}'">我的好友</button>       
+        <%="目前登入會員=" + memVO.getMember_no() + " " +memVO.getMb_name()%>
+     </FORM>	
 	
 <table class="table table-hover">
 	 <thead style="background-color:#F0F0F0">
 		<tr>
-			<th>會員姓名</th>
-			<th>加好友</th>
 
+			<th>會員名稱</th>
+			<th>加好友喔</th>
+	<!-- 		<th>修改</th> -->
+	<!-- 		<th>刪除</th> -->
 		</tr>
 	</thead>
-<%-- 	<c:forEach var="relationshipVO" items="${listRelationships_ByCompositeQuery}"> --%>
-	<c:forEach var="relationshipVO" items="${memSvc.all}">
-		<tbody>	
-			<tr>	
-<%-- 			<td>${relationshipVO.articleno}</td> --%>
-				
-				<td>【<font color=orange>${memSvc.getOneMem(relationshipVO.member_no).mb_name}</font>】</td>			
-<%-- 				<td>【<font color=orange>${memSvc.getOneMem(relationshipVO.friend_no).mb_name}</font>】</td>			 --%>
-<%-- 			<td>${relationshipVO.status}</td> --%>
-<%-- 			<td>${relationshipVO.isblock}</td>	 --%>
+	<c:forEach var="memVO" items="${listMems_ByCompositeQuery}">
+		<c:if test="${memVO.member_no != sessionScope.memVO.member_no}">
+			<tbody>	
+				<tr>
+					<td>
+						<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${memVO.member_no}"
+							alt="尚無圖片" width="96px;" height="108px" title="" style="border: groove;"/>
+						【<font color=orange>${memVO.mb_name}</font>】
+					</td>		
 
-<!-- 			<td> -->
-<%-- 			  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/reply/reply.do" style="margin-bottom: 0px;"> --%>
-<!-- 			     <input type="submit" value="修改">  -->
-<%-- 			     <input type="hidden" name="reply_no"    value="${replyVO.reply_no}"> --%>
-<%-- 			     <input type="hidden" name="requestURL"	value="<%=request.getServletPath()%>"><!--送出本網頁的路徑給Controller--> --%>
-<%-- 			     <input type="hidden" name="whichPage"	value="<%=whichPage%>">               <!--送出當前是第幾頁給Controller--> --%>
-<!-- 			     <input type="hidden" name="action"	    value="getOne_For_Update"></FORM> -->
-<!-- 			</td> -->
-<!-- 			<td> -->
-<%-- 			  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/reply/reply.do" style="margin-bottom: 0px;"> --%>
-<!-- 			     <input type="submit" value="刪除"> -->
-<%-- 			     <input type="hidden" name="reply_no"      value="${replyVO.reply_no}"> --%>
-<%-- 			     <input type="hidden" name="requestURL"	value="<%=request.getServletPath()%>"><!--送出本網頁的路徑給Controller--> --%>
-<%-- 			     <input type="hidden" name="whichPage"	value="<%=whichPage%>">               <!--送出當前是第幾頁給Controller--> --%>
-<!-- 			     <input type="hidden" name="action"     value="delete"></FORM> -->
-<!-- 			</td> -->
-			</tr>
-		</tbody>
+					<td style="vertical-align:middle;">
+						<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/relationship/relationship.do" name="form1">
+							<input type="hidden" name="member_no" value="<%=memVO.getMember_no()%>">
+							<input type="hidden" name="friend_no" value="${memVO.member_no}">
+							<input type="hidden" name="action" value="insert">			
+							<input type="submit" value="送出新增">
+						</FORM>
+					</td>
+	<!-- 			<td> -->
+	<%-- 			  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/reply/reply.do" style="margin-bottom: 0px;"> --%>
+	<!-- 			     <input type="submit" value="刪除"> -->
+	<%-- 			     <input type="hidden" name="reply_no"      value="${replyVO.reply_no}"> --%>
+	<%-- 			     <input type="hidden" name="requestURL"	value="<%=request.getServletPath()%>"><!--送出本網頁的路徑給Controller--> --%>
+	<%-- 			     <input type="hidden" name="whichPage"	value="<%=whichPage%>">               <!--送出當前是第幾頁給Controller--> --%>
+	<!-- 			     <input type="hidden" name="action"     value="delete"></FORM> -->
+	<!-- 			</td> -->
+				</tr>
+			</tbody>
+		</c:if>
 	</c:forEach>
 </table>
 <%-- <%@ include file="pages/page2_ByCompositeQuery.file" %> --%>

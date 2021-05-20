@@ -17,12 +17,13 @@
 <jsp:useBean id="groupSvc" scope="page" class="com.group.model.GroupService" />
 <jsp:useBean id="groupMemSvc" scope="page" class="com.group_member.model.Group_MemberService" />
 <jsp:useBean id="memSvc" scope="page" class="com.mem.model.MemService" />
+<jsp:useBean id="relationSvc" scope="page" class="com.relationship.model.RelationshipService" />
 <%@ page import="com.mem.model.*"%>
 <%@ page import="com.articleCollection.model.*"%>
 <%@ page import="com.order.model.*"%>
 <%@ page import="com.group.model.*"%>
 <%@ page import="java.util.*"%>
-<%@ page import="websocket.jedis.*"%>
+
 <%@ page import="org.json.JSONArray"%>
 <%@ page import="org.json.JSONObject"%>
 
@@ -118,7 +119,7 @@ hr{
 	padding:unset;
 }
 
-.info-content .tab-panel #comment-info-form, #ticket-info-form, #group-info-form, #notify-info-form{
+.info-content .tab-panel #comment-info-form, #ticket-info-form, #group-info-form, #notify-info-form, #articleCollection-info-form{
 	width:100%;
 }
 .info-content .tab-panel .noCSS{
@@ -160,14 +161,71 @@ hr{
 text-align:center;
 }
 
-.hover_box {
-    border: 5px solid black;
-    border-radius:40px;
-}
+
 
 .hover_table{
 	border:unset;
 	margin:auto;
+}
+
+/* 通知用 */
+  @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+
+
+.fadeOut {
+  opacity: 0;
+}
+
+#create {
+  border: none;
+  padding: 8px;
+  font-size:15px;
+  color: #FFF;
+  background-color: firebrick;
+  border-radius: 8px;
+}
+
+.alert-container{
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+}
+
+.alert {
+  position: relative;
+  background-color: white;
+  border: 5px solid lightblue;
+  height: 100px;
+  width: 250px;
+  border-radius: 15px;
+  margin-bottom: 15px;
+  color: #40bde6;
+  padding: 20px 15px 0 15px;
+  transition: opacity 2s;
+}
+
+.alert span {
+  font-size: 1.3rem;
+  position: absolute;
+  top: 3px;
+  right: 12px;
+  cursor: pointer;
+
+}
+.alertTxt{
+font-size: 1.1rem;
+  position: absolute;
+  top: 0px;
+  right: 12px;
+  cursor: pointer;
+  margin-top:23px;
+  width:170px;
+
+}
+.alertImg{
+  width:70px;
+
 }
 </style>
 </head>
@@ -198,17 +256,19 @@ text-align:center;
 								<h1 class="table-order">已預訂</h1>
 								<table class="table table-hover table-order">								
 									 <tr class="table-order" style="display:none;"><th>購票日期</th><th>電影名稱</th><th>狀態</th><th>付款方式</th><th>金額</th><th>退票</th><th>詳細資訊</th></tr>
+									 <center id="orderticket_switch"><div>您目前沒有預訂任何電影票，快按<a href=/xxxxx>這裡</a>來訂票!</div></center>
 								</table>
 								<br>
 								<hr class="table-order"/>
 								<h1 class="table-history">購票紀錄</h1>
 								<table class="table table-hover table-history">								
 									 <tr class="table-history" style="display:none;"><th>購票日期</th><th>電影名稱</th><th>狀態</th><th>付款方式</th><th>金額</th><th>詳細資訊</th></tr>
-									 
+									 <center id="orderhistory_switch"><div>您沒有任何訂票紀錄</div></center>
 								</table>
 							</form>
 						</div>
 					</div>
+					
 						</section>
 
 						<section id="group" class="tab-panel">
@@ -249,11 +309,16 @@ text-align:center;
 									<h1 class="table-friend">好友通知</h1>
 										<table class="table table-hover">
 									 		<tr class="table-friend"><th>通知時間</th><th>通知內容</th></tr>
-									 		
-<%-- 									 		<c:forEach var="obj" items="${aa}"> --%>
-<%-- 									 		<tr></tr> --%>
-<%-- 									 		</c:forEach> --%>
 									 	</table>
+									<h1 class="table-group">揪團通知</h1>
+										<table class="table table-hover">
+									 		<tr class="table-group"><th>通知時間</th><th>通知內容</th></tr>
+									 	</table>
+									<h1 class="table-ticket">訂票通知</h1>
+										<table class="table table-hover">
+									 		<tr class="table-ticket"><th>通知時間</th><th>通知內容</th></tr>
+									 	</table>
+									 	
 									</form>
 								</div>
 							</div>
@@ -264,11 +329,11 @@ text-align:center;
 								<div class="row">
 									<form method="post" id="comment-info-form">
 									 	<table class="table table-hover">
-									 	<tr><th>發表日期</th><th>電影名稱</th><th></th><th></th></tr>
+									 	<tr><th>發表日期</th><th>電影名稱</th><th>詳細資訊</th><th>移除評論</th></tr>
 										 	<c:forEach var="commVO" items="${commSvc.getComments(memVO.member_no)}">
 												<tr class="hover_comm hover_pointer"><td style="display:none">${commVO.movieno}</td><td>${commVO.creatdate}</td>
 											<td>${movieSvc.getOneMovie(commVO.movieno).moviename}</td>
-											<td><button type="button" class="btn btn-info" id="show_commBox_${commVO.commentno}">查看</button></td>
+											<td><button type="button" class="btn btn-primary" id="show_commBox_${commVO.commentno}">查看</button></td>
 												<td><i class="fas fa-minus-circle delete-comm"></i>
 													<input name="movie_no" style="display: none" value="${commVO.movieno}">
 													<input name="comm_no" style="display: none" value="${commVO.commentno}">
@@ -302,11 +367,11 @@ text-align:center;
 							<div class="row">
 								<form method="post" class="col" id="movieCollection-info-form">
 								<table class="table table-hover">
-										<tr><th>電影名稱</th><th>收藏時間</th><th></th><th></th></tr>
+										<tr><th>電影名稱</th><th>收藏時間</th><th>電影資訊</th><th>移除收藏</th></tr>
 										<c:forEach var="movcolVO" items="${movcolSvc.getAllMovieCollection(memVO.member_no)}">
 											<tr class="hover_movCol hover_pointer"><td style="display:none">${movcolVO.movie_no}</td><td>${movieSvc.getOneMovie(movcolVO.movie_no).moviename}</td>
 											<td>${movcolVO.crt_dt}</td>
-											<td><a href="xxxx">電影資訊</a></td>
+											<td><a href="xxxx">電影頁面</a></td>
 												<td><i class="fas fa-minus-circle delete-movcol"></i>
 													<input name="movie_no" style="display: none" value="${movcolVO.movie_no}">
  												</td>
@@ -325,11 +390,11 @@ text-align:center;
 							<div class="row">
 								<form method="post" class="col" id="articleCollection-info-form">
 									<table class="table table-hover">
-										<tr><th>文章名稱</th><th>收藏時間</th><th></th><th></th></tr>
+										<tr><th>文章名稱</th><th>收藏時間</th><th>文章資訊</th><th>移除收藏</th></tr>
 										<c:forEach var="artcolVO" items="${artcolSvc.getAllArticleCollection(memVO.member_no)}">
 											<tr class="hover_artCol hover_pointer"><td style="display:none">${artcolVO.article_no}</td><td>${articleSvc.getOneArticle(artcolVO.article_no).articleheadline}</td>
 											<td>${artcolVO.crt_dt}</td>
-											<td><a href="xxxx">文章</a></td>
+											<td><a href="xxxx">文章頁面</a></td>
 												<td><i class="fas fa-minus-circle delete-artcol"></i>
 													<input name="article_no" style="display: none" value="${artcolVO.article_no}">
  												</td>
@@ -337,9 +402,9 @@ text-align:center;
 										</c:forEach>
 									</table>
 								</form>
-							<div class="col artcol_articleinfo">
+<!-- 							<div class="col artcol_articleinfo"> -->
 
-							</div>
+<!-- 							</div> -->
 							</div>			
 						</div>
 							
@@ -349,7 +414,7 @@ text-align:center;
 							<div class="row">
 							<form class="col" method="post" id="movieRating-info-form">
 								<table id="ratingTable" class="table table-hover">
-									<tr><th>電影名稱</th><th>評分</th><th></th></tr>
+									<tr><th>電影名稱</th><th>評分</th><th>移除收藏</th></tr>
 										<c:forEach var="ratingVO" items="${ratingSvc.getAllRating(memVO.member_no)}">
 										<tr class="hover_rating hover_pointer" id="show_movinfo_${ratingVO.movie_no}"><td style="display:none">${ratingVO.movie_no}</td>
 										<td>${movieSvc.getOneMovie(ratingVO.movie_no).moviename}</td>
@@ -392,6 +457,7 @@ bK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></scrip
 "sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha
 384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
 
 
 
@@ -450,13 +516,13 @@ $(document.body).on("click", ".delete-order",function () {
       });
   });
 //都無訂票紀錄顯示提醒
-var undue = $("tr.table-order");
-var due = $("tr.table-history");
-var fragment;
-if(<%=pageContext.getAttribute("ord_list")%>=[]){
-	undue.after(`<center><div>您目前沒有預訂任何電影票，快按<a href=/xxxxx>這裡</a>來訂票!</div></center>`);
-	due.after(`<center><div>您沒有任何訂票紀錄</div></center>`);
-}
+// var undue = $("tr.table-order");
+// var due = $("tr.table-history");
+// var fragment;
+<%-- if(<%=pageContext.getAttribute("ord_list")%>=[]){ --%>
+// 	undue.after(`<center><div>您目前沒有預訂任何電影票，快按<a href=/xxxxx>這裡</a>來訂票!</div></center>`);
+// 	due.after(`<center><div>您沒有任何訂票紀錄</div></center>`);
+// }
 
 
 
@@ -469,10 +535,11 @@ var undue = $("tr.table-order");
 var due = $("tr.table-history");
 var fragment;
 if(now>showTime||"${orderVO.order_status}"=="2"){
-	if(switcher=="close"){
-		undue.after(`<center><div>您目前沒有預訂任何電影票，快按<a href=/xxxxx>這裡</a>來訂票!</div></center>`)
-		switcher="open";
-	}
+// 	if(switcher=="close"){
+// 		undue.after(`<center><div>您目前沒有預訂任何電影票，快按<a href=/xxxxx>這裡</a>來訂票!</div></center>`)
+// 		switcher="open";
+// 	}
+	$("#orderhistory_switch").css("display","none");
 	due.css("display","");
 	fragment = `<tr><td>` + "${orderVO.crt_dt}" + 
 			   `</td><td>` + "${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(orderVO.showtime_no).movie_no).moviename}" + 
@@ -482,6 +549,7 @@ if(now>showTime||"${orderVO.order_status}"=="2"){
 	due.after(fragment);
 	
 }else{
+	$("#orderticket_switch").css("display","none");
 	undue.css("display","");
 	fragment = `<tr><td>` + "${orderVO.crt_dt}" + 
 			   `</td><td>` + "${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(orderVO.showtime_no).movie_no).moviename}" + 
@@ -564,7 +632,7 @@ if(showTime>now&&("${groupVO.group_status}"=="0"||"${groupVO.group_status}"=="1"
 						`</td><td>` + "${groupVO.group_status}" + 
 						`</td><td>`+ "${groupVO.required_cnt}" +
 						`</td><td>`+ "${groupVO.member_cnt}" +
-						`</td><td><button type="button" class="btn btn-primary" id="show_masterBox_${groupVO.group_no}" >詳細資訊</button>
+						`</td><td><button type="button" class="btn btn-primary" id="show_masterBox_${groupVO.group_no}" >查看</button>
 						 </td><td>
 						 <form class="noCSS" METHOD="post" ACTION="<%=request.getContextPath()%>/GroupServlet">
 						 <button type="submit" class="btn btn-primary">修改</button>
@@ -583,7 +651,7 @@ if(showTime>now&&("${groupVO.group_status}"=="0"||"${groupVO.group_status}"=="1"
 						`</td><td>` + "${showtimeSvc.getOneShowtime(groupVO.showtime_no).showtime_time}" + 
 						`</td><td>` + "${groupVO.group_status}" + 
 						`</td><td>`+ "${groupMemSvc.getOneGroup_Member(groupVO.group_no,groupVO.member_no).status}" +
-						`</td><td><button type="button" class="btn btn-primary" id="show_masterBox_${groupVO.group_no}" >詳細資訊</button></td></tr>`
+						`</td><td><button type="button" class="btn btn-primary" id="show_masterBox_${groupVO.group_no}" >查看</button></td></tr>`
 		group_history.after(master_segment);
 }
 
@@ -598,140 +666,6 @@ $("#show_masterBox_${groupVO.group_no}").click(function(){
   		}, 1000);
 	})	
 })
-
-// var update_fragment_${groupVO.group_no}=
-// 				`<div class="update_group_box" id="update_group_box_${groupVO.group_no}" style="opacity:1; z-index:99;">
-// 					<div class="update_group_box_for_position">
-// 						<input id="group_no" type="hidden" name="group_title" id="group_no_${groupVO.group_no}" size="45" value="${groupVO.group_title}" placeholder="請輸入揪團標題"
-// 						 	 class="input-md form-control" />
-// 						<div class="form-group font-weight-bold">
-// 							<label for="member_no">主揪會員:</label>
-// 							<input id="member_no_${groupVO.group_no}" type="hidden" name="member_no" value="${memVO.member_no}" class="input-md form-control">
-// 							`+ "${memVO.mb_name}" +`
-// 						</div>
-// 						<div class="form-group">
-// 							<label for="group_title" class="font-weight-bold">揪團標題:</label>
-// 							<input type="TEXT" name="group_title" id="group_title_${groupVO.group_no}" size="45" value="${groupVO.group_title}" placeholder="請輸入揪團標題"
-// 								 class="input-md form-control" />
-// 						</div>
-// 						<div class="form-group">
-// 							<label for="movie_selection" class="font-weight-bold">請選擇電影:</label>
-// 								<select id="movie_selection_${groupVO.group_no}" size="1" name="movie_no" class="input-md form-control">
-// 									<c:forEach var="movieVO" items="${movieSvc.all}"><option value="${movieVO.movieno}">
-// 										電影`+"${movieVO.movieno}"+`: `+"${movieVO.moviename}"+`
-// 									</c:forEach>
-// 								</select>
-// 						</div>
-// 						<div class="form-group">
-// 							<label for="showtime_no" class="font-weight-bold">場次時間:</label>
-// 								<select size="1" name="showtime_no" id="showtime_selection_${groupVO.group_no}" class="input-md form-control" value="${groupVO.showtime_no}">
-// 									<option>`+"${showtimeSvc.getOneShowtime(groupVO.showtime_no).showtime_time}"+`</option>
-// 								</select>
-// 						</div>
-// 						<div class="form-group">
-// 							<label for="required_no" class="font-weight-bold">需求人數:</label>
-// 							<select size="1" id="require_no_${groupVO.group_no}" name="required_cnt" class="input-md form-control">
-// 								<option value="1">1</option>
-// 								<option value="2">2</option>
-// 								<option value="3">3</option>
-// 								<option value="4">4</option>
-// 								<option value="5">5</option>
-// 								<option value="6">6</option>
-// 								<option value="7">7</option>
-// 								<option value="8">8</option>
-// 								<option value="9">9</option>
-// 								<option value="10">10</option>
-// 							</select>
-// 						</div>
-// 						<div class="form-group">
-// 							<label for="desc" class="font-weight-bold">揪團說明:</label>
-// 							<textarea id="desc_${groupVO.group_no}" name="desc"  placeholder="請輸入揪團說明" class="input-md form-control">`+"${groupVO.desc}"+`</textarea>
-// 						</div>
-// 						<div class="form-group">
-// 							<label for="f_date1" class="font-weight-bold">截止時間(最晚為場次前一天)</label>
-// 							<input name="deadline_dt" id="f_date1_${groupVO.group_no}" type="text" class="input-md form-control" value="${groupVO.deadline_dt}">
-// 						</div>
-// 						<div class="cardBtn">
-// 							<button type="button" class="btn btn-primary groupUpdate" id="groupUpdate_${groupVO.group_no}" >修改</button>
-// 						</div>
-// 						<div class="cardBtn">
-// 							<button type="button" class="btn btn-warning leaveUpdate">取消</button>
-// 						</div>
-// 					</div>
-// 				</div>`;
-
-// $("#update_masterBox_${groupVO.group_no}").click(function(){
-// 	master.before(update_fragment_${groupVO.group_no});
-// })
-
-
-// $("#groupUpdate_${groupVO.group_no}").click(function(){
-// // 		e.preventDefault();
-// 		 console.log("11111111111111111");
-// 		 var group_title = $("#group_title_${groupVO.group_no}").val();
-// 		 var showtime_no = $("#showtime_selection_${groupVO.group_no}").val();
-// 		 var require_no = $("#require_no_${groupVO.group_no}").val();
-// 		 var desc = $("#desc_${groupVO.group_no}").val();
-// 		 var deadline_dt = $("#f_date1_${groupVO.group_no}").val();
-// 		 var group_no = $("#group_no_${groupVO.group_no}").val();
-// 		 var member_no = $("#member_no_${groupVO.group_no}").val();
-// 		 $.ajax({
-<%-- 			 url:"<%=request.getContextPath()%>/GroupServlet?action=updateOne_For_Ajax", --%>
-// 			 data:{
-// 				 "group_no":group_no,
-// 				 "member_no":member_no,
-// 				 "group_title":group_title,
-// 				 "showtime_no":showtime_no,
-// 				 "require_no":require_no,
-// 				 "desc":desc,
-// 				 "deadline_dt":deadline_dt
-// 			 },
-// 			 type:"POST",
-// 			 success:function(msg){
-// 				 if(msg=="success"){
-// 					 Swal.fire({
-// 	                      position: "center",
-// 	                      icon: "success",
-// 	                      title: "已更新揪團資訊",
-// 	                      showConfirmButton: false,
-// 	                      timer: 1000,
-// 	                  }); 
-
-// 				 }else if(msg=="title_error"){
-// 						 Swal.fire({
-// 	                         position: "center",
-// 	                         icon: "fail",
-// 	                         title: "揪團名稱格式有誤",
-// 	                         showConfirmButton: false,
-// 	                         timer: 1000,
-// 	                     });
-// 				 }else if(msg=="desc_error"){
-// 						 Swal.fire({
-// 	                         position: "center",
-// 	                         icon: "fail",
-// 	                         title: "揪團描述格式有誤",
-// 	                         showConfirmButton: false,
-// 	                         timer: 1000,
-// 	                     });
-				
-// 				 }else{
-					 
-// 						 Swal.fire({
-// 	                         position: "center",
-// 	                         icon: "fail",
-// 	                         title: "揪團資訊更新失敗，請洽客服",
-// 	                         showConfirmButton: false,
-// 	                         timer: 1000,
-// 	                     });
-					 
-// 				 }
-// 			}
-			 
-// 		 })	 
-		 
-// 	})
-	
-
 
 //列出主揪揪團詳細資訊
 var master_segment_${groupVO.group_no}=
@@ -787,7 +721,7 @@ member_segment= `<tr><td>` + "${groupSvc.getOneGroup(groupMemVO.group_no).group_
 				`</td><td>` + "${groupMemVO.pay_status}" + 
 				`</td><td>`+ "${groupSvc.getOneGroup(groupMemVO.group_no).required_cnt}" +
 				`</td><td>`+ "${groupSvc.getOneGroup(groupMemVO.group_no).member_cnt}" +
-				`</td><td><button type="button" class="btn btn-primary" id="show_memberBox_${groupSvc.getOneGroup(groupMemVO.group_no).group_no}" >詳細資訊</button>
+				`</td><td><button type="button" class="btn btn-primary" id="show_memberBox_${groupSvc.getOneGroup(groupMemVO.group_no).group_no}" >查看</button>
 				 </td><td><i class="fas fa-minus-circle leave-group"></i>
 				 <input name="group_no" style="display: none" value=`+"${groupMemVO.group_no}"+`>
 				 <input name="deadline_dt" style="display: none" value=`+"${groupSvc.getOneGroup(groupMemVO.group_no).deadline_dt}"+`>
@@ -910,10 +844,15 @@ $(document.body).on("click", ".leave-group",function () {
       
   });
 //------------------------------------------------------------------------------------------------------------------------
-//顯示朋友通知
+//通知
+
+//好友相關
 $(document).ready(function(){
-	var friend = $("tr.table-friend");
+	var notify_friend = $("tr.table-friend");
+	var notify_group = $("tr.table-group");
+	var notify_ticket = $("tr.table-ticket");
 	var memberno = ${memVO.member_no};
+	var slice;
 	 $.ajax({
 		 url:"<%=request.getContextPath()%>/NotifyServlet?action=insert_For_Ajax",
 		 data:{
@@ -925,21 +864,201 @@ $(document).ready(function(){
 			 let jsonobj = JSON.parse(json);
 			 let friend_list = jsonobj.friend;
 			 let len = jsonobj.friend.length;
-			 let slice;
 			 for(let i = 0 ; i < len ; i++){
 				 let jsono = JSON.parse(friend_list[i]);
 				 if(jsono.sender=="${memVO.member_no}"){
 					 slice += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;
-				 }
-				     slice += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td><td><button type="button" value=1>確定</button>&emsp;&emsp;<button type="button" value=0>拒絕</button></td></tr>`;
-				 	//點了要移除此蘭
+				 }else{
+					 <c:forEach var="relationVO" items="${relationSvc.getOneRelationshipByMemno(memVO.member_no)}">
+					 if(jsono.sender=="${relationVO.friend_no}"){
+						 slice += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;  
+						 //設定如果已經是好友就不會出現下面的按鈕訊息，而是出現純受邀請的訊息(未測試)
+					 }
+					 </c:forEach>
+					 else{
+						 slice += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td><td><button type="button" class="addfriend_check_btn" value=1>確定</button> &emsp;&emsp; <button type="button" class="addfriend_check_btn" value=0>拒絕</button></td></tr>`;
+						 //點了要移除此蘭
+					 }				 
+				 }			    
 			 }
-			 friend.after(slice);
+			 notify_friend.after(slice); 
+			 $(".addfriend_check_btn").click(function(){ //記得要slice這行生成後註冊btn才有用
+					
+				$(this).parent().parent().remove();	
+			})
 		 }
 	
 	
 		})
+		
+		$.ajax({
+		 url:"<%=request.getContextPath()%>/NotifyServlet?action=insert_For_Ajax",
+		 data:{
+			 "member_no":memberno,
+			 "type":"response"	
+		 },
+		 type:"POST",
+		 success:function(json){
+			 let jsonobj = JSON.parse(json);
+			 let friend_list = jsonobj.friend;
+			 let len = jsonobj.friend.length;
+			 let slice;
+			 for(let i = 0 ; i < len ; i++){
+				 let jsono = JSON.parse(friend_list[i]);
+					 slice += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;
+				 }	    
+			 notify_friend.after(slice); 
+		 	}
+			 
+		 })
+		 
+//揪團相關		 
+		 
+		 $.ajax({
+		 url:"<%=request.getContextPath()%>/NotifyServlet?action=insert_For_Ajax",
+		 data:{
+			 "member_no":memberno,
+			 "type":"addGroup"	
+		 },
+		 type:"POST",
+		 success:function(json){
+			 let jsonobj = JSON.parse(json);
+			 let friend_list = jsonobj.friend;
+			 let len = jsonobj.friend.length;
+			 let slice;
+			 for(let i = 0 ; i < len ; i++){
+				 let jsono = JSON.parse(friend_list[i]);
+					 slice += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;
+				 }	    
+			 notify_group.after(slice); 
+		 	}
+			 
+		 })
+		 $.ajax({
+		 url:"<%=request.getContextPath()%>/NotifyServlet?action=insert_For_Ajax",
+		 data:{
+			 "member_no":memberno,
+			 "type":"createGroup"	
+		 },
+		 type:"POST",
+		 success:function(json){
+			 let jsonobj = JSON.parse(json);
+			 let friend_list = jsonobj.friend;
+			 let len = jsonobj.friend.length;
+			 let slice;
+			 for(let i = 0 ; i < len ; i++){
+				 let jsono = JSON.parse(friend_list[i]);
+					 slice += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;
+				 }	    
+			 notify_group.after(slice); 
+		 	}
+			 
+		 })
+		 $.ajax({
+		 url:"<%=request.getContextPath()%>/NotifyServlet?action=insert_For_Ajax",
+		 data:{
+			 "member_no":memberno,
+			 "type":"dismissGroup"	
+		 },
+		 type:"POST",
+		 success:function(json){
+			 let jsonobj = JSON.parse(json);
+			 let friend_list = jsonobj.friend;
+			 let len = jsonobj.friend.length;
+			 let slice;
+			 for(let i = 0 ; i < len ; i++){
+				 let jsono = JSON.parse(friend_list[i]);
+					 slice += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;
+				 }	    
+			 notify_group.after(slice); 
+		 	}
+			 
+		 })
+		 $.ajax({
+		 url:"<%=request.getContextPath()%>/NotifyServlet?action=insert_For_Ajax",
+		 data:{
+			 "member_no":memberno,
+			 "type":"goGroup"	
+		 },
+		 type:"POST",
+		 success:function(json){
+			 let jsonobj = JSON.parse(json);
+			 let friend_list = jsonobj.friend;
+			 let len = jsonobj.friend.length;
+			 let slice;
+			 for(let i = 0 ; i < len ; i++){
+				 let jsono = JSON.parse(friend_list[i]);
+					 slice += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;
+				 }	    
+			 notify_group.after(slice); 
+		 	}
+			 
+		 })
+		 $.ajax({
+		 url:"<%=request.getContextPath()%>/NotifyServlet?action=insert_For_Ajax",
+		 data:{
+			 "member_no":memberno,
+			 "type":"kickUnpaid"	
+		 },
+		 type:"POST",
+		 success:function(json){
+			 let jsonobj = JSON.parse(json);
+			 let friend_list = jsonobj.friend;
+			 let len = jsonobj.friend.length;
+			 let slice;
+			 for(let i = 0 ; i < len ; i++){
+				 let jsono = JSON.parse(friend_list[i]);
+					 slice += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;
+				 }	    
+			 notify_group.after(slice); 
+		 	}
+			 
+		 })
+		 $.ajax({
+		 url:"<%=request.getContextPath()%>/NotifyServlet?action=insert_For_Ajax",
+		 data:{
+			 "member_no":memberno,
+			 "type":"kickoffGroup"	
+		 },
+		 type:"POST",
+		 success:function(json){
+			 let jsonobj = JSON.parse(json);
+			 let friend_list = jsonobj.friend;
+			 let len = jsonobj.friend.length;
+			 let slice;
+			 for(let i = 0 ; i < len ; i++){
+				 let jsono = JSON.parse(friend_list[i]);
+					 slice += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;
+				 }	    
+			 notify_group.after(slice); 
+		 	}
+			 
+		 })
+		 
+//訂票相關		 
+		 $.ajax({
+		 url:"<%=request.getContextPath()%>/NotifyServlet?action=insert_For_Ajax",
+		 data:{
+			 "member_no":memberno,
+			 "type":"buyTicket"	
+		 },
+		 type:"POST",
+		 success:function(json){
+			 let jsonobj = JSON.parse(json);
+			 let friend_list = jsonobj.friend;
+			 let len = jsonobj.friend.length;
+			 let slice;
+			 for(let i = 0 ; i < len ; i++){
+				 let jsono = JSON.parse(friend_list[i]);
+					 slice += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;
+				 }	    
+			 notify_ticket.after(slice); 
+		 	}
+			 
+		 })
+
 });
+
 
   
 //-------------------------------------------------------------------------------------------------------------------------
@@ -1184,12 +1303,14 @@ $(".hover_movCol").hover(function(){
 				fragment.innerHTML = slice;
                     
             $(".movcol_movieinfo").append(fragment);
-			
+            $(".movcol_movieinfo").css("background-color","aliceblue");
+            $(".movcol_movieinfo").css("border-radius","50px");
 		}
 	})
 },function(){
- $(this).closest('form').siblings().children().remove();
-
+	 $(this).closest('form').siblings().children().remove();
+	 $(".movcol_movieinfo").css("background-color","");
+     $(".movcol_movieinfo").css("border-radius","");
 })
 
 //---------------------------------------------------------------------------------------------------------
@@ -1242,35 +1363,39 @@ $(document.body).on("click", ".delete-artcol",function () {
       });
   });
   
-$(".hover_artCol").hover(function(){
-	let article_no = $($(this).find('td')[0]).text(); //$(this).find('td')[0]是DOM物件不能用jquery的text()，因此要再加上$()轉乘jquery物件
-	console.log(article_no);
-	$.ajax({
-		url: "<%=request.getContextPath()%>/ArticleServlet?action=getOne_For_Display_Ajax",
-		data:{"article_no":article_no},
-		type:"POST",
-		success:function(json){
-			let jsonobj = JSON.parse(json);
-			let content = jsonobj.content;
-			let author = jsonobj.author;
-			let title = jsonobj.title;
-			let likecount = jsonobj.likecount;
-			let fragment = document.createElement("div");
-			fragment.classList.add("article_info");
-			fragment.innerHTML = `
-                <table class="table-primary" style="font-size:15px;"><tr><th>文章</th><td>` 
-                + title + `</td></tr><tr><th>作者</th><td>` 
-                + author + `</td></tr><tr><th>內文 </th><td>` 
-                + content+`</td></tr><tr><th>讚數</th><td>` 
-                + likecount + `</td></tr></table>`
-        $(".artcol_articleinfo").append(fragment);
+// $(".hover_artCol").hover(function(){
+// 	let article_no = $($(this).find('td')[0]).text(); //$(this).find('td')[0]是DOM物件不能用jquery的text()，因此要再加上$()轉乘jquery物件
+// 	console.log(article_no);
+// 	$.ajax({
+<%-- 		url: "<%=request.getContextPath()%>/ArticleServlet?action=getOne_For_Display_Ajax", --%>
+// 		data:{"article_no":article_no},
+// 		type:"POST",
+// 		success:function(json){
+// 			let jsonobj = JSON.parse(json);
+// 			let content = jsonobj.content;
+// 			let author = jsonobj.author;
+// 			let title = jsonobj.title;
+// 			let likecount = jsonobj.likecount;
+// 			let fragment = document.createElement("div");
+// 			fragment.classList.add("article_info");
+// 			fragment.innerHTML = `
+//                 <table class="table-primary" style="font-size:15px;"><tr><th>文章</th><td>` 
+//                 + title + `</td></tr><tr><th>作者</th><td>` 
+//                 + author + `</td></tr><tr><th>內文 </th><td>` 
+//                 + content+`</td></tr><tr><th>讚數</th><td>` 
+//                 + likecount + `</td></tr></table>`
+//         $(".artcol_articleinfo").append(fragment);
+// 		$(".artcol_articleinfo").css("background-color","aliceblue");
+//         $(".artcol_articleinfo").css("border-radius","50px");
 
-		}
-	})
-},function(){
- $(this).closest('form').siblings().children().remove();
+// 		}
+// 	})
+// },function(){
+//  $(this).closest('form').siblings().children().remove();
+//  $(".artcol_articleinfo").css("background-color","");
+//  $(".artcol_articleinfo").css("border-radius","");
 
-})
+// })
   
 //-------------------------------------------------------------------------------------------------------
 //星星刪除紐
@@ -1538,12 +1663,16 @@ $(".hover_rating").hover(function(){
                     slice += `</table>`;
                     fragment.innerHTML = slice;
             $(".rating_movinfo").append(fragment);
+            $(".rating_movinfo").css("background-color","aliceblue");
+            $(".rating_movinfo").css("border-radius","50px");
 			
 		}
 	})
 },function(){
 
 	 $(this).closest('form').siblings().children().remove();
+	 $(".rating_movinfo").css("background-color","");
+     $(".rating_movinfo").css("border-radius","");
 
 })
 
