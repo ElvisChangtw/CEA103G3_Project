@@ -131,5 +131,9 @@ public class MovieService {
 	public List<MovieVO> getAllForGroup(){
 		return dao.getAllForGroup();
 	}
+	public void createMovieIdex() {
+		dao.createMovieIdex();
+	}
+	
 	
 }

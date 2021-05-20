@@ -413,7 +413,7 @@ public class MovieDAO implements MovieDAO_interface{
 				   + "select S0.* from movie S0 LEFT JOIN "
 				   +" B ON S0.MOVIE_NO = B.MOVIE_NO "
 				   + jdbcUtil_CompositeQuery_Movie.get_WhereCondition(map)
-				   +" ORDER BY (CASE WHEN B.CNT IS NULL THEN 0 ELSE B.CNT END) DESC, MOVIE_NO"
+				   +" ORDER BY (CASE WHEN B.CNT IS NULL THEN 0 ELSE B.CNT END) DESC, MOVIE_NO DESC"
 				   ;
 			
 			pstmt = con.prepareStatement(finalSQL);

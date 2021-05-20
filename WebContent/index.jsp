@@ -40,6 +40,8 @@
 	
 	List<MovieVO> listTopFive = movieSvc.getTopFive();
 	pageContext.setAttribute("listTopFive", listTopFive);
+	
+	movieSvc.createMovieIdex();
 %>
 
 <!DOCTYPE html>
@@ -72,6 +74,8 @@
     <link href='//fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
     <!--//web-fonts-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/styleForGroup.css">
 <style>
 	div.form-group>button.btn {
 	    border-radius: 3px;
@@ -301,9 +305,11 @@
 						</div>
 						<div id="cd-search" class="cd-search">
 							<form method="post" action="<%=request.getContextPath()%>/movie/movie.do" name="form1">
-								<input type="text" name="MOVIE_NAME" value="" placeholder="請輸入電影名稱" onkeydown="if (event.keyCode == 13) sendMessage();">
+								<input id="search-context"  type="text" name="MOVIE_NAME" value="" placeholder="請輸入電影名稱" onkeydown="if (event.keyCode == 13) sendMessage();">
 								<input type="hidden" name="action" value="listMovies_ByCompositeQuery">
 							</form>
+							<div id="search-results"class="container" >
+							</div>
 						</div>
 					</div>
                 </div>
@@ -610,7 +616,8 @@
                                     <div class="col-md-4 video_agile_player">
                                         <div class="video-grid-single-page-agileits" >
 	                        	 			<a class="w3_play_icon" href="#small-dialog1">
-	                            				<img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${oneNewestinTheatersMovie.movieno}" alt="" class="img-responsive" /> 
+	                            				<img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${oneNewestinTheatersMovie.movieno}" 
+	                            				alt="" class="img-responsive" title="點擊觀賞【${oneNewestinTheatersMovie.moviename}】最新預告" /> 
  	                       					</a>
 										</div>
                                         <div class="player-text">
@@ -837,7 +844,8 @@
                                 	<div class="col-md-4 video_agile_player">
                                         <div class="video-grid-single-page-agileits" >
 	                        	 			<a class="w3_play_icon" href="#small-dialog2">
-	                            				<img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${oneNewestComingSoonMovie.movieno}" alt="" class="img-responsive" /> 
+	                            				<img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${oneNewestComingSoonMovie.movieno}" 
+	                            				alt="" class="img-responsive" title="點擊觀賞【${oneNewestComingSoonMovie.moviename}】最新預告" /> 
  	                       					</a>
 										</div>
                                         <div class="player-text">
@@ -1245,7 +1253,8 @@
                         <div class="col-md-4 video_agile_player">
 	                        <div class="video-grid-single-page-agileits" >
 	                        	 <a class="w3_play_icon" href="#small-dialog3">
-	                            	<img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${bestMovie.movieno}" alt="" class="img-responsive" /> 
+	                            	<img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${bestMovie.movieno}" 
+	                            	alt="" class="img-responsive" title="點擊觀賞【${bestMovie.moviename}】最新預告"/> 
  	                       		</a>
 							</div>
 	                        <div class="player-text">
@@ -2017,8 +2026,67 @@ function drawPieChart2() {
            minDate:               '-1970-01-01', // 去除今日(不含)之前
            //maxDate:               '+1970-01-01'  // 去除今日(不含)之後
         });
-   
-        
+
 </script>
+
+<script>
+
+    	$("#search-context").on('input propertychange', function(){
+    		$("#search-results").html("");
+    		if(!$(this).val() == ""){
+    			var result;
+    			console.log("送出搜尋 = " + $(this).val());
+    			let json_result_list = getResults($(this).val());
+        		console.log("收回結果");
+    			console.log(json_result_list);
+        		if(json_result_list != undefined ){
+	        		for ( movieVO of json_result_list){
+	        			console.log(movieVO.moviename);
+	        			console.log(movieVO.actor);
+	        			console.log(movieVO.premiredate);
+	        			console.log(movieVO.movieno);
+	        			let link = '<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=' + movieVO.movieno  + '' ;
+	        			console.log(link);
+		        		result = 
+		    				'<div class="rslt row" onclick="location.href=\'' + link+ '\'" > ' +
+		    				'	<div class="col-md-4"> ' +
+		    		   		'			<img src="<%=request.getContextPath()%>/movie/DBGifReader2.do?movieno=' + movieVO.movieno + '" title=" " width="260px" height="120px"> ' +
+		    		  		'		</div> ' +
+		    		  		'		<div class="col-md-8">' +
+		    				'		<p class="mov-name">'+ movieVO.moviename +  '</p>' +
+		    				'		<p class="non-mov-name">'+ movieVO.actor +  '</p> ' +
+		    				'		<p class="non-mov-name">'+ movieVO.premiredate +  '</p> ' +
+		    	  			'	</div>' +
+		    				'</div>' +
+		    				'<hr class="hrhr">';
+		    			
+		        		$("#search-results").html(
+		        				$("#search-results").html() + result
+		        		);
+	        		}
+        		}
+    		}
+    	});
+
+    	function getResults(words){
+    		let json;
+			$.ajax({
+					url: "<%=request.getContextPath()%>/movie/movie.do",
+					type:"POST",
+					data: {
+						MOVIE_NAME: words,
+						action:"search_Ajax"
+					},
+					async: false,
+					success: function(data){
+						console.log("data==");
+						console.log(data);
+						json = JSON.parse(data).results;
+					}
+				});
+			return json;
+	}
+    </script>
+
 
 </html>

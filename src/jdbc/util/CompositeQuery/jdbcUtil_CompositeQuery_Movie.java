@@ -69,7 +69,6 @@ public class jdbcUtil_CompositeQuery_Movie {
 			
 		}
 		tmpStr += ")";
-		System.out.println("tmpStr = " + tmpStr);
 		return tmpStr;
 	}
 	

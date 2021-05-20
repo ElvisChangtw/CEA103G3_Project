@@ -6,13 +6,13 @@
 
 <%
 	ReportCommentVO reportCommentVO = (ReportCommentVO) request.getAttribute("reportCommentVO");
-
 %>
-
+<jsp:useBean id="memVO" scope="session" type="com.mem.model.MemVO" />
 <html>
 <head>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <title>新增檢舉評論</title>
 
 <style> 
@@ -66,14 +66,15 @@
 	<font style="color:red">請修正以下錯誤 : ${errorMsgs.content}</font>
 </c:if>
 
-<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/report_comment/reportcomment.do" name="form1">
+<%-- <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/report_comment/reportcomment.do" name="form1" id="add-form" onclick="return false"> --%>
+<%-- <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/report_comment/reportcomment.do" name="form1" id="add-form"> --%>
 <table>
 
 	<tr>
 		<td><span class="badge badge-danger" style="font-size:20px; background-color:#729f98; margin:5px 5px 5px 5px">檢舉評論原因</span></td>
 	</tr>	
 	<tr>
-		<td><textarea name="content" rows="5" cols="73" maxlength="300">${reportCommentVO.content}</textarea></td>
+		<td><textarea id="content-1" name="content" rows="5" cols="73" maxlength="300">${reportCommentVO.content}</textarea></td>
 	</tr>	
 
 
@@ -83,7 +84,8 @@
 <input type="hidden" name="commentno" value="<%=request.getParameter("commentno")%>">
 <input type="hidden" name="memberno" value="<%=request.getParameter("memberno")%>">
 <input type="hidden" name="requestURL" value="<%=request.getParameter("requestURL")%>"> <!--接收原送出修改的來源網頁路徑後,再送給Controller準備轉交之用-->
-<center><input type="submit" value="送出新增" class="btn btn-outline-danger"></center></FORM>
+<center><input type="submit" value="送出新增" class="btn btn-outline-danger" id="add-btn"></center>
+<!-- </FORM> -->
 </body>
 
 <!-- <br>送出修改的來源網頁路徑:<br><b> -->
@@ -172,5 +174,74 @@
         //              return [true, ""];
         //      }});
         
+</script>
+
+<script>
+function sweet(){
+	
+	Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "檢舉成功",
+        showConfirmButton: false,
+        timer: 1500,
+    });
+	
+	setTimeout(function(){
+		document.location.href="<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=${param.movieno}";
+	}, 1500);
+}
+
+function nosweet(){
+
+	Swal.fire({
+		  icon: 'error',
+		  title: '檢舉失敗',
+		  text: '檢舉原因請勿空白',
+		  width: 600,
+		  padding: '3em',
+		  background: '#fff url(/images/trees.png)',
+		  backdrop: `
+		    rgba(0,0,0,0.4)
+		    url("<%=request.getContextPath()%>/images/gif/1.gif")
+		    left center
+		    no-repeat
+  		`
+	})
+}
+	
+$(document).ready(function(){
+	$("#add-btn").click(function(){
+		
+		let content = $("#content-1").val();
+		let commentno = "${param.commentno}";
+		let memberno = "${memVO.member_no}";
+		
+		$.ajax({
+			url:"<%=request.getContextPath()%>/report_comment/reportcomment.do",
+			data:{
+				commentno: "${param.commentno}",
+				content: $('#content-1').val(),
+				memberno:"${memVO.member_no}",
+				action:"insert"
+			},
+			async: false,
+			type:"POST",
+			success:function(json){
+				let jsonobj = JSON.parse(json);
+				let problem = jsonobj.problem;
+				console.log(problem);
+				if (problem==0){
+					sweet();
+				}else{
+					nosweet();
+				}
+			}
+		});
+	})
+})
+
+
+
 </script>
 </html>
