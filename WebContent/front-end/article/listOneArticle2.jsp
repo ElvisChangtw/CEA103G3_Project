@@ -97,23 +97,16 @@ RelationshipVO relationshipVO = (RelationshipVO) request.getAttribute("relations
 </c:if>	
 
 	<div>
-		<%=memVO.getMember_no()%>
-		<form id="myForm" action="<%=request.getContextPath()%>/chat.do" method="POST">
-<!-- 			<input id="userName" name="userName" class="text-field" type="text">  -->
-			<input type="hidden" name="userName"  value="${memVO.mb_name}">
-<!-- 			<a onclick= document.getElementById("myForm").submit()></a> -->
-			<input type="submit" value="開啟聊天室">			
-		</form>
+		<%="目前登入會員=" + memVO.getMember_no() + " " +memVO.getMb_name()%>     
 	</div>
 
-		
 	 <div class="card-header bg-transparent border-success" > 		 			 	 		 	
  		 	<div>
-				<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/article/article.do" style="margin-bottom: 0px;" >
-				<button type="button" class="btn btn-outline-success" onclick="location.href='<%=request.getContextPath()%>/front-end/article/listAllArticle.jsp'">回上一列表</button>
-				<input type="submit" value="修改文章" class="btn btn-danger">
-				<span><i class="fas fa-bookmark" id="thumb1" style="font-size: 30px" ></i></span>
-				<a id="hao2">我是書本可以點我!!</a>
+				<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/front-end/article/article.do" style="margin-bottom: 0px;" >
+					<button type="button" class="btn btn-outline-success" onclick="location.href='<%=request.getContextPath()%>/front-end/article/listAllArticle.jsp'">回上一列表</button>
+						<input type="submit" value="修改文章" class="btn btn-danger">
+						<span><i class="fas fa-bookmark" id="thumb1" style="font-size: 30px" ></i></span>
+					<a id="hao2">我是書本可以點我!!</a>
 				<input type="hidden" name="requestURL"	value="<%=request.getServletPath()%>">
 	<!-- 			送出請求到update_article_input.jsp   -->				
 				<input type="hidden" name="articleno"  value="${articleVO.articleno}">

@@ -108,7 +108,7 @@
 	</tr>
 	<tr>
 		<td>雇用日期:</td>
-		<td><input name="hiredate" id="f_date1" type="text" ></td>
+		<td><input name="hiredate" id="f_date1" type="text" value="<%=employeeVO.getHiredate()%>"></td>
 	</tr>
 	<tr>
 		<td>離職日期:</td>

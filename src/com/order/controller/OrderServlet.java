@@ -9,7 +9,6 @@ import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,7 +23,7 @@ import com.order.model.OrderVO;
 import com.showtime.model.ShowtimeService;
 
 
-@WebServlet("/OrderServlet")
+
 public class OrderServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -491,12 +490,58 @@ public class OrderServlet extends HttpServlet {
 				session.setAttribute("ticketprice", ticketprice);
 				session.setAttribute("foodno", foodno);
 				session.setAttribute("foodcount", foodcount);
-				session.setAttribute("foodprice", foodprice);
+				session.setAttribute("foodprice", foodprice);	
 				session.setAttribute("count", count); //共訂了幾張票
+				
+  				List<Ord_foodVO> ordFood_list = new ArrayList<Ord_foodVO>();
+				for(int i = 0; i < foodno.length; i++) {
+					Integer food_no = new Integer(foodno[i]);
+					Integer food_count = new Integer(foodcount[i]);
+					Integer price = new Integer(foodprice[i]) * food_count;
+
+					Ord_foodVO ord_foodVO = new Ord_foodVO();
+					ord_foodVO.setFood_no(food_no);
+					ord_foodVO.setFood_count(food_count);
+					ord_foodVO.setPrice(price);
+					if(food_count != 0) {
+					ordFood_list.add(ord_foodVO);
+					}
+				}
+				
+				List<Ord_ticket_typeVO> ordTicket_list = new ArrayList<Ord_ticket_typeVO>();
+				for(int i = 0; i < ticket_typeno.length; i++) {
+					Integer ticket_type_no = new Integer(ticket_typeno[i]);
+					Integer ticket_count = new Integer(ticketcount[i]);
+					Integer price1 = new Integer(ticketprice[i]) * ticket_count;
+					
+					Ord_ticket_typeVO ord_ticket_typeVO = new Ord_ticket_typeVO();
+					ord_ticket_typeVO.setTicket_type_no(ticket_type_no);
+					ord_ticket_typeVO.setTicket_count(ticket_count);
+					ord_ticket_typeVO.setPrice(price1);
+					if(ticket_count != 0) {
+					ordTicket_list.add(ord_ticket_typeVO);
+					}
+				}
+				
+				Integer total_price = 0;
+  				
+				for(int i = 0; i < ticket_typeno.length; i++) {
+					Integer ticket_price = new Integer(ticketprice[i]);
+					Integer ticket_count = new Integer(ticketcount[i]);
+					total_price += ticket_price * ticket_count;
+				}
+				
+				for(int i = 0 ; i < foodprice.length; i++) {
+					total_price += (new Integer(foodprice[i])) * (new Integer(foodcount[i]));
+				}
+				
+				req.setAttribute("total_price", total_price);
+				req.setAttribute("ordFood_list", ordFood_list);
+				req.setAttribute("ordTicket_list", ordTicket_list);
 				
 				
  				/***************************3.新增完成,準備轉交(Send the Success view)***********/
- 				String url = "/back-end/showtime/update_showtime_input2.jsp";
+ 				String url = "/back-end/showtime/addOrd_ticket_type_sample.jsp";
 // 				String url = "/back-end/order/checkOrder.jsp";
  				RequestDispatcher successView = req.getRequestDispatcher(url); // 新增成功後轉交listAllTicket_type.jsp
  				successView.forward(req, res);				
@@ -636,36 +681,17 @@ public class OrderServlet extends HttpServlet {
 //  				}
   				String str1 = req.getParameter("showtime_no").trim();
   				
-  				Integer showtime_no = null;
-  				try {
-  					showtime_no = new Integer(str1);
-  				} catch (NumberFormatException e) {
-  					showtime_no = 0;
-  					errorMsgs.add("場次編號請填數字.");
-  				}
-//  				String str2 = req.getParameter("crt_dt");
-//  				Timestamp crt_dt = null;
-//  				try {
-//  					crt_dt = java.sql.Timestamp.valueOf(str2.trim());
-//  				} catch(IllegalArgumentException ie) {
-//  					crt_dt = new java.sql.Timestamp(System.currentTimeMillis());
-//  					errorMsgs.add("創建日期請填日期時間");
-//  				}
+  				Integer showtime_no = new Integer(str1);
   				
   				Timestamp crt_dt = new java.sql.Timestamp(System.currentTimeMillis());
-  				
-//  				System.out.println(crt_dt);
-  				
-//  			String order_status = req.getParameter("order_status");
-  				String order_status = "1";
-  				
-//  			String order_type = req.getParameter("order_type");
-  				String order_type = "1";
-  				
-//  			String payment_type = req.getParameter("payment_type");
-  				
-  				String payment_type = "0";
-  				
+  				String order_type = req.getParameter("order_type").trim();
+  				String payment_type = req.getParameter("payment_type").trim();
+  				String order_status = "";
+  				if(payment_type=="1") {
+  					order_status = "1";
+  				}else {
+  					order_status = "0";
+  				}
   				Integer total_price = 0;
 				for(int i = 0; i < ticket_typeno.length; i++) {
 					Integer ticket_price = new Integer(ticketprice[i]);
@@ -675,18 +701,8 @@ public class OrderServlet extends HttpServlet {
 				for(int i = 0 ; i < foodprice.length; i++) {
 					total_price += (new Integer(foodprice[i])) * (new Integer(foodcount[i]));
 				}
-				
-//  				String[] seatname = req.getParameterValues("seat_name");
   				String seat_name = req.getParameter("seat_name");
-//  				for(int i = 0; i < seatname.length; i++) {
-//  					if(i < seatname.length-1) {
-//  					seat_name += seatname[i] + ", ";
-//  					}else {
-//  						seat_name += seatname[i];
-//  					}
-//  				}
-
-  				OrderVO orderVO = new OrderVO();	
+  				OrderVO orderVO = new OrderVO();
   				orderVO.setMember_no(member_no);
   				orderVO.setShowtime_no(showtime_no);
   				orderVO.setCrt_dt(crt_dt);
@@ -706,9 +722,10 @@ public class OrderServlet extends HttpServlet {
 					ord_foodVO.setFood_no(food_no);
 					ord_foodVO.setFood_count(food_count);
 					ord_foodVO.setPrice(price);
-					ordFood_list.add(ord_foodVO);
+					if(food_count > 0) {
+						ordFood_list.add(ord_foodVO);
+					}
 				}
-				
 				List<Ord_ticket_typeVO> ordTicket_list = new ArrayList<Ord_ticket_typeVO>();
 				for(int i = 0; i < ticket_typeno.length; i++) {
 					Integer ticket_type_no = new Integer(ticket_typeno[i]);
@@ -719,15 +736,12 @@ public class OrderServlet extends HttpServlet {
 					ord_ticket_typeVO.setTicket_type_no(ticket_type_no);
 					ord_ticket_typeVO.setTicket_count(ticket_count);
 					ord_ticket_typeVO.setPrice(price1);
-					ordTicket_list.add(ord_ticket_typeVO);
+					if(ticket_count > 0) {
+						ordTicket_list.add(ord_ticket_typeVO);
+					}
 				}
-								
-//				String s[] = req.getParameterValues("seat_no");
-				String seat_no = req.getParameter("seat_no");;
-//				for(int i = 0; i < s.length; i++) {
-//					seat_no = seat_no + s[i];
-//				}
-  				/***************************2.開始新增資料***************************************/
+				String seat_no = req.getParameter("seat_no");
+				/***************************2.開始新增資料***************************************/
   				OrderService orderSvc = new OrderService();
   				orderVO = orderSvc.addOrder2(member_no, showtime_no, crt_dt	, order_status, 
   						order_type, payment_type, total_price, seat_name, ordFood_list, 
@@ -735,7 +749,7 @@ public class OrderServlet extends HttpServlet {
   				/***************************3.新增完成,準備轉交(Send the Success view)***********/
   				String url = "/back-end/order/listAllOrder.jsp";
   				RequestDispatcher successView = req.getRequestDispatcher(url); // 新增成功後轉交listAllTicket_type.jsp
-  				successView.forward(req, res);				
+  				successView.forward(req, res);	
   				
   				/***************************其他可能的錯誤處理**********************************/
   			} catch (Exception e) {

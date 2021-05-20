@@ -11,6 +11,7 @@
 <jsp:useBean id="listRelationships_ByMemno" scope="request" type="java.util.Set<RelationshipVO>" /> <!-- 於EL此行可省略 -->
 <jsp:useBean id="memSvc" scope="page" class="com.mem.model.MemService" />
 <jsp:useBean id="group_memberSvc" scope="page" class="com.group_member.model.Group_MemberService" />
+<jsp:useBean id="relationshipSvc" scope="page" class="com.relationship.model.RelationshipService" />
 
 
 <html>
@@ -18,7 +19,7 @@
 
 <style>
    body {  
-     width: 800px;  
+     width: 500px;  
      margin: 0 auto;  
      padding: 10px 20px 20px 20px;  
  	        }  
@@ -80,27 +81,15 @@
 	<c:forEach var="relationshipVO" items="${listRelationships_ByMemno}" >		
 		<tbody>	
 			<tr>
-<!-- 			<td> -->
-<%-- 			<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${relationshipVO.member_no}" --%>
-<!-- 					alt="尚無圖片" width="96px;" height="108px" title="" style="border: groove;"/> -->
-<!-- 			</td>	 -->
-<%-- 			<td><c:forEach var="memVO" items="${memSvc.all}"> --%>
-<%--                     <c:if test="${relationshipVO.member_no==memVO.member_no}"> --%>
-<%-- 	                   	 【<font color=orange>${memVO.mb_name}</font>】 --%>
-<%--                     </c:if> --%>
-<%--                 </c:forEach> --%>
-<!-- 			</td> -->
-			<td>
-			<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${relationshipVO.friend_no}"
-					alt="尚無圖片" width="96px;" height="108px" title="" style="border: groove;"/>
-							
-							<c:forEach var="memVO" items="${memSvc.all}">
-                   			 <c:if test="${relationshipVO.friend_no==memVO.member_no}">
-	                    	【<font color=orange>${memVO.mb_name}</font>】
-                    </c:if>
-                </c:forEach>
-			</td>		
-						
+				<td>
+					<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${relationshipVO.friend_no}"
+						alt="尚無圖片" width="96px;" height="108px" title="" style="border: groove;"/>						
+					<c:forEach var="memVO" items="${memSvc.all}">
+	                 	<c:if test="${relationshipVO.friend_no==memVO.member_no}">
+	                   		【<font color=orange>${memVO.mb_name}</font>】
+	                   	 </c:if>
+	                </c:forEach>
+				</td>								
 <%-- 			<td>${relationshipVO.status}</td> --%>
 <%-- 			<td>${relationshipVO.isblock}</td> --%>
 
@@ -113,13 +102,26 @@
 <!-- 			    <input type="hidden" name="action"	   value="getOne_For_Update"></FORM> -->
 <!-- 			</td> -->
 				<td style="vertical-align:middle;">
-			  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/relationship/relationship.do" style="margin-bottom: 0px;">
-				    <input type="submit" value="刪除好友">
-				    <input type="hidden" name="member_no"   value="${relationshipVO.member_no}">
-				    <input type="hidden" name="friend_no"   value="${relationshipVO.friend_no}">			    
-				    <input type="hidden" name="requestURL" value="<%=request.getServletPath()%>"><!--送出本網頁的路徑給Controller-->
-				    <input type="hidden" name="action"     value="delete">
-				</FORM>
+					<c:choose>
+						<c:when test="${relationshipSvc.getOneRelationship(relationshipVO.member_no, relationshipVO.friend_no).status == 0}">
+						  	<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/relationship/relationship.do" style="margin-bottom: 0px;">
+							    <input type="submit" value="收回好友邀請">
+							    <input type="hidden" name="member_no"   value="${relationshipVO.member_no}">
+							    <input type="hidden" name="friend_no"   value="${relationshipVO.friend_no}">			    
+							    <input type="hidden" name="requestURL" value="<%=request.getServletPath()%>"><!--送出本網頁的路徑給Controller-->
+							    <input type="hidden" name="action"     value="delete">
+							</FORM>
+						</c:when>	
+						<c:otherwise>
+							<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/relationship/relationship.do" style="margin-bottom: 0px;">
+							    <input type="submit" value="刪除好友" class="btn btn-danger">
+							    <input type="hidden" name="member_no"   value="${relationshipVO.member_no}">
+							    <input type="hidden" name="friend_no"   value="${relationshipVO.friend_no}">			    
+							    <input type="hidden" name="requestURL" value="<%=request.getServletPath()%>"><!--送出本網頁的路徑給Controller-->
+							    <input type="hidden" name="action"     value="delete1">
+							</FORM>
+						</c:otherwise>	
+					</c:choose>
 				</td>
 			</tr>
 		</tbody>

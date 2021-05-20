@@ -9,9 +9,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.employee.model.EmployeeService;
 import com.employee.model.EmployeeVO;
+import com.employee.model.SendEmail;
 
 public class EmployeeServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -97,10 +99,11 @@ public class EmployeeServlet extends HttpServlet {
 				/*************************** 2.開始查詢資料 ****************************************/
 				EmployeeService employeeSvc = new EmployeeService();
 				EmployeeVO employeeVO = employeeSvc.getOneEmp(empno);
+				System.out.println(123);
 
 				/*************************** 3.查詢完成,準備轉交(Send the Success view) ************/
 				req.setAttribute("employeeVO", employeeVO); // 資料庫取出的employeeVO物件,存入req
-				String url = "/back-end/employee/update_employee_input.jsp";
+				String url = "/back-end/employee/listAllEmployee.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url);// 成功轉交 update_employee_input.jsp
 				successView.forward(req, res);
 
@@ -246,14 +249,16 @@ public class EmployeeServlet extends HttpServlet {
 					errorMsgs.add("員工姓名: 只能是中、英文字母、數字和_ , 且長度必需在2到10之間");
 				}
 
-				String emppwd = req.getParameter("emppwd").trim();
-				String emppwdReg = "^[(a-zA-Z0-9)]{6,10}$";
-				if (emppwd == null || emppwd.trim().length() == 0) {
-					errorMsgs.add("密碼請勿空白");
-				} else if (!emppwd.trim().matches(emppwdReg)) {
-					errorMsgs.add("密碼只能是英文字母、數字 , 且長度必需在6到10之間");
-				}
+//				String emppwd = req.getParameter("emppwd").trim();
+//				String emppwdReg = "^[(a-zA-Z0-9)]{6,10}$";
+//				if (emppwd == null || emppwd.trim().length() == 0) {
+//					errorMsgs.add("密碼請勿空白");
+//				} else if (!emppwd.trim().matches(emppwdReg)) {
+//					errorMsgs.add("密碼只能是英文字母、數字 , 且長度必需在6到10之間");
+//				}
 
+				String emppwd = null;
+				
 				String gender = req.getParameter("gender").trim();
 				if (gender == null || gender.trim().length() == 0) {
 					errorMsgs.add("性別請勿空白");
@@ -307,6 +312,7 @@ public class EmployeeServlet extends HttpServlet {
 				}
 				
 				
+				
 				EmployeeVO employeeVO = new EmployeeVO();
 				employeeVO.setEmpname(empname);
 				employeeVO.setEmppwd(emppwd);
@@ -321,7 +327,7 @@ public class EmployeeServlet extends HttpServlet {
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					req.setAttribute("employeeVO", employeeVO); // 含有輸入格式錯誤的employeeVO物件,也存入req。儲存打過的資料，若輸入錯誤不用重新輸入
-					RequestDispatcher failureView = req.getRequestDispatcher("/back-end/employee/addEmployee.jsp");
+					RequestDispatcher failureView = req.getRequestDispatcher("/back-end/employee/listAllEmployee.jsp");
 					failureView.forward(req, res);
 					return;
 				}
@@ -329,9 +335,25 @@ public class EmployeeServlet extends HttpServlet {
 				/*************************** 2.開始新增資料 ***************************************/
 				EmployeeService employeeSvc = new EmployeeService();
 				employeeVO = employeeSvc.addEmp(empname, emppwd, gender, tel, email, title, hiredate, quitdate, status);
+				if (employeeVO != null) {
+					SendEmail mailService = new SendEmail();
+					String randomPwd = mailService.sendEmpPassword(email);
+//					System.out.println(randomPwd);
+					// 將該用戶的密碼修改成亂數密碼 
+					employeeSvc.updateRandomPws(email, randomPwd);
+				}
 
+				// Send the use back to the form, if there were errors
+				if (!errorMsgs.isEmpty()) {
+					RequestDispatcher failureView = req.getRequestDispatcher("/front-end/mem/MemLogin.jsp");
+					failureView.forward(req, res);
+					return;// 程式中斷
+				}
+				
+				
 				/*************************** 3.新增完成,準備轉交(Send the Success view) ***********/
 				String url = "/back-end/employee/listAllEmployee.jsp";
+//				String url = req.getParameter("requestURL");
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 新增成功後轉交listAllEmployee.jsp
 				successView.forward(req, res);
 
@@ -367,6 +389,69 @@ public class EmployeeServlet extends HttpServlet {
 			} catch (Exception e) {
 				errorMsgs.add("刪除資料失敗:" + e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/back-end/employee/listAllEmployee.jsp");
+				failureView.forward(req, res);
+			}
+		}
+		
+		if ("login_check".equals(action)) { // 來自empLogin.jsp的請求
+
+			List<String> errorMsgs = new LinkedList<String>();
+			// Store this set in the request scope, in case we need to
+			// send the ErrorPage view.
+			req.setAttribute("errorMsgs", errorMsgs);
+
+			try {
+				/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 **********************/
+				String email = req.getParameter("email");
+				String emailReg = "^[(a-zA-Z0-9_)]{2,20}[@][(a-zA-Z0-9)]{3,10}[.][(a-zA-Z)]{1,5}$"; // ^是規定開頭有後面的字(not
+																										// sure)
+				if (email == null || email.trim().length() == 0) {
+					errorMsgs.add("員工信箱: 請勿空白");
+				} else if (!email.trim().matches(emailReg)) { // 以下練習正則(規)表示式(regular-expression)
+					errorMsgs.add("員工信箱: 只能是英文字母、數字和_ , 且長度必需在2到20之間");
+				}
+
+				String emppwd = req.getParameter("emppwd");
+				String emppwdReg = "^[(a-zA-Z0-9_)]{2,20}$"; // ^是規定開頭有後面的字(not sure)
+				if (emppwd == null || emppwd.trim().length() == 0) {
+					errorMsgs.add("員工密碼: 請勿空白");
+				} else if (!emppwd.trim().matches(emppwdReg)) { // 以下練習正則(規)表示式(regular-expression)
+					errorMsgs.add("員工密碼: 只能是英文字母、數字和_ , 且長度必需在2到20之間");
+				}
+
+				// Send the use back to the form, if there were errors
+				if (!errorMsgs.isEmpty()) {
+					RequestDispatcher failureView = req.getRequestDispatcher("/back-end/employee/empLogin.jsp");
+					failureView.forward(req, res);
+					return;// 程式中斷
+				}
+
+				/*************************** 2.開始查詢資料 *****************************************/
+				EmployeeService employeeSvc = new EmployeeService();
+				EmployeeVO employeeVO = employeeSvc.loginCheck(email, emppwd);
+				if (employeeVO == null) {
+					errorMsgs.add("帳號密碼錯誤，請重新輸入");
+				}
+				// Send the use back to the form, if there were errors
+				if (!errorMsgs.isEmpty()) {
+					RequestDispatcher failureView = req.getRequestDispatcher("/back-end/employee/empLogin.jsp");
+					failureView.forward(req, res);
+					return;// 程式中斷
+				}
+				
+				
+				/*************************** 3.查詢完成,準備轉交(Send the Success view) *************/
+				HttpSession session = req.getSession();
+				session.setAttribute("employeeVO", employeeVO); // 資料庫取出的empVO物件,存入session
+				String url = "/後台畫面/index2.jsp";
+//				System.out.println(req.getContextPath());
+				RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交 listOneEmp.jsp
+				successView.forward(req, res);
+
+				/*************************** 其他可能的錯誤處理 *************************************/
+			} catch (Exception e) {
+				errorMsgs.add("無法取得資料:" + e.getMessage());
+				RequestDispatcher failureView = req.getRequestDispatcher("/back-end/employee/empLogin.jsp");
 				failureView.forward(req, res);
 			}
 		}
