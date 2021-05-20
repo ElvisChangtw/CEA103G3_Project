@@ -10,5 +10,6 @@ public interface ReportCommentDAO_interface {
     public void delete(Integer reportno);
     public ReportCommentVO findByPrimaryKey(Integer reportno);
     public List<ReportCommentVO> getAll();
+    public List<ReportCommentVO> getAllOrderByReportno();
 
 }

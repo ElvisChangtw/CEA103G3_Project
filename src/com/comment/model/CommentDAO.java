@@ -25,8 +25,10 @@ public class CommentDAO implements CommentDAO_interface{
 			"insert into COMMENT (MEMBER_NO,MOVIE_NO,CONTENT,STATUS) values (?, ?, ?, ?)";
 	private static final String UPDATE_STMT = 
 			"update COMMENT set CONTENT=?, MOVIE_NO=?, MODIFY_DT=default where COMMENT_NO = ?";
-	private static final String UPDATE_COMMENTSTATUS_STMT = 
+	private static final String UPDATE_COMMENTSTATUS_OFF_STMT = 
 			"update COMMENT set STATUS=1 where COMMENT_NO = ?";
+	private static final String UPDATE_COMMENTSTATUS_ON_STMT = 
+			"update COMMENT set STATUS=0 where COMMENT_NO = ?";
 	private static final String DELETE_REPORTCOMMENTS = 
 			"delete from REPORT_COMMENT where COMMENT_NO = ?";	
 	private static final String DELETE_COMMENT = 
@@ -122,12 +124,40 @@ public class CommentDAO implements CommentDAO_interface{
 	}
 	
 	@Override
-	public void updateCommentStatus(CommentVO commentVO , Connection con) {
+	public void updateCommentStatusOff(CommentVO commentVO , Connection con) {
 		
 		PreparedStatement pstmt = null;
 
 		try {
-     		pstmt = con.prepareStatement(UPDATE_COMMENTSTATUS_STMT);
+     		pstmt = con.prepareStatement(UPDATE_COMMENTSTATUS_OFF_STMT);
+
+			pstmt.setDouble(1, commentVO.getCommentno());	
+			
+			pstmt.executeUpdate();
+//			System.out.println("11");	
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+		}
+	}
+	
+	@Override
+	public void updateCommentStatusOn(CommentVO commentVO , Connection con) {
+		
+		PreparedStatement pstmt = null;
+
+		try {
+     		pstmt = con.prepareStatement(UPDATE_COMMENTSTATUS_ON_STMT);
 
 			pstmt.setDouble(1, commentVO.getCommentno());	
 			

@@ -11,7 +11,7 @@
 	List<ReportCommentVO> list = reportCommentSvc.getAll();
 	pageContext.setAttribute("list", list);
 %>
-
+<jsp:useBean id="commentSvc" scope="page" class="com.comment.model.CommentService" />
 <html>
 <head>
 <title>後台 瀏覽所有檢舉評論</title>
@@ -74,14 +74,19 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								<table>
 								<thead  align="center" class="123">
 								  <tr class="123">
+<%-- 									<th align="center"><a href="${pageContext.request.contextPath}/report_comment/reportcomment.do?action=getAllOrderByReportno"> --%>
+<!-- 									檢舉編號</a></th> -->
 									<th align="center">檢舉編號</th>
-									<th align="center">評論編號</th>
-									<th align="center">檢舉原因</th>
 									<th align="center">檢舉會員</th>
+									<th align="center">檢舉原因</th>	
+									<th align="center">評論作者</th>
+									<th align="center">評論編號</th>								
 									<th align="center">檢舉時間</th>
 									<th align="center">處理時間</th>
 									<th align="center">處理狀態</th>
 									<th align="center">備註</th>
+									<th align="center">修改</th>
+<!-- 									<th align="center">刪除</th> -->
 								  </tr>
 								</thead>
 								<tbody>
@@ -89,32 +94,62 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									end="<%=pageIndex+rowsPerPage-1%>">
 
 								  <tr>
-									<td width="50px;">${reportCommentVO.reportno}</td>
-									<td width="50px;">${reportCommentVO.commentno}</td>
-									<td width="80px;">${reportCommentVO.content}</td>
-									<td width="80px;">${reportCommentVO.memberno}</td>
+									<td width="10px;">${reportCommentVO.reportno}</td>
+									<td><img src="${pageContext.request.contextPath}/mem/mem.do?action=view_memPic&member_no=${reportCommentVO.memberno}" 
+											style="border-radius:50%; width:80px; height:80px;"></td>
+									<td width="150px;" style= "word-break: break-all;">${reportCommentVO.content}</td>
+									<c:forEach var="commentVO" items="${commentSvc.all}">
+										<c:if test="${reportCommentVO.commentno == commentVO.commentno}">
+											<td><img src="${pageContext.request.contextPath}/mem/mem.do?action=view_memPic&member_no=${commentVO.memberno}" 
+											style="border-radius:50%; width:80px; height:80px;"></td>
+										</c:if>
+									</c:forEach>
+									<td width="10px;">${reportCommentVO.commentno}</td>
 									<td width="105px;">
-										<fmt:formatDate value="${reportCommentVO.creatdate}" pattern="yyyy-MM-dd" /><br>
+										<fmt:formatDate value="${reportCommentVO.creatdate}" pattern="yyyy-MM-dd" />
+									</td>
+									<td width="105px;">
 										<fmt:formatDate value="${reportCommentVO.executedate}" pattern="yyyy-MM-dd" />
 									</td>
-									<td width="80px;">${reportCommentVO.status}</td>
 									<c:choose>
 										<c:when test="${reportCommentVO.status.equals('0')}">
-											<td width="70px;">未審核</td>
+											<td width="80px;">未審核</td>
 										</c:when>
 										<c:when test="${reportCommentVO.status.equals('1')}">
-											<td width="70px;">審核通過</td>
+											<td width="80px;">審核通過</td>
 										</c:when>
 										<c:when test="${reportCommentVO.status.equals('2')}">
-											<td width="70px;">審核未通過</td>
+											<td width="80px;">審核未通過</td>
 										</c:when>
 										<c:otherwise>
-											<td width="70px;">無效狀態</td>
+											<td width="80px;">無效狀態</td>
 										</c:otherwise>
 									</c:choose>
-									<td width="80px;">${reportCommentVO.desc}</td>
-
-
+									<td width="80px;" style= "word-break: break-all;">${reportCommentVO.desc}</td>
+									
+									<td width="50px;">
+										<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/report_comment/reportcomment.do" style="margin-bottom: 0px;">
+											<input type="submit" value="修改"> 
+											<input type="hidden" name="reportno" value="${reportCommentVO.reportno}"> 
+											<input type="hidden" name="requestURL" value="<%=request.getServletPath()%>">
+											<!--送出本網頁的路徑給Controller-->
+											<input type="hidden" name="whichPage" value="<%=whichPage%>">
+											<!--送出當前是第幾頁給Controller-->
+											<input type="hidden" name="action" value="getOne_For_Update">
+										</FORM>
+									</td>
+									
+<!-- 									<td width="50px;"> -->
+<%-- 										<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/report_comment/reportcomment.do" style="margin-bottom: 0px;"> --%>
+<!-- 											<input type="submit" value="刪除">  -->
+<%-- 											<input type="hidden" name="reportno" value="${reportCommentVO.reportno}">  --%>
+<%-- 											<input type="hidden" name="requestURL" value="<%=request.getServletPath()%>"> --%>
+<!-- 											送出本網頁的路徑給Controller -->
+<%-- 											<input type="hidden" name="whichPage" value="<%=whichPage%>"> --%>
+<!-- 											送出當前是第幾頁給Controller -->
+<!-- 											<input type="hidden" name="action" value="delete"> -->
+<!-- 										</FORM> -->
+<!-- 									</td> -->
 								</tr>
 								</c:forEach>
 								</tbody>

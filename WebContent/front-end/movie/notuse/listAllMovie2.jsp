@@ -245,7 +245,7 @@ th, td {
 	<%
 		if (request.getAttribute("listComments_ByMovieno") != null) {
 	%>
-	<jsp:include page="listComments_ByMovieno.jsp" />
+	<jsp:include page="listComments_ByMovieno2.jsp" />
 	<%
 		}
 	%>

@@ -35,17 +35,35 @@ public class ReportCommentService {
 
 		return reportcommentVO;
 	}
+	
+	public ReportCommentVO updateAllReportFromThisComment(Integer commentno, String status, String desc) {
+		
+		ReportCommentVO reportcommentVO = new ReportCommentVO();
+
+		reportcommentVO.setCommentno(commentno);
+		reportcommentVO.setStatus(status);
+		reportcommentVO.setDesc(desc);
+		
+		
+		dao.updateAllReportFromThisComment(reportcommentVO);
+
+		return reportcommentVO;
+	}
 
 	public void deleteReportComment(Integer reportno) {
 		dao.delete(reportno);
 	}
 
-	public ReportCommentVO getOneEmp(Integer reportno) {
+	public ReportCommentVO getOneReportComment(Integer reportno) {
 		return dao.findByPrimaryKey(reportno);
 	}
 
 	public List<ReportCommentVO> getAll() {
 		return dao.getAll();
+	}
+	
+	public List<ReportCommentVO> getAllOrderByReportno(){
+		return dao.getAllOrderByReportno();
 	}
 
 }
