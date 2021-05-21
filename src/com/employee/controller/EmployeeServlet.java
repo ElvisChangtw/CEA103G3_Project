@@ -99,11 +99,11 @@ public class EmployeeServlet extends HttpServlet {
 				/*************************** 2.開始查詢資料 ****************************************/
 				EmployeeService employeeSvc = new EmployeeService();
 				EmployeeVO employeeVO = employeeSvc.getOneEmp(empno);
-				System.out.println(123);
+//				System.out.println(123);
 
 				/*************************** 3.查詢完成,準備轉交(Send the Success view) ************/
 				req.setAttribute("employeeVO", employeeVO); // 資料庫取出的employeeVO物件,存入req
-				String url = "/back-end/employee/listAllEmployee.jsp";
+				String url = "/back-end/employee/update_employee_input.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url);// 成功轉交 update_employee_input.jsp
 				successView.forward(req, res);
 
