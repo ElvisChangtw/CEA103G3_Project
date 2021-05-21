@@ -124,35 +124,22 @@
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                             <ul class="nav navbar-nav">
                                 <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">會員專區 <b class="caret"></b></a>
-                                    <ul class="dropdown-menu multi-column columns-2">
-                                        <li>
-                                            <div class="col-sm-6">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="<%=request.getContextPath()%>/front-end/mem/MemLogin.jsp">登入/註冊</a></li>
-                                                    <li><a href="<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">會員中心</a></li>
-                                                    <li><a href="genre.html">X訂票紀錄</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="horror.html">X揪團紀錄</a></li>
-                                                    <li><a href="genre.html">X會員服務</a></li>
-                                                    <li><a href="genre.html">X會員QA</a></li>
-                                                </ul>
-                                            </div>
-                                            <!-- <div class="clearfix"></div> -->
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">電影介紹<b class="caret"></b></a>
                                     <ul class="dropdown-menu multi-column columns-3">
                                         <li>
+                                             <div class="col-sm-4">
+                                                <ul class="multi-column-dropdown">
+                                                    <li><a href="<%=request.getContextPath()%>/front-end/movie/listAllMovie.jsp">所有電影</a></li>
+                                                    <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&CATEGORY=冒險片">冒險片</a></li>
+                                                    <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&CATEGORY=戰爭片">戰爭片</a></li>
+                                                    <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&CATEGORY=警匪片">警匪片</a></li>
+                                                    <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&CATEGORY=驚悚片">驚悚片</a></li>
+                                                    <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&CATEGORY=愛情片">愛情片</a></li>
+                                                    
+                                                </ul>
+                                            </div>
                                             <div class="col-sm-4">
                                                 <ul class="multi-column-dropdown">
-                                                    <li><a href="<%=request.getContextPath()%>/front-end/movie/select_movie_page.jsp">搜尋電影</a></li>
-                                                    <li><a href="<%=request.getContextPath()%>/back-end/movie/backEndlistAllMovie.jsp">後台listall</a></li>
                                                     <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&CATEGORY=動作片">動作片</a></li>
                                                     <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&CATEGORY=劇情片">劇情片</a></li>
                                                     <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&CATEGORY=犯罪片">犯罪片</a></li>
@@ -163,21 +150,10 @@
                                             </div>
                                             <div class="col-sm-4">
                                                 <ul class="multi-column-dropdown">
-                                                    <li><a href="<%=request.getContextPath()%>/front-end/movie/listAllMovie.jsp">所有電影</a></li>
-                                                    <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&CATEGORY=冒險片">冒險片</a></li>
-                                                    <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&CATEGORY=戰爭片">戰爭片</a></li>
-                                                    <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&CATEGORY=警匪片">警匪片</a></li>
-                                                    <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&CATEGORY=驚悚片">驚悚片</a></li>
-                                                    <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&CATEGORY=愛情片">愛情片</a></li>
-                                                    <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&CATEGORY=音樂片">音樂片</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">哈燒影榜</a></li>
+                                                    
                                                     <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&CATEGORY=科幻片">科幻片</a></li>
                                                     <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&CATEGORY=史詩片">史詩片</a></li>
-                                                    <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&CATEGORY=奇幻片">奇幻片</a></li>
+                                                    <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&CATEGORY=音樂片">音樂片</a></li>
                                                     <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&CATEGORY=懸疑片">懸疑片</a></li>
                                                     <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&CATEGORY=文藝片">文藝片</a></li>
                                                     <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&CATEGORY=歌舞劇">歌舞劇</a></li>
@@ -187,77 +163,37 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">電影評論<b class="caret"></b></a>
-                                    <ul class="dropdown-menu multi-column columns-2">
-                                        <li>
-                                            <div class="col-sm-6">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="<%=request.getContextPath()%>/front-end/comment/select_comment_page.jsp">搜尋評論</a></li>
-                                                    <li><a href="genre.html">評論</a></li>
-                                                </ul>
-                                            </div>
-                                        <li>
-                                            <div class="col-sm-6">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="<%=request.getContextPath()%>/front-end/comment/listAllComment.jsp">所有評論</a></li>
-                                                    <li><a href="genre.html">沒啥好說</a></li>
-                                                </ul>
-                                            </div>
-                                        <li>
-                                            <div class="clearfix"></div>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">揪團啾啾<b class="caret"></b></a>
-                                    <ul class="dropdown-menu multi-column columns-2">
-                                        <li>
-                                            <div class="col-sm-6">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="<%=request.getContextPath()%>/front-end/group/group_front_page.jsp">揪團首頁</a></li>
-                                                    <li><a href="genre.html">快速揪團</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">搜尋揪團</a></li>
-                                                    <li><a href="genre.html">快速揪團</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                        </li>
-                                    </ul>
-                                </li>
                                 
+                                <li><a href="<%=request.getContextPath()%>/front-end/article/listAllArticle.jsp">魔穴論壇</a></li>
+                                <li><a href="<%=request.getContextPath()%>/front-end/group/group_front_page.jsp">揪團首頁</a></li>
+<%--  								<li><a href="<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">會員中心</a></li>  --%>
+                               	<li><a href="<%=request.getContextPath()%>/front-end/news/listAllNews.jsp">最新消息</a></li>
                                 <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">公告<b class="caret"></b></a>
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">會員專區<b class="caret"></b></a>
                                     <ul class="dropdown-menu multi-column columns-1">
                                         <li>
                                             <div class="col-sm-12">
                                                 <ul class="multi-column-dropdown">
-                                                    <li><a href="<%=request.getContextPath()%>/front-end/news/listAllNews.jsp">最新消息</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="col-sm-12">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">X影城活動</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="col-sm-12">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">X合作夥伴</a></li>
+                                                    <li class="active"><a href="<%=request.getContextPath()%>/front-end/news/listAllNews.jsp">登入/註冊</a></li>
                                                 </ul>
                                             </div>
                                             <div class="clearfix"></div>
+                                             <div class="col-sm-12">
+                                                <ul class="multi-column-dropdown">
+                                                    <li><a href="<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">會員中心</a></li>
+                                                </ul>
+                                            </div>
                                         </li>
                                     </ul>
                                 </li>
-                                <li class="active"><a href="<%=request.getContextPath()%>/front-end/news/listAllNews.jsp">最新消息</a></li>
                             </ul>
+                            
                         </div>
+                        
                         <div class="clearfix"> </div>
+
                     </nav>
+                    
                     <div class="w3ls_search">
 						<div class="cd-main-header">
 							<ul class="cd-header-buttons">
@@ -272,7 +208,9 @@
 							<div id="search-results"class="container" >
 							</div>
 						</div>
+						
 					</div>
+					
                 </div>
             </div>
             <!--//header-w3l-->
@@ -443,7 +381,7 @@
 	
 <nav class="navbar navbar-light" style="background-color: #75D9B5;">
     <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/movie/movie.do" name="form1" class="form-inline my-2 my-lg-0 composite-query">
-		<br><div class="form-row">
+		<div class="form-row">
 			搜尋電影:&ensp;
 			<div class="form-group col-2">
 				 <input type="text" name="MOVIE_NAME" value="" class="form-control" placeholder="請輸入電影" size="10"><br>
@@ -522,7 +460,7 @@
 				<input type="hidden" name="action" value="listMovies_ByCompositeQuery">
 		      	&ensp;<button class="btn btn-danger btn-sm" type="submit" value="送出">搜尋</button>
 	      	</div>
-		</div><br>
+		</div>
      </FORM>
 </nav>
 
@@ -574,115 +512,14 @@
                         <div class="tab1">
                             <div class="tab_movies_agileinfo">
                                 <div class="w3_agile_featured_movies">
-                                    <div class="col-md-4 video_agile_player">
-                                        <div class="video-grid-single-page-agileits" >
-	                        	 			<a class="w3_play_icon" href="#small-dialog1">
-	                            				<img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${oneNewestinTheatersMovie.movieno}" 
-	                            				alt="" class="img-responsive" title="點擊觀賞【${oneNewestinTheatersMovie.moviename}】最新預告" /> 
- 	                       					</a>
-										</div>
-                                        <div class="player-text">
-                                            <p class="fexi_header">${oneNewestinTheatersMovie.moviename}</p>
-                                            <p class="fexi_header_para">
-                                            	<span>導演<label>:</label></span>${oneNewestinTheatersMovie.director}
-                                            </p>
-                                            <p class="fexi_header_para">
-                                            	<span class="conjuring_w3">演員<label>:</label></span>
-                                            	${oneNewestinTheatersMovie.actor}
-                                            </p>
-                                            <p class="fexi_header_para">
-												<span>電影類型<label>:</label></span>${oneNewestinTheatersMovie.category}
-											</p>
-											<p class="fexi_header_para">
-												<span>上映日期<label>:</label></span>
-												<fmt:formatDate value="${oneNewestinTheatersMovie.premiredate}"
-													pattern="yyyy-MM-dd" />
-											</p>
-											<p class="fexi_header_para">
-												<span>下映日期<label>:</label></span>
-												<fmt:formatDate value="${oneNewestinTheatersMovie.offdate}" pattern="yyyy-MM-dd" />
-											</p>
-											<p class="fexi_header_para">
-												<span>片長<label>:</label></span>
-												<c:choose>
-													<c:when test="${((oneNewestinTheatersMovie.length)/60)<1}">
-														<td>${oneNewestinTheatersMovie.length}分鐘</td>
-													</c:when>
-													<c:when test="${(((oneNewestinTheatersMovie.length)/60)%1)==0}">
-														<td><fmt:formatNumber type="number"
-																value="${((oneNewestinTheatersMovie.length)-(oneNewestinTheatersMovie.length%60))/60}" />小時</td>
-													</c:when>
-													<c:when test="${((oneNewestinTheatersMovie.length)/60)>1}">
-														<td><fmt:formatNumber type="number"
-																value="${((oneNewestinTheatersMovie.length)-(oneNewestinTheatersMovie.length%60))/60}" />小時<fmt:formatNumber
-																type="number" value="${oneNewestinTheatersMovie.length%60}" />分鐘</td>
-													</c:when>
-													<c:otherwise>
-														<td>無效時間</td>
-													</c:otherwise>
-												</c:choose>
-											</p>
-											<p class="fexi_header_para">
-												<span>電影分級<label>:</label></span>
-												<c:choose>
-													<c:when test="${oneNewestinTheatersMovie.grade.equals('0')}">
-														<td>普遍級</td>
-													</c:when>
-													<c:when test="${oneNewestinTheatersMovie.grade.equals('1')}">
-														<td>保護級</td>
-													</c:when>
-													<c:when test="${oneNewestinTheatersMovie.grade.equals('2')}">
-														<td>輔導級</td>
-													</c:when>
-													<c:when test="${oneNewestinTheatersMovie.grade.equals('3')}">
-														<td>限制級</td>
-													</c:when>
-													<c:otherwise>
-														<td>尚未分級</td>
-													</c:otherwise>
-												</c:choose>
-											</p>
-											<p class="fexi_header_para">
-												<span>電影狀態<label>:</label></span>
-												<c:choose>
-													<c:when test="${oneNewestinTheatersMovie.status.equals('0')}">
-														<td>上映中</td>
-													</c:when>
-													<c:when test="${oneNewestinTheatersMovie.status.equals('1')}">
-														<td>未上映</td>
-													</c:when>
-													<c:when test="${oneNewestinTheatersMovie.status.equals('2')}">
-														<td>已下檔</td>
-													</c:when>
-													<c:otherwise>
-														<td>無效狀態</td>
-													</c:otherwise>
-												</c:choose>
-											</p>											
-											
-											<p class="fexi_header_para fexi_header_para1">
-												<span>電影評分<label>:</label></span> 
-											</p>
-											<div id="ratingValue" style="display:none;">${oneNewestinTheatersMovie.rating}</div>
-											<p id="rating" class="fexi_header_para fexi_header_para1"> </p>
-											<p id="noRating" class="fexi_header_para "></p>
-                                            
-                                            <p class="fexi_header_para ">
-												<span>電影期待度<label>:</label></span>
-											</p>
-											<div id="expectationValue" style="display:none;">${oneNewestinTheatersMovie.expectation}</div>
-						<%-- 					<td><fmt:formatNumber type="number" value="${movieVO.expectation*100}"/>測試數字格式化</td>					 --%>
-											<p id="expectation" class="fexi_header_para "></p>
-											<p id="noExpectation" class="fexi_header_para "></p>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8 wthree_agile-movies_list">
+                                    
+                                    <div class="col-md wthree_agile-movies_list">
                                     
                                     
                                     <c:forEach var="movieVO" items="${inTheatersMovie}">
                                         <div class="w3l-movie-gride-agile">
-                                            <a href="<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}" class="hvr-sweep-to-bottom">
-                                            <img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${movieVO.movieno}" title="${movieVO.moviename}" class="img-responsive" alt=" " style="width:200px; height:230px;">
+                                            <a href="<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}" class="hvr-sweep-to-bottom" style="width:100%;">
+                                            <img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${movieVO.movieno}" title="${movieVO.moviename}" class="img-responsive" alt=" " style="width:100%; height:230px;">
                                                 <div class="w3l-action-icon">
                                                 <i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
                                             </a>
@@ -691,8 +528,7 @@
                                                		<h6><a href="<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}"><span style="font-weight:bold; font-size:15px; color:#766BB0;" >${movieVO.moviename}</span></a></h6>
                                                 </div>
                                                 <div class="mid-2 agile_mid_2_home">
-													<p style="font-size:13px;">上映日期: <fmt:formatDate value="${movieVO.premiredate}" pattern="yyyy-MM-dd" /><br>
-													下映日期: <fmt:formatDate value="${movieVO.offdate}" pattern="yyyy-MM-dd" /></p>
+													<p style="font-size:13px;">上映日期: <fmt:formatDate value="${movieVO.premiredate}" pattern="yyyy-MM-dd" /></p><br>
                                                 <div class="mid-2 agile_mid_2_home">
 													<p><font color=red>${movieVO.rating} 分</font></p>
 												</div>	
@@ -780,9 +616,9 @@
 													</c:choose>	
                                                 </div>
                                             </div>
-                                            <div class="ribben">
-                                                <p>NEW</p>
-                                            </div>
+<!--                                             <div class="ribben"> -->
+<!--                                                 <p>NEW</p> -->
+<!--                                             </div> -->
                                         </div>
                                        </c:forEach>
                                     
@@ -794,122 +630,15 @@
                             </div>
                         </div>
                         
-                        
-                        
-                        
-                        
-                        
+
                         <div class="tab2">
                             <div class="tab_movies_agileinfo">
                                 <div class="w3_agile_featured_movies">
-                                	<div class="col-md-4 video_agile_player">
-                                        <div class="video-grid-single-page-agileits" >
-	                        	 			<a class="w3_play_icon" href="#small-dialog2">
-	                            				<img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${oneNewestComingSoonMovie.movieno}" 
-	                            				alt="" class="img-responsive" title="點擊觀賞【${oneNewestComingSoonMovie.moviename}】最新預告" /> 
- 	                       					</a>
-										</div>
-                                        <div class="player-text">
-                                            <p class="fexi_header">${oneNewestComingSoonMovie.moviename}</p>
-                                            <p class="fexi_header_para">
-                                            	<span>導演<label>:</label></span>${oneNewestComingSoonMovie.director}
-                                            </p>
-                                            <p class="fexi_header_para">
-                                            	<span class="conjuring_w3">演員<label>:</label></span>
-                                            	${oneNewestComingSoonMovie.actor}
-                                            </p>
-                                            <p class="fexi_header_para">
-												<span>電影類型<label>:</label></span>${oneNewestComingSoonMovie.category}
-											</p>
-											<p class="fexi_header_para">
-												<span>上映日期<label>:</label></span>
-												<fmt:formatDate value="${oneNewestComingSoonMovie.premiredate}"
-													pattern="yyyy-MM-dd" />
-											</p>
-											<p class="fexi_header_para">
-												<span>下映日期<label>:</label></span>
-												<fmt:formatDate value="${oneNewestComingSoonMovie.offdate}" pattern="yyyy-MM-dd" />
-											</p>
-											<p class="fexi_header_para">
-												<span>片長<label>:</label></span>
-												<c:choose>
-													<c:when test="${((oneNewestComingSoonMovie.length)/60)<1}">
-														<td>${oneNewestComingSoonMovie.length}分鐘</td>
-													</c:when>
-													<c:when test="${(((oneNewestComingSoonMovie.length)/60)%1)==0}">
-														<td><fmt:formatNumber type="number"
-																value="${((oneNewestComingSoonMovie.length)-(oneNewestComingSoonMovie.length%60))/60}" />小時</td>
-													</c:when>
-													<c:when test="${((oneNewestComingSoonMovie.length)/60)>1}">
-														<td><fmt:formatNumber type="number"
-																value="${((oneNewestComingSoonMovie.length)-(oneNewestComingSoonMovie.length%60))/60}" />小時<fmt:formatNumber
-																type="number" value="${oneNewestComingSoonMovie.length%60}" />分鐘</td>
-													</c:when>
-													<c:otherwise>
-														<td>無效時間</td>
-													</c:otherwise>
-												</c:choose>
-											</p>
-											<p class="fexi_header_para">
-												<span>電影分級<label>:</label></span>
-												<c:choose>
-													<c:when test="${oneNewestComingSoonMovie.grade.equals('0')}">
-														<td>普遍級</td>
-													</c:when>
-													<c:when test="${oneNewestComingSoonMovie.grade.equals('1')}">
-														<td>保護級</td>
-													</c:when>
-													<c:when test="${oneNewestComingSoonMovie.grade.equals('2')}">
-														<td>輔導級</td>
-													</c:when>
-													<c:when test="${oneNewestComingSoonMovie.grade.equals('3')}">
-														<td>限制級</td>
-													</c:when>
-													<c:otherwise>
-														<td>尚未分級</td>
-													</c:otherwise>
-												</c:choose>
-											</p>
-											<p class="fexi_header_para">
-												<span>電影狀態<label>:</label></span>
-												<c:choose>
-													<c:when test="${oneNewestComingSoonMovie.status.equals('0')}">
-														<td>上映中</td>
-													</c:when>
-													<c:when test="${oneNewestComingSoonMovie.status.equals('1')}">
-														<td>未上映</td>
-													</c:when>
-													<c:when test="${oneNewestComingSoonMovie.status.equals('2')}">
-														<td>已下檔</td>
-													</c:when>
-													<c:otherwise>
-														<td>無效狀態</td>
-													</c:otherwise>
-												</c:choose>
-											</p>											
-											
-											<p class="fexi_header_para fexi_header_para1">
-												<span>電影評分<label>:</label></span> 
-											</p>
-											<div id="ratingValue2" style="display:none;">${oneNewestComingSoonMovie.rating}</div>
-											<p id="rating2" class="fexi_header_para fexi_header_para1"> </p>
-											<p id="noRating2" class="fexi_header_para "></p>
-                                            
-                                            <p class="fexi_header_para ">
-												<span>電影期待度<label>:</label></span>
-											</p>
-											<div id="expectationValue2" style="display:none;">${oneNewestComingSoonMovie.expectation}</div>
-											<p id="expectation2" class="fexi_header_para "></p>
-											<p id="noExpectation2" class="fexi_header_para "></p>
-                                        </div>
-                                    </div>
-                                    
-                                    
-                                    <div class="col-md-8 wthree_agile-movies_list">
+                                    <div class="col-md wthree_agile-movies_list">
                                     <c:forEach var="movieVO" items="${comingSoonMovie}">
                                         <div class="w3l-movie-gride-agile">
-                                            <a href="<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}" class="hvr-sweep-to-bottom">
-                                            <img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${movieVO.movieno}" title="${movieVO.moviename}" class="img-responsive" alt=" " style="width:200px; height:230px;">
+                                            <a href="<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}" class="hvr-sweep-to-bottom" style="width:100%;">
+                                            <img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${movieVO.movieno}" title="${movieVO.moviename}" class="img-responsive" alt=" " style="width:100%;px; height:230px;">
                                                 <div class="w3l-action-icon">
                                                 <i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
                                             </a>
@@ -918,8 +647,7 @@
                                                		<h6><a href="<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}"><span style="font-weight:bold; font-size:15px; color:#766BB0;" >${movieVO.moviename}</span></a></h6>
                                                 </div>
                                                 <div class="mid-2 agile_mid_2_home">
-													<p style="font-size:13px;">上映日期: <fmt:formatDate value="${movieVO.premiredate}" pattern="yyyy-MM-dd" /><br>
-													下映日期: <fmt:formatDate value="${movieVO.offdate}" pattern="yyyy-MM-dd" /></p>
+													<p style="font-size:13px;">上映日期: <fmt:formatDate value="${movieVO.premiredate}" pattern="yyyy-MM-dd" /></p>
                                                 <div class="mid-2 agile_mid_2_home">
 													<p><font color=red>期待度 &nbsp;&thinsp;: ${movieVO.expectation * 100} %想看</font></p>
 												</div>
@@ -953,7 +681,7 @@
 						                <c:forEach var="movieVO" items="${allTopRatingInTheatersMovie}">	
 						                    <div class="item">
 						                        <div class="w3l-movie-gride-agile w3l-movie-gride-slider ">
-						                            <a href="<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}" class="hvr-sweep-to-bottom">
+						                            <a href="<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}" class="hvr-sweep-to-bottom" style="width:100%;">
 						                            <img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${movieVO.movieno}" 
 						                            title="${movieVO.moviename}" class="img-responsive" alt=" " style="width:225px; height:270px;"/>
 						                                <div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
@@ -963,8 +691,7 @@
 						                                    <h6><a href="<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}"><span style="font-weight:bold; font-size:17px; color:#766BB0;" >${movieVO.moviename} </span></a></h6>
 						                                </div>
 						                                <div class="mid-2 agile_mid_2_home">
-															<p>上映日期: <fmt:formatDate value="${movieVO.premiredate}" pattern="yyyy-MM-dd" /><br>						
-															下映日期: <fmt:formatDate value="${movieVO.offdate}" pattern="yyyy-MM-dd" /></p>
+															<p>上映日期: <fmt:formatDate value="${movieVO.premiredate}" pattern="yyyy-MM-dd" /></p>
 														<div class="mid-2 agile_mid_2_home">
 															<p><font color=red>${movieVO.rating} 分</font></p>
 														</div>
@@ -1057,7 +784,7 @@
 						                <c:forEach var="movieVO" items="${allTopExpectationComingSoonMovie}">	
 						                    <div class="item">
 						                        <div class="w3l-movie-gride-agile w3l-movie-gride-slider ">
-						                            <a href="<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}" class="hvr-sweep-to-bottom">
+						                            <a href="<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}" class="hvr-sweep-to-bottom" style="width:100%;">
 						                            <img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${movieVO.movieno}" 
 						                            title="${movieVO.moviename}" class="img-responsive" alt=" " style="width:225px; height:270px;"/>
 						                                <div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
@@ -1067,8 +794,7 @@
 						                                    <h6><a href="<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}"><span style="font-weight:bold; font-size:17px; color:#766BB0;" >${movieVO.moviename} </span></a></h6>
 						                                </div>
 						                                <div class="mid-2 agile_mid_2_home">
-															<p>上映日期: <fmt:formatDate value="${movieVO.premiredate}" pattern="yyyy-MM-dd" /><br>						
-															下映日期: <fmt:formatDate value="${movieVO.offdate}" pattern="yyyy-MM-dd" /></p>
+															<p>上映日期: <fmt:formatDate value="${movieVO.premiredate}" pattern="yyyy-MM-dd" /></p>
 														<div class="mid-2 agile_mid_2_home">
 															<p><font color=red>期待度 &nbsp;&thinsp;: &nbsp;&nbsp;&thinsp; ${movieVO.expectation * 100} %想看</font></p>
 														</div>
@@ -1102,9 +828,9 @@
                         <div class="col-md-8 wthree_agile-movies_list second-top">
                             
                         <c:forEach var="movieVO" items="${listTopTen}">
-	                        <div class="w3l-movie-gride-agile">
-	                            <a href="<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}" class="hvr-sweep-to-bottom">
-	                            <img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${movieVO.movieno}" title="${movieVO.moviename}" class="img-responsive" alt=" " style="width:200px; height:230px;">
+	                        <div class="w3l-movie-gride-agile1">
+	                            <a href="<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}" class="hvr-sweep-to-bottom" style="width:100%;">
+	                            <img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${movieVO.movieno}" title="${movieVO.moviename}" class="img-responsive" alt=" " style="width:100%; height:230px;">
 	                                <div class="w3l-action-icon">
 	                                <i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
 	                            </a>
@@ -1113,8 +839,7 @@
 	                               		<h6><a href="<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}"><span style="font-weight:bold; font-size:15px; color:#766BB0;" >${movieVO.moviename}</span></a></h6>
 	                                   </div>
 	                                   <div class="mid-2 agile_mid_2_home">
-										<p style="font-size:13px;">上映日期: <fmt:formatDate value="${movieVO.premiredate}" pattern="yyyy-MM-dd" /><br>
-										下映日期: <fmt:formatDate value="${movieVO.offdate}" pattern="yyyy-MM-dd" /></p>
+										<p style="font-size:13px;">上映日期: <fmt:formatDate value="${movieVO.premiredate}" pattern="yyyy-MM-dd" /></p>
 										                                   <div class="mid-2 agile_mid_2_home">
 										<p><font color=red>${movieVO.rating} 分</font></p>
 										</div>	
