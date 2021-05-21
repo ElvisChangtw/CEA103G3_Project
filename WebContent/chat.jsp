@@ -1,10 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<jsp:useBean id="relationSvc" scope="page" class="com.relationship.model.RelationshipService" />
+<jsp:useBean id="memSvc" scope="page" class="com.mem.model.MemService" />
+<%@ page import="com.mem.model.*"%>
+<%
+	MemVO memVO = (MemVO)session.getAttribute("memVO");
+
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<link rel="stylesheet" href="css/friendchat.css" type="text/css" />
+<link rel="stylesheet" href="<%=request.getContextPath()%>/css1/friendchat.css" type="text/css" />
+<link href="https://i2.bahamut.com.tw/css/basic.css?v=1618977484" rel="stylesheet">
+
 <style type="text/css">
 
 </style>
@@ -16,11 +27,12 @@
 	<div id="messagesArea" class="panel message-area" ></div>
 	<div class="panel input-area">
 		<input id="message" class="text-field" type="text" placeholder="Message" onkeydown="if (event.keyCode == 13) sendMessage();" /> 
-		<input type="submit" id="sendMessage" class="button" value="Send" onclick="sendMessage();" /> 
-		<input type="button" id="connect" class="button" value="Connect" onclick="connect();" /> 
-		<input type="button" id="disconnect" class="button" value="Disconnect" onclick="disconnect();" />
+		<input type="submit" id="sendMessage" class="button" value="送出" onclick="sendMessage();" /> 
+		<input type="button" id="connect" class="button" value="上線" onclick="connect();" /> 
+		<input type="button" id="disconnect" class="button" value="下線" onclick="disconnect();" />
 	</div>
 </body>
+
 <script>
 	var MyPoint = "/FriendWS/${userName}";
 	var host = window.location.host;
@@ -113,7 +125,13 @@
 		row.innerHTML = '';
 		for (var i = 0; i < friends.length; i++) {
 			if (friends[i] === self) { continue; }
-			row.innerHTML +='<div id=' + i + ' class="column" name="friendName" value=' + friends[i] + ' ><h2>' + friends[i] + '</h2></div>';
+				<c:forEach var="relationshipVO" items="${relationSvc.getAllFriendno(memVO.member_no)}">				
+				console.log("${memSvc.getOneMem(relationshipVO.friend_no).mb_name}");
+				if (friends[i]==="${memSvc.getOneMem(relationshipVO.friend_no).mb_name}"){
+
+					row.innerHTML +='<div id=' + i + ' class="column" name="friendName" value=' + friends[i] + ' ><h2>' + friends[i] + '</h2></div>';
+					}
+				</c:forEach>
 		}
 		addListener();
 	}

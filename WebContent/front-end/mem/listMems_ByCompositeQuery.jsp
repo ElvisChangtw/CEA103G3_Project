@@ -22,6 +22,7 @@
 
 <html>
 <head><title>複合查詢 - listMems_ByCompositeQuery.jsp</title>
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/front/notification.css" />
 <link href="https://i2.bahamut.com.tw/css/basic.css?v=1618977484" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
@@ -65,10 +66,11 @@
     padding: 5px;
     text-align: center;
   }
+  
 </style>
 
 </head>
-<body bgcolor='white'>
+<body bgcolor='white' onload="connect();" onunload="disconnection();">
 		<div class="shadow p-3 mb-1 bg-white rounded" style="font-size:40px">
 			<span class="badge badge-secondary">
 				MoviesHit好友專區
@@ -141,7 +143,7 @@
 										<input type="hidden" name="requestURL" value="<%=request.getServletPath()%>">
 										<input type="hidden" name="mb_name" value="${param.mb_name}">
 										<input type="hidden" name="action" value="insert">			
-										<input type="submit" value="送出好友邀請" class="btn btn-info">
+										<button type="submit" value="addFriend" class="btn btn-info addFriend">送出好友邀請</button>
 									</FORM>
 								</c:when>
 								<c:when test="${relationshipSvc.getOneRelationship(mem1VO.member_no, memVO.member_no) == null && relationshipSvc.getOneRelationship(memVO.member_no, mem1VO.member_no) != null}">
@@ -189,11 +191,152 @@
 			</c:if>
 			</c:forEach>
 </table>
+ <div class="alert-container">
+  </div>
 <%-- <%@ include file="pages/page2_ByCompositeQuery.file" %> --%>
 
 <!-- <br>本網頁的路徑:<br><b> -->
 <%--    <font color=blue>request.getServletPath():</font> <%=request.getServletPath()%><br> --%>
 <%--    <font color=blue>request.getRequestURI(): </font> <%=request.getRequestURI()%> </b> --%>
+<script>
+	var MyPoint = "/NotifyWS/${memVO.member_no}";
+	var host = window.location.host;
+	var path = window.location.pathname;
+	var webCtx = path.substring(0, path.indexOf('/', 1));
+	var endPointURL = "ws://" + window.location.host + webCtx + MyPoint;
+	var friendNO;
+	var groupNO;
+	var movieNO;
+	var groupName;
+	var goGroupName;
+	var kickGroupName;
+	var memberNO;
+	var self = '${memVO.member_no}';
+	var webSocket;
+	var type;
+
+
+	$(".addFriend").click(function(){
+		friendNO = $(this).prev().prev().prev().prev().val();
+		sendWebSocket($(this));
+	})
+	
+	function sendWebSocket(item){
+		let timespan = new Date();
+		let timeStr = timespan.getFullYear() + "-" + (timespan.getMonth()+1).toString().padStart(2, "0") + "-" 
+					+ timespan.getDate() + " " + timespan.getHours().toString().padStart(2, "0") + ":" + timespan.getMinutes().toString().padStart(2, "0");
+		if(item.val()=="addFriend"){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : friendNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		
+		webSocket.send(JSON.stringify(jsonObj));
+	}
+	
+
+	function connect() {
+		console.log(endPointURL);
+		// create a websocket
+		webSocket = new WebSocket(endPointURL);
+
+		webSocket.onopen = function(event) {
+			
+
+		};
+
+		webSocket.onmessage = function(event) {
+			console.log(event.data);
+			var jsonObj = JSON.parse(event.data);
+			var text = jsonObj.message;
+			var time = jsonObj.time;
+			var type = jsonObj.type;
+			console.log(jsonObj)
+			createAlert(text,time,type);
+			
+		};
+
+		webSocket.onclose = function(event) {
+			console.log("Disconnected!");
+		};
+	}
+	
+	function disconnect() {
+		webSocket.close();
+		document.getElementById('sendMessage').disabled = true;
+		document.getElementById('connect').disabled = false;
+		document.getElementById('disconnect').disabled = true;
+	}
+	
+	
+// 	產生通知block在視窗右下角
+	  const alertContainer = document.querySelector('.alert-container');
+	  const btnCreate = document.getElementById('create');
+	  
+	  
+	  
+	  const createAlert = (text,time,type) => {
+		  
+	  const newAlert = document.createElement('div');
+	  const closeNewAlert = document.createElement('span');
+	  const imgdiv = document.createElement('div');
+	  const img = document.createElement('img');
+	  const txt = document.createElement('div');
+	  const time_str = document.createElement('div');
+	  
+	  if (type==="addFriend"||type==="response"){
+		  img.src="<%=request.getContextPath()%>/images/notify_icons/friend.png"
+	  }
+	  if (type==="addGroup"||type==="createGroup"||type==="dismissGroup"||type==="goGroup"||type==="kickoffGroup"||type==="kickUnpaid"){
+			img.src="<%=request.getContextPath()%>/images/notify_icons/group.png"
+	  }
+	  if (type==="buyTicket"){
+			img.src="<%=request.getContextPath()%>/images/notify_icons/ticket.png"
+	  }
+	  if (type==="reminder"){
+			img.src="<%=request.getContextPath()%>/images/notify_icons/warning.png"
+	  }
+	  
+		  img.classList.add("alertImg");
+		  imgdiv.append(img);
+		  txt.innerText = text;
+		  txt.classList.add("alertTxt");
+		  time_str.innerText = time;
+		  txt.append(time_str);
+		  newAlert.prepend(imgdiv);
+		  newAlert.append(txt)
+		  closeNewAlert.innerHTML = '&times;';
+		  
+		  newAlert.appendChild(closeNewAlert);
+		  
+		  newAlert.classList.add('alert');
+		  
+		  alertContainer.appendChild(newAlert);
+		  
+		  setTimeout(()=> {
+		    newAlert.classList.add('fadeOut');
+		  },3000)
+		  
+		  setTimeout(()=> {
+		    newAlert.remove();
+		  },5000)
+		  
+		
+	};
+
+
+	alertContainer.addEventListener('click', (e) => {
+	    if(e.target.nodeName == 'SPAN') {
+	        e.target.parentNode.remove();
+	    }
+	})
+
+</script>
 
 </body>
 
