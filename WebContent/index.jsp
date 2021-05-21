@@ -129,16 +129,16 @@
                                         <li>
                                             <div class="col-sm-6">
                                                 <ul class="multi-column-dropdown">
-                                                    <li><a href="<%=request.getContextPath()%>/backend/mem/select_page.jsp">會員登入</a></li>
-                                                    <li><a href="genre.html">申請會員</a></li>
-                                                    <li><a href="genre.html">訂票紀錄</a></li>
+                                                    <li><a href="<%=request.getContextPath()%>/front-end/mem/MemLogin.jsp">登入/註冊</a></li>
+                                                    <li><a href="<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">會員中心</a></li>
+                                                    <li><a href="genre.html">X訂票紀錄</a></li>
                                                 </ul>
                                             </div>
                                             <div class="col-sm-6">
                                                 <ul class="multi-column-dropdown">
-                                                    <li><a href="horror.html">揪團紀錄</a></li>
-                                                    <li><a href="genre.html">會員服務</a></li>
-                                                    <li><a href="genre.html">會員QA</a></li>
+                                                    <li><a href="horror.html">X揪團紀錄</a></li>
+                                                    <li><a href="genre.html">X會員服務</a></li>
+                                                    <li><a href="genre.html">X會員QA</a></li>
                                                 </ul>
                                             </div>
                                             <!-- <div class="clearfix"></div> -->
@@ -215,7 +215,7 @@
                                         <li>
                                             <div class="col-sm-6">
                                                 <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">搜尋揪團</a></li>
+                                                    <li><a href="<%=request.getContextPath()%>/front-end/group/group_front_page.jsp">揪團首頁</a></li>
                                                     <li><a href="genre.html">快速揪團</a></li>
                                                 </ul>
                                             </div>
@@ -229,70 +229,31 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">討論區<b class="caret"></b></a>
-                                    <ul class="dropdown-menu multi-column columns-2">
-                                        <li>
-                                            <div class="col-sm-6">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">討論啥</a></li>
-                                                    <li><a href="genre.html">討論你</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">討論啥</a></li>
-                                                    <li><a href="genre.html">討論你</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">餐飲<b class="caret"></b></a>
-                                    <ul class="dropdown-menu multi-column columns-2">
-                                        <li>
-                                            <div class="col-sm-6">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">要吃啥</a></li>
-                                                    <li><a href="genre.html">吃屎吧</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">要吃啥</a></li>
-                                                    <li><a href="genre.html">吃屎吧</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                        </li>
-                                    </ul>
-                                </li>
+                                
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">公告<b class="caret"></b></a>
                                     <ul class="dropdown-menu multi-column columns-1">
                                         <li>
                                             <div class="col-sm-12">
                                                 <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">影城公告</a></li>
+                                                    <li><a href="<%=request.getContextPath()%>/front-end/news/listAllNews.jsp">最新消息</a></li>
                                                 </ul>
                                             </div>
                                             <div class="col-sm-12">
                                                 <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">影城活動</a></li>
+                                                    <li><a href="genre.html">X影城活動</a></li>
                                                 </ul>
                                             </div>
                                             <div class="col-sm-12">
                                                 <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">合作夥伴</a></li>
+                                                    <li><a href="genre.html">X合作夥伴</a></li>
                                                 </ul>
                                             </div>
                                             <div class="clearfix"></div>
                                         </li>
                                     </ul>
                                 </li>
-                                <li class="active"><a href="index.html">影城介紹</a></li>
+                                <li class="active"><a href="<%=request.getContextPath()%>/front-end/news/listAllNews.jsp">最新消息</a></li>
                             </ul>
                         </div>
                         <div class="clearfix"> </div>
