@@ -140,7 +140,7 @@ font-size: 20px;
 						<li>最後發佈時間: <fmt:formatDate value="${commentVO.modifydate}"
 								pattern="yyyy-MM-dd HH:mm:ss" /></li>
 						<c:if test="${commentVO.memberno != memVO.member_no}">
-						<li><a href="<%=request.getContextPath()%>/front-end/report_comment/addReportComment.jsp?commentno=${commentVO.commentno}&memberno=${memVO.member_no}&requestURL=<%=request.getServletPath()%>">
+						<li><a href="<%=request.getContextPath()%>/front-end/report_comment/addReportComment.jsp?commentno=${commentVO.commentno}&memberno=${memVO.member_no}&requestURL=<%=request.getServletPath()%>&movieno=${commentVO.movieno}">
 						<i class="fa fa-hand-o-left" aria-hidden="true"></i> </i>檢舉</a></li></c:if>
 					</ul>
 				

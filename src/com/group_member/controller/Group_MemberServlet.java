@@ -28,7 +28,7 @@ public class Group_MemberServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		req.setCharacterEncoding("UTF-8");
-		res.setContentType("text; charset=utf-8");
+		res.setContentType("text/html; charset=utf-8");
 		String action = req.getParameter("action");
 		
 		if ("getOne_For_Display".equals(action)) { // 來自select_page.jsp的請求
@@ -509,6 +509,9 @@ public class Group_MemberServlet extends HttpServlet {
 				out.close();
 			}
 		}
+		
+		
+		
 		
 		
 		if("leave_group_for_Ajax".equals(action)) {

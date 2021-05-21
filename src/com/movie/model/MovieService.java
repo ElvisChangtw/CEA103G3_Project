@@ -128,8 +128,23 @@ public class MovieService {
 	public List<MovieVO> getAllTopExpectationComingSoonMovie() {
 		return dao.getAllTopExpectationComingSoonMovie();
 	}
+	
+	public void updateMovieStatus() {
+		System.out.println("1");
+		dao.updateMovieStatus();
+		System.out.println("2");
+		
+	}
+	
+	
+	
+	
 	public List<MovieVO> getAllForGroup(){
 		return dao.getAllForGroup();
 	}
+	public void createMovieIdex() {
+		dao.createMovieIdex();
+	}
+	
 	
 }

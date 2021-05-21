@@ -477,7 +477,7 @@ public class CommentDAO implements CommentDAO_interface{
 			con = ds.getConnection();
 			String finalSQL = "select * from COMMENT "
 		          + jdbcUtil_CompositeQuery_Comment.get_WhereCondition(map)
-		          + "order by COMMENT_NO";
+		          + "order by COMMENT_NO desc";
 			pstmt = con.prepareStatement(finalSQL);
 			System.out.println("¡´¡´finalSQL(by DAO) = "+finalSQL);
 			rs = pstmt.executeQuery();

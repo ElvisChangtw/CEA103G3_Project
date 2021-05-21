@@ -50,15 +50,15 @@ public class MovieDAO implements MovieDAO_interface{
 	private static final String GET_LATEST_STMT = 
 			"select * from MOVIE order by PREMIERE_DT desc limit 6";
 	private static final String GET_INTHEATERS_MOVIE_STMT = 
-			"select * from MOVIE where now() between PREMIERE_DT and OFF_DT order by PREMIERE_DT desc";
+			"select * from MOVIE where cast(now() as date) between PREMIERE_DT and OFF_DT order by PREMIERE_DT desc";
 	private static final String GET_ONE_NEWEST_INTHEATERS_MOVIE_STMT = 
-			"select * from MOVIE where now() between PREMIERE_DT and OFF_DT order by PREMIERE_DT desc limit 1";
+			"select * from MOVIE where cast(now() as date) between PREMIERE_DT and OFF_DT order by PREMIERE_DT desc limit 1";
 	private static final String GET_COMINGSOON_MOVIE_STMT = 
 			"select * from MOVIE where PREMIERE_DT between now() and date_sub(now(),interval -30 day)";	
 	private static final String GET_ONE_NEWEST_COMINGSOON_MOVIE_STMT = 
 			"select * from MOVIE where PREMIERE_DT between now() and date_sub(now(),interval -30 day) order by PREMIERE_DT desc limit 1";	
 	private static final String GET_ALL_TOPRATING_INTHEATERS_MOVIE_STMT = 
-			"select * from MOVIE where now() between PREMIERE_DT and OFF_DT order by RATING desc";
+			"select * from MOVIE where cast(now() as date) between PREMIERE_DT and OFF_DT order by RATING desc";
 	private static final String GET_ALL_TOPEXPECTATION_COMINGSOON_MOVIE_STMT = 
 			"select * from MOVIE where PREMIERE_DT between now() and date_sub(now(),interval -30 day) order by EXPECTATION desc";		
 	
@@ -71,7 +71,14 @@ public class MovieDAO implements MovieDAO_interface{
 			"SELECT MOVIE_NO, MOVIE_NAME FROM `MOVIE`;";
 	private static final String INSRET_MOVIE_NAME_INDEX = 
 			"INSERT INTO `MOVIE_NAME_INDEX` VALUES  (?, ?);";
-
+	
+	private static final String UPDATE_MOVIE_ON = 
+			"update MOVIE set `STATUS`= 0 where PREMIERE_DT between date_sub(now(),interval +1 day) and now() and `STATUS` =1;";
+	private static final String UPDATE_MOVIE_DOWN = 
+			"update MOVIE set `STATUS`= 2 where OFF_DT < cast(now() as date) and `STATUS` = 0;";
+	
+	
+	
 	//揪團要取24HR之後有場次的電影列表用
 		private static final String GET_ALL_FOR_GROUP = 
 			"select S0.*  from MOVIE S0 " + 
@@ -413,7 +420,7 @@ public class MovieDAO implements MovieDAO_interface{
 				   + "select S0.* from movie S0 LEFT JOIN "
 				   +" B ON S0.MOVIE_NO = B.MOVIE_NO "
 				   + jdbcUtil_CompositeQuery_Movie.get_WhereCondition(map)
-				   +" ORDER BY (CASE WHEN B.CNT IS NULL THEN 0 ELSE B.CNT END) DESC, MOVIE_NO"
+				   +" ORDER BY (CASE WHEN B.CNT IS NULL THEN 0 ELSE B.CNT END) DESC, MOVIE_NO DESC"
 				   ;
 			
 			pstmt = con.prepareStatement(finalSQL);
@@ -1313,6 +1320,59 @@ public class MovieDAO implements MovieDAO_interface{
 					pstmt.close();
 				} catch (SQLException se) {
 					se.printStackTrace(System.err);
+				}
+			}
+		}
+	}
+	
+	@Override
+	public void updateMovieStatus() {
+
+		Connection con = null;
+		PreparedStatement pstmt1 = null;
+		PreparedStatement pstmt2 = null;
+		ResultSet rs = null;
+
+		try {
+
+			con = ds.getConnection();
+			pstmt1 = con.prepareStatement(UPDATE_MOVIE_ON);
+			pstmt2 = con.prepareStatement(UPDATE_MOVIE_DOWN);
+			pstmt1.executeUpdate();
+			pstmt2.executeUpdate();
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt2 != null) {
+				try {
+					pstmt2.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt1 != null) {
+				try {
+					pstmt1.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
 				}
 			}
 		}

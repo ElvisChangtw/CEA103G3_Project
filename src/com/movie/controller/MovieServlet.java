@@ -17,9 +17,31 @@ import com.comment.model.*;
 import com.rating.model.*;
 import com.expectation.model.*;
 
+
 @WebServlet("/MovieServlet")
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 5 * 1024 * 1024, maxRequestSize = 5 * 5 * 1024 * 1024)
 public class MovieServlet extends HttpServlet {
+//	private MovieTimer movieTimer;
+	long count = 0;
+	Timer movieTimer = new Timer();
+	Calendar cal = new GregorianCalendar(2021, Calendar.MAY, 19, 00, 01);
+	
+	public void init() throws ServletException {
+
+		movieTimer.scheduleAtFixedRate(new TimerTask() {
+			public void run() {
+				MovieService movieSvc = new MovieService();
+				movieSvc.updateMovieStatus();
+				System.out.println("update movie status = " + count);
+				System.out.println(new Date(scheduledExecutionTime()));
+				count++;
+			}
+		}, cal.getTime(), 24*60*60*1000);
+	}
+	
+	public void destroy() {
+		movieTimer.cancel();
+	}
 
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		doPost(req, res);
@@ -885,6 +907,51 @@ public class MovieServlet extends HttpServlet {
 //				failureView.forward(req, res);
 //			}
 //		}
-
+		if ("search_Ajax".equals(action)) { // 來自select_page.jsp的複合查詢請求
+			List<String> errorMsgs = new LinkedList<String>();
+			req.setAttribute("errorMsgs", errorMsgs);
+			PrintWriter out = res.getWriter();
+			try {
+			/***************************1.將輸入資料轉為Map**********************************/ 
+				//採用Map<String,String[]> getParameterMap()的方法 
+				//注意:an immutable java.util.Map 
+				//Map<String, String[]> map = req.getParameterMap();
+				HttpSession session = req.getSession();
+				Map<String, String[]> map = (Map<String, String[]>)session.getAttribute("map");
+			
+				// 以下的 if 區塊只對第一次執行時有效
+				if (req.getParameter("whichPage") == null){
+					Map<String, String[]> map1 = new HashMap<String, String[]>(req.getParameterMap());
+					session.setAttribute("map",map1);
+					map = map1;
+				} 
+				/***************************2.開始複合查詢***************************************/
+				MovieService movieSvc = new MovieService();
+				List<MovieVO> list  = movieSvc.getAll(map);
+				
+				for( MovieVO movieVO : list) {
+					movieVO.setMoviepicture1(null);
+					movieVO.setMoviepicture2(null);
+				}
+				JSONArray results = new JSONArray(list);  //
+				JSONObject jsonobj=new JSONObject();
+				try {
+					jsonobj.put("results", results);
+					out.print(jsonobj.toString());
+					return;
+				}catch(JSONException e) {
+					e.printStackTrace();
+				}finally {
+					out.flush();
+					out.close();
+				}
+				/***************************其他可能的錯誤處理**********************************/
+			} catch (Exception e) {
+				errorMsgs.add(e.getMessage());
+				RequestDispatcher failureView = req
+						.getRequestDispatcher("/front-end/movie/select_movie_page.jsp");
+				failureView.forward(req, res);
+			}
+		}
 	}
 }

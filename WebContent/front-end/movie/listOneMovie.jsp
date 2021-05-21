@@ -72,15 +72,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 </style>
 </head>
 <body>
-<c:choose>
-<c:when test="${movieVO.offdate < today}">
-<p>1</p>
-</c:when>
-<c:when test="${movieVO.offdate > today}">
-<p>1</p>
-</c:when>
-</c:choose>
-
 
 <!--/main-header-->
   <!--/banner-section-->
@@ -415,7 +406,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 														 <c:if test="${today.before(movieVO.premiredate)}">													 
 															 <tr>
 																<td><span style="color:#524066; font-weight:1000; font-size:30px;">期待度:&emsp;</span></td>
-																	<i class="fa fa-thumbs-up fa-2x thumbsup" id="t1" style="color:gray"></i>
+																	<i class="fa fa-thumbs-up fa-2x thumbsup" id="t1" style="color:gray"></i>&ensp;
 																	<i class="fa fa-thumbs-down fa-2x thumbsdown" id="t2" style="color:gray"></i>
 															 </tr>
 													 	</c:if>
@@ -1130,7 +1121,16 @@ $(document).ready(function(){
             icon: "success",
             title: "我好期待RRRRR",
             showConfirmButton: false,
-            timer: 1000,
+            timer: 5000,
+			width: 600,
+			padding: '3em',
+			background: '#fff url(/images/trees.png)',
+			backdrop: `
+			  rgba(0,0,0,0.4)
+			  url("<%=request.getContextPath()%>/images/gif/hotBoy.gif")
+			  left center
+			  no-repeat
+			`
         });
 		 $("#leaveBtn").show();
 		 
@@ -1168,7 +1168,16 @@ $(document).ready(function(){
             icon: "success",
             title: "我好失望RRRRR",
             showConfirmButton: false,
-            timer: 1000,
+            timer: 5000,
+			width: 600,
+			padding: '3em',
+			background: '#fff url(/images/trees.png)',
+			backdrop: `
+			  rgba(0,0,0,0.4)
+			  url("https://zodiac.tw/uploads/1455625798-jI266.jpg")
+			  left center
+			  no-repeat
+			`
         });
 		 $("#leaveBtn").show();
 		
@@ -1381,7 +1390,16 @@ $(document).ready(function(){
             icon: "success",
             title: "一星摳摳",
             showConfirmButton: false,
-            timer: 1500,
+            timer: 3000,
+			width: 600,
+			padding: '3em',
+			background: '#fff url(/images/trees.png)',
+			backdrop: `
+			  rgba(0,0,0,0.4)
+			  url("<%=request.getContextPath()%>/images/gif/11.gif")
+			  left center
+			  no-repeat
+			`
         });
 		 $("#leaveBtn").show();
 	})
@@ -1417,7 +1435,16 @@ $(document).ready(function(){
             icon: "success",
             title: "二星舔舔",
             showConfirmButton: false,
-            timer: 1500,
+            timer: 3000,
+			width: 600,
+			padding: '3em',
+			background: '#fff url(/images/trees.png)',
+			backdrop: `
+			  rgba(0,0,0,0.4)
+			  url("https://memes.tw/user-maker-thumbnail/a1c21b379244a82960756bf4f8def57a.gif")
+			  left center
+			  no-repeat
+			`
         });
 		 $("#leaveBtn").show();
 	})
@@ -1454,7 +1481,16 @@ $(document).ready(function(){
             icon: "success",
             title: "三星吸吸",
             showConfirmButton: false,
-            timer: 1500,
+            timer: 3000,
+			width: 600,
+			padding: '3em',
+			background: '#fff url(/images/trees.png)',
+			backdrop: `
+			  rgba(0,0,0,0.4)
+			  url("https://64.media.tumblr.com/8210fd413c5ce209678ef82d65731443/tumblr_mjphnqLpNy1s5jjtzo1_400.gifv")
+			  left top
+			  no-repeat
+			`
         });
 		 $("#leaveBtn").show();
 	})
@@ -1490,20 +1526,22 @@ $(document).ready(function(){
             icon: "success",
             title: "四星含含",
             showConfirmButton: false,
-            timer: 1500,
+            timer: 3000,
+			width: 600,
+			padding: '3em',
+			background: '#fff url(/images/trees.png)',
+			backdrop: `
+			  rgba(0,0,0,0.4)
+			  url("<%=request.getContextPath()%>/images/gif/yee.gif")
+			  left top
+			  no-repeat
+			`
         });
 		 $("#leaveBtn").show();
 	})
 	
 	$("#s5").click(function(){
-// 		$(".all-star").css("color","gray");
-// 		$(".all-star").css("color","yellow");
-// 		$("#con").val("5.0");
-		
-// 		let movieno = "${movieVO.movieno}";
-// 		let memberno = "${memVO.member_no}";
-// 		let rating = "5.0";
-		
+	
 		$(".all-star").css("color","gray");
 		$("#s1,#s2,#s3,#s4,#s5").css("color","yellow");
 		$("#con").val("5.0");
@@ -1534,7 +1572,16 @@ $(document).ready(function(){
             icon: "success",
             title: "五星吹吹",
             showConfirmButton: false,
-            timer: 1500,
+            timer: 3000,
+			width: 600,
+			padding: '3em',
+			background: '#fff url(/images/trees.png)',
+			backdrop: `
+			  rgba(123,123,123,0.4)
+			  url("<%=request.getContextPath()%>/images/gif/2.gif")
+			  left center
+			  no-repeat
+			`
         });
 		 $("#leaveBtn").show();
 	})
