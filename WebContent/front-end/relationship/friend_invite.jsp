@@ -10,6 +10,7 @@
 <html>
 <head>
 <title>IBM relationship: Home</title>
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/front/notification.css" />
 <link href="https://i2.bahamut.com.tw/css/basic.css?v=1618977484" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
@@ -54,10 +55,12 @@
     padding: 5px;
     text-align: center;
   }
+  
+
 </style>
 
 </head>
-<body bgcolor='white'>
+<body bgcolor='white' onload="connect();" onunload="disconnection();">
 
 <%-- 錯誤表列 --%>
 <c:if test="${not empty errorMsgs}">
@@ -133,7 +136,7 @@
 						<input type="hidden" name="member_no" value="${memVO.member_no}">
 						<input type="hidden" name="friend_no" value="${mem1VO.member_no}">
 						<input type="hidden" name="action" value="accept">			
-						<input type="submit" value="接受好友邀請" class="btn btn-success">
+						<button type="submit" value="1" class="btn btn-success addfriend_check_btn">接受好友邀請</button>
 					</FORM>
      			</td>   		
      		</tr>
@@ -146,6 +149,145 @@
       <jsp:include page="/front-end/mem/listRelationships_ByMemno.jsp" />
 <%} %>
 
+ <div class="alert-container">
+  </div>
+<script>
+	var MyPoint = "/NotifyWS/${memVO.member_no}";
+	var host = window.location.host;
+	var path = window.location.pathname;
+	var webCtx = path.substring(0, path.indexOf('/', 1));
+	var endPointURL = "ws://" + window.location.host + webCtx + MyPoint;
+	var friendNO;
+	var groupNO;
+	var movieNO;
+	var groupName;
+	var goGroupName;
+	var kickGroupName;
+	var memberNO;
+	var self = '${memVO.member_no}';
+	var webSocket;
+	var type;
+
+
+	$(".addfriend_check_btn").click(function(){
+		friendNO = $(this).prev().prev().val();
+		sendWebSocket($(this));
+	})
+	
+	function sendWebSocket(item){
+		let timespan = new Date();
+		let timeStr = timespan.getFullYear() + "-" + (timespan.getMonth()+1).toString().padStart(2, "0") + "-" 
+					+ timespan.getDate() + " " + timespan.getHours().toString().padStart(2, "0") + ":" + timespan.getMinutes().toString().padStart(2, "0");
+		if(item.val()==1){
+			var jsonObj = {
+				"type" : "response",
+				"sender" : self,
+				"receiver" : friendNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		
+		webSocket.send(JSON.stringify(jsonObj));
+	}
+	
+
+	function connect() {
+		console.log(endPointURL);
+		// create a websocket
+		webSocket = new WebSocket(endPointURL);
+
+		webSocket.onopen = function(event) {
+			
+
+		};
+
+		webSocket.onmessage = function(event) {
+			console.log(event.data);
+			var jsonObj = JSON.parse(event.data);
+			var text = jsonObj.message;
+			var time = jsonObj.time;
+			var type = jsonObj.type;
+			console.log(jsonObj)
+			createAlert(text,time,type);
+			
+		};
+
+		webSocket.onclose = function(event) {
+			console.log("Disconnected!");
+		};
+	}
+	
+	function disconnect() {
+		webSocket.close();
+		document.getElementById('sendMessage').disabled = true;
+		document.getElementById('connect').disabled = false;
+		document.getElementById('disconnect').disabled = true;
+	}
+	
+	
+// 	產生通知block在視窗右下角
+	  const alertContainer = document.querySelector('.alert-container');
+	  const btnCreate = document.getElementById('create');
+	  
+	  
+	  
+	  const createAlert = (text,time,type) => {
+		  
+	  const newAlert = document.createElement('div');
+	  const closeNewAlert = document.createElement('span');
+	  const imgdiv = document.createElement('div');
+	  const img = document.createElement('img');
+	  const txt = document.createElement('div');
+	  const time_str = document.createElement('div');
+	  
+	  if (type==="addFriend"||type==="response"){
+		  img.src="<%=request.getContextPath()%>/images/notify_icons/friend.png"
+	  }
+	  if (type==="addGroup"||type==="createGroup"||type==="dismissGroup"||type==="goGroup"||type==="kickoffGroup"||type==="kickUnpaid"){
+			img.src="<%=request.getContextPath()%>/images/notify_icons/group.png"
+	  }
+	  if (type==="buyTicket"){
+			img.src="<%=request.getContextPath()%>/images/notify_icons/ticket.png"
+	  }
+	  if (type==="reminder"){
+			img.src="<%=request.getContextPath()%>/images/notify_icons/warning.png"
+	  }
+	  
+		  img.classList.add("alertImg");
+		  imgdiv.append(img);
+		  txt.innerText = text;
+		  txt.classList.add("alertTxt");
+		  time_str.innerText = time;
+		  txt.append(time_str);
+		  newAlert.prepend(imgdiv);
+		  newAlert.append(txt)
+		  closeNewAlert.innerHTML = '&times;';
+		  
+		  newAlert.appendChild(closeNewAlert);
+		  
+		  newAlert.classList.add('alert');
+		  
+		  alertContainer.appendChild(newAlert);
+		  
+		  setTimeout(()=> {
+		    newAlert.classList.add('fadeOut');
+		  },3000)
+		  
+		  setTimeout(()=> {
+		    newAlert.remove();
+		  },5000)
+		  
+		
+	};
+
+
+	alertContainer.addEventListener('click', (e) => {
+	    if(e.target.nodeName == 'SPAN') {
+	        e.target.parentNode.remove();
+	    }
+	})
+</script>
 </body>
 
 </html>
