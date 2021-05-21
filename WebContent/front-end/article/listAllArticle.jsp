@@ -105,7 +105,7 @@
 	<button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/topic/topic.do?action=listArticles_ByTopicno_B&topicno=3'">影城活動</button>   
  	<b>●符 合 查 詢 條 件 如 下 所 示:</b>
 </div>
-   <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/article/article.do" name="form1">   
+   <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/front-end/article/article.do" name="form1">   
        <b><font color=blue>搜尋本站的作者或文章主題:</font></b> 
         <b>選擇文章作者:</b>
         <select size="1" name="member_no" >
@@ -156,7 +156,7 @@
 			<th>文章主題</th>
 			<th>發表文章時間</th>
 	<!-- 		<th>更新文章時間</th> -->
-			<th>文章狀態</th>
+<!-- 			<th>文章狀態</th> -->
 			<th>點讚數</th>
 	<!-- 		<th>修改</th> -->
 	<!-- 		<th>刪除</th> -->
@@ -184,7 +184,7 @@
 				</td>			
 				<td><fmt:formatDate value="${articleVO.crtdt}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 <%-- 			<td><fmt:formatDate value="${articleVO.updatedt}" pattern="yyyy-MM-dd HH:mm:ss"/></td> --%>
-				<td>${articleVO.status}</td>
+<%-- 				<td>${articleVO.status}</td> --%>
 				<td>${articleVO.likecount}</td>
 				
 				

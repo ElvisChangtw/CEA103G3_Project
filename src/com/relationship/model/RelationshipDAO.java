@@ -32,12 +32,14 @@ public class RelationshipDAO implements RelationshipDAO_interface {
 	private static final String UPDATE = 
 		"UPDATE relationship set isblock=? where member_no = ? and friend_no = ?";
 	private static final String GET_ALL_FRIENDNO = 
-			"SELECT * FROM relationship where member_no = ?";	
+			"SELECT * FROM relationship where member_no = ? and status = 1";	
 	
 	private static final String UPDATE_STATUS_TO_ONE = 
 			"UPDATE relationship set `status`=1 "
 			+ "where (member_no = ? and friend_no = ?) or "
 			+ "(friend_no = ? and member_no = ?)";
+	private static final String GET_ONE_STMT_BY_MEMNO = 
+			"SELECT * FROM relationship where member_no = ?";
 		
 	
 	@Override
@@ -407,5 +409,59 @@ public class RelationshipDAO implements RelationshipDAO_interface {
 				}
 			}
 		}
+	}
+	public List<RelationshipVO> findByPrimaryKeyByMemno(Integer member_no){
+		List<RelationshipVO> list = new ArrayList<RelationshipVO>();
+		RelationshipVO relationshipVO = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_ONE_STMT_BY_MEMNO);
+			pstmt.setInt(1, member_no);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// messageVO ¤]ºÙ¬° Domain objects
+				relationshipVO = new RelationshipVO();
+				relationshipVO.setMember_no(rs.getInt("member_no"));
+				relationshipVO.setFriend_no(rs.getInt("friend_no"));
+				relationshipVO.setStatus(rs.getString("status"));
+				relationshipVO.setIsblock(rs.getString("isblock"));
+				list.add(relationshipVO);
+			}
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
 	}
 }

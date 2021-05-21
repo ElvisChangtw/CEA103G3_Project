@@ -105,8 +105,6 @@ RelationshipVO relationshipVO = (RelationshipVO) request.getAttribute("relations
 				<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/front-end/article/article.do" style="margin-bottom: 0px;" >
 					<button type="button" class="btn btn-outline-success" onclick="location.href='<%=request.getContextPath()%>/front-end/article/listAllArticle.jsp'">回上一列表</button>
 						<input type="submit" value="修改文章" class="btn btn-danger">
-						<span><i class="fas fa-bookmark" id="thumb1" style="font-size: 30px" ></i></span>
-					<a id="hao2">我是書本可以點我!!</a>
 				<input type="hidden" name="requestURL"	value="<%=request.getServletPath()%>">
 	<!-- 			送出請求到update_article_input.jsp   -->				
 				<input type="hidden" name="articleno"  value="${articleVO.articleno}">
@@ -120,21 +118,11 @@ RelationshipVO relationshipVO = (RelationshipVO) request.getAttribute("relations
  		 			<div class="col-md-3" style="text-align:center;">
 		 		 		<img src ="<%=request.getContextPath()%>/MemServlet?action=view_memPic&member_no=${articleVO.memberno}" height= "200px" width="200px" style="margin-bottom:8px"/>
 		 		 		<h3><span class="badge badge-pill badge-success" style="font-size:1.5rem">樓主 ${memSvc.getOneMem(articleVO.memberno).mb_name}</span></h3>		 		 				 		 		
+		 		 			<span><i class="fas fa-bookmark" id="thumb1" style="font-size: 30px" ></i></span>
+							<a id="hao2">點我可以收藏文章!!</a>
 		 		 	</div>
 		 		 	<div class="card-title col-md-9">
 		 		 		<p style="font-size:2.50rem;"><font color=orange>【${topicSvc.getOneTopic(articleVO.articletype).topic}】</font>${articleVO.articleheadline}</p>
-<%-- 			 		 	文章編號:${articleVO.articleno}  --%>
- 		 	<!-- 			加入好友按鈕 -->
-				<div>
-		 		 <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/relationship/relationship.do" name="form2">
-							<input type="hidden" name="member_no" value="<%=myNumber%>">
-							<input type="hidden" name="friend_no" value="${articleVO.memberno}">
-			<%-- 			<input type="hidden" name="articleno" value="${articleVO.articleno}"> --%>
-			<%-- 			<input type="hidden" name="requestURL"	value="<%=request.getServletPath()%>"> --%>
-							<input type="hidden" name="action" value="insert">
-							<input type="submit" value="送出好友邀請"></FORM>
-<!-- 						加入好友按鈕 -->
-						</div>
 		 		 	</div>		 		 	
 	 		 	</div>
 				<div  style="text-align:right">
