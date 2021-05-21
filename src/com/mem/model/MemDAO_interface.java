@@ -1,6 +1,7 @@
 package com.mem.model;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.relationship.model.RelationshipVO;
@@ -21,4 +22,6 @@ public interface MemDAO_interface {
           public Set<RelationshipVO> getRelationshipsByMemberno(Integer member_no);
 		  public MemVO getPassword(String mb_email);
 		  public void updateRandomPws(String mb_email, String mb_pwd);
+		  
+		  public List<MemVO> getAll(Map<String, String[]> map);
 }

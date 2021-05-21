@@ -15,6 +15,9 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import com.relationship.model.RelationshipVO;
+import java.util.*;
+
+import jdbc.util.CompositeQuery.jdbcUtil_CompositeQuery_Member;
 
 
 public class MemDAO implements MemDAO_interface {
@@ -800,6 +803,74 @@ public class MemDAO implements MemDAO_interface {
 				}
 			}
 		}
+	}
+	
+	@Override
+	public List<MemVO> getAll(Map<String, String[]> map) {
+		List<MemVO> list = new ArrayList<MemVO>();
+		MemVO memVO = null;
+	
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+	
+		try {			
+			con = ds.getConnection();
+			String finalSQL = "select * from `member` "
+					+ jdbcUtil_CompositeQuery_Member.get_WhereCondition(map)
+					+ "order by member_no";
+			pstmt = con.prepareStatement(finalSQL);
+			System.out.println("¡´¡´finalSQL(by DAO) = "+finalSQL);
+			rs = pstmt.executeQuery();
+	
+			while (rs.next()) {
+				memVO = new MemVO();
+				memVO.setMember_no(rs.getInt("member_no"));
+				memVO.setMb_name(rs.getString("mb_name"));
+				memVO.setMb_email(rs.getString("mb_email"));
+				memVO.setMb_pwd(rs.getString("mb_pwd"));
+				memVO.setMb_bd(rs.getDate("mb_bd"));
+				memVO.setMb_pic(rs.getBytes("mb_pic"));
+				memVO.setMb_phone(rs.getString("mb_phone"));
+				memVO.setMb_city(rs.getString("mb_city"));
+				memVO.setMb_address(rs.getString("mb_address"));
+				memVO.setStatus(rs.getString("status"));
+				memVO.setMb_point(rs.getInt("mb_point"));
+				memVO.setMb_level(rs.getString("mb_level"));
+				memVO.setCrt_dt(rs.getDate("crt_dt"));
+				
+				list.add(memVO); // Store the row in the List
+			}
+			
+	
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
 	}
 }
 
