@@ -5,57 +5,26 @@
 <%
   EmployeeVO employeeVO = (EmployeeVO) request.getAttribute("employeeVO"); //EmpServlet.java (Concroller) 存入req的employeeVO物件 (包括幫忙取出的employeeVO, 也包括輸入資料錯誤時的employeeVO物件)
 %>
-<%= employeeVO==null %>
-<html>
+<%-- <%= employeeVO==null %> --%>
+<html lang="en" class="no-js">
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 <title>員工資料修改 - update_employee_input.jsp</title>
 
-<style>
-  table#table-1 {
-	background-color: #CCCCFF;
-    border: 2px solid black;
-    text-align: center;
-  }
-  table#table-1 h4 {
-    color: red;
-    display: block;
-    margin-bottom: 1px;
-  }
-  h4 {
-    color: blue;
-    display: inline;
-  }
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 
-<style>
-  table {
-	width: 450px;
-	background-color: white;
-	margin-top: 1px;
-	margin-bottom: 1px;
-  }
-  table, th, td {
-    border: 0px solid #CCCCFF;
-  }
-  th, td {
-    padding: 1px;
-  }
-</style>
+        <meta name="description" content="Login and Registration Form with HTML5 and CSS3" />
+        <meta name="keywords" content="html5, css3, form, switch, animation, :target, pseudo-class" />
+        <meta name="author" content="Codrops" />
+        <link rel="shortcut icon" href="../favicon.ico"> 
+        <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/back-end/employee/css/demo.css" />
+        <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/back-end/employee/css/stylexxx.css" />
+		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/back-end/employee/css/animate-custom.css" />
 
 </head>
-<body bgcolor='white'>
-
-<table id="table-1">
-	<tr><td>
-		 <h3>員工資料修改 - update_employee_input.jsp</h3>
-		 <h4><a href="select_page.jsp"><img src="images/back1.gif" width="100" height="32" border="0">回首頁</a></h4>
-	</td></tr>
-</table>
-
-<h3>資料修改:</h3>
-
-<%-- 錯誤表列 --%>
+    <body>
+    
+    <%-- 錯誤表列 --%>
 <c:if test="${not empty errorMsgs}">
 	<font style="color:red">請修正以下錯誤:</font>
 	<ul>
@@ -65,73 +34,115 @@
 	</ul>
 </c:if>
 
+        <div class="container">
+        <header>
+                <h1></span></h1>
+            </header>
+            <section>				
+                <div id="container_demo" >
+                    <!-- hidden anchor to stop jump http://www.css3create.com/Astuce-Empecher-le-scroll-avec-l-utilisation-de-target#wrap4  -->
+                    <a class="hiddenanchor" id="toregister"></a>
+                    <div id="wrapper">
+                    
+                    <div id="login" class="animate form">
+                            <form  action="mysuperscript.php" autocomplete="on"> 
+                                <h1>Log in</h1> 
+                                <p> 
+                                    <label for="username" class="uname" data-icon="u" > Your email or username </label>
+                                    <input id="username" name="username" required="required" type="text" placeholder="myusername or mymail@mail.com"/>
+                                </p>
+                                <p> 
+                                    <label for="password" class="youpasswd" data-icon="p"> Your password </label>
+                                    <input id="password" name="password" required="required" type="password" placeholder="eg. X8df!90EO" /> 
+                                </p>
+                                <p class="keeplogin"> 
+									<input type="checkbox" name="loginkeeping" id="loginkeeping" value="loginkeeping" /> 
+									<label for="loginkeeping">Keep me logged in</label>
+								</p>
+                                <p class="login button"> 
+                                    <input type="submit" value="Login" /> 
+								</p>
+                                <p class="change_link">
+									Not a member yet ?
+									<a href="#toregister" class="to_register">Join us</a>
+								</p>
+                            </form>
+                        </div>
 
-
-
-<FORM METHOD="post" ACTION="employee.do" name="form1">
-<table>
-	<tr>
-		<td>員工編號:<font color=red><b>*</b></font></td>
-		<td><%=employeeVO.getEmpno()%></td>
-	</tr>
-	<tr>
-		<td>員工姓名:</td>
-		<td><input type="TEXT" name="empname" size="45" value="<%=employeeVO.getEmpname()%>" /></td>
-	</tr>
-	<tr>
-		<td>員工密碼:</td>
-		<td><input type="TEXT" name="emppwd" size="45"	value="<%=employeeVO.getEmppwd()%>" /></td>
-	</tr>
-	
-	<tr>
-		<td>性別:</td>
-		<td>
-			<select size="1" name="gender">
-				<option value="0">女
-				<option value="1">男
-			</select>
-		</td>
-	</tr>
-
-	<tr>
-		<td>電話:</td>
-		<td><input type="TEXT" name="tel" size="45"	value="<%=employeeVO.getTel()%>" /></td>
-	</tr>
-	<tr>
-		<td>電子郵件:</td>
-		<td><input type="TEXT" name="email" size="45" value="<%=employeeVO.getEmail()%>" /></td>
-	</tr>
-	<tr>
-<!-- 	之後再回來補useBean & EL語法 -->
-		<td>職稱:</td>
-		<td><input type="TEXT" name="title" size="45" value="<%=employeeVO.getTitle()%>" /></td>
-	</tr>
-	<tr>
-		<td>雇用日期:</td>
-		<td><input name="hiredate" id="f_date1" type="text" ></td>
-	</tr>
-	<tr>
-		<td>離職日期:</td>
-		<td><input name="quitdate" id="f_date2" type="text" ></td>
-	</tr>
-	<tr>
-		<td>在職狀態:</td>
-<!-- 				<td><input type="TEXT" name="status" size="45" -->
-<%-- 					value="<%=(employeeVO == null) ? "0" : employeeVO.getStatus()%>" /></td> --%>
-		<td>
-			<input type="radio" name="status" value="0">已離職
-			<input type="radio" name="status" value="1" checked>在職中
-			<input type="radio" name="status" value="2">留職停薪
-		</td>
-	</tr>
-	
-
-</table>
-<br>
-<input type="hidden" name="action" value="update">
-<input type="hidden" name="empno" value="<%=employeeVO.getEmpno()%>">
-<input type="submit" value="送出修改"></FORM>
-</body>
+                        <div id="register" class="animate form">
+                            <form  METHOD="post" ACTION="<%=request.getContextPath()%>/back-end/employee/employee.do" name="form1" autocomplete="on"> 
+                                <h1> 員工修改 </h1> 
+                                <p> 
+                                    <label for="empno" data-icon="u">員工編號:</label>
+                                    <input id="empno" name="empno" required="required" type="text" value="<%=employeeVO.getEmpno()%>" />
+                                </p>
+                                
+                                <p> 
+                                    <label for="empname" data-icon="u" >員工姓名:</label>
+                                    <input id="empname" name="empname" required="required" type="text" value="<%=employeeVO.getEmpname()%>" /> 
+                                </p>
+                                
+                                 <p> 
+                                    <label for="emppwd" data-icon="p">員工密碼:</label>
+                                    <input id="emppwd" name="emppwd" required="required" type="password" value="<%=employeeVO.getEmppwd()%>" />
+                                </p>
+                                
+                                <p> 
+                                    <label for="gender">性別:</label>
+                                		<select size="1" name="gender">
+										<option value="0">女
+										<option value="1">男
+									</select>
+                                </p>
+                                
+                                <p> 
+                                    <label for="tel" data-icon="u">電話:</label>
+                                    <input id="tel" name="tel" required="required" type="text" value="<%=employeeVO.getTel()%>" />
+                                </p>
+                                
+                                <p> 
+                                    <label for="email" data-icon="e">電子郵件:</label>
+                                    <input id="email" name="email" required="required" type="text"  value="<%=employeeVO.getEmail()%>" />
+                                </p>
+                                
+                                <p> 
+                                    <label for="title" data-icon="u">職稱:</label>
+                                    <input id="title" name="title" required="required" type="text" value="<%=employeeVO.getTitle()%>" />
+                                </p>
+                                
+                                <p> 
+                                    <label for="f_date1" data-icon="u">雇用日期:</label>
+                                    <input id="f_date1" name="hiredate" required="required" type="text" value="<%=employeeVO.getHiredate()%>"/>
+                                </p>
+                                
+                                <p> 
+                                    <label for="f_date2" data-icon="u">離職日期:</label>
+                                    <input id="f_date2" name="quitdate" required="required" type="text" value="<%=employeeVO.getQuitdate()%>"/>
+                                </p>
+                                
+                                <p> 
+                                 	 <label for="status" data-icon="u">在職狀態:</label>
+									 <input id="status" name="status" required="required" type="text" value="<%=employeeVO.getStatus()%>"/>
+<!--                                   	 <input type="radio" name="status" value="0">已離職 -->
+<!-- 									 <input type="radio" name="status" value="1" checked>在職中 -->
+<!-- 									 <input type="radio" name="status" value="2">留職停薪 -->
+                                </p>
+                                
+                                
+                                
+                                <p class="signin button"> 
+									<input type="hidden" name="action" value="update">
+									<input type="hidden" name="empno" value="<%=employeeVO.getEmpno()%>">
+									<input type="submit" value="save">
+								</p>
+                            </form>
+                        </div>
+						
+                    </div>
+                </div>  
+            </section>
+        </div>
+    </body>
 
 
 

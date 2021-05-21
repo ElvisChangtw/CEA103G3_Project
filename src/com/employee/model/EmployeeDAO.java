@@ -8,6 +8,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 import com.employee.model.*;
+import com.employee.model.EmployeeVO;
 
 public class EmployeeDAO implements EmployeeDAO_interface {
 
@@ -22,17 +23,13 @@ public class EmployeeDAO implements EmployeeDAO_interface {
 		}
 	}
 
-	private static final String INSERT_STMT = 
-		"INSERT INTO employee (empname,emppwd,gender,tel,email,title,hiredate,quitdate,status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	private static final String GET_ALL_STMT = 
-		"SELECT empno,empname,emppwd,gender,tel,email,title,hiredate,quitdate,status FROM employee order by empno";
-	private static final String GET_ONE_STMT = 
-		"SELECT empno,empname,emppwd,gender,tel,email,title,hiredate,quitdate,status FROM employee where empno = ?";
-	private static final String DELETE = 
-		"DELETE FROM employee where empno = ?";
-	private static final String UPDATE = 
-		"UPDATE employee set empname=?, emppwd=?, gender=?, tel=?, email=?, title=?, hiredate=?, quitdate=?, status=? where empno = ?";
-
+	private static final String INSERT_STMT = "INSERT INTO employee (empname,emppwd,gender,tel,email,title,hiredate,quitdate,status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	private static final String GET_ALL_STMT = "SELECT empno,empname,emppwd,gender,tel,email,title,hiredate,quitdate,status FROM employee order by empno";
+	private static final String GET_ONE_STMT = "SELECT empno,empname,emppwd,gender,tel,email,title,hiredate,quitdate,status FROM employee where empno = ?";
+	private static final String DELETE = "DELETE FROM employee where empno = ?";
+	private static final String UPDATE = "UPDATE employee set empname=?, emppwd=?, gender=?, tel=?, email=?, title=?, hiredate=?, quitdate=?, status=? where empno = ?";
+	private static final String LOGIN_CHECK = "SELECT * FROM employee where email = ? and emppwd = ?";
+	private static final String UPDATERANDOMPWD = "UPDATE employee set emppwd = ? where email = ?";
 
 	public void insert(EmployeeVO employeeVO) {
 
@@ -53,13 +50,12 @@ public class EmployeeDAO implements EmployeeDAO_interface {
 			pstmt.setDate(7, employeeVO.getHiredate());
 			pstmt.setDate(8, employeeVO.getQuitdate());
 			pstmt.setString(9, employeeVO.getStatus());
-			
+
 			pstmt.executeUpdate();
 
 			// Handle any SQL errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (pstmt != null) {
@@ -79,7 +75,6 @@ public class EmployeeDAO implements EmployeeDAO_interface {
 		}
 
 	}
-
 
 	public void update(EmployeeVO employeeVO) {
 
@@ -91,7 +86,6 @@ public class EmployeeDAO implements EmployeeDAO_interface {
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(UPDATE);
 
-			
 			pstmt.setString(1, employeeVO.getEmpname());
 			pstmt.setString(2, employeeVO.getEmppwd());
 			pstmt.setString(3, employeeVO.getGender());
@@ -102,13 +96,12 @@ public class EmployeeDAO implements EmployeeDAO_interface {
 			pstmt.setDate(8, employeeVO.getQuitdate());
 			pstmt.setString(9, employeeVO.getStatus());
 			pstmt.setInt(10, employeeVO.getEmpno());
-			
+
 			pstmt.executeUpdate();
 
 			// Handle any driver errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (pstmt != null) {
@@ -128,7 +121,6 @@ public class EmployeeDAO implements EmployeeDAO_interface {
 		}
 
 	}
-
 
 	public void delete(Integer empno) {
 
@@ -146,8 +138,7 @@ public class EmployeeDAO implements EmployeeDAO_interface {
 
 			// Handle any driver errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (pstmt != null) {
@@ -167,7 +158,6 @@ public class EmployeeDAO implements EmployeeDAO_interface {
 		}
 
 	}
-
 
 	public EmployeeVO findByPrimaryKey(Integer empno) {
 
@@ -202,8 +192,7 @@ public class EmployeeDAO implements EmployeeDAO_interface {
 
 			// Handle any driver errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {
@@ -230,7 +219,6 @@ public class EmployeeDAO implements EmployeeDAO_interface {
 		}
 		return employeeVO;
 	}
-
 
 	public List<EmployeeVO> getAll() {
 		List<EmployeeVO> list = new ArrayList<EmployeeVO>();
@@ -264,8 +252,7 @@ public class EmployeeDAO implements EmployeeDAO_interface {
 
 			// Handle any driver errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {
@@ -293,4 +280,97 @@ public class EmployeeDAO implements EmployeeDAO_interface {
 		return list;
 	}
 
+	@Override
+	public EmployeeVO login_check(String email, String emppwd) {
+		EmployeeVO employeeVO = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(LOGIN_CHECK);
+
+			pstmt.setString(1, email);
+			pstmt.setString(2, emppwd);
+
+			rs = pstmt.executeQuery();
+				
+			while (rs.next()) {
+				employeeVO = new EmployeeVO();
+				employeeVO.setEmpno(rs.getInt("empno"));
+				employeeVO.setEmpname(rs.getString("empname"));
+				employeeVO.setEmppwd(rs.getString("emppwd"));
+				employeeVO.setGender(rs.getString("gender"));
+				employeeVO.setTel(rs.getString("tel"));
+				employeeVO.setEmail(rs.getString("email"));
+				employeeVO.setTitle(rs.getString("title"));
+				employeeVO.setHiredate(rs.getDate("hiredate"));
+				employeeVO.setQuitdate(rs.getDate("quitdate"));
+				employeeVO.setStatus(rs.getString("status"));
+			}
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return employeeVO;
+	}
+
+	@Override
+	public void updateRandomPws(String email, String randomPwd) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = ds.getConnection();
+			pstmt = conn.prepareStatement(UPDATERANDOMPWD);
+			
+			pstmt.setString(1, randomPwd);
+			pstmt.setString(2, email);
+
+			pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			throw new RuntimeException("A database error occured. " + e.getMessage());
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace(System.err);
+				}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+	}
 }

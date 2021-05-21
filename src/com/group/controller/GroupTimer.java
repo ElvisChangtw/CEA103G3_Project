@@ -1,5 +1,10 @@
 package com.group.controller;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.sql.Date;
+import java.sql.Timestamp;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -42,7 +47,7 @@ public class GroupTimer extends Timer{
 		this.kickOutMap.put(timerTask.getGroupVO().getGroup_no(), timerTask);
 		System.out.println("加入剔除未付款團員排程器...");
 		System.out.println("將於Deadline: " + timerTask.getGroupVO().getDeadline_dt() + "清除揪團編號" + timerTask.getGroupVO().getGroup_no() + "之未付款團員");
-		this.schedule( timerTask  , groupVO.getDeadline_dt()); 
+		this.schedule( timerTask  , new Timestamp(System.currentTimeMillis()+10000)); 
 	}
 	//取得剔除未付款團員排程器
 	public TimerTask_KickOut getKickTask(int group_no) {
@@ -80,6 +85,34 @@ class TimerTask_Dismiss extends TimerTask {
 		GroupService groupSvc = new GroupService();
 		groupSvc.groupOverDue(this.groupVO.getGroup_no());
 		System.out.println("揪團編號: " + this.groupVO.getGroup_no() + "超過截止時間, 揪團失敗!!!");
+		sendWSMessage("dismissGroup",this.groupVO.getMember_no(), String.valueOf(this.groupVO.getGroup_no()),this.groupVO.getCrt_dt());
+	}
+	
+	
+	public void sendWSMessage(String type, int memno, String receiver, Timestamp time) {
+		// open websocket
+        WebsocketClientEndpoint clientEndPoint;
+		try {
+			clientEndPoint = new WebsocketClientEndpoint(new URI("ws://localhost:8081/CEA103_G3_git/NotifyWS/-1"));
+
+			if("dismissGroup".equals(type)) {
+				// send message to websocket
+		        clientEndPoint.sendMessage("{\"type\":\""+type+"\",\"sender\":"+memno+",\"receiver\":\""+receiver+"\",\"message\":\"XXXXXXX\",\"time\":\""+time+"\"}");
+			}
+	        
+			try {
+				Thread.sleep(3 * 1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	       
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+        
 	}
 }
 
@@ -99,8 +132,34 @@ class TimerTask_KickOut extends TimerTask {
 	@Override
 	public void run() {
 		Group_MemberService group_memberSvc = new Group_MemberService();
-		group_memberSvc.kickUnpaidMemberOut(this.groupVO.getGroup_no());
+		group_memberSvc.kickUnpaidMemberOut(this.groupVO.getGroup_no());;
 		System.out.println("揪團編號: " + this.groupVO.getGroup_no() + "之未付款團員已剔除完成!!!");
-		System.out.println("揪團編號: " + this.groupVO.getGroup_no() + "狀態更改為正常出團，結束!!!");
+		sendWSMessage("kickUnpaid",this.groupVO.getMember_no(), String.valueOf(this.groupVO.getGroup_no()),this.groupVO.getCrt_dt());
+	}
+	
+	public void sendWSMessage(String type, int memno, String receiver, Timestamp time) {
+		// open websocket
+        WebsocketClientEndpoint clientEndPoint;
+		try {
+			clientEndPoint = new WebsocketClientEndpoint(new URI("ws://localhost:8081/CEA103_G3_git/NotifyWS/-1"));
+
+			if("kickUnpaid".equals(type)) {
+				// send message to websocket
+		        clientEndPoint.sendMessage("{\"type\":\""+type+"\",\"sender\":"+memno+",\"receiver\":\""+receiver+"\",\"message\":\"XXXXXXX\",\"time\":\""+time+"\"}");
+			}
+	        
+			try {
+				Thread.sleep(3 * 1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	       
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+        
 	}
 }

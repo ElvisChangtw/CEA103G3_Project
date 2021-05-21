@@ -72,5 +72,11 @@ public class Group_MemberService {
 	public int getGroupCount(Integer group_no) {
 		return dao.getGroupCount(group_no);
 	}
+	public List<Group_MemberVO> getMembers(Integer group_no){
+		return dao.findMembersByGroup_no(group_no);
+	}
+	public List<Group_MemberVO> getKickOutUnpaidMembers(Integer group_no){
+		return dao.findUnpaidMembersByGroup_no(group_no);
+	}
 }
 		

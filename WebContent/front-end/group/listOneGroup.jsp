@@ -297,7 +297,9 @@ th, td {
             	}
             }
             else {
-                console.log('揪團已截止！');
+                alert('揪團已截止！');
+//                 window.location.reload();
+				document.location.href ="<%=request.getContextPath()%>/front-end/group/group_front_page.jsp";
                 clearInterval(timer); 
             }
         }, 1000);

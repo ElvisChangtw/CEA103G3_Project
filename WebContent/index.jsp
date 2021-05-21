@@ -40,6 +40,8 @@
 	
 	List<MovieVO> listTopFive = movieSvc.getTopFive();
 	pageContext.setAttribute("listTopFive", listTopFive);
+	
+	movieSvc.createMovieIdex();
 %>
 
 <!DOCTYPE html>
@@ -72,6 +74,8 @@
     <link href='//fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
     <!--//web-fonts-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/styleForGroup.css">
 <style>
 	div.form-group>button.btn {
 	    border-radius: 3px;
@@ -100,7 +104,7 @@
 
     <!--/main-header-->
     <!--/banner-section-->
-    <div id="demo-1" data-zs-src='["<%=request.getContextPath()%>/images/2.jpg", "<%=request.getContextPath()%>/images/1.jpg", "<%=request.getContextPath()%>/images/3.jpg","<%=request.getContextPath()%>/images/4.jpg"]' data-zs-overlay="dots">
+    <div id="demo-1" data-zs-src='["<%=request.getContextPath()%>/images/1.jpg", "<%=request.getContextPath()%>/images/2.jpg", "<%=request.getContextPath()%>/images/3.jpg","<%=request.getContextPath()%>/images/4.jpg"]' data-zs-overlay="dots">    
         <div class="demo-inner-content">
             <!--/header-w3l-->
             <div class="header-w3-agileits" id="home">
@@ -148,7 +152,7 @@
                                             <div class="col-sm-4">
                                                 <ul class="multi-column-dropdown">
                                                     <li><a href="<%=request.getContextPath()%>/front-end/movie/select_movie_page.jsp">搜尋電影</a></li>
-                                                    <li><a href="<%=request.getContextPath()%>/back-end/movie/listAllMovie2.jsp">後台listall</a></li>
+                                                    <li><a href="<%=request.getContextPath()%>/back-end/movie/backEndlistAllMovie.jsp">後台listall</a></li>
                                                     <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&CATEGORY=動作片">動作片</a></li>
                                                     <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&CATEGORY=劇情片">劇情片</a></li>
                                                     <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&CATEGORY=犯罪片">犯罪片</a></li>
@@ -301,9 +305,11 @@
 						</div>
 						<div id="cd-search" class="cd-search">
 							<form method="post" action="<%=request.getContextPath()%>/movie/movie.do" name="form1">
-								<input type="text" name="MOVIE_NAME" value="" placeholder="請輸入電影名稱" onkeydown="if (event.keyCode == 13) sendMessage();">
+								<input id="search-context"  type="text" name="MOVIE_NAME" value="" placeholder="請輸入電影名稱" onkeydown="if (event.keyCode == 13) sendMessage();">
 								<input type="hidden" name="action" value="listMovies_ByCompositeQuery">
 							</form>
+							<div id="search-results"class="container" >
+							</div>
 						</div>
 					</div>
                 </div>
@@ -311,7 +317,7 @@
             <!--//header-w3l-->
             <!--/banner-info-->
             <div class="baner-info">
-                <h3>磨 <span>穴</span> 電 影 </h3>
+                <h3>魔 <span>穴</span> 電 影 </h3>
                 <h4>May the Force be with you.</h4>
                 <a class="w3_play_icon1" href="#small-dialog">
                    	觀 看 預 告
@@ -474,26 +480,29 @@
    </section>
 	<!--訂票+文章區塊結束 -->
 	
-<nav class="navbar navbar-light" style="background-color: #02A388;">
+<nav class="navbar navbar-light" style="background-color: #75D9B5;">
     <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/movie/movie.do" name="form1" class="form-inline my-2 my-lg-0 composite-query">
-		<div class="form-row">
-			搜尋電影:
+		<br><div class="form-row">
+			搜尋電影:&ensp;
 			<div class="form-group col-2">
-				 <input type="text" name="MOVIE_NAME" value="" class="form-control" placeholder="請輸入電影" id=li1><br>
-			</div>
+				 <input type="text" name="MOVIE_NAME" value="" class="form-control" placeholder="請輸入電影" size="10"><br>
+			</div>&ensp;
+			
 			<div class="form-group col-2">
-				<input type="text" name="DIRECTOR" value="" class="form-control" placeholder="請輸入導演"><br>
-			</div>
+				<input type="text" name="DIRECTOR" value="" class="form-control" placeholder="請輸入導演" size="10"><br>
+			</div>&ensp;
+	       
 	       <div class="form-group col-2">
-				<input type="text" name="ACTOR" value="" class="form-control" placeholder="請輸入演員"><br>
-			</div>
+				<input type="text" name="ACTOR" value="" class="form-control" placeholder="請輸入演員" size="10"><br>
+			</div>&ensp;
+	      
 	       <div class="form-group col-2">
-				<input type="text" name="showtime_time" id="f_date1" class="form-control" placeholder="請輸入觀影日期">
- 		       <input type="text" name="OFF_DT" id="f_date2" class="form-control" placeholder="請輸入觀影日期" ><br> 
-			</div>
+<!-- 				<input type="text" name="PREMIERE_DT" id="f_date1" class="form-control" placeholder="請輸入觀影日期" size="12"> -->
+ 		       <input type="text" name="OFF_DT" id="f_date2" class="form-control" placeholder="請輸入觀影日期" size="12"><br> 
+			</div>&ensp;
 
 			<div class="form-group col-2">
-	       <select  name="category" class="form-control form-control-sm" >
+	       <select  name="category" class="form-control form-control-sm">
 				<option value="">請選擇電影類型</option>
 				<option value="動作片">動作片</option>
 				<option value="冒險片">冒險片</option>
@@ -504,17 +513,17 @@
 				<option value="劇情片">劇情片</option>
 				<option value="愛情片">愛情片</option>
 	       	</select><br>
-	       	</div>
+	       	</div>&ensp;
 	       	
-	       	<div class="form-group col-2">
-	       	<select size="1" name="STATUS" class="form-control form-control-sm">
-				<option value="">請選擇電影狀態</option>
-				<option value="0">上映中</option>
-				<option value="1">未上映</option>
-				<option value="2">已下檔</option>
-      		</select><br>
-    		</div>
-       		
+<!-- 	       	<div class="form-group col-2"> -->
+<!-- 	       	<select size="1" name="STATUS" class="form-control form-control-sm"> -->
+<!-- 				<option value="">請選擇電影狀態</option> -->
+<!-- 				<option value="0">上映中</option> -->
+<!-- 				<option value="1">未上映</option> -->
+<!-- 				<option value="2">已下檔</option> -->
+<!--       		</select><br> -->
+<!--     		</div>&ensp; -->
+	       	
        		<div class="form-group col-2">
        		<select size="1" name="GRADE" class="form-control form-control-sm">
 				<option value="">請選擇電影分級</option>
@@ -523,23 +532,22 @@
 				<option value="2">輔導級</option>
 				<option value="3">限制級</option>
        		</select><br>
-			</div>       
+			</div>&ensp;
        		
        		<div class="form-group col-2">
        		<select size="1" name="RATING" class="form-control form-control-sm">
-				<option value="">評分大於</option>
+				<option value="">評分不低於</option>
+				<option value="1">1</option>
 				<option value="2">2</option>
+				<option value="3">3</option>
 				<option value="4">4</option>
-				<option value="6">6</option>
-				<option value="8">8</option>
-				<option value="9">9</option>
-			<option value="9.5">9.5</option>
+				<option value="5">5</option>
       		</select><br>
-       		</div>
+       		</div>&ensp;
        		
        		<div class="form-group col-2">
-       		<select size="1" name="EXPECTATION" class="form-control form-control-sm" >
-				<option value="">期待度大於</option>
+       		<select size="1" name="EXPECTATION" class="form-control form-control-sm">
+				<option value="">期待度不低於</option>
 				<option value="0.2">20%</option>
 				<option value="0.4">40%</option>
 				<option value="0.6">60%</option>
@@ -547,13 +555,13 @@
 				<option value="0.9">90%</option>
 				<option value="0.95">95%</option>
        		</select><br>
-			</div>
+			</div>&ensp;
 			
 			<div class="form-group col-2">
-				<input type="hidden" name="action" value="listGroups_ByCompositeQuery">
-		      	<button class="btn btn-danger btn-sm" type="submit" value="送出">搜尋</button>
+				<input type="hidden" name="action" value="listMovies_ByCompositeQuery">
+		      	&ensp;<button class="btn btn-danger btn-sm" type="submit" value="送出">搜尋</button>
 	      	</div>
-		</div>
+		</div><br>
      </FORM>
 </nav>
 
@@ -608,7 +616,8 @@
                                     <div class="col-md-4 video_agile_player">
                                         <div class="video-grid-single-page-agileits" >
 	                        	 			<a class="w3_play_icon" href="#small-dialog1">
-	                            				<img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${oneNewestinTheatersMovie.movieno}" alt="" class="img-responsive" /> 
+	                            				<img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${oneNewestinTheatersMovie.movieno}" 
+	                            				alt="" class="img-responsive" title="點擊觀賞【${oneNewestinTheatersMovie.moviename}】最新預告" /> 
  	                       					</a>
 										</div>
                                         <div class="player-text">
@@ -835,7 +844,8 @@
                                 	<div class="col-md-4 video_agile_player">
                                         <div class="video-grid-single-page-agileits" >
 	                        	 			<a class="w3_play_icon" href="#small-dialog2">
-	                            				<img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${oneNewestComingSoonMovie.movieno}" alt="" class="img-responsive" /> 
+	                            				<img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${oneNewestComingSoonMovie.movieno}" 
+	                            				alt="" class="img-responsive" title="點擊觀賞【${oneNewestComingSoonMovie.moviename}】最新預告" /> 
  	                       					</a>
 										</div>
                                         <div class="player-text">
@@ -1243,7 +1253,8 @@
                         <div class="col-md-4 video_agile_player">
 	                        <div class="video-grid-single-page-agileits" >
 	                        	 <a class="w3_play_icon" href="#small-dialog3">
-	                            	<img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${bestMovie.movieno}" alt="" class="img-responsive" /> 
+	                            	<img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${bestMovie.movieno}" 
+	                            	alt="" class="img-responsive" title="點擊觀賞【${bestMovie.moviename}】最新預告"/> 
  	                       		</a>
 							</div>
 	                        <div class="player-text">
@@ -2015,8 +2026,67 @@ function drawPieChart2() {
            minDate:               '-1970-01-01', // 去除今日(不含)之前
            //maxDate:               '+1970-01-01'  // 去除今日(不含)之後
         });
-   
-        
+
 </script>
+
+<script>
+
+    	$("#search-context").on('input propertychange', function(){
+    		$("#search-results").html('<hr class="hrhr">');
+    		if(!$(this).val() == ""){
+    			var result;
+    			console.log("送出搜尋 = " + $(this).val());
+    			let json_result_list = getResults($(this).val());
+        		console.log("收回結果");
+    			console.log(json_result_list);
+        		if(json_result_list != undefined ){
+	        		for ( movieVO of json_result_list){
+	        			console.log(movieVO.moviename);
+	        			console.log(movieVO.actor);
+	        			console.log(movieVO.premiredate);
+	        			console.log(movieVO.movieno);
+	        			let link = '<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=' + movieVO.movieno  + '' ;
+	        			var dt = new Date(movieVO.premiredate);
+	        			var yr = 1900 + dt.getYear();
+	        			result = 
+		    				'<div class="rslt row" onclick="location.href=\'' + link+ '\'" > ' +
+		    				'	<div class="col-md-4"> ' +
+		    		   		'			<img src="<%=request.getContextPath()%>/movie/DBGifReader2.do?movieno=' + movieVO.movieno + '" title=" " width="260px" height="120px"> ' +
+		    		  		'		</div> ' +
+		    		  		'		<div class="col-md-8">' +
+		    				'		<p class="mov-name">'+ movieVO.moviename +  '</p>' +
+		    				'		<p class="non-mov-name">'+ movieVO.actor +  '</p> ' +
+		    				'		<p class="non-mov-name">'+ yr +  '</p> ' +
+		    	  			'	</div>' +
+		    				'</div>' +
+		    				'<hr class="hrhr">';
+		    			
+		        		$("#search-results").html(
+		        				$("#search-results").html() + result
+		        		);
+	        		}
+        		}
+    		}
+    	});
+
+    	function getResults(words){
+    		let json;
+			$.ajax({
+					url: "<%=request.getContextPath()%>/movie/movie.do",
+					type:"POST",
+					data: {
+						MOVIE_NAME: words,
+						action:"search_Ajax"
+					},
+					async: false,
+					success: function(data){
+						console.log(data);
+						json = JSON.parse(data).results;
+					}
+				});
+			return json;
+	}
+    </script>
+
 
 </html>

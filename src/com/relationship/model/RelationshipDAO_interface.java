@@ -14,4 +14,5 @@ public interface RelationshipDAO_interface {
 
 		  public void update_status(Integer member_no, Integer friend_no);
 		  public void addOneWay(RelationshipVO relationshipVO);
+          public List<RelationshipVO> findByPrimaryKeyByMemno(Integer member_no);
 }

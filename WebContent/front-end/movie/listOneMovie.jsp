@@ -6,6 +6,7 @@
 <%@ page import="com.comment.model.*"%>
 <%@ page import="com.rating.model.*"%>
 <%@ page import="com.expectation.model.*"%>
+<%@ page import="java.sql.Date"%>
 
 
 <%
@@ -18,15 +19,15 @@
 	pageContext.setAttribute("latestMovie", latestMovie);
 	
 	MovieVO movieVO = (MovieVO) request.getAttribute("movieVO"); //MovieServlet.java(Concroller), 存入req的movieVO物件
-// 	RatingVO ratingVO = (RatingVO) request.getAttribute("ratingVO");
 	RatingVO ratingCount = (RatingVO) request.getAttribute("ratingCount");
 	ExpectationVO expectationCount = (ExpectationVO)request.getAttribute("expectationCount");
 	
+	java.sql.Date today = new java.sql.Date(System.currentTimeMillis());
+	pageContext.setAttribute("today", today);
 	
 // 	int memberNumber = 9; //到時要換成從session取memVO出來
 // 	pageContext.setAttribute("memberNumber", memberNumber);
-	
-	
+
 %>
 <jsp:useBean id="memVO" scope="session" type="com.mem.model.MemVO" />
 <%-- <jsp:useBean id="listComments_ByMovieno" scope="request" type="java.util.Set<CommentVO>" /> --%>
@@ -61,6 +62,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
 
 <script src="<%=request.getContextPath()%>/js/jquery-1.11.1.min.js"></script>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <style>
 #chart{
   width:50px;
@@ -69,15 +72,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 </style>
 </head>
 <body>
-<c:choose>
-<c:when test="${movieVO.offdate < today}">
-<p>1</p>
-</c:when>
-<c:when test="${movieVO.offdate > today}">
-<p>1</p>
-</c:when>
-</c:choose>
-
 
 <!--/main-header-->
   <!--/banner-section-->
@@ -395,59 +389,28 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 														<div data-video="${movieVO.embed}" id="video"> <img src="${pageContext.request.contextPath}/movie/DBGifReader2.do?movieno=${movieVO.movieno}" alt="" > </div>
 													</div>
 													 <h4>Official Trailer | ${movieVO.actor}</h4>
-<%-- 													 <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/rating/rating.do" name="form1"> --%>
-													 
-<!-- 													 	<tr> -->
-<!-- 															<td>會員編號:</td> -->
-<!-- 															<td><input type="TEXT" name="memberno" size="45" -->
-<%-- 																value="<%=(ratingVO == null) ? "" : ratingVO.getMemberno()%>" /></td> --%>
-<!-- 														</tr> -->
-<!-- 														<tr> -->
-<%-- 															<td><input type="hidden" name="movieno" size="45" value="${movieVO.movieno}" /></td> --%>
-<!-- 														</tr> -->
-													 <tr>
-														<td>評分:</td>
-														<td><input type="hidden" name="rating" value="" id="con"/>
-															<i class="fa fa-star fa-lg all-star" id="s1" style="color:gray"></i>
-															<i class="fa fa-star fa-lg all-star" id="s2" style="color:gray"></i>
-															<i class="fa fa-star fa-lg all-star" id="s3" style="color:gray"></i>
-															<i class="fa fa-star fa-lg all-star" id="s4" style="color:gray"></i>
-															<i class="fa fa-star fa-lg all-star" id="s5" style="color:gray"></i>
-<!-- 															<ion-icon name="star" class="all-star" id="s1"></ion-icon> -->
-<!-- 															<ion-icon name="star" class="all-star" id="s2"></ion-icon> -->
-<!-- 															<ion-icon name="star" class="all-star" id="s3"></ion-icon> -->
-<!-- 															<ion-icon name="star" class="all-star" id="s4"></ion-icon> -->
-<!-- 															<ion-icon name="star" class="all-star" id="s5"></ion-icon> -->
-														</td>
-													 </tr>
-<!-- 													<input type="hidden" name="action" value="insertOrUpdate">  -->
-<%--  													<input type="hidden" name="requestURL"	value="<%=request.getServletPath()%>">	 --%>
-<!-- 													<input type="submit" value="送出"> -->
-<!-- 													</FORM> -->
+													 <c:if test="${today.before(movieVO.offdate)}">
+													 	<c:if test="${today.after(movieVO.premiredate)}">
+													 		<tr>
+																<td><span style="color:#524066; font-weight:1000; font-size:30px;">評分:&emsp;</span></td>
+																<td><input type="hidden" name="rating" value="" id="con"/>
+																	<i class="fa fa-star fa-2x all-star" id="s1" style="color:gray"></i>
+																	<i class="fa fa-star fa-2x all-star" id="s2" style="color:gray"></i>
+																	<i class="fa fa-star fa-2x all-star" id="s3" style="color:gray"></i>
+																	<i class="fa fa-star fa-2x all-star" id="s4" style="color:gray"></i>
+																	<i class="fa fa-star fa-2x all-star" id="s5" style="color:gray"></i>
+																</td>
+													 		</tr>
+														 </c:if>
 													
-<%-- 													<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/expectation/expectation.do" name="form1"> --%>
-													 
-<!-- 													 	<tr> -->
-<!-- 															<td>會員編號:</td> -->
-<!-- 															<td><input type="TEXT" name="memberno" size="45" -->
-<%-- 																value="<%=(ratingVO == null) ? "" : ratingVO.getMemberno()%>" /></td> --%>
-<!-- 														</tr> -->
-<!-- 														<tr> -->
-<%-- 															<td><input type="hidden" name="movieno" size="45" value="${movieVO.movieno}" /></td> --%>
-<!-- 														</tr> -->
-													 <tr>
-														<td>期待度:</td>
-<!-- 														<td><input type="hidden" name="expectation" value="" id="con1" size="50"/> -->
-<!-- 															<ion-icon name="thumbs-up-outline" class="thumbsup" id="t1" style="color:gray; font-size:30px;"></ion-icon> -->
-															<i class="fa fa-thumbs-up fa-2x thumbsup" id="t1" style="color:gray"></i>
-															<i class="fa fa-thumbs-down fa-2x thumbsdown" id="t2" style="color:gray"></i>
-<!-- 															<ion-icon name="thumbs-down-outline" class="thumbsdown" id="t2" style="color:gray"></ion-icon> -->
-<!-- 														</td> -->
-													 </tr>
-<!-- 													<input type="hidden" name="action" value="insertOrUpdate">  -->
-<%--  													<input type="hidden" name="requestURL"	value="<%=request.getServletPath()%>">	 --%>
-<!-- 													<input type="submit" value="送出"> -->
-<!-- 													</FORM> -->
+														 <c:if test="${today.before(movieVO.premiredate)}">													 
+															 <tr>
+																<td><span style="color:#524066; font-weight:1000; font-size:30px;">期待度:&emsp;</span></td>
+																	<i class="fa fa-thumbs-up fa-2x thumbsup" id="t1" style="color:gray"></i>&ensp;
+																	<i class="fa fa-thumbs-down fa-2x thumbsdown" id="t2" style="color:gray"></i>
+															 </tr>
+													 	</c:if>
+													 </c:if>
 										    </div>
 									    
 
@@ -708,7 +671,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByYear&year=2020" title="Release 2020">2020</a></li>
                         <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByYear&year=2019" title="Release 2019">2019</a></li>
                         <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByYear&year=2018" title="Release 2018">2018</a></li>
-                        <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByYear&year=2017" title="Release 2017">2017</a></li>
+                        <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByYear&year=2017" title="Release 2017">2017--${openModal}--</a></li>
                     </ul>
                 </div>
                 <div class="col-md-2 footer-grid">
@@ -1149,8 +1112,28 @@ $(document).ready(function(){
 				let newExpectation = jsonobj.newExpectation;
 				let countExpectation = jsonobj.countExpectation;
 				thumbsUpDrawPieChart(newExpectation , countExpectation);
+				
 			}
 		 });
+		
+		Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "我好期待RRRRR",
+            showConfirmButton: false,
+            timer: 5000,
+			width: 600,
+			padding: '3em',
+			background: '#fff url(/images/trees.png)',
+			backdrop: `
+			  rgba(0,0,0,0.4)
+			  url("<%=request.getContextPath()%>/images/gif/hotBoy.gif")
+			  left center
+			  no-repeat
+			`
+        });
+		 $("#leaveBtn").show();
+		 
 	})
 	$("#t2").click(function(){
 		$(".thumbsdown").css("color","gray");
@@ -1179,6 +1162,25 @@ $(document).ready(function(){
 				thumbsDownDrawPieChart(newExpectation , countExpectation);
 			}
 		 });
+		
+		Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "我好失望RRRRR",
+            showConfirmButton: false,
+            timer: 5000,
+			width: 600,
+			padding: '3em',
+			background: '#fff url(/images/trees.png)',
+			backdrop: `
+			  rgba(0,0,0,0.4)
+			  url("https://zodiac.tw/uploads/1455625798-jI266.jpg")
+			  left center
+			  no-repeat
+			`
+        });
+		 $("#leaveBtn").show();
+		
 	})
 })
 
@@ -1199,7 +1201,6 @@ function initialDrawRating() {
 			"<a><i class=\"fa fa-star-o fa-lg\" aria-hidden=\"true\"></i></a>"+
 			"<td> ${movieVO.rating} 分</td>"+
 			"<td> (已有<fmt:formatNumber type="number" value=" ${ratingCount.rating}"/> 人投票)</td>"
-			
 		);
 	}else if($("#ratingValue").text() < 2.0){
 		$(".all-star").css("color","gray");
@@ -1383,7 +1384,26 @@ $(document).ready(function(){
 				drawRating(newRating,countRating); 
 			}
 		 });
+		
+		Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "一星摳摳",
+            showConfirmButton: false,
+            timer: 3000,
+			width: 600,
+			padding: '3em',
+			background: '#fff url(/images/trees.png)',
+			backdrop: `
+			  rgba(0,0,0,0.4)
+			  url("<%=request.getContextPath()%>/images/gif/11.gif")
+			  left center
+			  no-repeat
+			`
+        });
+		 $("#leaveBtn").show();
 	})
+	
 	$("#s2").click(function(){
 		$(".all-star").css("color","gray");
 		$("#s1,#s2").css("color","yellow");
@@ -1409,7 +1429,26 @@ $(document).ready(function(){
 				drawRating(newRating,countRating); 
 			}
 		 });
+		
+		Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "二星舔舔",
+            showConfirmButton: false,
+            timer: 3000,
+			width: 600,
+			padding: '3em',
+			background: '#fff url(/images/trees.png)',
+			backdrop: `
+			  rgba(0,0,0,0.4)
+			  url("https://memes.tw/user-maker-thumbnail/a1c21b379244a82960756bf4f8def57a.gif")
+			  left center
+			  no-repeat
+			`
+        });
+		 $("#leaveBtn").show();
 	})
+	
 	$("#s3").click(function(){
 		$(".all-star").css("color","gray");
 		$("#s1,#s2,#s3").css("color","yellow");
@@ -1436,7 +1475,26 @@ $(document).ready(function(){
 				
 			}
 		 });
+		
+		Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "三星吸吸",
+            showConfirmButton: false,
+            timer: 3000,
+			width: 600,
+			padding: '3em',
+			background: '#fff url(/images/trees.png)',
+			backdrop: `
+			  rgba(0,0,0,0.4)
+			  url("https://64.media.tumblr.com/8210fd413c5ce209678ef82d65731443/tumblr_mjphnqLpNy1s5jjtzo1_400.gifv")
+			  left top
+			  no-repeat
+			`
+        });
+		 $("#leaveBtn").show();
 	})
+	
 	$("#s4").click(function(){
 		$(".all-star").css("color","gray");
 		$("#s1,#s2,#s3,#s4").css("color","yellow");
@@ -1462,16 +1520,28 @@ $(document).ready(function(){
 				drawRating(newRating,countRating); 
 			}
 		 });
+		
+		Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "四星含含",
+            showConfirmButton: false,
+            timer: 3000,
+			width: 600,
+			padding: '3em',
+			background: '#fff url(/images/trees.png)',
+			backdrop: `
+			  rgba(0,0,0,0.4)
+			  url("<%=request.getContextPath()%>/images/gif/yee.gif")
+			  left top
+			  no-repeat
+			`
+        });
+		 $("#leaveBtn").show();
 	})
+	
 	$("#s5").click(function(){
-// 		$(".all-star").css("color","gray");
-// 		$(".all-star").css("color","yellow");
-// 		$("#con").val("5.0");
-		
-// 		let movieno = "${movieVO.movieno}";
-// 		let memberno = "${memVO.member_no}";
-// 		let rating = "5.0";
-		
+	
 		$(".all-star").css("color","gray");
 		$("#s1,#s2,#s3,#s4,#s5").css("color","yellow");
 		$("#con").val("5.0");
@@ -1496,9 +1566,29 @@ $(document).ready(function(){
 				drawRating(newRating,countRating); 
 			}
 		 });
+		
+		Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "五星吹吹",
+            showConfirmButton: false,
+            timer: 3000,
+			width: 600,
+			padding: '3em',
+			background: '#fff url(/images/trees.png)',
+			backdrop: `
+			  rgba(123,123,123,0.4)
+			  url("<%=request.getContextPath()%>/images/gif/2.gif")
+			  left center
+			  no-repeat
+			`
+        });
+		 $("#leaveBtn").show();
 	})
 })
 </script> 
+
+
 
 </body>
 </html>

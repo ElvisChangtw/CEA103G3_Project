@@ -6,12 +6,14 @@
 <% 
 	MemVO memVO = (MemVO) session.getAttribute("memVO");
 %>
-
+	
 <html>
 <head>
 <title>IBM relationship: Home</title>
 <link href="https://i2.bahamut.com.tw/css/basic.css?v=1618977484" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
 
 <style>
    body {  
@@ -65,15 +67,30 @@
 		</c:forEach>
 	</ul>
 </c:if>
-		<h1 class="shadow p-3 mb-1 bg-white rounded">
+		<div class="shadow p-3 mb-1 bg-white rounded" style="font-size:40px">
 			<span class="badge badge-secondary">
 				MoviesHit好友專區
 			</span>
-				<button type="button" class="btn btn-dark" onclick="location.href='<%=request.getContextPath()%>/mem/mem.do?action=listRelationships_ByMemberno_B&member_no=${memVO.member_no}'">我的好友</button>       			
-		</h1>
+			<div class="btn-group">
+		        <button type="button" class="btn btn-success">好友管理</button>
+		        <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	            	<span class="sr-only">Toggle Dropdown</span>
+	       		</button>
+		       		<div class="dropdown-menu">
+			            <a class="dropdown-item" href="<%=request.getContextPath()%>/mem/mem.do?action=listRelationships_ByMemberno_B&member_no=${memVO.member_no}">我的好友</a>
+			            <a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/relationship/friend_invite.jsp">好友邀請</a>
+		        	</div>
+	      	 </div>
+		</div>	
+		
+		 <Form id="myForm" action="<%=request.getContextPath()%>/chat.do" method="POST">
+			<input type="hidden" name="userName"  value="${memVO.mb_name}">
+			<input type="submit" value="開啟聊天室">			
+		 </Form>
  		
 		<jsp:useBean id="memSvc" scope="page" class="com.mem.model.MemService" />
-
+		<jsp:useBean id="relationshipSvc" scope="page" class="com.relationship.model.RelationshipService" />
+		
 <!--     <li> -->
 
 <%--      <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/mem/mem.do" > --%>
@@ -99,7 +116,7 @@
      	<br>
      	<%="目前登入會員=" + memVO.getMember_no() + " " +memVO.getMb_name()%>     
      </FORM>
-
+     
 <%if (request.getAttribute("listRelationships_ByMemno")!=null){%>
       <jsp:include page="/front-end/mem/listRelationships_ByMemno.jsp" />
 <%} %>

@@ -1,0 +1,15 @@
+/* ul.list-unstyled> li{ */
+/* 	color: pink; */
+/* 	font-size: 14px; */
+/* } */
+
+
+table.table.myaccordion.table-hover> thead> tr> th{
+	padding: 5px;
+	background: rgb(2, 163, 136) !important;
+	color: #fff;
+}
+table.table.myaccordion.table-hover> tbody> tr> td{
+	padding: 10px;
+	font-size: 14px;
+}

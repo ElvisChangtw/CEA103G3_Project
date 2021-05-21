@@ -93,6 +93,7 @@ font-size: 20px;
 	</div>
 
 <c:forEach var="commentVO" items="${list}">
+<c:if test="${commentVO.status != 1}">
 	<div class="response">
 			<div class="media response-info">
 				<div class="media-left response-text-left">
@@ -138,13 +139,16 @@ font-size: 20px;
 					<ul>
 						<li>最後發佈時間: <fmt:formatDate value="${commentVO.modifydate}"
 								pattern="yyyy-MM-dd HH:mm:ss" /></li>
-						<li><a href=""><i class="fa fa-hand-o-left"
-								aria-hidden="true"></i> </i>檢舉</a></li>
+						<c:if test="${commentVO.memberno != memVO.member_no}">
+						<li><a href="<%=request.getContextPath()%>/front-end/report_comment/addReportComment.jsp?commentno=${commentVO.commentno}&memberno=${memVO.member_no}&requestURL=<%=request.getServletPath()%>&movieno=${commentVO.movieno}">
+						<i class="fa fa-hand-o-left" aria-hidden="true"></i> </i>檢舉</a></li></c:if>
 					</ul>
+				
 				</div>
 				<div class="clearfix"> </div>
 			</div>
 		</div>
+</c:if>		
 </c:forEach>
 
 	<c:if test="${memVO.mb_level.equals('2')}">

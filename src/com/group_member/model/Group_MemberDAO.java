@@ -39,9 +39,10 @@ public class Group_MemberDAO implements Group_MemberDAO_interface {
 	private static final String GET_GROUP_BY_MEMBER_STMT = 
 			"SELECT * FROM group_member where member_no = ? order by group_no, crt_dt";
 	private static final String KICKOUT__STMT = "UPDATE `group_member` set STATUS = 0 where PAY_STATUS = 0 and GROUP_NO = ?";
-	
 	private static final String GET_COUNT = "SELECT COUNT(*) CNT from GROUP_MEMBER WHERE GROUP_NO = ? AND STATUS = 1; ";
-	
+	private static final String GET_MEMBERS_BY_GROUP_STMT = 
+			"SELECT * FROM group_member where group_no = ?";
+	private static final String GET_UNPAIDMEMBERS_BY_GROUP_STMT="SELECT * FROM group_member where group_no = ? AND STATUS = 0";
 	@Override
 	public void insert(Group_MemberVO group_memberVO) {
 
@@ -62,7 +63,6 @@ public class Group_MemberDAO implements Group_MemberDAO_interface {
 				cnt = rs.getInt("CNT");
 				if(cnt == 0) {
 					pstmt = con.prepareStatement(INSERT_STMT);
-					System.out.println(INSERT_STMT);
 					pstmt.setInt(1, group_memberVO.getGroup_no());
 					pstmt.setInt(2, group_memberVO.getMember_no());
 				}
@@ -605,5 +605,116 @@ public class Group_MemberDAO implements Group_MemberDAO_interface {
 		}
 		return cnt;
 	}
+	
+	@Override
+	public List<Group_MemberVO> findMembersByGroup_no(Integer group_no) {
+		List<Group_MemberVO> list = new ArrayList<Group_MemberVO>();
+		Group_MemberVO group_memberVO = null;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_MEMBERS_BY_GROUP_STMT);
+			pstmt.setInt(1, group_no);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// messageVO 也稱為 Domain objects
+				group_memberVO = new Group_MemberVO();
+				group_memberVO.setGroup_no(rs.getInt("group_no"));
+				group_memberVO.setMember_no(rs.getInt("member_no"));
+				group_memberVO.setPay_status(rs.getString("pay_status"));
+				group_memberVO.setCrt_dt(rs.getTimestamp("crt_dt"));
+				group_memberVO.setStatus(rs.getString("status"));
+				list.add(group_memberVO); // Store the row in the list
+			}
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}
+	
+	@Override
+	public List<Group_MemberVO> findUnpaidMembersByGroup_no(Integer group_no) {
+		List<Group_MemberVO> list = new ArrayList<Group_MemberVO>();
+		Group_MemberVO group_memberVO = null;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_UNPAIDMEMBERS_BY_GROUP_STMT);
+			pstmt.setInt(1, group_no);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// messageVO 也稱為 Domain objects
+				group_memberVO = new Group_MemberVO();
+				group_memberVO.setGroup_no(rs.getInt("group_no"));
+				group_memberVO.setMember_no(rs.getInt("member_no"));
+				group_memberVO.setPay_status(rs.getString("pay_status"));
+				group_memberVO.setCrt_dt(rs.getTimestamp("crt_dt"));
+				group_memberVO.setStatus(rs.getString("status"));
+				list.add(group_memberVO); // Store the row in the list
+			}
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}
+
 
 }

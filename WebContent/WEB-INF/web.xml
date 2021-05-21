@@ -199,7 +199,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>ArticleServlet</servlet-name>
-    <url-pattern>/article/article.do</url-pattern>
+    <url-pattern>/front-end/article/article.do</url-pattern>
   </servlet-mapping>
   
 	<servlet>
@@ -347,7 +347,7 @@
     <url-pattern>/mem/DBGifReader4.do</url-pattern>
   </servlet-mapping>
   
-    	<servlet>
+  	<servlet>
 		<servlet-name>NameServlet</servlet-name>
 		<servlet-class>idv.david.websocketchat.controller.NameServlet</servlet-class>
 	</servlet>

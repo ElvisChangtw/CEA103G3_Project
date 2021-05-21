@@ -7,18 +7,11 @@
 <%@ page import="java.util.*"%>
 
 <%
-//	Ord_ticket_typeVO ord_ticket_typeVO = (Ord_ticket_typeVO) request.getAttribute("ord_ticket_typeVO");
-//	Ord_ticket_typeService ord_ticket_typeSvc = new Ord_ticket_typeService();
-//	List<Ord_ticket_typeVO> list = ord_ticket_typeSvc.getAll();
-//	pageContext.setAttribute("list", list);
-	
-// 	  Ord_foodVO ord_foodVO = (Ord_foodVO) request.getAttribute("ord_foodVO");
-// 	  Ord_foodService ord_foodSvc = new Ord_foodService();
-// 	  List<Ord_foodVO> list1 = ord_foodSvc.getAll();
-// 	  pageContext.setAttribute("list1", list1);
 	java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:00");; 
 	pageContext.setAttribute("df",df);
-
+// 	HttpSession session1 = request.getSession();
+// 	String member_no = "1";
+// 	session1.setAttribute("member_no", member_no);
 %>
 
 
@@ -35,6 +28,9 @@
 <title>訂單票種資料新增 - addOrd_ticket_type2.jsp</title>
 
 <style>
+body{
+	box-sizing: border-box;
+}
 table {
 	width: 600px;
 	background-color: white;
@@ -56,7 +52,9 @@ td {
 	line-height: 30px;
 	color: black;
 }
-
+#main{
+	margin-left:20px;
+}
 #div1, #div6 {
 	width: 600px;
 /* 	height: 150px; */
@@ -84,6 +82,27 @@ FORM {
 	text-align: center;
 	color: white;
 }
+.product{
+ 	border-bottom:1px solid lightgray; 
+	text-align:right;
+	font-size:10px;
+	margin-bottom:0px;
+	margin-top:0px;
+/* 	margin-right:10px; */
+}
+#total_price{
+/*  	border-bottom:1px solid lightgray;  */
+	text-align:right;
+	font-size:10px;
+	margin-bottom:0px;
+	margin-top:0px;
+ 	margin-right: 3px;
+}
+.text{
+/* 	border-bottom:1px solid lightgray; */
+	font-size:10px;
+	margin-bottom:0px;
+}
 
 img{
   	width: 115px;
@@ -91,9 +110,11 @@ img{
   	margin: 0 auto;
   }
 
+
 </style>
 <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
 <script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
 </head>
 <body bgcolor='white'>
 
@@ -107,8 +128,10 @@ img{
 		</ul>
 	</c:if>
 
-	<FORM METHOD="post"	ACTION="<%=request.getContextPath()%>/order/order.do" name="form1">
-		<div id="div1">
+<FORM METHOD="post"	ACTION="<%=request.getContextPath()%>/order/order.do" name="form1">
+	<div id="main" class="container" >
+	  <div class="row">
+		<div id="div1" style="display:inline-block" class="col-8">
 			<div style="margin-bottom:5px; padding: 10px 0;">
 				<c:choose>
 					<c:when test="${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(param.showtime_no)
@@ -159,7 +182,7 @@ img{
 					${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(param.showtime_no)
 						.movie_no).moviename}
 				</h2>
-				<p style="display: inline-block; margin-top: 0px; margin-left: 66px; vertical-align:top; width: 161px;" >
+				<p style="display: inline-block; margin-top: 0px; margin-left: 64px; vertical-align:top; width: 161px;" >
 					<i class="fas fa-clock" style="margin-right:5px; color:#008080;"></i> ${df.format(showtimeSvc.getOneShowtime(param.showtime_no).showtime_time)}
 					<br>
 					<br>
@@ -167,7 +190,7 @@ img{
 						.theater_no).theater_name}
 				</p>
 			</div>
-			<div id="div2">
+			<div id="div2" >
 				<h2 id="h2">選擇電影票</h2>
 				<p id="p1">選擇您希望購買的電影票張數和類型.請注意系統將自動為您保留可訂的最佳座位, 每筆交易最多可購買10張電影票</p>
 			</div>
@@ -200,10 +223,8 @@ img{
 				</c:forEach>
 			
 			</table>
-		</div>
-
-		<div id="div6">
-			<div id="div7">
+			
+			<div id="div7" style="margin-top:20px;">
 				<h2 id="h3">選擇餐飲</h2>
 				<p id="p2">請選擇販賣部商品並結帳</p>
 			</div>
@@ -225,15 +246,137 @@ img{
 					</div>
 				</c:forEach>
 			<input type="hidden" name="action" value="sendToST">
-<!-- 			<input type="hidden" name="action" value="insert3"> -->
-			
+			<input type="hidden" name="showtime_no" value="${param.showtime_no}">
 			<input type="button"  id="btn" value="繼續   →"  style="margin-top: 20px; background-color: #337ab7; 
-			color: white; border: white; width:100px; height:50px; margin-left: 100%;"><i class="fas fa-arrow-right"></i>
+			color: white; border: white; width:100px; height:50px; margin-left: 80%;">
+			
 		</div>
-	</FORM>
+		<div class="col-0.5"></div>
+		<div class="col-2" style="margin-top:150px; over"  >
+			<div class="row" >
+				<div class="col-12" style="padding:0;border: 1px solid black;">
+					<div style="height:40px;background-color: #337ab7; border: 1px solid black;">
+						<div style="margin-top: 7px; margin-left:40px; color:white;">會員專區</div>
+					</div>
+					<div style="height:50px; margin-top:10px; font-size:10px; color:#777777; padding-left:10px;">
+						${sessionScope.member_no == null ? "尚未登入" : '嗨!TONY 您好'}
+					</div>
+				</div>
+				
+				<div class="col-12" style="padding:0; border: 1px solid black; margin-top:20px;">
+					<div style="height:40px; background-color: #337ab7; padding:7px;">
+						<div style=" margin-left:40px; color:white;">購物清單</div>
+					</div>
+					<div style="font-size:10px; color:#777777; padding-left:10px; margin-top: 0px;">
+						<table style="width:100%; padding:0; margin-top: 0;">
+							<tr id="total">
+								<td>
+									<p id="total_price">合計:0</p>
+								</td>
+							</tr>
+						
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
 
+	  </div>
+	</div>
+</FORM>
 <script>
 	$("#btn").click(test);
+	
+	$("select[name=ticket_count]").change(function(){
+		let productPrice = $(this).parent().prev().text().substr(1);
+		let productCount = parseInt($(this).val());
+		let productName = $(this).parent().prev().prev().text();
+		console.log(productPrice);
+		console.log(productCount);
+		console.log(productName);
+		let tableStructure = "";
+		
+		let target = $(this).attr("name");
+		let idName = "#" + productName;
+		if (productCount !== 0) {
+			if ($(idName)) {
+				$(idName).remove();
+			}
+		
+			tableStructure += "<tr id='"+productName +"'><td>";
+			tableStructure += "<p class='text'>" + productName + "</p>";
+			tableStructure += "<p class='product'>";
+			tableStructure += "<span style='margin:3px;'>"
+					+ productPrice + "</span>X";
+			tableStructure += "<span style='margin:3px;'>"
+					+ productCount + "</span>=";
+			tableStructure += "<span class='subtotal' style='margin:3px;'>"
+					+ (productPrice * productCount)
+					+ "</span>";
+			tableStructure += "</p></td></tr>";
+		
+		} else {
+			$(idName).remove();
+		}
+		$("#total").before(tableStructure);
+		
+		let orderList = $(".subtotal");
+		let totalPrice = 0;
+
+		for (let i = 0; i < orderList.length; i++) {
+			totalPrice += parseInt($(orderList[i]).text());
+		}
+		$("#total_price").text("合計: " + totalPrice);
+		
+	});
+	
+	$("select[name=food_count]").change(function(){
+		let productPrice = $(this).prev().text().substr(1);
+		let productCount = parseInt($(this).val());
+		let productName = $(this).prev().prev().text();
+		console.log(productPrice);
+		console.log(productCount);
+		console.log(productName);
+		let tableStructure = "";
+		
+		let target = $(this).attr("name");
+		let idName = "#" + productName;
+		if (productCount !== 0) {
+			if ($(idName)) {
+				$(idName).remove();
+			}
+		
+			tableStructure += "<tr id='"+productName +"'><td>";
+			tableStructure += "<p class='text'>" + productName + "</p>";
+			tableStructure += "<p class='product'>";
+			tableStructure += "<span style='margin:3px;'>"
+					+ productPrice + "</span>X";
+			tableStructure += "<span style='margin:3px;'>"
+					+ productCount + "</span>=";
+			tableStructure += "<span class='subtotal' style='margin:3px;'>"
+					+ (productPrice * productCount)
+					+ "</span>";
+			tableStructure += "</p></td></tr>";
+		
+		} else {
+			$(idName).remove();
+		}
+		$("#total").before(tableStructure);
+		
+		let orderList = $(".subtotal");
+		let totalPrice = 0;
+
+		for (let i = 0; i < orderList.length; i++) {
+			totalPrice += parseInt($(orderList[i]).text());
+		}
+		$("#total_price").text("合計: " + totalPrice);
+		
+	});
+	
+	
+	
+	
+	
 	
 	function test(){
 		
@@ -259,6 +402,6 @@ img{
 
 </script>
 
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

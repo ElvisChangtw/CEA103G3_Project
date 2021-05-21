@@ -404,6 +404,7 @@ String articleheadline = req.getParameter("articleheadline").trim();
 				articleVO = articleSvc.addArticle(memberno, articletype, content, articleheadline, crtdt, updatedt, status, likecount);				
 				/***************************3.新增完成,準備轉交(Send the Success view)***********/
 				String url = "/front-end/article/listAllArticle.jsp";
+//				String url = req.getParameter("requestURL");
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 新增成功後轉交listAllArticle.jsp
 				successView.forward(req, res);				
 				

@@ -137,7 +137,6 @@ public class CommentServlet extends HttpServlet {
 				RequestDispatcher failureView = req
 						.getRequestDispatcher(requestURL);
 				failureView.forward(req, res);
-
 			}
 		}
 		

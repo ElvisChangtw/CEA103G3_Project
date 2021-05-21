@@ -8,7 +8,8 @@ public interface CommentDAO_interface {
 	
     public void insert(CommentVO commentVO);
     public void update(CommentVO commentVO);
-    public void updateCommentStatus(CommentVO commentVO , java.sql.Connection con);
+    public void updateCommentStatusOff(CommentVO commentVO , java.sql.Connection con);
+    public void updateCommentStatusOn(CommentVO commentVO , java.sql.Connection con);
     public void delete(Integer commentno);
     public CommentVO findByPrimaryKey(Integer commentno);
 //    public List<CommentVO> findByMemberNo(Integer memberno);

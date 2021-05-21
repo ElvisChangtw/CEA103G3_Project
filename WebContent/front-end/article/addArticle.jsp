@@ -81,7 +81,7 @@
 	</ul>
 </c:if>
 
-<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/article/article.do" name="form1">
+<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/front-end/article/article.do" name="form1">
 <table>
 
 <!-- 	<tr> -->
