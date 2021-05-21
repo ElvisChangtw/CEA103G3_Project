@@ -13,6 +13,11 @@
 
 <html>
 <head>
+
+
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/front/notification.css" />
+	
+	
 <title>所有會員資料 - listAllMem.jsp</title>
 
 <style>
@@ -54,66 +59,7 @@
 	myimg:expression(onload=function(){
 	this.style.width=(this.offsetWidth > 600)?"600px":"auto"});
   }
-  
-  
-  @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
-
-
-.fadeOut {
-  opacity: 0;
-}
-
-#create {
-  border: none;
-  padding: 8px;
-  font-size:15px;
-  color: #FFF;
-  background-color: firebrick;
-  border-radius: 8px;
-}
-
-.alert-container{
-  position: fixed;
-  right: 10px;
-  bottom: 10px;
-}
-
-.alert {
-  position: relative;
-  background-color: white;
-  border: 5px solid lightblue;
-  height: 100px;
-  width: 250px;
-  border-radius: 15px;
-  margin-bottom: 15px;
-  color: #40bde6;
-  padding: 20px 15px 0 15px;
-  transition: opacity 2s;
-}
-
-.alert span {
-  font-size: 1.3rem;
-  position: absolute;
-  top: 3px;
-  right: 12px;
-  cursor: pointer;
-
-}
-.alertTxt{
-font-size: 1.1rem;
-  position: absolute;
-  top: 0px;
-  right: 12px;
-  cursor: pointer;
-  margin-top:23px;
-  width:170px;
-
-}
-.alertImg{
-  width:70px;
-
-}
 </style>
 
 </head>
@@ -205,25 +151,43 @@ font-size: 1.1rem;
 
 	</c:forEach>
 	
-	<button type="button" class="addFriend" value="addFriend">加好友</button>
-    <input type="hidden" id="friendNO"  value="4">
+	<button type="button" class="addFriend" value="addFriend">加好友 <input type="hidden" class="friendNO"  value="4"></button>
+	<button type="button" class="addFriend" value="addFriend">加好友 <input type="hidden" class="friendNO"  value="1"></button>
+	<button type="button" class="addFriend" value="addFriend">加好友 <input type="hidden" class="friendNO"  value="3"></button>
+    <br>
 	
-	<button type="button" class="addGroup" value="addGroup">加入揪團</button>
-	<input type="hidden" id="groupNO"  value="4">
+	<button type="button" class="addGroup" value="addGroup">加入揪團<input type="hidden" class="groupNO"  value="4"></button>
+	<button type="button" class="addGroup" value="addGroup">加入揪團<input type="hidden" class="groupNO"  value="5"></button>
+	<button type="button" class="addGroup" value="addGroup">加入揪團<input type="hidden" class="groupNO"  value="1"></button>
+	<br>
 	
-	<button type="button" class="buyTicket" value="buyTicket">確認購票</button>
-	<input type="hidden" id="movieNO"  value="4">
+	<button type="button" class="buyTicket" value="buyTicket">確認購票<input type="hidden" class="movieNO"  value="4"></button>
+	<button type="button" class="buyTicket" value="buyTicket">確認購票<input type="hidden" class="movieNO"  value="5"></button>
+	<button type="button" class="buyTicket" value="buyTicket">確認購票<input type="hidden" class="movieNO"  value="6"></button>
+	<br>
 	
 	<input type="text" id="groupName">
 	<button type="button" class="createGroup" value="createGroup">建立揪團</button>
+	<br>
 	
-	<button type="button" class="addfriend_check_btn" value=1>確定</button> &emsp;&emsp; <button type="button" class="addfriend_check_btn" value=0>拒絕</button>
+	<button type="button" class="addfriend_check_btn" value=1>確定 <input type="hidden" class="friendNO"  value="4"></button> &emsp;<button type="button" class="addfriend_check_btn" value=0>拒絕</button>
+	<button type="button" class="addfriend_check_btn" value=1>確定 <input type="hidden" class="friendNO"  value="1"></button> &emsp;<button type="button" class="addfriend_check_btn" value=0>拒絕</button>
+	<button type="button" class="addfriend_check_btn" value=1>確定 <input type="hidden" class="friendNO"  value="3"></button> &emsp;<button type="button" class="addfriend_check_btn" value=0>拒絕</button>
+	<br>
 	
-	<button type="button" class="goGroup" value="goGroup">出團</button>
-	<input type="hidden" id="goGroupName"  value="4">
+	<button type="button" class="goGroup" value="goGroup">出團<input type="hidden" class="goGroupName"  value="4"></button>
+	<button type="button" class="goGroup" value="goGroup">出團<input type="hidden" class="goGroupName"  value="5"></button>
+	<button type="button" class="goGroup" value="goGroup">出團<input type="hidden" class="goGroupName"  value="1"></button>
+	<br>
 	
-	<button type="button" class="kickoffGroup" value="kickoffGroup">修改出團條件</button>
-	<input type="hidden" id="kickGroupName"  value="4">
+	<button type="button" class="kickoffGroup" value="kickoffGroup">修改出團條件<input type="hidden" class="kickGroupName"  value="4"></button>
+	<button type="button" class="kickoffGroup" value="kickoffGroup">修改出團條件<input type="hidden" class="kickGroupName"  value="5"></button>
+	<button type="button" class="kickoffGroup" value="kickoffGroup">修改出團條件<input type="hidden" class="kickGroupName"  value="1"></button>
+	<br>
+	
+	<button type="button" class="reminder" value="reminder">提醒<input type="hidden" class="memberNO"  value="4"></button>
+	<button type="button" class="reminder" value="reminder">提醒<input type="hidden" class="memberNO"  value="3"></button>
+    <br>
 	
 	我是${memVO.member_no}
 	
@@ -235,34 +199,39 @@ font-size: 1.1rem;
 </body>
 <script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
 
+
 <script>
 	var MyPoint = "/NotifyWS/${memVO.member_no}";
 	var host = window.location.host;
 	var path = window.location.pathname;
 	var webCtx = path.substring(0, path.indexOf('/', 1));
 	var endPointURL = "ws://" + window.location.host + webCtx + MyPoint;
-	var friendNO = document.getElementById("friendNO").value;
-	var groupNO = document.getElementById("groupNO").value;
-	var movieNO = document.getElementById("movieNO").value;
+	var friendNO;
+	var groupNO;
+	var movieNO;
 	var groupName;
-	var goGroupName = document.getElementById("goGroupName").value;
-	var kickGroupName = document.getElementById("kickGroupName").value;
+	var goGroupName;
+	var kickGroupName;
+	var memberNO;
 	var self = '${memVO.member_no}';
 	var webSocket;
 	var type;
 
 
 	$(".addFriend").click(function(){
+		friendNO = $(this).find("input.friendNO").val();
 		sendWebSocket($(this));
 	})
 	$(".addGroup").click(function(){
+		groupNO = $(this).find("input.groupNO").val();
 		sendWebSocket($(this));
 	})
-// 	$(this).find("input") 這樣不行不知道為啥
 	$(".buyTicket").click(function(){
+		movieNO = $(this).find("input.movieNO").val();
 		sendWebSocket($(this));
 	})
 	$(".addfriend_check_btn").click(function(){
+		friendNO = $(this).find("input.friendNO").val();
 		sendWebSocket($(this));
 		//這邊執行insertfriend的code
 	})
@@ -271,11 +240,19 @@ font-size: 1.1rem;
 		sendWebSocket($(this));
 	})
 	$(".goGroup").click(function(){
+		goGroupName = $(this).find("input.goGroupName").val();
 		sendWebSocket($(this));
 	})
 	$(".kickoffGroup").click(function(){
+		kickGroupName = $(this).find("input.kickGroupName").val();
 		sendWebSocket($(this));
 	})
+	$(".reminder").click(function(){
+		memberNO = $(this).find("input.memberNO").val();
+		sendWebSocket($(this));
+
+	})
+	
 	
 	function sendWebSocket(item){
 		let timespan = new Date();
@@ -350,6 +327,16 @@ font-size: 1.1rem;
 				"time":timeStr
 			};
 		}
+		if(item.val()=="reminder"){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : memberNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
 
 		webSocket.send(JSON.stringify(jsonObj));
 	}
@@ -413,6 +400,10 @@ font-size: 1.1rem;
 	  if (type==="buyTicket"){
 			img.src="<%=request.getContextPath()%>/images/notify_icons/ticket.png"
 	  }
+	  if (type==="reminder"){
+			img.src="<%=request.getContextPath()%>/images/notify_icons/warning.png"
+	  }
+	  
 		  img.classList.add("alertImg");
 		  imgdiv.append(img);
 		  txt.innerText = text;

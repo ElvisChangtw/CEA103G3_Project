@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+
+
+.fadeOut {
+  opacity: 0;
+}
+
+#create {
+  border: none;
+  padding: 8px;
+  font-size:15px;
+  color: #FFF;
+  background-color: firebrick;
+  border-radius: 8px;
+}
+
+.alert-container{
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+}
+
+.alert {
+  position: relative;
+  background-color: white;
+  border: 5px solid lightblue;
+  height: 100px;
+  width: 250px;
+  border-radius: 15px;
+  margin-bottom: 15px;
+  color: #40bde6;
+  padding: 20px 15px 0 15px;
+  transition: opacity 2s;
+}
+
+.alert span {
+  font-size: 1.3rem;
+  position: absolute;
+  top: 3px;
+  right: 12px;
+  cursor: pointer;
+
+}
+.alertTxt{
+font-size: 1.1rem;
+  position: absolute;
+  top: 0px;
+  right: 12px;
+  cursor: pointer;
+  margin-top:23px;
+  width:170px;
+
+}
+.alertImg{
+  width:70px;
+
+}

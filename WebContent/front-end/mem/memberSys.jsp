@@ -36,33 +36,20 @@
 	MemVO memVO = (MemVO)session.getAttribute("memVO");
 
 	ArticleCollectionVO artcolVO = (ArticleCollectionVO)request.getAttribute("artcolVO");
-	
 
-	List<OrderVO> ord_list = orderSvc.getAllOrderByMemno(memVO.getMember_no());
-    pageContext.setAttribute("ord_list",ord_list);
-    
-// 	List<String> addfriend = JedisHandleMessage.getHistoryMsg("2", "addFriend");
-// 	List<JSONObject> aa = new ArrayList<JSONObject>();
-// 	JSONArray friend = new JSONArray(addfriend);
-	
-// 	for(int i = 0; i< friend.length(); i++) {
-// 		JSONObject obj = friend.getJSONObject(i);
-// 		aa.add(obj);
-// 	}
-// 	pageContext.setAttribute("aa",aa);
 
-    
 %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="BIG5">
-<link rel="stylesheet" type="text/css"
-	href="<%=request.getContextPath()%>/css/front/memberSys.css" />
+<%-- <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/front/notification.css" /> --%>
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/front/memberSys.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" 
 integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/datetimepicker/jquery.datetimepicker.css" />
+
+
 <title>Insert title here</title>
 
 <style>
@@ -171,65 +158,64 @@ text-align:center;
 /* 通知用 */
   @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
-
-
 .fadeOut {
-  opacity: 0;
+  opacity: 0 !important;
 }
 
 #create {
-  border: none;
-  padding: 8px;
-  font-size:15px;
-  color: #FFF;
-  background-color: firebrick;
-  border-radius: 8px;
+  border: none !important;
+  padding: 8px !important;
+  font-size:15px !important;
+  color: #FFF !important;
+  background-color: firebrick !important;
+  border-radius: 8px !important;
 }
 
 .alert-container{
-  position: fixed;
-  right: 10px;
-  bottom: 10px;
+  position: fixed !important;
+  right: 10px !important;
+  bottom: 10px !important;
 }
 
 .alert {
-  position: relative;
-  background-color: white;
-  border: 5px solid lightblue;
-  height: 100px;
-  width: 250px;
-  border-radius: 15px;
-  margin-bottom: 15px;
-  color: #40bde6;
-  padding: 20px 15px 0 15px;
-  transition: opacity 2s;
+  position: relative !important;
+  background-color: white !important;
+  border: 5px solid lightblue !important;
+  height: 130px !important;
+  width: 290px !important;
+  border-radius: 15px !important;
+  margin-bottom: 15px !important;
+  color: #40bde6 !important;
+  padding: 20px 15px 0 15px !important;
+  transition: opacity 2s !important;
 }
 
 .alert span {
-  font-size: 1.3rem;
-  position: absolute;
-  top: 3px;
-  right: 12px;
-  cursor: pointer;
+  font-size: 1.3rem !important;
+  position: absolute !important;
+  top: 3px !important;
+  right: 12px !important;
+  cursor: pointer !important;
 
 }
 .alertTxt{
-font-size: 1.1rem;
-  position: absolute;
-  top: 0px;
-  right: 12px;
-  cursor: pointer;
-  margin-top:23px;
-  width:170px;
+  font-size: 17px !important;
+  position: absolute !important;
+  top: 0px !important;
+  right: 12px !important;
+  cursor: pointer !important;
+  margin-top:23px !important;
+  width:170px !important;
 
 }
 .alertImg{
-  width:70px;
+  width:80px !important;
+  margin-left:-5px !important;
 
 }
 </style>
 </head>
-<body>
+<body onload="connect();starbling();" onunload="disconnection();">
 	<div class="main-wrapper">
 		<div class="info-div">
 			<div class="info-content">
@@ -250,6 +236,10 @@ font-size: 1.1rem;
 						aria-controls="movieRating" /> <label for="tab7">已評分電影</label>
 					<div class="tab-panels">
 						<section id="ticket" class="tab-panel">
+						<button type="button" class="addFriend" value="addFriend">加好友 <input type="hidden" class="friendNO"  value="4"></button>
+	<button type="button" class="addFriend" value="addFriend">加好友 <input type="hidden" class="friendNO"  value="1"></button>
+	<button type="button" class="addFriend" value="addFriend">加好友 <input type="hidden" class="friendNO"  value="3"></button>
+    <br>
 						<div class="container-fluid">
 								<div class="row">
 							<form method="post" id="ticket-info-form">
@@ -445,9 +435,10 @@ font-size: 1.1rem;
 		</div>
 	</div>
 
+ <div class="alert-container">
+  </div>
 
-<script src="<%=request.getContextPath()%>/datetimepicker/jquery.js"></script>
-<script src="<%=request.getContextPath()%>/datetimepicker/jquery.datetimepicker.full.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/imask/3.4.0/imask.min.js"></script>
 <script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
@@ -457,7 +448,6 @@ bK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></scrip
 "sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha
 384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-
 
 
 
@@ -515,16 +505,6 @@ $(document.body).on("click", ".delete-order",function () {
           }
       });
   });
-//都無訂票紀錄顯示提醒
-// var undue = $("tr.table-order");
-// var due = $("tr.table-history");
-// var fragment;
-<%-- if(<%=pageContext.getAttribute("ord_list")%>=[]){ --%>
-// 	undue.after(`<center><div>您目前沒有預訂任何電影票，快按<a href=/xxxxx>這裡</a>來訂票!</div></center>`);
-// 	due.after(`<center><div>您沒有任何訂票紀錄</div></center>`);
-// }
-
-
 
 //移到歷史訂單
 var switcher = "close";  //控制顯示"來訂票"
@@ -658,6 +638,31 @@ if(showTime>now&&("${groupVO.group_status}"=="0"||"${groupVO.group_status}"=="1"
 
 $("#show_masterBox_${groupVO.group_no}").click(function(){
 	master.before(master_segment_${groupVO.group_no});
+	var memberNO;
+	$(".reminder").click(function(){
+		memberNO = $(this).find("input.memberNO").val();
+		sendWebSocket($(this));
+		console.log(memberNO)
+		
+		function sendWebSocket(item){
+			let timespan = new Date();
+			let timeStr = timespan.getFullYear() + "-" + (timespan.getMonth()+1).toString().padStart(2, "0") + "-" 
+						+ timespan.getDate() + " " + timespan.getHours().toString().padStart(2, "0") + ":" + timespan.getMinutes().toString().padStart(2, "0");
+			
+			if(item.val()=="reminder"){
+				type = item.val();
+				var jsonObj = {
+					"type" : type,
+					"sender" : self,
+					"receiver" : memberNO,
+					"message":"",
+					"time":timeStr
+				};
+			}
+
+			webSocket.send(JSON.stringify(jsonObj));
+		}
+	})
 	$(".leaveUpdate").click(function(){
   		$("#master_box_${groupVO.group_no}").css("opacity", "0");
   		$("#master_box_${groupVO.group_no}").css("z-index", "-1");
@@ -671,7 +676,7 @@ $("#show_masterBox_${groupVO.group_no}").click(function(){
 var master_segment_${groupVO.group_no}=
 	`<div class="master_box" id="master_box_${groupVO.group_no}" style="opacity:1; z-index:99;">
 	<div class="master_box_for_position detail_box">
-		<table class="table table-dark table-hover" style="text-align:center;">
+		<table class="table table-secondary table-hover" style="text-align:center;">
 		<button type="button" class="btn-close leaveUpdate" style="position:absolute; right:450px; top:250px;"></button>
 			<h1>揪團明細</h1>
 			<tr><th style="border-top-left-radius: 40px;">揪團名稱 : </th><td style="border-top-right-radius: 40px;">`+ "${groupVO.group_title}" +`</td></tr>
@@ -680,7 +685,11 @@ var master_segment_${groupVO.group_no}=
 			<tr><th>參加團員 : </th><td>
 			<table style="margin-left:250px;">
 				<c:forEach var="groupMemVO" items="${groupSvc.getMembersByGroupno(groupVO.group_no)}">
-					<tr><td>`+"${memSvc.getOneMem(groupMemVO.member_no).mb_name}"+`</td><td>(`+"${groupMemVO.pay_status}"+`)</td></tr>
+					<tr><td>`+"${memSvc.getOneMem(groupMemVO.member_no).mb_name}"+`</td><td>(`+"${groupMemVO.pay_status}"+`)</td>
+						<c:if test="${groupMemVO.pay_status == '0'}">
+		            		<td><button type="button" class="btn-primary reminder" value="reminder">提醒<input type="hidden" class="memberNO"  value="${groupMemVO.member_no}"></button></td>
+		        		</c:if>
+					</tr>
 				</c:forEach>
 			</table>
 				</td></tr>
@@ -846,216 +855,121 @@ $(document.body).on("click", ".leave-group",function () {
 //------------------------------------------------------------------------------------------------------------------------
 //通知
 
-//好友相關
 $(document).ready(function(){
 	var notify_friend = $("tr.table-friend");
 	var notify_group = $("tr.table-group");
 	var notify_ticket = $("tr.table-ticket");
 	var memberno = ${memVO.member_no};
-	var slice;
+	var slice_addFriend;
+	var slice_response;
+	var slice_addGroup;
+	var slice_createGroup;
+	var slice_dismissGroup;
+	var slice_kickUnpaid;
+	var slice_kickoffGroup;
+	var slice_buyTicket;
+	var slice_reminder;
 	 $.ajax({
 		 url:"<%=request.getContextPath()%>/NotifyServlet?action=insert_For_Ajax",
 		 data:{
-			 "member_no":memberno,
-			 "type":"addFriend"	
+			 "member_no":memberno
 		 },
 		 type:"POST",
 		 success:function(json){
 			 let jsonobj = JSON.parse(json);
-			 let friend_list = jsonobj.friend;
-			 let len = jsonobj.friend.length;
+			 let all_list = jsonobj.all;
+			 let len = jsonobj.all.length;
 			 for(let i = 0 ; i < len ; i++){
-				 let jsono = JSON.parse(friend_list[i]);
-				 if(jsono.sender=="${memVO.member_no}"){
-					 slice += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;
-				 }else{
-					 <c:forEach var="relationVO" items="${relationSvc.getOneRelationshipByMemno(memVO.member_no)}">
-					 if(jsono.sender=="${relationVO.friend_no}"){
-						 slice += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;  
-						 //設定如果已經是好友就不會出現下面的按鈕訊息，而是出現純受邀請的訊息(未測試)
-					 }
-					 </c:forEach>
-					 else{
-						 slice += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td><td><button type="button" class="addfriend_check_btn" value=1>確定</button> &emsp;&emsp; <button type="button" class="addfriend_check_btn" value=0>拒絕</button></td></tr>`;
-						 //點了要移除此蘭
-					 }				 
-				 }			    
+				 let jsono = JSON.parse(all_list[i]);
+				 
+				 if(jsono.type==="addFriend"){
+					 if(jsono.sender=="${memVO.member_no}"){
+						 slice_addFriend += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;
+					 }else{
+						 <c:forEach var="relationVO" items="${relationSvc.getOneRelationshipByMemno(memVO.member_no)}">
+						 if(jsono.sender=="${relationVO.friend_no}"){
+							 slice_addFriend += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;  
+							 //設定如果已經是好友就不會出現下面的按鈕訊息，而是出現純受邀請的訊息(未測試)
+						 }
+						 </c:forEach>
+						 else{
+							 slice_addFriend += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td><td><button type="button" class="addfriend_check_btn_Yes btn-primary" value=1>確定</button> &emsp;&emsp; <button type="button" class="addfriend_check_btn_No btn-primary" value=0>拒絕</button></td><td class="friendNO" style="display:none;">`+jsono.sender+`</td></tr>`;
+						 }	
+						
+					 }	
+				 }
+				 if(jsono.type==="response"){
+					 slice_response += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;
+				 }
+				 if(jsono.type==="addGroup"){
+					 slice_addGroup += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;
+				 }
+				 if(jsono.type==="createGroup"){
+					 slice_createGroup += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;
+				 }
+				 if(jsono.type==="dismissGroup"){
+					 slice_dismissGroup += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;
+				 }
+				 if(jsono.type==="kickUnpaid"){
+					 slice_kickUnpaid += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;
+				 }
+				 if(jsono.type==="kickoffGroup"){
+					 slice_kickoffGroup += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;
+				 }
+				 if(jsono.type==="buyTicket"){
+					 slice_buyTicket += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;
+				 }
+				 if(jsono.type==="reminder"){
+					 slice_reminder += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;
+				 }
+				 
+				 		    
 			 }
-			 notify_friend.after(slice); 
-			 $(".addfriend_check_btn").click(function(){ //記得要slice這行生成後註冊btn才有用
-					
+			 notify_friend.after(slice_addFriend); 
+			 $(".addfriend_check_btn_Yes").click(function(){ //記得要slice這行生成後註冊btn才有用		
+				$(this).parent().parent().remove();
+				Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "已加入好友",
+                    showConfirmButton: false,
+                    timer: 1000,
+                });
+				friendNO = $(this).parent().next().text();
+				sendWebSocket($(this));
+				function sendWebSocket(item){
+					let timespan = new Date();
+					let timeStr = timespan.getFullYear() + "-" + (timespan.getMonth()+1).toString().padStart(2, "0") + "-" 
+								+ timespan.getDate() + " " + timespan.getHours().toString().padStart(2, "0") + ":" + timespan.getMinutes().toString().padStart(2, "0");
+					if(item.val()==1){
+						var jsonObj = {
+							"type" : "response",
+							"sender" : self,
+							"receiver" : friendNO,
+							"message":"",
+							"time":timeStr
+						};
+					}
+					webSocket.send(JSON.stringify(jsonObj));
+				}			
+				//這邊放入insertFriend的ajax
+			})
+			$(".addfriend_check_btn_No").click(function(){ //記得要slice這行生成後註冊btn才有用		
 				$(this).parent().parent().remove();	
 			})
+			
+			 notify_friend.after(slice_response); 
+			 notify_group.after(slice_addGroup); 
+			 notify_group.after(slice_createGroup); 
+			 notify_group.after(slice_dismissGroup); 
+			 notify_group.after(slice_kickUnpaid); 
+			 notify_group.after(slice_kickoffGroup); 
+			 notify_ticket.after(slice_buyTicket); 
+			 notify_ticket.after(slice_reminder); 
 		 }
 	
 	
 		})
-		
-		$.ajax({
-		 url:"<%=request.getContextPath()%>/NotifyServlet?action=insert_For_Ajax",
-		 data:{
-			 "member_no":memberno,
-			 "type":"response"	
-		 },
-		 type:"POST",
-		 success:function(json){
-			 let jsonobj = JSON.parse(json);
-			 let friend_list = jsonobj.friend;
-			 let len = jsonobj.friend.length;
-			 let slice;
-			 for(let i = 0 ; i < len ; i++){
-				 let jsono = JSON.parse(friend_list[i]);
-					 slice += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;
-				 }	    
-			 notify_friend.after(slice); 
-		 	}
-			 
-		 })
-		 
-//揪團相關		 
-		 
-		 $.ajax({
-		 url:"<%=request.getContextPath()%>/NotifyServlet?action=insert_For_Ajax",
-		 data:{
-			 "member_no":memberno,
-			 "type":"addGroup"	
-		 },
-		 type:"POST",
-		 success:function(json){
-			 let jsonobj = JSON.parse(json);
-			 let friend_list = jsonobj.friend;
-			 let len = jsonobj.friend.length;
-			 let slice;
-			 for(let i = 0 ; i < len ; i++){
-				 let jsono = JSON.parse(friend_list[i]);
-					 slice += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;
-				 }	    
-			 notify_group.after(slice); 
-		 	}
-			 
-		 })
-		 $.ajax({
-		 url:"<%=request.getContextPath()%>/NotifyServlet?action=insert_For_Ajax",
-		 data:{
-			 "member_no":memberno,
-			 "type":"createGroup"	
-		 },
-		 type:"POST",
-		 success:function(json){
-			 let jsonobj = JSON.parse(json);
-			 let friend_list = jsonobj.friend;
-			 let len = jsonobj.friend.length;
-			 let slice;
-			 for(let i = 0 ; i < len ; i++){
-				 let jsono = JSON.parse(friend_list[i]);
-					 slice += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;
-				 }	    
-			 notify_group.after(slice); 
-		 	}
-			 
-		 })
-		 $.ajax({
-		 url:"<%=request.getContextPath()%>/NotifyServlet?action=insert_For_Ajax",
-		 data:{
-			 "member_no":memberno,
-			 "type":"dismissGroup"	
-		 },
-		 type:"POST",
-		 success:function(json){
-			 let jsonobj = JSON.parse(json);
-			 let friend_list = jsonobj.friend;
-			 let len = jsonobj.friend.length;
-			 let slice;
-			 for(let i = 0 ; i < len ; i++){
-				 let jsono = JSON.parse(friend_list[i]);
-					 slice += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;
-				 }	    
-			 notify_group.after(slice); 
-		 	}
-			 
-		 })
-		 $.ajax({
-		 url:"<%=request.getContextPath()%>/NotifyServlet?action=insert_For_Ajax",
-		 data:{
-			 "member_no":memberno,
-			 "type":"goGroup"	
-		 },
-		 type:"POST",
-		 success:function(json){
-			 let jsonobj = JSON.parse(json);
-			 let friend_list = jsonobj.friend;
-			 let len = jsonobj.friend.length;
-			 let slice;
-			 for(let i = 0 ; i < len ; i++){
-				 let jsono = JSON.parse(friend_list[i]);
-					 slice += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;
-				 }	    
-			 notify_group.after(slice); 
-		 	}
-			 
-		 })
-		 $.ajax({
-		 url:"<%=request.getContextPath()%>/NotifyServlet?action=insert_For_Ajax",
-		 data:{
-			 "member_no":memberno,
-			 "type":"kickUnpaid"	
-		 },
-		 type:"POST",
-		 success:function(json){
-			 let jsonobj = JSON.parse(json);
-			 let friend_list = jsonobj.friend;
-			 let len = jsonobj.friend.length;
-			 let slice;
-			 for(let i = 0 ; i < len ; i++){
-				 let jsono = JSON.parse(friend_list[i]);
-					 slice += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;
-				 }	    
-			 notify_group.after(slice); 
-		 	}
-			 
-		 })
-		 $.ajax({
-		 url:"<%=request.getContextPath()%>/NotifyServlet?action=insert_For_Ajax",
-		 data:{
-			 "member_no":memberno,
-			 "type":"kickoffGroup"	
-		 },
-		 type:"POST",
-		 success:function(json){
-			 let jsonobj = JSON.parse(json);
-			 let friend_list = jsonobj.friend;
-			 let len = jsonobj.friend.length;
-			 let slice;
-			 for(let i = 0 ; i < len ; i++){
-				 let jsono = JSON.parse(friend_list[i]);
-					 slice += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;
-				 }	    
-			 notify_group.after(slice); 
-		 	}
-			 
-		 })
-		 
-//訂票相關		 
-		 $.ajax({
-		 url:"<%=request.getContextPath()%>/NotifyServlet?action=insert_For_Ajax",
-		 data:{
-			 "member_no":memberno,
-			 "type":"buyTicket"	
-		 },
-		 type:"POST",
-		 success:function(json){
-			 let jsonobj = JSON.parse(json);
-			 let friend_list = jsonobj.friend;
-			 let len = jsonobj.friend.length;
-			 let slice;
-			 for(let i = 0 ; i < len ; i++){
-				 let jsono = JSON.parse(friend_list[i]);
-					 slice += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;
-				 }	    
-			 notify_ticket.after(slice); 
-		 	}
-			 
-		 })
 
 });
 
@@ -1602,7 +1516,7 @@ $(document).ready(function(){
   
 
 //一開始讓星星亮
-window.onload=function(){
+function starbling(){
 	var rating;
 	<c:forEach var="ratingVO" items="${ratingSvc.getAllRating(memVO.member_no)}">
 		rating=${ratingVO.rating};
@@ -1681,5 +1595,249 @@ $(".hover_rating").hover(function(){
 
 </script>
 </body>
+
+<script>
+	var MyPoint = "/NotifyWS/${memVO.member_no}";
+	var host = window.location.host;
+	var path = window.location.pathname;
+	var webCtx = path.substring(0, path.indexOf('/', 1));
+	var endPointURL = "ws://" + window.location.host + webCtx + MyPoint;
+	var friendNO;
+	var groupNO;
+	var movieNO;
+	var groupName;
+	var goGroupName;
+	var kickGroupName;
+	var memberNO;
+	var self = '${memVO.member_no}';
+	var webSocket;
+	var type;
+
+
+	$(".addFriend").click(function(){
+		friendNO = $(this).find("input.friendNO").val();
+		sendWebSocket($(this));
+	})
+	$(".addGroup").click(function(){
+		groupNO = $(this).find("input.groupNO").val();
+		sendWebSocket($(this));
+	})
+	$(".buyTicket").click(function(){
+		movieNO = $(this).find("input.movieNO").val();
+		sendWebSocket($(this));
+	})
+	$(".addfriend_check_btn").click(function(){
+		friendNO = $(this).find("input.friendNO").val();
+		sendWebSocket($(this));
+		//這邊執行insertfriend的code
+	})
+	$(".createGroup").click(function(){
+		groupName = document.getElementById("groupName").value;  //不可放在上面宣告，因為groupname是使用者自己打要click後才會取直，所以要放在click事件內
+		sendWebSocket($(this));
+	})
+	$(".goGroup").click(function(){
+		goGroupName = $(this).find("input.goGroupName").val();
+		sendWebSocket($(this));
+	})
+	$(".kickoffGroup").click(function(){
+		kickGroupName = $(this).find("input.kickGroupName").val();
+		sendWebSocket($(this));
+	})
+	$(".reminder").click(function(){
+		memberNO = $(this).find("input.memberNO").val();
+		sendWebSocket($(this));
+
+	})
+	
+	
+	function sendWebSocket(item){
+		let timespan = new Date();
+		let timeStr = timespan.getFullYear() + "-" + (timespan.getMonth()+1).toString().padStart(2, "0") + "-" 
+					+ timespan.getDate() + " " + timespan.getHours().toString().padStart(2, "0") + ":" + timespan.getMinutes().toString().padStart(2, "0");
+		if(item.val()=="addFriend"){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : friendNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.val()=="addGroup"){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : groupNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.val()=="buyTicket"){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : movieNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.val()==1){
+			var jsonObj = {
+				"type" : "response",
+				"sender" : self,
+				"receiver" : friendNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.val()=="createGroup"){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : groupName,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.val()=="goGroup"){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : goGroupName,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.val()=="kickoffGroup"){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : kickGroupName,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.val()=="reminder"){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : memberNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+
+		webSocket.send(JSON.stringify(jsonObj));
+	}
+	
+
+	function connect() {
+		console.log(endPointURL);
+		// create a websocket
+		webSocket = new WebSocket(endPointURL);
+
+		webSocket.onopen = function(event) {
+			
+
+		};
+
+		webSocket.onmessage = function(event) {
+			console.log(event.data);
+			var jsonObj = JSON.parse(event.data);
+			var text = jsonObj.message;
+			var time = jsonObj.time;
+			var type = jsonObj.type;
+			console.log(jsonObj)
+			createAlert(text,time,type);
+			
+		};
+
+		webSocket.onclose = function(event) {
+			console.log("Disconnected!");
+		};
+	}
+	
+	function disconnect() {
+		webSocket.close();
+		document.getElementById('sendMessage').disabled = true;
+		document.getElementById('connect').disabled = false;
+		document.getElementById('disconnect').disabled = true;
+	}
+	
+	
+// 	產生通知block在視窗右下角
+	  const alertContainer = document.querySelector('.alert-container');
+	  const btnCreate = document.getElementById('create');
+	  
+	  
+	  
+	  const createAlert = (text,time,type) => {
+		  
+	  const newAlert = document.createElement('div');
+	  const closeNewAlert = document.createElement('span');
+	  const imgdiv = document.createElement('div');
+	  const img = document.createElement('img');
+	  const txt = document.createElement('div');
+	  const time_str = document.createElement('div');
+	  
+	  if (type==="addFriend"||type==="response"){
+		  img.src="<%=request.getContextPath()%>/images/notify_icons/friend.png"
+	  }
+	  if (type==="addGroup"||type==="createGroup"||type==="dismissGroup"||type==="goGroup"||type==="kickoffGroup"||type==="kickUnpaid"){
+			img.src="<%=request.getContextPath()%>/images/notify_icons/group.png"
+	  }
+	  if (type==="buyTicket"){
+			img.src="<%=request.getContextPath()%>/images/notify_icons/ticket.png"
+	  }
+	  if (type==="reminder"){
+			img.src="<%=request.getContextPath()%>/images/notify_icons/warning.png"
+	  }
+	  
+		  img.classList.add("alertImg");
+		  imgdiv.append(img);
+		  txt.innerText = text;
+		  txt.classList.add("alertTxt");
+		  time_str.innerText = time;
+		  txt.append(time_str);
+		  newAlert.prepend(imgdiv);
+		  newAlert.append(txt)
+		  closeNewAlert.innerHTML = '&times;';
+		  
+		  newAlert.appendChild(closeNewAlert);
+		  
+		  newAlert.classList.add('alert');
+		  
+		  alertContainer.appendChild(newAlert);
+		  
+		  setTimeout(()=> {
+		    newAlert.classList.add('fadeOut');
+		  },3000)
+		  
+		  setTimeout(()=> {
+		    newAlert.remove();
+		  },5000)
+		  
+		
+	};
+
+
+	alertContainer.addEventListener('click', (e) => {
+	    if(e.target.nodeName == 'SPAN') {
+	        e.target.parentNode.remove();
+	    }
+	})
+
+
+
+
+</script>
+
 
 </html>

@@ -15,7 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import websocket.jedis.JedisHandleMessage;
-
+import com.google.gson.Gson;
 @WebServlet("/NotifyServlet")
 public class NotifyServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -32,15 +32,15 @@ public class NotifyServlet extends HttpServlet {
 		
 		if("insert_For_Ajax".equals(action)) {
 			String member_no = req.getParameter("member_no");
-			String type = req.getParameter("type");
+			
 			try {
-				List<String> historyData = JedisHandleMessage.getHistoryMsg(member_no, type);
+				List<String> historyData = JedisHandleMessage.getHistoryMsg(member_no);
 				JSONArray a = new JSONArray(historyData);
 				JSONObject jsonobj=new JSONObject();
-				jsonobj.put("friend", a);
+				jsonobj.put("all", a);
 				out.print(jsonobj);
 				return;
-			} catch (JSONException e) {
+			}catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}finally {
@@ -49,6 +49,20 @@ public class NotifyServlet extends HttpServlet {
 			}
 			
 		}
+		
+		if("readNotify".equals(action)) {
+			String member_no = req.getParameter("member_no");
+			try {
+				JedisHandleMessage.updateRead(member_no);
+				out.print("success");
+				return;
+			}finally {
+				out.flush();
+				out.close();
+			}
+			
+		}
+
 		
 	}
 
