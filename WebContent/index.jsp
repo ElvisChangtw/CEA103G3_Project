@@ -168,24 +168,10 @@
                                 <li><a href="<%=request.getContextPath()%>/front-end/group/group_front_page.jsp">揪團首頁</a></li>
 <%--  								<li><a href="<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">會員中心</a></li>  --%>
                                	<li><a href="<%=request.getContextPath()%>/front-end/news/listAllNews.jsp">最新消息</a></li>
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">會員專區<b class="caret"></b></a>
-                                    <ul class="dropdown-menu multi-column columns-1">
-                                        <li>
-                                            <div class="col-sm-12">
-                                                <ul class="multi-column-dropdown">
-                                                    <li class="active"><a href="<%=request.getContextPath()%>/front-end/news/listAllNews.jsp">登入/註冊</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                             <div class="col-sm-12">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">會員中心</a></li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </li>
+                                
+                                <li><a href="<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">會員中心</a></li>
+                                <li class="active"><a href="<%=request.getContextPath()%>/front-end/news/listAllNews.jsp">登入/註冊</a></li>
+                                
                             </ul>
                             
                         </div>
@@ -1052,7 +1038,7 @@
         <div class="footer-w3lagile-inner">
             <div class="footer-grids w3-agileits">
                 <div class="col-md-2 footer-grid">
-                    <h4 class="b-log"><a><span>Y</span>ear</a></h4>
+                    <h4 class="b-log"><a><span>年</span>份</a></h4>
                     <ul>
                         <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByYear&year=2021" title="Release 2021">2021</a></li>
                         <li><a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByYear&year=2020" title="Release 2020">2020</a></li>
@@ -1062,11 +1048,11 @@
                     </ul>
                 </div>
                 <div class="col-md-2 footer-grid">
-                    <h4 class="b-log"><a><span>D</span>irector</a></h4>
+                    <h4 class="b-log"><a><span>導</span>演</a></h4>
                     <div class="footer-grid1">
                         <div class="footer-grid1-left">
                             <a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&DIRECTOR=Steven Spielberg">
-                                <img src="<%=request.getContextPath()%>/images/index/Steven Spielberg.jpg" alt=" " width="40px" height="50px"></a>
+                                <img src="<%=request.getContextPath()%>/images/index/Steven Spielberg.jpg" alt=" " width="60px" height="50px"></a>
                         </div>
                         <div class="footer-grid1-right">
                             <a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&DIRECTOR=Steven Spielberg">
@@ -1077,7 +1063,7 @@
                     <div class="footer-grid1">
                         <div class="footer-grid1-left">
                             <a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&DIRECTOR=Michael Bay">
-                                <img src="<%=request.getContextPath()%>/images/index/Michael Bay.jpg" alt=" " width="40px" height="50px"></a>
+                                <img src="<%=request.getContextPath()%>/images/index/Michael Bay.jpg" alt=" " width="60px" height="50px"></a>
                         </div>
                         <div class="footer-grid1-right">
                             <a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&DIRECTOR=Michael Bay">
@@ -1088,7 +1074,7 @@
                     <div class="footer-grid1">
                         <div class="footer-grid1-left">
                             <a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&DIRECTOR=James Cameron">
-                                <img src="<%=request.getContextPath()%>/images/index/James Cameron.jpg" alt=" " width="40px" height="50px"></a>
+                                <img src="<%=request.getContextPath()%>/images/index/James Cameron.jpg" alt=" " width="60px" height="50px"></a>
                         </div>
                         <div class="footer-grid1-right">
                             <a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&DIRECTOR=James Cameron">
@@ -1099,7 +1085,7 @@
                     <div class="footer-grid1">
                         <div class="footer-grid1-left">
                             <a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&DIRECTOR=Christopher Nolan">
-                                <img src="<%=request.getContextPath()%>/images/index/Christopher Nolan.jpg" alt=" " width="40px" height="50px"></a>
+                                <img src="<%=request.getContextPath()%>/images/index/Christopher Nolan.jpg" alt=" " width="60px" height="50px"></a>
                         </div>
                         <div class="footer-grid1-right">
                             <a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&DIRECTOR=Christopher Nolan">
@@ -1109,7 +1095,7 @@
                     </div>
                 </div>
                 <div class="col-md-2 footer-grid">
-                    <h4 class="b-log"><a><span>L</span>atest <span>M</span>ovie</a></h4>
+                    <h4 class="b-log"><a><span>最</span>新 <span>電</span>影</a></h4>
                     <c:forEach var="movieVO" items="${latestMovie}">
                         <div class="footer-grid-instagram">
                             <a href="${pageContext.request.contextPath}/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}">
@@ -1125,11 +1111,11 @@
                     <div class="clearfix"> </div>
                 </div>
                 <div class="col-md-2 footer-grid">
-                    <h4 class="b-log"><a><span>A</span>ctor</a></h4>
+                    <h4 class="b-log"><a><span>演</span>員</a></h4>
                     <div class="footer-grid1">
                         <div class="footer-grid1-left">
                             <a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&ACTOR=Leonardo Wilhelm DiCaprio">
-                                <img src="<%=request.getContextPath()%>/images/index/Leonardo DiCaprio.jpg" alt=" " width="40px" height="50px"></a>
+                                <img src="<%=request.getContextPath()%>/images/index/Leonardo DiCaprio.jpg" alt=" " width="60px" height="50px"></a>
                         </div>
                         <div class="footer-grid1-right">
                             <a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&ACTOR=Leonardo Wilhelm DiCaprio">
@@ -1140,7 +1126,7 @@
                     <div class="footer-grid1">
                         <div class="footer-grid1-left">
                             <a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&ACTOR=Tom Cruise">
-                                <img src="<%=request.getContextPath()%>/images/index/Tom Cruise.jpg" alt=" " width="40px" height="50px"></a>
+                                <img src="<%=request.getContextPath()%>/images/index/Tom Cruise.jpg" alt=" " width="60px" height="50px"></a>
                         </div>
                         <div class="footer-grid1-right">
                             <a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&ACTOR=Tom Cruise">
@@ -1151,7 +1137,7 @@
                     <div class="footer-grid1">
                         <div class="footer-grid1-left">
                             <a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&ACTOR=Emma Stone">
-                                <img src="<%=request.getContextPath()%>/images/index/Emma Stone.jpg" alt=" " width="40px" height="50px"></a>
+                                <img src="<%=request.getContextPath()%>/images/index/Emma Stone.jpg" alt=" " width="60px" height="50px"></a>
                         </div>
                         <div class="footer-grid1-right">
                             <a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&ACTOR=Emma Stone">
@@ -1162,7 +1148,7 @@
                     <div class="footer-grid1">
                         <div class="footer-grid1-left">
                             <a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&ACTOR=Anne Hathaway">
-                                <img src="<%=request.getContextPath()%>/images/index/Anne Hathaway.jpg" alt=" " width="40px" height="50px"></a>
+                                <img src="<%=request.getContextPath()%>/images/index/Anne Hathaway.jpg" alt=" " width="60px" height="50px"></a>
                         </div>
                         <div class="footer-grid1-right">
                             <a href="${pageContext.request.contextPath}/movie/movie.do?action=listMovies_ByCompositeQuery&ACTOR=Anne Hathaway">
@@ -1172,7 +1158,7 @@
                     </div>
                 </div>
                 <div class="col-md-2 footer-grid">
-                    <h4 class="b-log"><a><span>T</span>op <span>F</span>ive <span>M</span>ovies</a></h4>
+                    <h4 class="b-log"><a><span>精</span>選 <span></span> <span>電</span>影</a></h4>
                     <ul>
                         <c:forEach var="movieVO" items="${listTopFive}">
                             <li><a href="genre.html">${movieVO.moviename}</a></li>
