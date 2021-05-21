@@ -17,9 +17,31 @@ import com.comment.model.*;
 import com.rating.model.*;
 import com.expectation.model.*;
 
+
 @WebServlet("/MovieServlet")
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 5 * 1024 * 1024, maxRequestSize = 5 * 5 * 1024 * 1024)
 public class MovieServlet extends HttpServlet {
+//	private MovieTimer movieTimer;
+	long count = 0;
+	Timer movieTimer = new Timer();
+	Calendar cal = new GregorianCalendar(2021, Calendar.MAY, 19, 00, 01);
+	
+	public void init() throws ServletException {
+
+		movieTimer.scheduleAtFixedRate(new TimerTask() {
+			public void run() {
+				MovieService movieSvc = new MovieService();
+				movieSvc.updateMovieStatus();
+				System.out.println("update movie status = " + count);
+				System.out.println(new Date(scheduledExecutionTime()));
+				count++;
+			}
+		}, cal.getTime(), 24*60*60*1000);
+	}
+	
+	public void destroy() {
+		movieTimer.cancel();
+	}
 
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		doPost(req, res);

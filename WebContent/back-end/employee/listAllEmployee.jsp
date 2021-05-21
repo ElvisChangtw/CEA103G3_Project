@@ -16,7 +16,6 @@
 	EmployeeVO employeeVO = (EmployeeVO) request.getAttribute("employeeVO");
 %>
 
-<%= employeeVO==null %>
 
 <!doctype html>
 <html lang="en">
@@ -104,12 +103,12 @@
 						      		<i class="fa" aria-hidden="true"></i>
 				        		</td>
 				        		<td>
-				        		 <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/employee/employee.do" style="margin-bottom: 0px;">
+				        		 <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/back-end/employee/employee.do" style="margin-bottom: 0px;">
 			     <input type="hidden" name="empno"  value="${employeeVO.empno}">
 			     <input type="hidden" name="action"	value="getOne_For_Update">
-<!-- 			     <input type="submit" class="btn btn-success edit" value="Edit"> -->
+			     <input type="submit" class="btn btn-success edit" value="Edit">
+<!-- 			      <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> -->
 			      				</FORM>
-			      <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
 			</td>
 						    </tr>
 						    <tr>
