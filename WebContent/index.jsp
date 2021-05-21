@@ -2056,7 +2056,7 @@ function drawPieChart2() {
 		    		  		'		<div class="col-md-8">' +
 		    				'		<p class="mov-name">'+ movieVO.moviename +  '</p>' +
 		    				'		<p class="non-mov-name">'+ movieVO.actor +  '</p> ' +
-		    				'		<p class="non-mov-name">'+ movieVO.premiredate +  '</p> ' +
+		    				'		<p class="non-mov-name">'+ yr +  '</p> ' +
 		    	  			'	</div>' +
 		    				'</div>' +
 		    				'<hr class="hrhr">';
