@@ -7,18 +7,20 @@ public class Notify {
 	private String receiver;
 	private String message;
 	private String time;
+	private String read;
 	
 	
 
 	public Notify() {};
 	
-	public Notify(String type, int sender, String receiver, String message, String time) {
+	public Notify(String type, int sender, String receiver, String message, String time, String read) {
 		super();
 		this.type=type;
 		this.sender=sender;
 		this.receiver=receiver;
 		this.message=message;
 		this.setTime(time);
+		this.read=read;
 	}
 	
 	public String getTime() {
@@ -54,6 +56,14 @@ public class Notify {
 	}
 	public void setReceiver(String receiver) {
 		this.receiver = receiver;
+	}
+
+	public String getRead() {
+		return read;
+	}
+
+	public void setRead(String read) {
+		this.read = read;
 	}
 	
 
