@@ -1736,10 +1736,10 @@ function drawPieChart2() {
 	        			var yr = 1900 + dt.getYear();
 	        			result = 
 		    				'<div class="rslt row" onclick="location.href=\'' + link+ '\'" > ' +
-		    				'	<div class="col-md-4"> ' +
+		    				'	<div class="col-md-3"> ' +
 		    		   		'			<img src="<%=request.getContextPath()%>/movie/DBGifReader2.do?movieno=' + movieVO.movieno + '" title=" " width="260px" height="120px"> ' +
 		    		  		'		</div> ' +
-		    		  		'		<div class="col-md-8">' +
+		    		  		'		<div class="col-md-9">' +
 		    				'		<p class="mov-name">'+ movieVO.moviename +  '</p>' +
 		    				'		<p class="non-mov-name">'+ movieVO.actor +  '</p> ' +
 		    				'		<p class="non-mov-name">'+ yr +  '</p> ' +
