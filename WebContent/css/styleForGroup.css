@@ -85,7 +85,8 @@
         	font-size:1em;
         }
         #display.container{
-        	max-width: 100%;
+        	max-width: 90%;
+        	margin-top: 20px;
         }
         div.jumbotron>div.row>div.div-th{
         	text-align: end;
