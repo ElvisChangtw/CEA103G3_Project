@@ -5,6 +5,7 @@
 <%@ page import="com.movie.model.*"%>
 <%@ page import="com.comment.model.*"%>
 <%@ page import="com.expectation.model.*"%>
+<%@ page import="com.mem.model.*"%>
 
 <%
 	MovieService movieSvc = new MovieService();	
@@ -42,6 +43,12 @@
 	pageContext.setAttribute("listTopFive", listTopFive);
 	
 	movieSvc.createMovieIdex();
+	
+	MemVO memVO = (MemVO) session.getAttribute("memVO");
+	if(memVO == null){
+		memVO = (new MemService()).getOneMem(99);
+	}
+	pageContext.setAttribute("memVO", memVO);
 %>
 
 <!DOCTYPE html>
@@ -165,13 +172,16 @@
                                 </li>
                                 
                                 <li><a href="<%=request.getContextPath()%>/front-end/article/listAllArticle.jsp">魔穴論壇</a></li>
-                                <li><a href="<%=request.getContextPath()%>/front-end/group/group_front_page.jsp">揪團首頁</a></li>
-<%--  								<li><a href="<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">會員中心</a></li>  --%>
+                                <li><a href="<%=request.getContextPath()%>/front-end/group/group_front_page.jsp">揪團啾啾</a></li>
                                	<li><a href="<%=request.getContextPath()%>/front-end/news/listAllNews.jsp">最新消息</a></li>
-                                
-                                <li><a href="<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">會員中心</a></li>
-                                <li class="active"><a href="<%=request.getContextPath()%>/front-end/news/listAllNews.jsp">登入/註冊</a></li>
-                                
+<%--                                 <li class="active"><a href="<%=request.getContextPath()%>/front-end/mem/MemLogin.jsp">登入/註冊</a></li> --%>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">會員專區<b class="caret"></b></a>
+                                    <ul class="dropdown-menu multi-column columns-1">
+                                        <li><a href="<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">會員中心</a></li>
+                                        <li><a href="<%=request.getContextPath()%>/front-end/mem/memberInfo.jsp">會員資訊</a></li>
+                                    </ul>
+                                </li>
                             </ul>
                             
                         </div>
@@ -183,6 +193,17 @@
                     <div class="w3ls_search">
 						<div class="cd-main-header">
 							<ul class="cd-header-buttons">
+								<li class="active rhs"><a id="login-btn"  href="<%=request.getContextPath()%>/front-end/mem/MemLogin.jsp">登入</a></li>
+								<li class="active rhs">
+									<c:if test="${memVO.member_no !=99 }">
+										<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${memVO.member_no}" 
+										id="${groupVO.group_no}-${memVO.member_no}" alt="尚無圖片" width="60px;" height="60px" 
+										style="border-radius:50%;" class="clickable" />
+									</c:if>
+									<a id="welcome"> ${memVO.mb_name } &nbsp</a>
+									<a id="logout-btn" href="#"> 登出 </a>
+								</li>
+
 								<li><a class="cd-search-trigger" href="#cd-search"> <span></span></a></li>
 							</ul> <!-- cd-header-buttons -->
 						</div>
@@ -1592,6 +1613,25 @@ function initialDrawRating3() {
 
 $(document).ready(drawPieChart1);
 $(document).ready(drawPieChart2);
+$(document).ready(function(){
+	$("#logout-btn").click(function(){
+		sessionStorage.removeItem('memVO'); 
+		window.location.href = '<%=request.getContextPath()%>/index.jsp';
+	})
+	
+	
+	let hasLoggedIn = <%= memVO.getMember_no() %>;
+	if(hasLoggedIn != 99){
+		$("#welcome").show();
+		$("#login-btn").hide();
+		$("#logout-btn").show();
+	} else{
+		$("#welcome").hide();
+		$("#login-btn").show();
+		$("#logout-btn").hide();
+	}
+	
+});
 
 function drawPieChart1() {
 	var canvas = document.createElement('canvas');

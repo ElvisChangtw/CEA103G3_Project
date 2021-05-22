@@ -22,7 +22,7 @@
 
 <html>
 <head>
-<title>瀏覽揪團資料</title>
+<title>揪團</title>
  <script type="application/x-javascript">
         addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
 
