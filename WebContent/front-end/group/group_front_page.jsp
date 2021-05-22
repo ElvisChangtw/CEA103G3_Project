@@ -3,13 +3,22 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page import="java.util.*"%>
 <%@ page import="com.group.model.*"%>
+<%@ page import="com.mem.model.*" %>
 
 <%
 	GroupService groupSvc = new GroupService();
 	List<GroupVO> list = groupSvc.getAll();
 	pageContext.setAttribute("list", list);
+	
+	MemVO memVO = (MemVO) session.getAttribute("memVO");
+	if(memVO == null){
+		memVO = new MemVO();
+		memVO.setMember_no(999);
+	}
+	
+	
+	pageContext.setAttribute("memVO", memVO);
 %>
-<jsp:useBean id="memVO" scope="session" type="com.mem.model.MemVO" />
 
 <!--
 author: W3layouts
@@ -323,15 +332,20 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
     
     <div class="list-btn">
-<%--           <button type="button" class="btn bˊn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/front-end/group/group_front_page.jsp'">進行中揪團</button>    --%>
-<%--           <button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=0'">我的揪團(尚未出團)</button> --%>
-<%--           <button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=1'">我的歷史揪團(準備出團)</button> --%>
-<%--           <button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=2'">我的歷史揪團(已結束)</button>     --%>
 		<ul class="nav nav-tabs">
 		  <li role="presentation" class="active"><a href="<%=request.getContextPath()%>/front-end/group/group_front_page.jsp">所有揪團</a></li>
-		  <li role="presentation"><a href="<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=0">我的揪團(尚未出團)</a></li>
-		  <li role="presentation"><a href="<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=1">我的揪團(已成行)</a></li>
-		  <li role="presentation"><a href="<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=2">我的歷史揪團</a></li>
+		  <c:choose>
+			  <c:when test="${memVO.member_no != 999}">
+				  <li role="presentation"><a href="<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=0">我的揪團(尚未出團)</a></li>
+				  <li role="presentation"><a href="<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=1">我的揪團(已成行)</a></li>
+				  <li role="presentation"><a href="<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=2">我的歷史揪團</a></li>
+			  </c:when>
+			  <c:otherwise>
+			  	  <li><a href="#" onclick="loginFirst()">我的揪團(尚未出團)</a></li>
+				  <li><a href="#" onclick="loginFirst()">我的揪團(已成行)</a></li>
+				  <li><a href="#" onclick="loginFirst()">我的歷史揪團</a></li>
+			  </c:otherwise>
+		  </c:choose>
 		</ul>
     </div>
     <!-- //breadcrumb -->
@@ -534,6 +548,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     <!-- Dropdown-Menu-JavaScript -->
     <script>
         $(document).ready(function() {
+<%--         	let hasLoggedIn = <%=  %> --%>
             $(".dropdown").hover(
                 function() {
                     $('.dropdown-menu', this).stop(true, true).slideDown("fast");
@@ -775,7 +790,11 @@ fit: true
         //              return [true, ""];
         //      }});
         
-        
+        function loginFirst(){
+        	alert("請先登入");
+        	window.location.href = "<%=request.getContextPath()%>/front-end/mem/MemLogin.jsp";
+        }
+
 </script>
 
 	

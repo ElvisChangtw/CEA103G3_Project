@@ -6,14 +6,25 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page import="com.mappingtool.*"%>
 <%@ page import="com.mappingtool.StatusMapping"%>
+<%@ page import="com.mem.model.*"%>
 
 
 <%-- 此頁暫練習採用 Script 的寫法取值 --%>
 
 <%
 	GroupVO groupVO = (GroupVO) request.getAttribute("groupVO");
+	
+	MemVO memVO = (MemVO) session.getAttribute("memVO");
+	if(memVO == null){
+		memVO = new MemVO();
+		memVO.setMember_no(999);
+}
+
+
+pageContext.setAttribute("memVO", memVO);
+
 %>
-<jsp:useBean id="memVO" scope="session" type="com.mem.model.MemVO" />
+<%-- <jsp:useBean id="memVO" scope="session" type="com.mem.model.MemVO" /> --%>
 <jsp:useBean id="memSvc" scope="page" class="com.mem.model.MemService" />
 <jsp:useBean id="groupSvc" scope="page"	class="com.group.model.GroupService" />
 <jsp:useBean id="movieSvc" scope="page"	class="com.movie.model.MovieService" />
@@ -202,8 +213,16 @@ th, td {
 				<button id="leaveBtn" class="btn btn-lg btn-danger" style="display:none">退出揪團</button> 
 				<a id="modifyBtn" href="<%=request.getContextPath()%>/group/group.do?group_no=${groupVO.group_no}&action=getOne_For_Update" 
 				style="margin-bottom: 0px;" class="btn btn-lg btn-success">修改揪團</a>
-				<a id="reportBtn" href="<%=request.getContextPath()%>/front-end/report_group/addReport_Group.jsp?group_no=${groupVO.group_no}" 
-				style="margin-bottom: 0px;" class="btn btn-lg btn-warning">檢舉揪團</a>
+				<c:choose>
+					<c:when test="${memVO.member_no!=999}">
+						<a id="reportBtn" href="<%=request.getContextPath()%>/front-end/report_group/addReport_Group.jsp?group_no=${groupVO.group_no}" 
+						style="margin-bottom: 0px;" class="btn btn-lg btn-warning">檢舉揪團</a>
+					</c:when>
+					<c:otherwise>
+						<a id="reportBtn" href="#" onclick="loginFirst()"
+						style="margin-bottom: 0px;" class="btn btn-lg btn-warning">檢舉揪團</a>
+					</c:otherwise>
+				</c:choose>
 				<a id="dismissBtn" href="<%=request.getContextPath()%>/group/group.do?group_no=${groupVO.group_no}&action=delete" 
 				style="margin-bottom: 0px;" class="btn btn-lg btn-danger">解散揪團</a>
 <%-- 					<a id="TimerdismissBtn" href="<%=request.getContextPath()%>/group/group.do?group_no=${groupVO.group_no}&action=SetDeleteTimerTask"  --%>
@@ -339,59 +358,64 @@ th, td {
 	//起始動作結束
 		
 		$("#joinBtn").click(function(){
-			$.ajax({
-				url: "<%=request.getContextPath()%>/group_member/group_member.do",
-				type:"POST",
-				data: {
-					group_no:"${groupVO.group_no}",
-					member_no:"${memVO.member_no}",
-					pay_status:"0",
-					status:"1",
-					action:"insert",
-					requestURL:"<%=request.getServletPath()%>"
-					
-				},
-				success: function(data){
-					$("#joinBtn").hide();
-					$("#member").append(
-						 '<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${memVO.member_no}" id="${groupVO.group_no}-${memVO.member_no}" '
-						+ 'alt="尚無圖片" width="90px;" height="90px" '
-						+ 'style="border-radius:50%;" class="clickable" />'
-						);
-					//動態繫結
-					$(".clickable").off("mouseenter").on("mouseenter",function(){
-						cancelTimer();
-						displayImg();
-					});
-					
-					$(".clickable").off("mouseleave").on("mouseleave", function(){
-						setTimer();
-					});
-					//動態繫結
-					 Swal.fire({
-	                        position: "center",
-	                        icon: "success",
-	                        title: "已成功加入揪團",
-	                        showConfirmButton: false,
-	                        timer: 1500,
-	                    });
-					 $("#leaveBtn").show();
-				}
-			}).done(function(){
-				//結束後才做的, 拉最新的時間
+			if(${memVO.member_no == 999}){
+				loginFirst();
+			}
+			else{
 				$.ajax({
 					url: "<%=request.getContextPath()%>/group_member/group_member.do",
 					type:"POST",
 					data: {
 						group_no:"${groupVO.group_no}",
-						action:"getGroupCount_Ajax",
+						member_no:"${memVO.member_no}",
+						pay_status:"0",
+						status:"1",
+						action:"insert",
 						requestURL:"<%=request.getServletPath()%>"
+						
 					},
 					success: function(data){
-						 $("#groupCnt").text('' +data + " / ${groupVO.required_cnt}");
+						$("#joinBtn").hide();
+						$("#member").append(
+							 '<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${memVO.member_no}" id="${groupVO.group_no}-${memVO.member_no}" '
+							+ 'alt="尚無圖片" width="90px;" height="90px" '
+							+ 'style="border-radius:50%;" class="clickable" />'
+							);
+						//動態繫結
+						$(".clickable").off("mouseenter").on("mouseenter",function(){
+							cancelTimer();
+							displayImg();
+						});
+						
+						$(".clickable").off("mouseleave").on("mouseleave", function(){
+							setTimer();
+						});
+						//動態繫結
+						 Swal.fire({
+		                        position: "center",
+		                        icon: "success",
+		                        title: "已成功加入揪團",
+		                        showConfirmButton: false,
+		                        timer: 1500,
+		                    });
+						 $("#leaveBtn").show();
 					}
+				}).done(function(){
+					//結束後才做的, 拉最新的時間
+					$.ajax({
+						url: "<%=request.getContextPath()%>/group_member/group_member.do",
+						type:"POST",
+						data: {
+							group_no:"${groupVO.group_no}",
+							action:"getGroupCount_Ajax",
+							requestURL:"<%=request.getServletPath()%>"
+						},
+						success: function(data){
+							 $("#groupCnt").text('' +data + " / ${groupVO.required_cnt}");
+						}
+					});
 				});
-			});
+			}
 		});
 		
 		$("#leaveBtn").click(function(){
@@ -702,6 +726,11 @@ th, td {
 				}
 			});
 		}
+		
+		function loginFirst(){
+        	alert("請先登入");
+        	window.location.href = "<%=request.getContextPath()%>/front-end/mem/MemLogin.jsp";
+        }
 		
  	</script> 
 </body>

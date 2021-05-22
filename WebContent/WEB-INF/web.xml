@@ -355,5 +355,27 @@
 		<servlet-name>NameServlet</servlet-name>
 		<url-pattern>/chat.do</url-pattern>
 	</servlet-mapping>
- 
+ 	
+ 	
+ 	 <filter>
+    <filter-name>loginFilter</filter-name>
+    <filter-class>com.filter.LoginFilter</filter-class>
+  </filter>
+  
+  <filter-mapping>
+    <filter-name>loginFilter</filter-name>
+    <url-pattern>/back-end/ord_ticket_type/addOrd_ticket_type2.jsp</url-pattern>
+    <url-pattern>/front-end/group/addGroup.jsp</url-pattern>
+    
+    <url-pattern>/front-end/group/group_listMyGroups.jsp</url-pattern>
+    <url-pattern>/front-end/report_group/addReport_Group.jsp</url-pattern>
+    <url-pattern>/front-end/mem/memberSys.jsp</url-pattern>
+    <url-pattern>/front-end/mem/memberInfo.jsp</url-pattern>
+    
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+    <dispatcher>INCLUDE</dispatcher>
+    <dispatcher>ERROR</dispatcher>
+    <dispatcher>ASYNC</dispatcher>
+  </filter-mapping>
 </web-app>
