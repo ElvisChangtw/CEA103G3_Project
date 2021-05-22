@@ -19,7 +19,7 @@
             --color-v: black;
             --color: grey;
             flex: 1;
-            width: 100vw;
+            width: 100%;
         }
 
         section.booking_area>div.container-fluid>div.row>div>div.booking-form {
@@ -42,4 +42,13 @@
             div.article-table.table-responsive {
                 border: none;
             }
+        }
+        .rhs{
+        	position:relative; 
+        	top:-15px; 
+        }
+        .rhs>a{
+        	color:white;
+        	font-family: 'Lato', sans-serif;
+        	font-size:1.0em;
         }

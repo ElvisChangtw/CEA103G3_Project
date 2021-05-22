@@ -539,10 +539,9 @@ public class OrderServlet extends HttpServlet {
 				req.setAttribute("ordFood_list", ordFood_list);
 				req.setAttribute("ordTicket_list", ordTicket_list);
 				
-				
  				/***************************3.新增完成,準備轉交(Send the Success view)***********/
- 				String url = "/back-end/showtime/addOrd_ticket_type_sample.jsp";
-// 				String url = "/back-end/order/checkOrder.jsp";
+// 				String url = "/back-end/showtime/addOrd_ticket_type_sample.jsp";
+ 				String url = "/back-end/websocketSeat/addOrd_ticket_type_sample.jsp";
  				RequestDispatcher successView = req.getRequestDispatcher(url); // 新增成功後轉交listAllTicket_type.jsp
  				successView.forward(req, res);				
  				

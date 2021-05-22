@@ -84,8 +84,9 @@
         #table-listOne>tbody>tr>th, #table-listOne>tbody>tr>td{
         	font-size:1em;
         }
-        #display.container{
-        	max-width: 100%;
+        #display.container-fluid{
+        	max-width: 90%;
+        	padding-top: 30px;
         }
         div.jumbotron>div.row>div.div-th{
         	text-align: end;

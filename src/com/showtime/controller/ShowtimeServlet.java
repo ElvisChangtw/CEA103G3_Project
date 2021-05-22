@@ -540,7 +540,7 @@ public class ShowtimeServlet extends HttpServlet {
 			List<Object[]> list = showtimeSvc.getByHibernate(sql);
 			List<Integer> list_showtimeno = new ArrayList<Integer>();
 			List<java.sql.Time> list_showtime_time = new ArrayList<java.sql.Time>();
-			
+			 
 			for(Object[] object : list) {
 				list_showtimeno.add((Integer) object[0]);
 				list_showtime_time.add((Time) object[1]);

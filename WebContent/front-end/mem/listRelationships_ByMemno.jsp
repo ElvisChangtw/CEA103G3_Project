@@ -74,7 +74,7 @@
 	 <thead>
 		<tr>
 			<th>我的好友名稱</th>
-			<th>刪除好友</th>
+			<th>好友狀態</th>
 		</tr>
 	</thead>
 
@@ -105,11 +105,11 @@
 					<c:choose>
 						<c:when test="${relationshipSvc.getOneRelationship(relationshipVO.member_no, relationshipVO.friend_no).status == 0}">
 						  	<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/relationship/relationship.do" style="margin-bottom: 0px;">
-							    <input type="submit" value="收回好友邀請">
+							    <input type="submit" value="收回好友邀請" class="btn btn-warning">
 							    <input type="hidden" name="member_no"   value="${relationshipVO.member_no}">
 							    <input type="hidden" name="friend_no"   value="${relationshipVO.friend_no}">			    
 							    <input type="hidden" name="requestURL" value="<%=request.getServletPath()%>"><!--送出本網頁的路徑給Controller-->
-							    <input type="hidden" name="action"     value="delete">
+							    <input type="hidden" name="action"     value="delete" >
 							</FORM>
 						</c:when>	
 						<c:otherwise>
