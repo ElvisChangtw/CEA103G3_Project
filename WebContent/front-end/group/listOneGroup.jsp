@@ -22,7 +22,7 @@
 
 <html>
 <head>
-<title>揪團資料 - listOneGroup.jsp</title>
+<title>揪團</title>
  <script type="application/x-javascript">
         addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
 
@@ -94,7 +94,7 @@ th, td {
 
 </head>
 <body>
-	<div id="display" class="container">
+	<div id="display" class="container-fluid">
 <!-- 			<div class="row"> -->
 <!-- 			<table id="table-2"> -->
 <!-- 				<tr> -->
@@ -110,39 +110,36 @@ th, td {
 		
 		<div class="row">
 			<div class="jumbotron">
-			  <h1 class="display-4">${groupVO.group_title}(${groupVO.group_no})</h1>
+			  <h1 style="margin-left: -20px; display:flex; align-items: center; "class="display-4">
+			  ${groupVO.group_title} &nbsp
+			  	<button disabled id="stat" style="font-size: 20px; height:60px; width:auto; border-radius: 10px;" class="btnlead">
+			  	${mapping.dboGroup_GroupStatus(groupVO.group_status)}: ${groupVO.member_cnt} / ${groupVO.required_cnt}</button>
+			  </h1>
+			  <br>
+			  <h2 class="lead">${groupVO.desc}</h2>
+			  
 			  <hr class="my-4">
 			  <div class="row">
 				  <div class="col-md-2 lead div-th">
-				   電影(場次編號):
+				   電影名稱:
 				  </div>
-			      <div class="col-md-2 lead">
-			      ${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(groupVO.showtime_no).movie_no).moviename}
-			  		(${groupVO.showtime_no})
+			      <div class="col-md-2 lead">${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(groupVO.showtime_no).movie_no).moviename}
 			      </div>
 			  </div>
 			  <div class="row">
 				  <div class="col-md-2 lead div-th">
-				   目前狀態:
+				   場次時間:
 				  </div>
-			      <div class="col-md-10 lead" id="group_status">
-			      ${mapping.dboGroup_GroupStatus(groupVO.group_status)}
+			      <div class="col-md lead">
+			  		<fmt:formatDate value="${showtimeSvc.getOneShowtime(groupVO.showtime_no).showtime_time}" pattern="yyyy-MM-dd HH:mm" />
 			      </div>
-			  </div>
-			  <div class="row">
-			    <div class="col-md-2 lead div-th">
-			    	人數 / 最大人數:
-			    </div>
-			    <div class="col-md-2 lead" id="groupCnt">
-			    ${groupVO.member_cnt} / ${groupVO.required_cnt}
-			    </div>
 			  </div>
 			  <c:choose>
 			  	
 			  	<c:when test="${groupVO.group_status == 0}">
 			  		<div class="row">
 					  	<div class="col-md-2 lead div-th">
-					  	成員:
+					  	目前成員:
 			  			</div>
 					  	<div class="col-md-10 lead group-mem-pic" id="member"> 
 						  	<c:forEach var="group_memberVO" items="${groupSvc.getMembersByGroupno(groupVO.getGroup_no())}">
@@ -186,41 +183,32 @@ th, td {
 		  			</div>
 		  		</c:otherwise>
 			</c:choose>
-			 <div class="row">
-			    <div class="col-md-2 lead div-th">
-			    內容:
-			    </div>
-			    <div class="col-md-10 lead">
-			    ${groupVO.desc}
-			    </div>
-			  </div>
-
-				 <div class="row">
+			<div class="row">
 			    <div class="col-md-2 lead div-th">
 			    截止時間:
 			    </div>
 			    <div class="col-md-10 lead" id="dd-cntDown">
 			    </div>
-			  </div>
+		  	</div>
 			<hr class="my-4">
 			
-			   <div class="row">
-			    <div class="col-md lead">
-					<a id="backBtn" href="<%=request.getContextPath()%>/front-end/group/group_front_page.jsp" 
-					style="margin-bottom: 0px;" class="btn btn-lg">回首頁</a>
-					<button id="joinBtn" class="btn btn-lg btn-primary" ${(groupVO.member_cnt < groupVO.required_cnt) ?  '' : 'disabled'}>
-						${(groupVO.member_cnt < groupVO.required_cnt) ?  '現在加入' : '人數已滿'}
-						</button> 
-					<button id="leaveBtn" class="btn btn-lg btn-danger" style="display:none">退出揪團</button> 
-					<a id="modifyBtn" href="<%=request.getContextPath()%>/group/group.do?group_no=${groupVO.group_no}&action=getOne_For_Update" 
-					style="margin-bottom: 0px;" class="btn btn-lg btn-success">修改揪團</a>
-					<a id="reportBtn" href="<%=request.getContextPath()%>/front-end/report_group/addReport_Group.jsp?group_no=${groupVO.group_no}" 
-					style="margin-bottom: 0px;" class="btn btn-lg btn-warning">檢舉揪團</a>
-					<a id="dismissBtn" href="<%=request.getContextPath()%>/group/group.do?group_no=${groupVO.group_no}&action=delete" 
-					style="margin-bottom: 0px;" class="btn btn-lg btn-danger">解散揪團</a>
+		   <div class="row">
+		    <div class="col-md lead">
+				<a id="backBtn" href="<%=request.getContextPath()%>/front-end/group/group_front_page.jsp" 
+				style="margin-bottom: 0px;" class="btn btn-lg">回首頁</a>
+				<button id="joinBtn" class="btn btn-lg btn-primary" ${(groupVO.member_cnt < groupVO.required_cnt) ?  '' : 'disabled'}>
+					${(groupVO.member_cnt < groupVO.required_cnt) ?  '現在加入' : '人數已滿'}
+					</button> 
+				<button id="leaveBtn" class="btn btn-lg btn-danger" style="display:none">退出揪團</button> 
+				<a id="modifyBtn" href="<%=request.getContextPath()%>/group/group.do?group_no=${groupVO.group_no}&action=getOne_For_Update" 
+				style="margin-bottom: 0px;" class="btn btn-lg btn-success">修改揪團</a>
+				<a id="reportBtn" href="<%=request.getContextPath()%>/front-end/report_group/addReport_Group.jsp?group_no=${groupVO.group_no}" 
+				style="margin-bottom: 0px;" class="btn btn-lg btn-warning">檢舉揪團</a>
+				<a id="dismissBtn" href="<%=request.getContextPath()%>/group/group.do?group_no=${groupVO.group_no}&action=delete" 
+				style="margin-bottom: 0px;" class="btn btn-lg btn-danger">解散揪團</a>
 <%-- 					<a id="TimerdismissBtn" href="<%=request.getContextPath()%>/group/group.do?group_no=${groupVO.group_no}&action=SetDeleteTimerTask"  --%>
 <!-- 					style="margin-bottom: 0px;" class="btn btn-lg btn-danger">測試排程刪除</a> -->
-					<a id="gogoBtn" style="margin-bottom: 0px;" class="btn btn-lg btn-primary">出團(團長)</a>
+				<a id="gogoBtn" style="margin-bottom: 0px;" class="btn btn-lg btn-primary">出團(團長)</a>
 			    </div>
 			  </div>
 			</div>
@@ -252,6 +240,17 @@ th, td {
 	
 	let timer = null;
 	$(function() {
+		console.log("揪團編號: " + ${groupVO.group_no});
+		//依據揪團狀態顯示不同顏色button
+		let stat = ${groupVO.group_status};
+		if (stat == 0)
+			$("#stat").toggleClass("btn-success", true);
+		else if(stat == 1)
+			$("#stat").toggleClass("btn-info", true);
+		else if(stat == 2)
+			$("#stat").toggleClass("btn-primary", true);
+		else
+			$("#stat").toggleClass("btn-danger", true);
 		//確認會員是否為團長, 決定顯示條件
 		if(${memVO.member_no == groupVO.member_no}){
 			console.log("團長!");

@@ -1,0 +1,58 @@
+  /* ³qª¾¥Î */
+  @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+.fadeOut {
+  opacity: 0 !important;
+}
+
+#create {
+  border: none !important;
+  padding: 8px !important;
+  font-size:15px !important;
+  color: #FFF !important;
+  background-color: firebrick !important;
+  border-radius: 8px !important;
+}
+
+.alert-container{
+  position: fixed !important;
+  right: 10px !important;
+  bottom: 10px !important;
+}
+
+.alert {
+  position: relative !important;
+  background-color: white !important;
+  border: 5px solid lightblue !important;
+  height: 130px !important;
+  width: 290px !important;
+  border-radius: 15px !important;
+  margin-bottom: 15px !important;
+  color: #40bde6 !important;
+  padding: 20px 15px 0 15px !important;
+  transition: opacity 2s !important;
+}
+
+.alert span {
+  font-size: 1.3rem !important;
+  position: absolute !important;
+  top: 3px !important;
+  right: 12px !important;
+  cursor: pointer !important;
+
+}
+.alertTxt{
+  font-size: 17px !important;
+  position: absolute !important;
+  top: 0px !important;
+  right: 12px !important;
+  cursor: pointer !important;
+  margin-top:23px !important;
+  width:170px !important;
+
+}
+.alertImg{
+  width:80px !important;
+  margin-left:-5px !important;
+
+}

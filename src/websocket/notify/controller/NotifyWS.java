@@ -57,7 +57,7 @@ public class NotifyWS {
 		int sender = notify.getSender();
 		String receiver = notify.getReceiver();
 		String timeStr = notify.getTime();
-		System.out.println(message);
+		String read = "N";
 		
 		//送出好友邀請
 		if("addFriend".equals(notify.getType())){
@@ -69,9 +69,9 @@ public class NotifyWS {
 			
 			String receiverText = sendName+"邀請你成為好友";
 			String senderText = "您已邀請"+receiveName+"成為好友";
-			Notify senderMsg = new Notify(notify.getType(),sender, receiver, senderText, timeStr);
+			Notify senderMsg = new Notify(notify.getType(),sender, receiver, senderText, timeStr, read);
 			String senderMsgJson = gson.toJson(senderMsg);
-			Notify receiverMsg = new Notify(notify.getType(),sender, receiver, receiverText, timeStr);
+			Notify receiverMsg = new Notify(notify.getType(),sender, receiver, receiverText, timeStr, read);
 			String receiverMsgJson = gson.toJson(receiverMsg);
 			JedisHandleMessage.saveChatMessage(String.valueOf(sender), notify.getType(), senderMsgJson);
 			JedisHandleMessage.saveChatMessage(String.valueOf(receiver), notify.getType(), receiverMsgJson);
@@ -104,9 +104,9 @@ public class NotifyWS {
 			String receiverText = sender_name+"已加入揪團:"+group_name;
 			String senderText = "您已加入揪團:"+group_name;
 			
-			Notify senderMsg = new Notify(notify.getType(),sender, receiver, senderText, timeStr);
+			Notify senderMsg = new Notify(notify.getType(),sender, receiver, senderText, timeStr, read);
 			String senderMsgJson = gson.toJson(senderMsg);
-			Notify receiverMsg = new Notify(notify.getType(),sender, receiver, receiverText, timeStr);
+			Notify receiverMsg = new Notify(notify.getType(),sender, receiver, receiverText, timeStr, read);
 			String receiverMsgJson = gson.toJson(receiverMsg);
 			//新成員收到加入揪團訊息並存在redis
 			JedisHandleMessage.saveChatMessage(String.valueOf(sender), notify.getType(), senderMsgJson);
@@ -132,7 +132,7 @@ public class NotifyWS {
 			String movieName = movieSvc.getOneMovie(new Integer(receiver)).getMoviename();
 
 			String senderText = "您已成功預訂電影:"+movieName+"，請在開演前半小時付款，謝謝!";
-			Notify senderMsg = new Notify(notify.getType(),sender, receiver, senderText, timeStr);
+			Notify senderMsg = new Notify(notify.getType(),sender, receiver, senderText, timeStr, read);
 			String senderMsgJson = gson.toJson(senderMsg);
 			JedisHandleMessage.saveChatMessage(String.valueOf(sender), notify.getType(), senderMsgJson);
 
@@ -151,9 +151,9 @@ public class NotifyWS {
 
 			String receiverText = sendName+"已接受您的交友邀請";
 			String senderText = "您與"+receiveName+"已成為好友";
-			Notify senderMsg = new Notify(notify.getType(),sender, receiver, senderText, timeStr);
+			Notify senderMsg = new Notify(notify.getType(),sender, receiver, senderText, timeStr, read);
 			String senderMsgJson = gson.toJson(senderMsg);
-			Notify receiverMsg = new Notify(notify.getType(),sender, receiver, receiverText, timeStr);
+			Notify receiverMsg = new Notify(notify.getType(),sender, receiver, receiverText, timeStr, read);
 			String receiverMsgJson = gson.toJson(receiverMsg);
 			JedisHandleMessage.saveChatMessage(String.valueOf(sender), notify.getType(), senderMsgJson);
 			JedisHandleMessage.saveChatMessage(String.valueOf(receiver), notify.getType(), receiverMsgJson);
@@ -171,7 +171,7 @@ public class NotifyWS {
 		if("createGroup".equals(notify.getType())){
 
 			String senderText = "您已成功建立揪團:"+receiver;
-			Notify senderMsg = new Notify(notify.getType(),sender, receiver, senderText, timeStr);
+			Notify senderMsg = new Notify(notify.getType(),sender, receiver, senderText, timeStr, read);
 			String senderMsgJson = gson.toJson(senderMsg);
 			JedisHandleMessage.saveChatMessage(String.valueOf(sender), notify.getType(), senderMsgJson);
 
@@ -199,7 +199,7 @@ public class NotifyWS {
 				}
 			}
 			String senderText = "揪團:"+group_name+"因未在截止日前出團已被取消";
-			Notify senderMsg = new Notify(notify.getType(),sender, receiver, senderText, timeStr);
+			Notify senderMsg = new Notify(notify.getType(),sender, receiver, senderText, timeStr, read);
 			String senderMsgJson = gson.toJson(senderMsg);
 
 			for(Integer memno : gmList) {
@@ -238,7 +238,7 @@ public class NotifyWS {
 				}
 			}
 			String senderText = "揪團:"+group_name+"已出團，請在場次開演前一小時付款，謝謝!";
-			Notify senderMsg = new Notify(notify.getType(),sender, receiver, senderText, timeStr);
+			Notify senderMsg = new Notify(notify.getType(),sender, receiver, senderText, timeStr, read);
 			String senderMsgJson = gson.toJson(senderMsg);
 
 			for(Integer memno : gmList) {
@@ -277,7 +277,7 @@ public class NotifyWS {
 				}
 			}
 			String senderText = "揪團:"+group_name+"條件已被修改，請重新加入揪團，謝謝!";
-			Notify senderMsg = new Notify(notify.getType(),sender, receiver, senderText, timeStr);
+			Notify senderMsg = new Notify(notify.getType(),sender, receiver, senderText, timeStr, read);
 			String senderMsgJson = gson.toJson(senderMsg);
 			
 			for(Integer memno : gmList) {
@@ -322,12 +322,12 @@ public class NotifyWS {
 			}
 			//團主收到的通知
 			String senderText = "您的揪團:"+group_name+"有"+kick_cnt+"位團員，因在開演前未付款已被踢除";
-			Notify senderMsg = new Notify(notify.getType(),sender, receiver, senderText, timeStr);
+			Notify senderMsg = new Notify(notify.getType(),sender, receiver, senderText, timeStr, read);
 			String senderMsgJson = gson.toJson(senderMsg);
 			
 			//被剔除團員收到的通知
 			String receiverText = "您未在電影開演前一小時付款，已被踢除揪團:"+group_name;
-			Notify receiverMsg = new Notify(notify.getType(),sender, receiver, receiverText, timeStr);
+			Notify receiverMsg = new Notify(notify.getType(),sender, receiver, receiverText, timeStr, read);
 			String receiverMsgJson = gson.toJson(receiverMsg);
 			
 			//團主存的redis
@@ -357,6 +357,30 @@ public class NotifyWS {
 			}
 			return;
 			
+		}
+		
+		if("reminder".equals(notify.getType())){
+			
+			Session receiverSession = sessionsMap.get(new Integer(receiver));
+			
+			String sendName = memSvc.getOneMem(sender).getMb_name();
+			String receiveName = memSvc.getOneMem(new Integer(receiver)).getMb_name();
+			
+			String receiverText = "提醒您，請在電影開演前一小時付款，謝謝";
+			String senderText = "已送出您的付款提醒給"+receiveName;
+			Notify senderMsg = new Notify(notify.getType(),sender, receiver, senderText, timeStr, read);
+			String senderMsgJson = gson.toJson(senderMsg);
+			Notify receiverMsg = new Notify(notify.getType(),sender, receiver, receiverText, timeStr, read);
+			String receiverMsgJson = gson.toJson(receiverMsg);
+			JedisHandleMessage.saveChatMessage(String.valueOf(sender), notify.getType(), senderMsgJson);
+			JedisHandleMessage.saveChatMessage(String.valueOf(receiver), notify.getType(), receiverMsgJson);
+			
+			
+			if (receiverSession != null && receiverSession.isOpen()) {
+			receiverSession.getAsyncRemote().sendText(receiverMsgJson);
+			userSession.getAsyncRemote().sendText(senderMsgJson);
+			}
+			return;
 		}
 		
 		

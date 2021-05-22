@@ -8,6 +8,7 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -28,6 +29,10 @@ import com.mem.model.MemService;
 import com.mem.model.MemVO;
 import com.mem.model.SendEmail;
 import com.relationship.model.RelationshipVO;
+
+import imageUtil.ImageUtil;
+
+import java.util.*;
 
 import security.SecureUtils;
 
@@ -455,6 +460,7 @@ public class MemServlet extends HttpServlet {
 			MemVO memVO = memSvc.getOnePic(member_no);
 			byte[] mb_pic = memVO.getMb_pic();
 			if (mb_pic != null) {
+				mb_pic=ImageUtil.shrink(mb_pic,200);
 				res.getOutputStream().write(mb_pic);
 			} else {
 				in = req.getServletContext().getResourceAsStream("/img/none.jpg");
@@ -714,6 +720,43 @@ public class MemServlet extends HttpServlet {
 			} catch (Exception e) {
 				errorMsgs.add("無法取得資料:" + e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/front-end/mem/MemLogin.jsp");
+				failureView.forward(req, res);
+			}
+		}
+		
+		if ("listMems_ByCompositeQuery".equals(action)) { // 來自select_page.jsp的複合查詢請求
+			List<String> errorMsgs = new LinkedList<String>();
+			// Store this set in the request scope, in case we need to
+			// send the ErrorPage view.
+			req.setAttribute("errorMsgs", errorMsgs);
+
+			try {
+				
+				/***************************1.將輸入資料轉為Map**********************************/ 
+				//採用Map<String,String[]> getParameterMap()的方法 
+				//注意:an immutable java.util.Map 
+				//Map<String, String[]> map = req.getParameterMap();
+				HttpSession session = req.getSession();
+				Map<String, String[]> map = (Map<String, String[]>)session.getAttribute("map");
+				// 以下的 if 區塊只對第一次執行時有效
+				if (req.getParameter("whichPage") == null){
+					Map<String, String[]> map1 = new HashMap<String, String[]>(req.getParameterMap());
+					session.setAttribute("map",map1);
+					map = map1;
+				} 
+				/***************************2.開始複合查詢***************************************/
+				MemService memSvc = new MemService();
+				List<MemVO> list  = memSvc.getAll(map);
+				/***************************3.查詢完成,準備轉交(Send the Success view)************/
+				req.setAttribute("listMems_ByCompositeQuery", list); // 資料庫取出的list物件,存入request
+				RequestDispatcher successView = req.getRequestDispatcher("/front-end/mem/listMems_ByCompositeQuery.jsp"); // 成功轉交listMems_ByCompositeQuery.jsp
+				successView.forward(req, res);
+				
+				/***************************其他可能的錯誤處理**********************************/
+			} catch (Exception e) {
+				errorMsgs.add(e.getMessage());
+				RequestDispatcher failureView = req
+						.getRequestDispatcher("/front-end/mem/addMem.jsp");
 				failureView.forward(req, res);
 			}
 		}

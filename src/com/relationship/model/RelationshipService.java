@@ -66,5 +66,8 @@ public class RelationshipService {
 		dao.addOneWay(relationshipVO);
 		return relationshipVO;
 	}
+	public List<RelationshipVO> getOneRelationshipByMemno(Integer member_no) {
+		return dao.findByPrimaryKeyByMemno(member_no);
+	}
 }
 		

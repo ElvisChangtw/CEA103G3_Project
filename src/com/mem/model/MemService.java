@@ -5,9 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.relationship.model.RelationshipVO;
-
-
-
+import java.util.*;
 
 
 public class MemService {
@@ -134,6 +132,9 @@ public class MemService {
 //		memVO1.setMb_email(mb_email);
 //		memVO1.setMb_pwd(mb_pwd);
 		dao.updateRandomPws(mb_email, mb_pwd);
+	}
+	public List<MemVO> getAll(Map<String, String[]> map) {		
+		return dao.getAll(map);
 	}
 	
 	 

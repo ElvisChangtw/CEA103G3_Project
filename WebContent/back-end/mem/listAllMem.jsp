@@ -8,11 +8,19 @@
     MemService memSvc = new MemService();
     List<MemVO> list = memSvc.getAll();
     pageContext.setAttribute("list",list);
+	MemVO memVO = (MemVO)session.getAttribute("memVO");
 %>
 
 
 <html>
 <head>
+
+
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/front/notification.css" />
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css">
+	
 <title>所有會員資料 - listAllMem.jsp</title>
 
 <style>
@@ -54,115 +62,36 @@
 	myimg:expression(onload=function(){
 	this.style.width=(this.offsetWidth > 600)?"600px":"auto"});
   }
-  
-  
-  @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
-
-
-.fadeOut {
-  opacity: 0;
-}
-
-#create {
-  border: none;
-  padding: 8px;
-  font-size:15px;
-  color: #FFF;
-  background-color: firebrick;
-  border-radius: 8px;
-}
-
-.alert-container{
-  position: fixed;
-  right: 10px;
-  bottom: 10px;
-}
-
-.alert {
-  position: relative;
-  background-color: white;
-  border: 5px solid lightblue;
-  height: 100px;
-  width: 250px;
-  border-radius: 15px;
-  margin-bottom: 15px;
-  color: #40bde6;
-  padding: 20px 15px 0 15px;
-  transition: opacity 2s;
-}
-
-.alert span {
-  font-size: 1.3rem;
-  position: absolute;
-  top: 3px;
-  right: 12px;
-  cursor: pointer;
-
-}
-.alertTxt{
-font-size: 1.1rem;
-  position: absolute;
-  top: 0px;
-  right: 12px;
-  cursor: pointer;
-  margin-top:23px;
-  width:170px;
-
-}
-.alertImg{
-  width:70px;
-
-}
 </style>
 
 </head>
-<body bgcolor='white' onload="connect();" onunload="disconnection();">
+<body bgcolor='white'>
 <%@ include file="page1.file" %> 
 
-<h4>此頁練習採用 EL 的寫法取值:</h4>
-<table id="table-1">
-	<tr><td>
-		 <h3>所有員工資料 - listAllMem.jsp</h3>
-		 <h4><a href="<%=request.getContextPath()%>/back-end/mem/select_page.jsp"><img src="images/back1.gif" width="100" height="32" border="0">回首頁</a></h4>
-	</td></tr>
-</table>
 
-<%-- 錯誤表列 --%>
-<c:if test="${not empty errorMsgs}">
-	<font style="color:red">請修正以下錯誤:</font>
-	<ul>
-		<c:forEach var="message" items="${errorMsgs}">
-			<li style="color:red">${message}</li>
-		</c:forEach>
-	</ul>
-</c:if>
-
-<table>
+<table class="table table-secondary table-hover" data-toggle="table">
+<thead>
 	<tr>
-		<th>會員編號<button>XX</button></th>
-		<th>會員姓名</th>
-		<th>會員信箱</th>
-		<th>會員密碼</th>
-		<th>會員生日</th>
-		<th>會員照片</th>
-		<th>會員電話</th>
-		<th>會員地址</th>
-		<th>會員狀態</th>
-		<th>會員積分</th>
-		<th>會員身分</th>
-		<th>會員註冊日</th>
-		
-		
+		<th data-field="member_no" data-sortable="true">會員編號</th>
+		<th data-field="member_name" data-sortable="true">會員姓名</th>
+		<th data-field="member_email" data-sortable="false">會員信箱</th>
+		<th data-field="member_bd" data-sortable="true">會員生日</th>
+		<th data-field="member_pic" data-sortable="false">會員照片</th>
+		<th data-field="member_phone" data-sortable="false">會員電話</th>
+		<th data-field="member_address" data-sortable="false">會員地址</th>
+		<th data-field="member_status" data-sortable="true">會員狀態</th>
+		<th data-field="member_level" data-sortable="true">會員身分</th>
+		<th data-field="member_rgDate" data-sortable="true">會員註冊日</th>
+		<th data-field="member_edit" data-sortable="false"></th>
 	</tr>
-	
-	<c:forEach var="memVO" items="${list}">
-		
+</thead>	
+<tbody>
+	<c:forEach var="memVO" items="${list}" begin="<%=pageIndex%>" end="<%=pageIndex+rowsPerPage-1%>">
 		<tr>
 			<td>${memVO.member_no}</td>
 			<td>${memVO.mb_name}</td>
 			<td>${memVO.mb_email}</td>
-			<td>${memVO.mb_pwd}</td>
 			<td>${memVO.mb_bd}</td>
 			<td><img src="${pageContext.request.contextPath}/mem/mem.do?action=view_memPic&member_no=${memVO.member_no}"></td>
 			<td>${memVO.mb_phone}</td>
@@ -185,55 +114,30 @@ font-size: 1.1rem;
 				<td>無效狀態</td>
 				</c:otherwise>
 			</c:choose>
-			<td>${memVO.mb_point}</td>
 			<td>${(memVO.mb_level=="1")? "一般會員":"專職影評"}</td>
 			<td>${memVO.crt_dt}</td>
 			
 			<td>
 			  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/mem/mem.do" style="margin-bottom: 0px;">
-			     <input type="submit" value="修改">
+			     <button type="submit" class="btn-primary">修改</button>
 			     <input type="hidden" name="member_no"  value="${memVO.member_no}">
 			     <input type="hidden" name="action"	value="getOne_For_Update"></FORM>
 			</td>
-			<td>
-			  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/mem/mem.do" style="margin-bottom: 0px;">
-			     <input type="submit" value="刪除">
-			     <input type="hidden" name="member_no"  value="${memVO.member_no}">
-			     <input type="hidden" name="action" value="delete"></FORM>
-			</td>
 		</tr>
-
 	</c:forEach>
-	
-	<button type="button" class="addFriend" value="addFriend">加好友</button>
-    <input type="hidden" id="friendNO"  value="4">
-	
-	<button type="button" class="addGroup" value="addGroup">加入揪團</button>
-	<input type="hidden" id="groupNO"  value="4">
-	
-	<button type="button" class="buyTicket" value="buyTicket">確認購票</button>
-	<input type="hidden" id="movieNO"  value="4">
-	
-	<input type="text" id="groupName">
-	<button type="button" class="createGroup" value="createGroup">建立揪團</button>
-	
-	<button type="button" class="addfriend_check_btn" value=1>確定</button> &emsp;&emsp; <button type="button" class="addfriend_check_btn" value=0>拒絕</button>
-	
-	<button type="button" class="goGroup" value="goGroup">出團</button>
-	<input type="hidden" id="goGroupName"  value="4">
-	
-	<button type="button" class="kickoffGroup" value="kickoffGroup">修改出團條件</button>
-	<input type="hidden" id="kickGroupName"  value="4">
-	
-	我是${memVO.member_no}
-	
-	
+</tbody>
 </table>
- <div class="alert-container">
-  </div>
 <%@ include file="page2.file" %> 
-</body>
+ <div class="alert-container">
+ </div>
 <script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.js"></script>
+
+</body>
+
 
 <script>
 	var MyPoint = "/NotifyWS/${memVO.member_no}";
@@ -241,28 +145,32 @@ font-size: 1.1rem;
 	var path = window.location.pathname;
 	var webCtx = path.substring(0, path.indexOf('/', 1));
 	var endPointURL = "ws://" + window.location.host + webCtx + MyPoint;
-	var friendNO = document.getElementById("friendNO").value;
-	var groupNO = document.getElementById("groupNO").value;
-	var movieNO = document.getElementById("movieNO").value;
+	var friendNO;
+	var groupNO;
+	var movieNO;
 	var groupName;
-	var goGroupName = document.getElementById("goGroupName").value;
-	var kickGroupName = document.getElementById("kickGroupName").value;
+	var goGroupName;
+	var kickGroupName;
+	var memberNO;
 	var self = '${memVO.member_no}';
 	var webSocket;
 	var type;
 
 
 	$(".addFriend").click(function(){
+		friendNO = $(this).find("input.friendNO").val();
 		sendWebSocket($(this));
 	})
 	$(".addGroup").click(function(){
+		groupNO = $(this).find("input.groupNO").val();
 		sendWebSocket($(this));
 	})
-// 	$(this).find("input") 這樣不行不知道為啥
 	$(".buyTicket").click(function(){
+		movieNO = $(this).find("input.movieNO").val();
 		sendWebSocket($(this));
 	})
 	$(".addfriend_check_btn").click(function(){
+		friendNO = $(this).find("input.friendNO").val();
 		sendWebSocket($(this));
 		//這邊執行insertfriend的code
 	})
@@ -271,11 +179,19 @@ font-size: 1.1rem;
 		sendWebSocket($(this));
 	})
 	$(".goGroup").click(function(){
+		goGroupName = $(this).find("input.goGroupName").val();
 		sendWebSocket($(this));
 	})
 	$(".kickoffGroup").click(function(){
+		kickGroupName = $(this).find("input.kickGroupName").val();
 		sendWebSocket($(this));
 	})
+	$(".reminder").click(function(){
+		memberNO = $(this).find("input.memberNO").val();
+		sendWebSocket($(this));
+
+	})
+	
 	
 	function sendWebSocket(item){
 		let timespan = new Date();
@@ -350,6 +266,16 @@ font-size: 1.1rem;
 				"time":timeStr
 			};
 		}
+		if(item.val()=="reminder"){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : memberNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
 
 		webSocket.send(JSON.stringify(jsonObj));
 	}
@@ -413,6 +339,10 @@ font-size: 1.1rem;
 	  if (type==="buyTicket"){
 			img.src="<%=request.getContextPath()%>/images/notify_icons/ticket.png"
 	  }
+	  if (type==="reminder"){
+			img.src="<%=request.getContextPath()%>/images/notify_icons/warning.png"
+	  }
+	  
 		  img.classList.add("alertImg");
 		  imgdiv.append(img);
 		  txt.innerText = text;

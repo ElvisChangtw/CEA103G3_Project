@@ -15,4 +15,6 @@ public interface Group_MemberDAO_interface {
 		  public void kickUnpaidMemberOut(Integer group_no); 
 		  
 		  public int getGroupCount(Integer group_no);
+		  public List<Group_MemberVO> findMembersByGroup_no(Integer group_no);
+		  public List<Group_MemberVO> findUnpaidMembersByGroup_no(Integer group_no);
 }
