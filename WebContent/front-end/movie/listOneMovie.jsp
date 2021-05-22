@@ -72,15 +72,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 </style>
 </head>
 <body>
-<c:choose>
-<c:when test="${movieVO.offdate < today}">
-<p>1</p>
-</c:when>
-<c:when test="${movieVO.offdate > today}">
-<p>1</p>
-</c:when>
-</c:choose>
-
 
 <!--/main-header-->
   <!--/banner-section-->
