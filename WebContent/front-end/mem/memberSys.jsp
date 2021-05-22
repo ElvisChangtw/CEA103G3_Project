@@ -886,7 +886,7 @@ $(document).ready(function(){
 					 if(jsono.sender=="${memVO.member_no}"){
 						 slice_addFriend += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;
 					 }else{
-						 <c:forEach var="relationVO" items="${relationSvc.getOneRelationshipByMemno(memVO.member_no)}">
+						 <c:forEach var="relationVO" items="${memSvc.getRelationshipsByMemberno(memVO.member_no)}">
 						 if(jsono.sender=="${relationVO.friend_no}"){
 							 slice_addFriend += `<tr><td>`+jsono.time+`</td><td>` + jsono.message + `</td></tr>`;  
 							 //設定如果已經是好友就不會出現下面的按鈕訊息，而是出現純受邀請的訊息(未測試)

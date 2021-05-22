@@ -29,6 +29,9 @@ import com.mem.model.MemService;
 import com.mem.model.MemVO;
 import com.mem.model.SendEmail;
 import com.relationship.model.RelationshipVO;
+
+import imageUtil.ImageUtil;
+
 import java.util.*;
 
 import security.SecureUtils;
@@ -457,6 +460,7 @@ public class MemServlet extends HttpServlet {
 			MemVO memVO = memSvc.getOnePic(member_no);
 			byte[] mb_pic = memVO.getMb_pic();
 			if (mb_pic != null) {
+				mb_pic=ImageUtil.shrink(mb_pic,200);
 				res.getOutputStream().write(mb_pic);
 			} else {
 				in = req.getServletContext().getResourceAsStream("/img/none.jpg");
