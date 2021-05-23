@@ -33,7 +33,7 @@
 %>
 
 <div class="w3ls-news-result">
-	<h4>Search Results : <span><%=rowNumber%></span></h4>
+	<h4>Search Results : <font color=red><span><%=rowNumber%></span></font></h4>
 	<%if (pageNumber>0){%>
   		<b>Pages : <font color=red><%=whichPage%>/<%=pageNumber%></font></b>
 	<%}%>

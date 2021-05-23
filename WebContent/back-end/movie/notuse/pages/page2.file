@@ -15,8 +15,6 @@
 <br><br>
   <%if (pageNumber>1) {%>
     <FORM METHOD="post" ACTION="<%=request.getRequestURI()%>">
-    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
        <select size="1" name="whichPage" style="height:32px;">
          <%for (int i=1; i<=pageNumber; i++){%>
          	<option value="<%=i%>">¦Ü²Ä<%=i%>­¶

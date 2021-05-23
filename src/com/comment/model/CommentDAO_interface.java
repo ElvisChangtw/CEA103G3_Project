@@ -17,5 +17,5 @@ public interface CommentDAO_interface {
     public List<CommentVO> getAll();
     //萬用複合查詢(傳入參數型態Map)(回傳 List)
     public List<CommentVO> getAll(Map<String, String[]> map); 
-
+    public List<CommentVO> findByMemberNo(Integer memberno);
 }

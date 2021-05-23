@@ -57,5 +57,9 @@ public class CommentService {
 	public List<CommentVO> getOneMovieComment(Integer movieno) {
 		return dao.findByMovieNo(movieno);
 	}
+	
+	public List<CommentVO> getComments(Integer memberno) {
+		return dao.findByMemberNo(memberno);
+	}
 
 }
