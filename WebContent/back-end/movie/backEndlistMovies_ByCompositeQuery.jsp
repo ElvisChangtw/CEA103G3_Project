@@ -15,7 +15,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <link href="<%=request.getContextPath()%>/後台畫面/css/styles.css" rel="stylesheet" />
+        <link href="<%=request.getContextPath()%>/back-home/css/styles.css" rel="stylesheet" />
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
     </head>
@@ -47,7 +47,7 @@
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                        <img src="<%=request.getContextPath()%>/後台畫面/img/logo2-1-5.png">
+                        <img src="<%=request.getContextPath()%>/back-home/img/logo2-1-5.png">
                         <a class="nav-link collapsed" href="tables3.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-user-alt"></i></div>
                             基本資料
@@ -232,7 +232,7 @@
                                         <c:forEach var="movieVO" items="${listMovies_ByCompositeQuery}" begin="<%=pageIndex%>"
 									end="<%=pageIndex+rowsPerPage-1%>">
 
-										  <tr  ${(movieVO.movieno == param.movieno) ? 'style="background-color:#C9B8DC;"':''}>
+										 <tr  ${(movieVO.movieno == param.movieno) ? 'style="background-color:#C9B8DC;"':''}>
 											<td>
 												<a href="${pageContext.request.contextPath}/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}">
 												<img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${movieVO.movieno}" 
@@ -245,7 +245,7 @@
 											
 <%-- 											<td width="50px;">${movieVO.director}</td> --%>
 <%-- 											<td width="50px;">${movieVO.actor}</td> --%>
-											<td width="60px;">${movieVO.category}</td>
+											<td width="90px;">${movieVO.category}</td>
 											
 											<c:choose>
 												<c:when test="${movieVO.length >0}">
@@ -258,43 +258,43 @@
 											
 											<c:choose>
 												<c:when test="${movieVO.status.equals('0')}">
-													<td width="70px;">上映中</td>
+													<td width="90px;">上映中</td>
 												</c:when>
 												<c:when test="${movieVO.status.equals('1')}">
-													<td width="70px;">未上映</td>
+													<td width="90px;">未上映</td>
 												</c:when>
 												<c:when test="${movieVO.status.equals('2')}">
-													<td width="70px;">已下檔</td>
+													<td width="90px;">已下檔</td>
 												</c:when>
 												<c:otherwise>
-													<td width="70px;">無效狀態</td>
+													<td width="90px;">無效狀態</td>
 												</c:otherwise>
 											</c:choose>
 											
-											<td width="105px;">
+											<td width="125px;">
 												<fmt:formatDate value="${movieVO.premiredate}" pattern="yyyy-MM-dd" /><br>
 												<fmt:formatDate value="${movieVO.offdate}" pattern="yyyy-MM-dd" />
 											</td>
 											
 											<c:choose>
 												<c:when test="${movieVO.grade.equals('0')}">
-													<td width="70px;">普遍級</td>
+													<td width="90px;">普遍級</td>
 												</c:when>
 												<c:when test="${movieVO.grade.equals('1')}">
-													<td width="70px;">保護級</td>
+													<td width="90px;">保護級</td>
 												</c:when>
 												<c:when test="${movieVO.grade.equals('2')}">
-													<td width="70px;">輔導級</td>
+													<td width="90px;">輔導級</td>
 												</c:when>
 												<c:when test="${movieVO.grade.equals('3')}">
-													<td width="70px;">限制級</td>
+													<td width="90px;">限制級</td>
 												</c:when>
 												<c:otherwise>
-													<td width="70px;">尚未分級</td>
+													<td width="90px;">尚未分級</td>
 												</c:otherwise>
 											</c:choose>
 												
-											<td width="70px !important;;"><a href="${movieVO.trailor}" class="btn btn-outline-danger"
+											<td width="90px;"><a href="${movieVO.trailor}" class="btn btn-outline-danger"
 											style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#F5CA5E; font-weight:bold; color:white;">觀賞</a></td>
 		<!-- 									<td> -->
 		<!-- 										<div id="coverImg" onclick="onPlayerReady()">  -->
@@ -357,7 +357,7 @@
         </div>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="<%=request.getContextPath()%>/後台畫面/js/scripts.js"></script>
+        <script src="<%=request.getContextPath()%>/back-home/js/scripts.js"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
         <script src="<%=request.getContextPath()%>/css/demo/datatables-demo.js"></script>

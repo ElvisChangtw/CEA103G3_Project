@@ -141,18 +141,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     <!--/banner-section-->
     <!--//main-header-->
     <!--/banner-bottom-->
-    <div class="w3_agilits_banner_bootm">
-        <div class="w3_agilits_inner_bottom">
-            <div class="col-md-6 wthree_agile_login">
-                <ul>
-                    <li><i class="fa fa-phone" aria-hidden="true"></i> (+000) 009 455 4088</li>
-                    <li><a href="#" class="login" data-toggle="modal" data-target="#myModal4">Login</a></li>
-                    <li><a href="#" class="login reg" data-toggle="modal" data-target="#myModal5">Register</a></li>
-                </ul>
-            </div>
-        
-        </div>
-    </div>
+    
     
     <!-- 萬用查詢navbar -->
     
@@ -360,131 +349,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     <!--/footer-bottom-->
     <jsp:include page="/front_footer_copy.jsp"/>
     <!--/footer-bottom-->
-        <!-- Dropdown-Menu-JavaScript -->
- <div class="alert-container">
- </div>
-   
-    <script>
-        $(document).ready(function() {
-<%--         	let hasLoggedIn = <%=  %> --%>
-            $(".dropdown").hover(
-                function() {
-                    $('.dropdown-menu', this).stop(true, true).slideDown("fast");
-                    $(this).toggleClass('open');
-                },
-                function() {
-                    $('.dropdown-menu', this).stop(true, true).slideUp("fast");
-                    $(this).toggleClass('open');
-                }
-            );
-        });
-    </script>
-    <!-- //Dropdown-Menu-JavaScript -->
-    <!-- search-jQuery -->
-    <script src="<%=request.getContextPath()%>js/main.js"></script>
-    <!-- //search-jQuery -->
-    <script src="<%=request.getContextPath()%>js/simplePlayer.js"></script>
-    <script>
-        $("document").ready(function() {
-            $("#video").simplePlayer();
-        });
-    </script>
-    <script>
-        $("document").ready(function() {
-            $("#video1").simplePlayer();
-        });
-    </script>
-    <script>
-        $("document").ready(function() {
-            $("#video2").simplePlayer();
-        });
-    </script>
-    <script>
-        $("document").ready(function() {
-            $("#video3").simplePlayer();
-        });
-    </script>
-    <script>
-        $("document").ready(function() {
-            $("#video4").simplePlayer();
-        });
-    </script>
-    <script>
-        $("document").ready(function() {
-            $("#video5").simplePlayer();
-        });
-    </script>
-    <script>
-        $("document").ready(function() {
-            $("#video6").simplePlayer();
-        });
-    </script>
+
     <!-- pop-up-box -->
-    <script src="js/jquery.magnific-popup.js" type="text/javascript"></script>
-    <!--//pop-up-box -->
-    <div id="small-dialog1" class="mfp-hide">
-        <iframe src="https://player.vimeo.com/video/165197924?color=ffffff&title=0&byline=0&portrait=0"></iframe>
-    </div>
-    <div id="small-dialog2" class="mfp-hide">
-        <iframe src="https://player.vimeo.com/video/165197924?color=ffffff&title=0&byline=0&portrait=0"></iframe>
-    </div>
-    <script>
-        $(document).ready(function() {
-		$('.w3_play_icon,.w3_play_icon1,.w3_play_icon2').magnificPopup({
-			type: 'inline',
-			fixedContentPos: false,
-			fixedBgPos: true,
-			overflowY: 'auto',
-			closeBtnInside: true,
-			preloader: false,
-			midClick: true,
-			removalDelay: 300,
-			mainClass: 'my-mfp-zoom-in'
-		});
-																		
-		});
-	</script>
+   
+
     <script src="<%=request.getContextPath()%>/js/easy-responsive-tabs.js"></script>
-    <script>
-        $(document).ready(function () {
-$('#horizontalTab').easyResponsiveTabs({
-type: 'default', //Types: default, vertical, accordion           
-width: 'auto', //auto or any width like 600px
-fit: true,   // 100% fit in a container
-closed: 'accordion', // Start closed if in accordion view
-activate: function(event) { // Callback function if tab is switched
-var $tab = $(this);
-var $info = $('#tabInfo');
-var $name = $('span', $info);
-$name.text($tab.text());
-$info.show();
-}
-});
-$('#verticalTab').easyResponsiveTabs({
-type: 'vertical',
-width: 'auto',
-fit: true
-});
-});
-</script>
-    <link href="<%=request.getContextPath()%>/css/owl.carousel.css" rel="stylesheet" type="text/css" media="all">
-    <script src="<%=request.getContextPath()%>/js/owl.carousel.js"></script>
-    <script>
-        $(document).ready(function() {
-            $("#owl-demo").owlCarousel({
-
-                autoPlay: 3000, //Set AutoPlay to 3 seconds
-                autoPlay: true,
-                navigation: true,
-
-                items: 5,
-                itemsDesktop: [640, 4],
-                itemsDesktopSmall: [414, 3]
-
-            });
-
-        });
-    </script>
     <!--/script-->
     <script type="text/javascript" src="<%=request.getContextPath()%>/js/move-top.js"></script>
     <script type="text/javascript" src="<%=request.getContextPath()%>/js/easing.js"></script>
@@ -498,23 +367,13 @@ fit: true
     </script>
     <script type="text/javascript">
         $(document).ready(function() {
-            /*
-							var defaults = {
-					  			containerID: 'toTop', // fading element id
-								containerHoverID: 'toTopHover', // fading element hover id
-								scrollSpeed: 1200,
-								easingType: 'linear' 
-					 		};
-							*/
-
-            $().UItoTop({ easingType: 'easeOutQuart' });
+        $().UItoTop({ easingType: 'easeOutQuart' });
 
         });
     </script>
     <!--end-smooth-scrolling-->
     <script src="<%=request.getContextPath()%>/js/bootstrap.js"></script>
 
-  
 </body>
 	
 <% 
@@ -522,11 +381,8 @@ fit: true
   java.sql.Timestamp crt_dt_end = null;
   final long DIFF = System.currentTimeMillis() - (1000 * 60 * 60 *24 * 14); //30天前
   
-	crt_dt = new java.sql.Timestamp(DIFF);
-// 	System.out.println("crt_dt = " + crt_dt);
-	
+	crt_dt = new java.sql.Timestamp(DIFF);	
 	crt_dt_end = new java.sql.Timestamp(System.currentTimeMillis());
-// 	System.out.println("crt_dt_end = " + crt_dt_end);
 
 
 %>
@@ -559,55 +415,6 @@ fit: true
             //minDate:               '-1970-01-01', // 去除今日(不含)之前
             //maxDate:               '+1970-01-01'  // 去除今日(不含)之後
          });
-   
-        // ----------------------------------------------------------以下用來排定無法選擇的日期-----------------------------------------------------------
-
-        //      1.以下為某一天之前的日期無法選擇
-        //      var somedate1 = new Date('2017-06-15');
-        //      $('#f_date1').datetimepicker({
-        //          beforeShowDay: function(date) {
-        //        	  if (  date.getYear() <  somedate1.getYear() || 
-        //		           (date.getYear() == somedate1.getYear() && date.getMonth() <  somedate1.getMonth()) || 
-        //		           (date.getYear() == somedate1.getYear() && date.getMonth() == somedate1.getMonth() && date.getDate() < somedate1.getDate())
-        //              ) {
-        //                   return [false, ""]
-        //              }
-        //              return [true, ""];
-        //      }});
-
-        
-        //      2.以下為某一天之後的日期無法選擇
-        //      var somedate2 = new Date('2017-06-15');
-        //      $('#f_date1').datetimepicker({
-        //          beforeShowDay: function(date) {
-        //        	  if (  date.getYear() >  somedate2.getYear() || 
-        //		           (date.getYear() == somedate2.getYear() && date.getMonth() >  somedate2.getMonth()) || 
-        //		           (date.getYear() == somedate2.getYear() && date.getMonth() == somedate2.getMonth() && date.getDate() > somedate2.getDate())
-        //              ) {
-        //                   return [false, ""]
-        //              }
-        //              return [true, ""];
-        //      }});
-
-
-        //      3.以下為兩個日期之外的日期無法選擇 (也可按需要換成其他日期)
-        //      var somedate1 = new Date('2017-06-15');
-        //      var somedate2 = new Date('2017-06-25');
-        //      $('#f_date1').datetimepicker({
-        //          beforeShowDay: function(date) {
-        //        	  if (  date.getYear() <  somedate1.getYear() || 
-        //		           (date.getYear() == somedate1.getYear() && date.getMonth() <  somedate1.getMonth()) || 
-        //		           (date.getYear() == somedate1.getYear() && date.getMonth() == somedate1.getMonth() && date.getDate() < somedate1.getDate())
-        //		             ||
-        //		            date.getYear() >  somedate2.getYear() || 
-        //		           (date.getYear() == somedate2.getYear() && date.getMonth() >  somedate2.getMonth()) || 
-        //		           (date.getYear() == somedate2.getYear() && date.getMonth() == somedate2.getMonth() && date.getDate() > somedate2.getDate())
-        //              ) {
-        //                   return [false, ""]
-        //              }
-        //              return [true, ""];
-        //      }});
-        
         function loginFirst(){
         	alert("請先登入");
         	window.location.href = "<%=request.getContextPath()%>/front-end/mem/MemLogin.jsp";
@@ -801,9 +608,6 @@ var MyPoint = "/NotifyWS/${memVO.member_no}";
 // 	產生通知block在視窗右下角
 	  const alertContainer = document.querySelector('.alert-container');
 	  const btnCreate = document.getElementById('create');
-	  
-	  
-	  
 	  const createAlert = (text,time,type) => {
 		  
 	  const newAlert = document.createElement('div');

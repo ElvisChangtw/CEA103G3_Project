@@ -20,7 +20,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <link href="<%=request.getContextPath()%>/後台畫面/css/styles.css" rel="stylesheet" />
+        <link href="<%=request.getContextPath()%>/back-home/css/styles.css" rel="stylesheet" />
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
     </head>
@@ -52,7 +52,7 @@
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                        <img src="<%=request.getContextPath()%>/後台畫面/img/logo2-1-5.png">
+                        <img src="<%=request.getContextPath()%>/back-home/img/logo2-1-5.png">
                         <a class="nav-link collapsed" href="tables3.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-user-alt"></i></div>
                             基本資料
@@ -240,7 +240,7 @@
         </div>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="<%=request.getContextPath()%>/後台畫面/js/scripts.js"></script>
+        <script src="<%=request.getContextPath()%>/back-home/js/scripts.js"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
         <script src="<%=request.getContextPath()%>/css/demo/datatables-demo.js"></script>
