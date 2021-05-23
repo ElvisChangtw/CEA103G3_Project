@@ -176,18 +176,18 @@ height:50px;
 <script src="<%=request.getContextPath()%>/js/jquery-1.11.1.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/bootstrap.js"></script>
 <script>
-//         $(document).ready(function() {
-//             $(".dropdown").hover(
-//                 function() {
-//                     $('.dropdown-menu', this).stop(true, true).slideDown("fast");
-//                     $(this).toggleClass('open');
-//                 },
-//                 function() {
-//                     $('.dropdown-menu', this).stop(true, true).slideUp("fast");
-//                     $(this).toggleClass('open');
-//                 }
-//             );
-//         });
+        $(document).ready(function() {
+            $(".dropdown").hover(
+                function() {
+                    $('.dropdown-menu', this).stop(true, true).slideDown("fast");
+                    $(this).toggleClass('open');
+                },
+                function() {
+                    $('.dropdown-menu', this).stop(true, true).slideUp("fast");
+                    $(this).toggleClass('open');
+                }
+            );
+        });
     </script>
     <!-- //Dropdown-Menu-JavaScript -->
     <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery.zoomslider.min.js"></script>
@@ -197,7 +197,6 @@ height:50px;
 <script>
 		$(document).ready(function(){
 			$("#logout-btn").click(function(){
-				<% session.removeAttribute("memVO"); %>
 				window.location.href = '<%=request.getContextPath()%>/index.jsp';
 			});
 			

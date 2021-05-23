@@ -325,12 +325,12 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     
     <div class="list-btn">
     	<ul class="nav nav-tabs">
-		  <li role="presentation" class="active"><a href="<%=request.getContextPath()%>/front-end/group/group_front_page.jsp">所有揪團</a></li>
+		  <li role="presentation" ${group_status==null? 'class="active"':''}><a href="<%=request.getContextPath()%>/front-end/group/group_front_page.jsp">所有揪團</a></li>
 		  <c:choose>
 			  <c:when test="${memVO.member_no != 999}">
-				  <li role="presentation"><a href="<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=0">我的揪團(尚未出團)</a></li>
-				  <li role="presentation"><a href="<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=1">我的揪團(已成行)</a></li>
-				  <li role="presentation"><a href="<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=2">我的歷史揪團</a></li>
+				  <li role="presentation" ${group_status==0? 'class="active"':''}><a href="<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=0">我的揪團(尚未出團)</a></li>
+				  <li role="presentation" ${group_status==1? 'class="active"':''}><a href="<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=1">我的揪團(已成行)</a></li>
+				  <li role="presentation" ${group_status==2? 'class="active"':''}><a href="<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=2">我的歷史揪團</a></li>
 			  </c:when>
 			  <c:otherwise>
 			  	  <li><a href="#" onclick="loginFirst()">我的揪團(尚未出團)</a></li>

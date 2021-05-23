@@ -65,127 +65,79 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!-- 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
 <!-- 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script> -->
 	
+	
+<style>
+  /* 通知用 */
+  @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+.fadeOut {
+  opacity: 0 !important;
+}
+
+#create {
+  border: none !important;
+  padding: 8px !important;
+  font-size:15px !important;
+  color: #FFF !important;
+  background-color: firebrick !important;
+  border-radius: 8px !important;
+}
+
+.alert-container{
+  position: fixed !important;
+  right: 10px !important;
+  bottom: 10px !important;
+}
+
+.alert {
+  position: relative !important;
+  background-color: white !important;
+  border: 5px solid lightblue !important;
+  height: 130px !important;
+  width: 290px !important;
+  border-radius: 15px !important;
+  margin-bottom: 15px !important;
+  color: #40bde6 !important;
+  padding: 20px 15px 0 15px !important;
+  transition: opacity 2s !important;
+}
+
+.alert span {
+  font-size: 1.3rem !important;
+  position: absolute !important;
+  top: 3px !important;
+  right: 12px !important;
+  cursor: pointer !important;
+
+}
+.alertTxt{
+  font-size: 17px !important;
+  position: absolute !important;
+  top: 0px !important;
+  right: 12px !important;
+  cursor: pointer !important;
+  margin-top:23px !important;
+  width:170px !important;
+
+}
+.alertImg{
+  width:80px !important;
+  margin-left:-5px !important;
+
+}
+
+.alertTxt .alertTime{
+	font-size:10px !important;
+	color:gray;
+}
+</style>	
 </head>
 
-<body>
+<body onload="connect();" onunload="disconnection();">
 
     <!--/main-header-->
     <!--/banner-section-->
-    <div id="demo-1" class="banner-inner">
-        <div class="banner-inner-dott">
-            <!--/header-w3l-->
-            <div class="header-w3-agileits" id="home">
-                <div class="inner-header-agile part2">
-                    <nav class="navbar navbar-default">
-                        <div class="navbar-header">
-                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                                <span class="sr-only">Toggle navigation</span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                            </button>
-                            <h1><a href="<%=request.getContextPath()%>/index.jsp"><span>M</span>ovies<span>H</span>it</a></h1>
-                        </div>
-                        <!-- navbar-header -->
-                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                            <ul class="nav navbar-nav">
-                                <li><a href="<%=request.getContextPath()%>/front-end/group/select_page.jsp">首頁</a></li>
-                                <li class="dropdown active">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Genre <b class="caret"></b></a>
-                                    <ul class="dropdown-menu multi-column columns-3">
-                                        <li>
-                                            <div class="col-sm-4">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">Action</a></li>
-                                                    <li><a href="genre.html">Biography</a></li>
-                                                    <li><a href="genre.html">Crime</a></li>
-                                                    <li><a href="genre.html">Family</a></li>
-                                                    <li><a href="horror.html">Horror</a></li>
-                                                    <li><a href="genre.html">Romance</a></li>
-                                                    <li><a href="genre.html">Sports</a></li>
-                                                    <li><a href="genre.html">War</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">Adventure</a></li>
-                                                    <li><a href="comedy.html">Comedy</a></li>
-                                                    <li><a href="genre.html">Documentary</a></li>
-                                                    <li><a href="genre.html">Fantasy</a></li>
-                                                    <li><a href="genre.html">Thriller</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">Animation</a></li>
-                                                    <li><a href="genre.html">Costume</a></li>
-                                                    <li><a href="genre.html">Drama</a></li>
-                                                    <li><a href="genre.html">History</a></li>
-                                                    <li><a href="genre.html">Musical</a></li>
-                                                    <li><a href="genre.html">Psychological</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li><a href="series.html">tv - series</a></li>
-                                <li><a href="news.html">news</a></li>
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Country <b class="caret"></b></a>
-                                    <ul class="dropdown-menu multi-column columns-3">
-                                        <li>
-                                            <div class="col-sm-4">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">Asia</a></li>
-                                                    <li><a href="genre.html">France</a></li>
-                                                    <li><a href="genre.html">Taiwan</a></li>
-                                                    <li><a href="genre.html">United States</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">China</a></li>
-                                                    <li><a href="genre.html">HongCong</a></li>
-                                                    <li><a href="genre.html">Japan</a></li>
-                                                    <li><a href="genre.html">Thailand</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">Euro</a></li>
-                                                    <li><a href="genre.html">India</a></li>
-                                                    <li><a href="genre.html">Korea</a></li>
-                                                    <li><a href="genre.html">United Kingdom</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li><a href="list.html">A - z list</a></li>
-                                <li><a href="<%=request.getContextPath()%>/front-end/group/group_front_page.jsp">揪團</a></li>
-                            </ul>
-                        </div>
-                        <div class="clearfix"> </div>
-                    </nav>
-                    <div class="w3ls_search">
-                        <div class="cd-main-header">
-                            <ul class="cd-header-buttons">
-                                <li><a class="cd-search-trigger" href="#cd-search"> <span></span></a></li>
-                            </ul> <!-- cd-header-buttons -->
-                        </div>
-                        <div id="cd-search" class="cd-search">
-                            <form action="#" method="post">
-                                <input name="Search" type="search" placeholder="Search...">
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--//header-w3l-->
-        </div>
-    </div>
+    <jsp:include page="/front_header.jsp"/>
     <!--/banner-section-->
     <!--//main-header-->
     <!--/banner-bottom-->
@@ -405,147 +357,13 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 </div>
     <!--//content-inner-section-->
     <!--揪團列表外層div -->
-    
-    
     <!--/footer-bottom-->
-    <div class="contact-w3ls" id="contact">
-        <div class="footer-w3lagile-inner">
-            <h2>Sign up for our <span>Newsletter</span></h2>
-            <p class="para">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vitae eros eget tellus
-                tristique bibendum. Donec rutrum sed sem quis venenatis.</p>
-            <div class="footer-contact">
-                <form action="#" method="post">
-                    <input type="email" name="Email" placeholder="Enter your email...." required=" ">
-                    <input type="submit" value="Subscribe">
-                </form>
-            </div>
-            <div class="footer-grids w3-agileits">
-                <div class="col-md-2 footer-grid">
-                    <h4>Release</h4>
-                    <ul>
-                        <li><a href="#" title="Release 2016">2016</a></li>
-                        <li><a href="#" title="Release 2015">2015</a></li>
-                        <li><a href="#" title="Release 2014">2014</a></li>
-                        <li><a href="#" title="Release 2013">2013</a></li>
-                        <li><a href="#" title="Release 2012">2012</a></li>
-                        <li><a href="#" title="Release 2011">2011</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-2 footer-grid">
-                    <h4>Movies</h4>
-                    <ul>
-                        <li><a href="genre.html">ADVENTURE</a></li>
-                        <li><a href="comedy.html">COMEDY</a></li>
-                        <li><a href="series.html">FANTASY</a></li>
-                        <li><a href="series.html">ACTION </a></li>
-                        <li><a href="genre.html">MOVIES </a></li>
-                        <li><a href="horror.html">HORROR </a></li>
-                    </ul>
-                </div>
-                <div class="col-md-2 footer-grid">
-                    <h4>Review Movies</h4>
-                    <ul class="w3-tag2">
-                        <li><a href="comedy.html">Comedy</a></li>
-                        <li><a href="horror.html">Horror</a></li>
-                        <li><a href="series.html">Historical</a></li>
-                        <li><a href="series.html">Romantic</a></li>
-                        <li><a href="series.html">Love</a></li>
-                        <li><a href="genre.html">Action</a></li>
-                        <li><a href="single.html">Reviews</a></li>
-                        <li><a href="comedy.html">Comedy</a></li>
-                        <li><a href="horror.html">Horror</a></li>
-                        <li><a href="series.html">Historical</a></li>
-                        <li><a href="series.html">Romantic</a></li>
-                        <li><a href="genre.html">Love</a></li>
-                        <li><a href="comedy.html">Comedy</a></li>
-                        <li><a href="horror.html">Horror</a></li>
-                        <li><a href="genre.html">Historical</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-2 footer-grid">
-                    <h4>Latest Movies</h4>
-                    <div class="footer-grid1">
-                        <div class="footer-grid1-left">
-                            <a href="single.html"><img src="<%=request.getContextPath()%>/images/1.jpg" alt=" " class="img-responsive"></a>
-                        </div>
-                        <div class="footer-grid1-right">
-                            <a href="single.html">eveniet ut molesti</a>
-                        </div>
-                        <div class="clearfix"> </div>
-                    </div>
-                    <div class="footer-grid1">
-                        <div class="footer-grid1-left">
-                            <a href="single.html"><img src="<%=request.getContextPath()%>/images/2.jpg" alt=" " class="img-responsive"></a>
-                        </div>
-                        <div class="footer-grid1-right">
-                            <a href="single.html">earum rerum tenet</a>
-                        </div>
-                        <div class="clearfix"> </div>
-                    </div>
-                    <div class="footer-grid1">
-                        <div class="footer-grid1-left">
-                            <a href="single.html"><img src="<%=request.getContextPath()%>/images/4.jpg" alt=" " class="img-responsive"></a>
-                        </div>
-                        <div class="footer-grid1-right">
-                            <a href="single.html">eveniet ut molesti</a>
-                        </div>
-                        <div class="clearfix"> </div>
-                    </div>
-                    <div class="footer-grid1">
-                        <div class="footer-grid1-left">
-                            <a href="single.html"><img src="<%=request.getContextPath()%>/images/3.jpg" alt=" " class="img-responsive"></a>
-                        </div>
-                        <div class="footer-grid1-right">
-                            <a href="single.html">earum rerum tenet</a>
-                        </div>
-                        <div class="clearfix"> </div>
-                    </div>
-                </div>
-                <div class="col-md-2 footer-grid">
-                    <h4 class="b-log"><a href="index.html"><span>M</span>ovies <span>P</span>ro</a></h4>
-                    <div class="footer-grid-instagram">
-                        <a href="single.html"><img src="<%=request.getContextPath()%>/images/m1.jpg" alt=" " class="img-responsive"></a>
-                    </div>
-                    <div class="footer-grid-instagram">
-                        <a href="single.html"><img src="<%=request.getContextPath()%>/images/m2.jpg" alt=" " class="img-responsive"></a>
-                    </div>
-                    <div class="footer-grid-instagram">
-                        <a href="single.html"><img src="<%=request.getContextPath()%>/images/m3.jpg" alt=" " class="img-responsive"></a>
-                    </div>
-                    <div class="footer-grid-instagram">
-                        <a href="single.html"><img src="<%=request.getContextPath()%>/images/m4.jpg" alt=" " class="img-responsive"></a>
-                    </div>
-                    <div class="footer-grid-instagram">
-                        <a href="single.html"><img src="<%=request.getContextPath()%>/images/m5.jpg" alt=" " class="img-responsive"></a>
-                    </div>
-                    <div class="footer-grid-instagram">
-                        <a href="single.html"><img src="<%=request.getContextPath()%>/images/m6.jpg" alt=" " class="img-responsive"></a>
-                    </div>
-                    <div class="clearfix"> </div>
-                </div>
-                <div class="clearfix"> </div>
-                <ul class="bottom-links-agile">
-                    <li><a href="icons.html" title="Font Icons">Icons</a></li>
-                    <li><a href="short-codes.html" title="Short Codes">Short Codes</a></li>
-                    <li><a href="contact.html" title="contact">Contact</a></li>
-                </ul>
-            </div>
-            <h3 class="text-center follow">Connect <span>Us</span></h3>
-            <ul class="social-icons1 agileinfo">
-                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                <li><a href="#"><i class="fa fa-youtube"></i></a></li>
-                <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-            </ul>
-        </div>
-    </div>
-    <div class="w3agile_footer_copy">
-        <p> 2017 Movies Pro. All rights reserved | Design by <a href="http://w3layouts.com/">W3layouts</a></p>
-    </div>
-    <a href="#home" id="toTop" class="scroll" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
-<%--     <script src="<%=request.getContextPath()%>/js/jquery-1.11.1.min.js"></script> --%>
-    <!-- Dropdown-Menu-JavaScript -->
+    <jsp:include page="/front_footer_copy.jsp"/>
+    <!--/footer-bottom-->
+        <!-- Dropdown-Menu-JavaScript -->
+ <div class="alert-container">
+ </div>
+   
     <script>
         $(document).ready(function() {
 <%--         	let hasLoggedIn = <%=  %> --%>
@@ -796,6 +614,253 @@ fit: true
         }
 
 </script>
+<script>
+var MyPoint = "/NotifyWS/${memVO.member_no}";
+	var host = window.location.host;
+	var path = window.location.pathname;
+	var webCtx = path.substring(0, path.indexOf('/', 1));
+	var endPointURL = "ws://" + window.location.host + webCtx + MyPoint;
+	var friendNO;
+	var groupNO;
+	var movieNO;
+	var groupName;
+	var goGroupName;
+	var kickGroupName;
+	var memberNO;
+	var self = '${memVO.member_no}';
+	var webSocket;
+	var type;
+	var activeDismissGroupNO;
 
+
+	$(".addFriend").click(function(){
+		friendNO = $(this).find("input.friendNO").val();
+		sendWebSocket($(this));
+	})
+	$(".addGroup").click(function(){
+		groupNO = $(this).find("input.groupNO").val();
+		sendWebSocket($(this));
+	})
+	$(".buyTicket").click(function(){
+		movieNO = $(this).find("input.movieNO").val();
+		sendWebSocket($(this));
+	})
+	$(".addfriend_check_btn").click(function(){
+		friendNO = $(this).find("input.friendNO").val();
+		sendWebSocket($(this));
+		//這邊執行insertfriend的code
+	})
+	$(".createGroup").click(function(){
+		groupName = document.getElementById("groupName").value;  //不可放在上面宣告，因為groupname是使用者自己打要click後才會取直，所以要放在click事件內
+		sendWebSocket($(this));
+	})
+	$(".kickoffGroup").click(function(){
+		kickGroupName = $(this).find("input.kickGroupName").val();
+		sendWebSocket($(this));
+	})
+	$(".reminder").click(function(){
+		memberNO = $(this).find("input.memberNO").val();
+		sendWebSocket($(this));
+
+	})
+	$(".activeDismissGroup").click(function(){
+		activeDismissGroupNO = $(this).find("input.activeDismissGroupNO").val();
+		sendWebSocket($(this));
+	})
+	
+	
+	function sendWebSocket(item){
+		let timespan = new Date();
+		let timeStr = timespan.getFullYear() + "-" + (timespan.getMonth()+1).toString().padStart(2, "0") + "-" 
+					+ timespan.getDate() + " " + timespan.getHours().toString().padStart(2, "0") + ":" + timespan.getMinutes().toString().padStart(2, "0");
+		if(item.hasClass("addFriend")){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : friendNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.hasClass("addGroup")){
+			type = "addGroup";
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : groupNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.hasClass("buyTicket")){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : movieNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.val()==1){
+			var jsonObj = {
+				"type" : "response",
+				"sender" : self,
+				"receiver" : friendNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.hasClass("createGroup")){
+			type = "createGroup";
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : groupName,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.hasClass("goGroup")){
+			type = "goGroup";
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : goGroupName,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.hasClass("kickoffGroup")){
+			type = "kickoffGroup";
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : kickGroupName,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.hasClass("reminder")){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : memberNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.hasClass("activeDismissGroup")){
+			type = "activeDismissGroup";
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : activeDismissGroupNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+
+		webSocket.send(JSON.stringify(jsonObj));
+	}
+	
+
+	function connect() {
+		console.log(endPointURL);
+		// create a websocket
+		webSocket = new WebSocket(endPointURL);
+
+		webSocket.onopen = function(event) {
+			
+
+		};
+
+		webSocket.onmessage = function(event) {
+			console.log(event.data);
+			var jsonObj = JSON.parse(event.data);
+			var text = jsonObj.message;
+			var time = jsonObj.time;
+			var type = jsonObj.type;
+			console.log(jsonObj)
+			createAlert(text,time,type);
+			
+		};
+
+		webSocket.onclose = function(event) {
+			console.log("Disconnected!");
+		};
+	}
+	
+	function disconnect() {
+		webSocket.close();
+	}
+	
+	
+// 	產生通知block在視窗右下角
+	  const alertContainer = document.querySelector('.alert-container');
+	  const btnCreate = document.getElementById('create');
+	  
+	  
+	  
+	  const createAlert = (text,time,type) => {
+		  
+	  const newAlert = document.createElement('div');
+	  const closeNewAlert = document.createElement('span');
+	  const imgdiv = document.createElement('div');
+	  const img = document.createElement('img');
+	  const txt = document.createElement('div');
+	  const time_str = document.createElement('div');
+	  
+	  if (type==="addFriend"||type==="response"){
+		  img.src="<%=request.getContextPath()%>/images/notify_icons/friend.png"
+	  }
+	  if (type==="addGroup"||type==="createGroup"||type==="goGroup"||type==="activeDismissGroup"){
+			img.src="<%=request.getContextPath()%>/images/notify_icons/group.png"
+	  }
+	  if (type==="buyTicket"){
+			img.src="<%=request.getContextPath()%>/images/notify_icons/ticket.png"
+	  }
+	  if (type==="reminder"||type==="dismissGroup"||type==="kickoffGroup"||type==="kickUnpaid"){
+			img.src="<%=request.getContextPath()%>/images/notify_icons/warning.png"
+	  }
+	  
+		  img.classList.add("alertImg");
+		  imgdiv.append(img);
+		  txt.innerText = text;
+		  txt.classList.add("alertTxt");
+		  time_str.innerText = time;
+		  time_str.classList.add("alertTime");
+		  txt.append(time_str);
+		  newAlert.prepend(imgdiv);
+		  newAlert.append(txt)
+		  closeNewAlert.innerHTML = '&times;';
+		  
+		  newAlert.appendChild(closeNewAlert);
+		  
+		  newAlert.classList.add('alert');
+		  
+		  alertContainer.appendChild(newAlert);
+		  
+		  setTimeout(()=> {
+		    newAlert.classList.add('fadeOut');
+		  },3000)
+		  
+		  setTimeout(()=> {
+		    newAlert.remove();
+		  },5000)
+		  
+		
+	};
+
+
+	alertContainer.addEventListener('click', (e) => {
+	    if(e.target.nodeName == 'SPAN') {
+	        e.target.parentNode.remove();
+	    }
+	})
+
+</script>
 	
 </html>
