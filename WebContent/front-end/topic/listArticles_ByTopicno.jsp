@@ -17,7 +17,13 @@
 <head><title>文章類型的文章 - listArticles_ByTopicno.jsp</title>
 
 <style>
-  table#table-2 {
+   body {  
+     width: 1200px;  
+     margin: 0 auto;  
+     padding: 10px 20px 20px 15px;   
+
+ 	        }  
+  table#table-1 {
 	background-color: #CCCCFF;
     border: 2px solid black;
     text-align: center;
@@ -79,7 +85,7 @@
 			<th>文章主題</th>
 			<th>發表文章時間</th>
 	<!-- 		<th>更新文章時間</th> -->
-			<th>文章狀態</th>
+<!-- 			<th>文章狀態</th> -->
 			<th>點讚數</th>
 	<!-- 		<th>修改</th> -->
 	<!-- 		<th>刪除</th> -->
@@ -87,29 +93,30 @@
 	</thead>
 	
 	<c:forEach var="articleVO" items="${listArticles_ByTopicno}" >		
+		<tbody>
 			<tr>
-<%-- 		<tr ${(replyVO.reply_no==param.reply_no) ? 'bgcolor = blue':''}><!--將修改的那一筆加入對比色而已--> --%>			
-			<td>${articleVO.articleno}</td>		
-			<td>【<font color=orange>${memSvc.getOneMem(articleVO.memberno).mb_name}</font>】</td>
-				
-			<td>
-				<c:forEach var="topicVO" items="${topicSvc.all}">
-                    <c:if test="${articleVO.articletype==topicVO.topicno}">
-	                  	 【<font color=orange>${topicVO.topic}</font>】
-                    </c:if>
-                </c:forEach>
-			</td>	
-									
-<%-- 		<td>${articleVO.content}</td> --%>
-			<td>			
-				<div class="box">
-					<a class="JQellipsis" href='<%=request.getContextPath()%>/front-end/article/listOneArticle2.jsp?articleno=${articleVO.articleno}'>${articleVO.articleheadline}</a>				
-				</div>	
-			</td>
-			<td><fmt:formatDate value="${articleVO.crtdt}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
-<%-- 			<td><fmt:formatDate value="${articleVO.updatedt}" pattern="yyyy-MM-dd HH:mm:ss"/></td> --%>
-			<td>${articleVO.status}</td>
-			<td>${articleVO.likecount}</td>
+	<%-- 		<tr ${(replyVO.reply_no==param.reply_no) ? 'bgcolor = blue':''}><!--將修改的那一筆加入對比色而已--> --%>			
+				<td>${articleVO.articleno}</td>		
+				<td>【<font color=orange>${memSvc.getOneMem(articleVO.memberno).mb_name}</font>】</td>
+					
+				<td>
+					<c:forEach var="topicVO" items="${topicSvc.all}">
+	                    <c:if test="${articleVO.articletype==topicVO.topicno}">
+		                  	 【<font color=orange>${topicVO.topic}</font>】
+	                    </c:if>
+	                </c:forEach>
+				</td>	
+										
+	<%-- 		<td>${articleVO.content}</td> --%>
+				<td>			
+					<div class="box">
+						<a class="JQellipsis" href='<%=request.getContextPath()%>/front-end/article/listOneArticle2.jsp?articleno=${articleVO.articleno}'>${articleVO.articleheadline}</a>				
+					</div>	
+				</td>
+				<td><fmt:formatDate value="${articleVO.crtdt}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+	<%-- 			<td><fmt:formatDate value="${articleVO.updatedt}" pattern="yyyy-MM-dd HH:mm:ss"/></td> --%>
+<%-- 				<td>${articleVO.status}</td> --%>
+				<td>${articleVO.likecount}</td>
 
 <!-- 			<td> -->
 <%-- 			  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/article/article.do" style="margin-bottom: 0px;"> --%>
@@ -125,7 +132,8 @@
 <%-- 			    <input type="hidden" name="requestURL" value="<%=request.getServletPath()%>"><!--送出本網頁的路徑給Controller--> --%>
 <!-- 			    <input type="hidden" name="action"     value="delete"></FORM> -->
 <!-- 			</td> -->
-		</tr>
+			</tr>
+		</tbody>	
 	</c:forEach>
 </table>
 
@@ -141,7 +149,7 @@ $(function(){
     $(".JQellipsis").each(function(i){
         if($(this).text().length>len){
             $(this).attr("title",$(this).text());
-            var text=$(this).text().substring(0,len-1)+"......more";
+            var text=$(this).text().substring(0,len-1)+"......see more...";
             $(this).text(text);
         }
     });
