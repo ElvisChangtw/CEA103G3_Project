@@ -13,10 +13,8 @@
 
 <%-- <jsp:useBean id="listComments_ByMovieno" scope="request" type="java.util.Set<CommentVO>" /> <!-- 於EL此行可省略 --> --%>
 
-<jsp:useBean id="movieSvc" scope="page"
-	class="com.movie.model.MovieService" />
-<jsp:useBean id="commentSvc" scope="page"
-	class="com.comment.model.CommentService" />
+<jsp:useBean id="movieSvc" scope="page" class="com.movie.model.MovieService" />
+<jsp:useBean id="commentSvc" scope="page" class="com.comment.model.CommentService" />
 <jsp:useBean id="memSvc" scope="page" class="com.mem.model.MemService" />
 <%
 	MovieVO movieVO = (MovieVO) request.getAttribute("movieVO");
@@ -26,8 +24,18 @@
 	List<CommentVO> list = commentSvc.getOneMovieComment(movieVO.getMovieno());
 	pageContext.setAttribute("list", list);
 	
+MemVO memVO = (MemVO) session.getAttribute("memVO");
+if (memVO == null){
+	memVO = new MemVO();
+	memVO.setMember_no(999);
+	pageContext.setAttribute("needLogin", memVO);
+}else{
+	pageContext.setAttribute("memVO", memVO);
+}
+
+	
 %>
-<jsp:useBean id="memVO" scope="session" type="com.mem.model.MemVO" />
+<%-- <jsp:useBean id="memVO" scope="session" type="com.mem.model.MemVO" /> --%>
 
 <!DOCTYPE html>
 <html>
@@ -74,6 +82,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	rel='stylesheet' type='text/css'>
 <!--//web-fonts-->
 <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
+
 <style>
 .fa-book{
 color: red;
@@ -82,6 +91,7 @@ color: red;
 color: #CE184B
 font-size: 20px;
 }
+
 </style>
 	
 </head>
@@ -100,7 +110,7 @@ font-size: 20px;
 					<c:forEach var="memVO" items="${memSvc.all}">
 						<c:if test="${commentVO.memberno==memVO.member_no}">
 							<a href="${pageContext.request.contextPath}/comment/comment.do?action=listComments_ByCompositeQuery&MEMBER_NO=${memVO.member_no}">
-							<img class="media-object"
+							<img class="media-object" id="css-${commentVO.commentno}"
 								src="${pageContext.request.contextPath}/mem/mem.do?action=view_memPic&member_no=${memVO.member_no}"
 								width="120px" height="120px" />
 							</a>
@@ -111,45 +121,85 @@ font-size: 20px;
 					</c:forEach>
 				</div>
 				<div class="media-body response-text-right">
-				<p>${commentVO.content}</p>
-					<ul>
+					<div class="essence">
+						<div class="essence_item">
+							<div class="essence_item_content" >
+								<span id="content-${commentVO.commentno}" style="word-break: break-all;">${commentVO.content}</span>
+								<p id="seeAbout-${commentVO.commentno}" style="cursor: pointer; color:#89bdd3;">繼續閱讀</p>
+							</div>
+						</div>
+					</div>
+<script type="text/javascript">
+	$(function(){
+		var onoff = false;
+		$('.essence .essence_item').each(function(){
+			var content = $(this).find('#content-${commentVO.commentno}');
+			var str = content.text();
+			var see =  $(this).find('#seeAbout-${commentVO.commentno}');
+			if(str.length > 15){
+				content.text(str.substr(0,15)+'......');
+			} 
+			else{
+				see.hide();
+			}
+			see.on('click',function(){
+				if(onoff){
+					content.text(str.substr(0,15)+'......');
+					see.text('繼續閱讀');
+				}else{
+					content.text(str);
+					see.text("收起評論");
+				}
+			onoff =! onoff
+			})
+		})
+	});
+</script>				
+						
 						<c:if test="${commentVO.memberno==memVO.member_no}">
-						<li><FORM METHOD="post"
-								ACTION="<%=request.getContextPath()%>/comment/comment.do"
-								style="margin-bottom: 0px;">
-								<li><i class="fa fa-book fa-lg" aria-hidden="true" style="color:#4194CA"></i> 
-								<input type="submit" value="修改"> 
-								<input type="hidden" name="commentno" value="${commentVO.commentno}"> 
-								<input type="hidden" name="requestURL" value="<%=request.getServletPath()%>">
-								<!--送出本網頁的路徑給Controller-->
-								<!-- 目前尚未用到  --> 
-								<input type="hidden" name="action" value="getOne_For_Update">
-							</FORM></li>
+						<ul>
+							<li><FORM METHOD="post"
+									ACTION="<%=request.getContextPath()%>/comment/comment.do"
+									style="margin-bottom: 0px;">
+									<li><i class="fa fa-book fa-lg" aria-hidden="true" style="color:#4194CA"></i> 
+									<input type="submit" value="修改"> 
+									<input type="hidden" name="commentno" value="${commentVO.commentno}"> 
+									<input type="hidden" name="requestURL" value="<%=request.getServletPath()%>">
+									<!--送出本網頁的路徑給Controller-->
+									<!-- 目前尚未用到  --> 
+									<input type="hidden" name="action" value="getOne_For_Update">
+								</FORM>
+							</li>
 
-						<li><FORM METHOD="post"
-								ACTION="<%=request.getContextPath()%>/comment/comment.do">
-								<li><i class="fa fa-times fa-lg" aria-hidden="true" style="color:#D47070"></i> 
-								<input type="submit" value="刪除"> 
-								<input type="hidden" name="commentno" value="${commentVO.commentno}"> 
-								<input type="hidden" name="requestURL" value="<%=request.getServletPath()%>">
-								<!--送出本網頁的路徑給Controller--> 
-								<input type="hidden" name="action" value="delete">
-							</FORM></li></c:if>
-					</ul>
+							<li><FORM METHOD="post"
+									ACTION="<%=request.getContextPath()%>/comment/comment.do">
+									<li><i class="fa fa-times fa-lg" aria-hidden="true" style="color:#D47070"></i> 
+									<input type="submit" value="刪除"> 
+									<input type="hidden" name="commentno" value="${commentVO.commentno}"> 
+									<input type="hidden" name="requestURL" value="<%=request.getServletPath()%>">
+									<!--送出本網頁的路徑給Controller--> 
+									<input type="hidden" name="action" value="delete">
+								</FORM>
+							</li>
+						</ul>
+						</c:if>
 					<ul>
-						<li>最後發佈時間: <fmt:formatDate value="${commentVO.modifydate}"
+						<li>最後發佈時間:<fmt:formatDate value="${commentVO.modifydate}"
 								pattern="yyyy-MM-dd HH:mm:ss" /></li>
-						<c:if test="${commentVO.memberno != memVO.member_no}">
-						<li><a href="<%=request.getContextPath()%>/front-end/report_comment/addReportComment.jsp?commentno=${commentVO.commentno}&memberno=${memVO.member_no}&requestURL=<%=request.getServletPath()%>&movieno=${commentVO.movieno}">
-						<i class="fa fa-hand-o-left" aria-hidden="true"></i> </i>檢舉</a></li></c:if>
+						<c:if test="${needLogin.member_no != 999}">
+							<c:if test="${commentVO.memberno != memVO.member_no}">
+								<li><a href="<%=request.getContextPath()%>/front-end/report_comment/addReportComment.jsp?commentno=${commentVO.commentno}&memberno=${memVO.member_no}&requestURL=<%=request.getServletPath()%>&movieno=${commentVO.movieno}">
+								<i class="fa fa-hand-o-left" aria-hidden="true"></i> </i>檢舉</a></li>
+							</c:if>
+						</c:if>
 					</ul>
-				
 				</div>
 				<div class="clearfix"> </div>
 			</div>
 		</div>
 </c:if>		
 </c:forEach>
+
 
 	<c:if test="${memVO.mb_level.equals('2')}">
 		<div class="all-comments-info">
@@ -360,6 +410,8 @@ font-size: 20px;
 	</script>
 	<!--end-smooth-scrolling-->
 	<script src="<%=request.getContextPath()%>/js/bootstrap.js"></script>
+	
+
 
 </body>
 </html>

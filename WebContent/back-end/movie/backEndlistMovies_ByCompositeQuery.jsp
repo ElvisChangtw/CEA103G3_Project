@@ -185,12 +185,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									<td>
 										<a href="${pageContext.request.contextPath}/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}">
 										<img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${movieVO.movieno}" 
-										alt="尚無圖片" width="90px;" height="110px" title="${movieVO.moviename}"/> 
+										alt="尚無圖片" width="80px;" height="100px" title="${movieVO.moviename}"/> 
 										<span  style="text-align: center; display:block; font-size:10px; font-weight:bold;">${movieVO.moviename}</span></a></td>
 									<td>
 										<a href="${pageContext.request.contextPath}/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}">
 										<img src="${pageContext.request.contextPath}/movie/DBGifReader2.do?movieno=${movieVO.movieno}" 
-										alt="尚無圖片" width="90px;" height="110px" title="${movieVO.moviename}"/></a></td>
+										alt="尚無圖片" width="80px;" height="100px" title="${movieVO.moviename}"/></a></td>
 									
 									<td width="50px;">${movieVO.director}</td>
 									<td width="50px;">${movieVO.actor}</td>

@@ -3,6 +3,7 @@ package com.employee.controller;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.authority.model.AuthorityService;
+import com.authority.model.AuthorityVO;
 import com.employee.model.EmployeeService;
 import com.employee.model.EmployeeVO;
 import com.employee.model.SendEmail;
@@ -241,6 +244,8 @@ public class EmployeeServlet extends HttpServlet {
 
 			try {
 				/*********************** 1.接收請求參數 - 輸入格式的錯誤處理 *************************/
+				
+//				*****接收員工資料*****
 				String empname = req.getParameter("empname");
 				String empnameReg = "^[(\u4e00-\u9fa5)(a-zA-Z0-9_)]{2,10}$";
 				if (empname == null || empname.trim().length() == 0) {
@@ -323,6 +328,8 @@ public class EmployeeServlet extends HttpServlet {
 				employeeVO.setHiredate(hiredate);
 				employeeVO.setQuitdate(quitdate);
 				employeeVO.setStatus(status);
+				
+				
 
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
@@ -331,8 +338,10 @@ public class EmployeeServlet extends HttpServlet {
 					failureView.forward(req, res);
 					return;
 				}
+				
 
 				/*************************** 2.開始新增資料 ***************************************/
+//				********Step1：新增員工********
 				EmployeeService employeeSvc = new EmployeeService();
 				employeeVO = employeeSvc.addEmp(empname, emppwd, gender, tel, email, title, hiredate, quitdate, status);
 				if (employeeVO != null) {
@@ -342,25 +351,67 @@ public class EmployeeServlet extends HttpServlet {
 					// 將該用戶的密碼修改成亂數密碼 
 					employeeSvc.updateRandomPws(email, randomPwd);
 				}
-
+				
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
-					RequestDispatcher failureView = req.getRequestDispatcher("/front-end/mem/MemLogin.jsp");
+					RequestDispatcher failureView = req.getRequestDispatcher("/back-end/employee/listAllEmployee.jsp");
 					failureView.forward(req, res);
 					return;// 程式中斷
 				}
 				
+//				********Step2：新增權限********
 				
+//				*****接收權限資料*****
+				
+				String function_no[] =req.getParameterValues("function_no");
+				if(function_no == null) {
+					errorMsgs.add("權限請勿空白");
+				}
+				
+				String auth_status = "Y";
+				Integer empno = employeeVO.getEmpno();
+				
+//				AuthorityVO authorityVO = new AuthorityVO();
+//				authorityVO.setEmpno(empno);
+//				authorityVO.setFunction_no(function_no);
+//				authorityVO.setAuth_status(auth_status);
+				
+//				System.out.println(empno);
+//				System.out.println(function_no);
+//				System.out.println(auth_status);
+
+				// Send the use back to the form, if there were errors
+				if (!errorMsgs.isEmpty()) {
+//					req.setAttribute("authorityVO", authorityVO); // 含有輸入格式錯誤的authorityVO物件,也存入req。儲存打過的資料，若輸入錯誤不用重新輸入
+					RequestDispatcher failureView = req.getRequestDispatcher("/back-end/employee/listAllEmployee.jsp");
+					failureView.forward(req, res);
+					return;
+				}
+				
+				
+				AuthorityService authoritySvc = new AuthorityService();
+				
+				for(String funo : function_no) {
+					Integer funno = new Integer(funo);
+					authoritySvc.addAuthority(empno, funno, auth_status);
+				}
+				
+				if (!errorMsgs.isEmpty()) {
+					RequestDispatcher failureView = req.getRequestDispatcher("/back-end/employee/listAllEmployee.jsp");
+					failureView.forward(req, res);
+					return;// 程式中斷
+				}
+
 				/*************************** 3.新增完成,準備轉交(Send the Success view) ***********/
 				String url = "/back-end/employee/listAllEmployee.jsp";
 //				String url = req.getParameter("requestURL");
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 新增成功後轉交listAllEmployee.jsp
 				successView.forward(req, res);
-
+				
 				/*************************** 其他可能的錯誤處理 **********************************/
 			} catch (Exception e) {
 				errorMsgs.add(e.getMessage());
-				RequestDispatcher failureView = req.getRequestDispatcher("/back-end/employee/addEmployee.jsp");
+				RequestDispatcher failureView = req.getRequestDispatcher("/back-end/employee/listAllEmployee.jsp");
 				failureView.forward(req, res);
 			}
 		}
@@ -453,6 +504,32 @@ public class EmployeeServlet extends HttpServlet {
 				errorMsgs.add("無法取得資料:" + e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/back-end/employee/empLogin.jsp");
 				failureView.forward(req, res);
+			}
+		}
+		
+		if ("listAuthority_ByEmpno".equals(action)) {
+
+			List<String> errorMsgs = new LinkedList<String>();
+			req.setAttribute("errorMsgs", errorMsgs);
+
+			try {
+				/*************************** 1.接收請求參數 ****************************************/
+				Integer empno = new Integer(req.getParameter("empno"));
+
+				/*************************** 2.開始查詢資料 ****************************************/
+				EmployeeService employeeSvc = new EmployeeService();
+				Set<AuthorityVO> set = employeeSvc.getAuthsByEmpno(empno);
+
+				/*************************** 3.查詢完成,準備轉交(Send the Success view) ************/
+				req.setAttribute("listAuths_ByEmpno", set);    // 資料庫取出的set物件,存入request
+				String url = "/back-end/employee/listAllEmployee.jsp";
+
+				RequestDispatcher successView = req.getRequestDispatcher(url);
+				successView.forward(req, res);
+
+				/*************************** 其他可能的錯誤處理 ***********************************/
+			} catch (Exception e) {
+				throw new ServletException(e);
 			}
 		}
 	}

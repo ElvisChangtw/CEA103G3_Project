@@ -129,7 +129,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									
 									<td width="50px;">
 										<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/report_comment/reportcomment.do" style="margin-bottom: 0px;">
-											<input type="submit" value="修改"> 
+											<input type="submit" value="修改"
+											 class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#73BDBE; font-weight:bold; color:white;"> 
 											<input type="hidden" name="reportno" value="${reportCommentVO.reportno}"> 
 											<input type="hidden" name="requestURL" value="<%=request.getServletPath()%>">
 											<!--送出本網頁的路徑給Controller-->

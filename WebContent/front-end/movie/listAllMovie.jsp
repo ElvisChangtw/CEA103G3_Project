@@ -22,7 +22,7 @@
 	int z = 0;
 	pageContext.setAttribute("z", z);
 %>
-<jsp:useBean id="memVO" scope="session" type="com.mem.model.MemVO" />
+<%-- <jsp:useBean id="memVO" scope="session" type="com.mem.model.MemVO" /> --%>
 <%-- <jsp:useBean id="movieSvc1" scope="page" class="com.movie.model.MovieService" /> --%>
 <!DOCTYPE html>
 <html>

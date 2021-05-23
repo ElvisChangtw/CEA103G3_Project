@@ -7,6 +7,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+
+import com.authority.model.AuthorityVO;
 import com.employee.model.*;
 import com.employee.model.EmployeeVO;
 
@@ -30,6 +32,7 @@ public class EmployeeDAO implements EmployeeDAO_interface {
 	private static final String UPDATE = "UPDATE employee set empname=?, emppwd=?, gender=?, tel=?, email=?, title=?, hiredate=?, quitdate=?, status=? where empno = ?";
 	private static final String LOGIN_CHECK = "SELECT * FROM employee where email = ? and emppwd = ?";
 	private static final String UPDATERANDOMPWD = "UPDATE employee set emppwd = ? where email = ?";
+	private static final String GET_Auths_ByEmpno_STMT = "Select function_no, auth_status FROM authority where empno = ?";
 
 	public void insert(EmployeeVO employeeVO) {
 
@@ -39,8 +42,9 @@ public class EmployeeDAO implements EmployeeDAO_interface {
 		try {
 
 			con = ds.getConnection();
-			pstmt = con.prepareStatement(INSERT_STMT);
-
+			pstmt = con.prepareStatement(INSERT_STMT, Statement.RETURN_GENERATED_KEYS);
+			
+			
 			pstmt.setString(1, employeeVO.getEmpname());
 			pstmt.setString(2, employeeVO.getEmppwd());
 			pstmt.setString(3, employeeVO.getGender());
@@ -52,6 +56,17 @@ public class EmployeeDAO implements EmployeeDAO_interface {
 			pstmt.setString(9, employeeVO.getStatus());
 
 			pstmt.executeUpdate();
+			
+			ResultSet rs = pstmt.getGeneratedKeys();
+			rs.next();
+			Integer empno = rs.getInt(1);
+			
+
+			employeeVO.setEmpno(empno);
+			employeeVO.getEmpno();
+			int i = employeeVO.getEmpno();
+			System.out.println(i);
+
 
 			// Handle any SQL errors
 		} catch (SQLException se) {
@@ -73,7 +88,6 @@ public class EmployeeDAO implements EmployeeDAO_interface {
 				}
 			}
 		}
-
 	}
 
 	public void update(EmployeeVO employeeVO) {
@@ -372,5 +386,58 @@ public class EmployeeDAO implements EmployeeDAO_interface {
 				}
 			}
 		}
+	}
+
+	@Override
+	public Set<AuthorityVO> getAuthsByEmpno(Integer empno) {
+		Set<AuthorityVO> set = new LinkedHashSet<AuthorityVO>();
+		AuthorityVO authorityVO = null;
+	
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+	
+		try {
+	
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_Auths_ByEmpno_STMT);
+			pstmt.setInt(1, empno);
+			rs = pstmt.executeQuery();
+	
+			while (rs.next()) {
+				authorityVO = new AuthorityVO();
+				authorityVO.setFunction_no(rs.getInt("function_no"));
+				authorityVO.setAuth_status(rs.getString("auth_status"));
+				set.add(authorityVO); // Store the row in the vector
+			}
+	
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return set;
 	}
 }

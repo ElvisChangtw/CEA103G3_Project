@@ -39,14 +39,16 @@
 	List<MovieVO> latestMovie = movieSvc.getLatestMovie();
 	pageContext.setAttribute("latestMovie", latestMovie);
 	
-	List<MovieVO> listTopFive = movieSvc.getTopFive();
-	pageContext.setAttribute("listTopFive", listTopFive);
+// 	List<MovieVO> listTopFive = movieSvc.getTopFive();
+// 	pageContext.setAttribute("listTopFive", listTopFive);
 	
 	movieSvc.createMovieIdex();
 	
 	MemVO memVO = (MemVO) session.getAttribute("memVO");
 	if(memVO == null){
-		memVO = (new MemService()).getOneMem(99);
+// 		memVO = (new MemService()).getOneMem(99);
+		memVO = new MemVO();
+		memVO.setMember_no(99);
 	}
 	pageContext.setAttribute("memVO", memVO);
 %>
@@ -193,17 +195,20 @@
                     <div class="w3ls_search">
 						<div class="cd-main-header">
 							<ul class="cd-header-buttons">
-								<li class="active rhs"><a id="login-btn"  href="<%=request.getContextPath()%>/front-end/mem/MemLogin.jsp">登入</a></li>
-								<li class="active rhs">
-									<c:if test="${memVO.member_no !=99 }">
-										<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${memVO.member_no}" 
-										id="${groupVO.group_no}-${memVO.member_no}" alt="尚無圖片" width="60px;" height="60px" 
-										style="border-radius:50%;" class="clickable" />
-									</c:if>
-									<a id="welcome"> ${memVO.mb_name } &nbsp</a>
-									<a id="logout-btn" href="#"> 登出 </a>
-								</li>
-
+								<c:choose>
+									<c:when test="${memVO.member_no == 99}">
+										<li class="active rhs"><a id="login-btn"  href="<%=request.getContextPath()%>/front-end/mem/MemLogin.jsp">登入</a></li>
+									</c:when>
+									<c:otherwise>
+										<li class="active rhs">
+												<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${memVO.member_no}" 
+												id="${groupVO.group_no}-${memVO.member_no}" alt="尚無圖片" width="60px;" height="60px" 
+												style="border-radius:50%;" class="clickable" />
+											<a id="welcome"> ${memVO.mb_name } &nbsp</a>
+											<a id="logout-btn" href="#"> 登出 </a>
+										</li>
+									</c:otherwise>
+								</c:choose>
 								<li><a class="cd-search-trigger" href="#cd-search"> <span></span></a></li>
 							</ul> <!-- cd-header-buttons -->
 						</div>
@@ -1181,7 +1186,7 @@
                 <div class="col-md-2 footer-grid">
                     <h4 class="b-log"><a><span>精</span>選 <span></span> <span>電</span>影</a></h4>
                     <ul>
-                        <c:forEach var="movieVO" items="${listTopFive}">
+                        <c:forEach var="movieVO" items="${listTopTen}" begin="0" end ="4">
                             <li><a href="genre.html">${movieVO.moviename}</a></li>
                         </c:forEach>
                     </ul>
@@ -1615,11 +1620,9 @@ $(document).ready(drawPieChart1);
 $(document).ready(drawPieChart2);
 $(document).ready(function(){
 	$("#logout-btn").click(function(){
-		sessionStorage.removeItem('memVO'); 
+		<% session.removeAttribute("memVO"); %>
 		window.location.href = '<%=request.getContextPath()%>/index.jsp';
-	})
-	
-	
+	});
 	let hasLoggedIn = <%= memVO.getMember_no() %>;
 	if(hasLoggedIn != 99){
 		$("#welcome").show();

@@ -19,8 +19,8 @@ public class AuthorityDAO implements AuthorityDAO_interface{
 		}
 	}
 	
-	private static final String INSERT_STMT = "insert into Authority (EMPNO,FUNCTION_NO,STATUS) values (?, ?, ?)";
-	private static final String UPDATE_STMT = "update Authority set STATUS=? where EMPNO=? and FUNCTION_NO=?";
+	private static final String INSERT_STMT = "insert into Authority (EMPNO,FUNCTION_NO,AUTH_STATUS) values (?, ?, ?)";
+	private static final String UPDATE_STMT = "update Authority set AUTH_STATUS=? where EMPNO=? and FUNCTION_NO=?";
 	private static final String DELETE_STMT = "delete from Authority where EMPNO=? and FUNCTION_NO=?";
 	private static final String GET_ONE_BY_EMPNO_STMT = "select * from Authority where EMPNO = ?";
 	private static final String GET_ONE_BY_EMPNO_FUCTION_STMT = "select * from Authority where EMPNO = ? and FUNCTION_NO=?";
@@ -39,7 +39,7 @@ public class AuthorityDAO implements AuthorityDAO_interface{
 
 			pstmt.setInt(1, authorityVO.getEmpno());
 			pstmt.setInt(2, authorityVO.getFunction_no());
-			pstmt.setString(3, authorityVO.getStatus());
+			pstmt.setString(3, authorityVO.getAuth_status());
 
 			pstmt.executeUpdate();
 
@@ -77,7 +77,7 @@ public class AuthorityDAO implements AuthorityDAO_interface{
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(UPDATE_STMT);
 
-			pstmt.setString(1, authorityVO.getStatus());
+			pstmt.setString(1, authorityVO.getAuth_status());
 			pstmt.setInt(2, authorityVO.getEmpno());
 			pstmt.setInt(3, authorityVO.getFunction_no());
 
@@ -170,7 +170,7 @@ public class AuthorityDAO implements AuthorityDAO_interface{
 				authorityVO = new AuthorityVO();
 				authorityVO.setEmpno(rs.getInt("EMPNO"));
 				authorityVO.setFunction_no(rs.getInt("FUNCTION_NO"));
-				authorityVO.setStatus(rs.getString("STATUS"));
+				authorityVO.setAuth_status(rs.getString("AUTH_STATUS"));
 				
 			}
 
@@ -228,7 +228,7 @@ public class AuthorityDAO implements AuthorityDAO_interface{
 				authorityVO = new AuthorityVO();
 				authorityVO.setEmpno(rs.getInt("EMPNO"));
 				authorityVO.setFunction_no(rs.getInt("FUNCTION_NO"));
-				authorityVO.setStatus(rs.getString("STATUS"));
+				authorityVO.setAuth_status(rs.getString("AUTH_STATUS"));
 				
 			}
 
@@ -286,7 +286,7 @@ public class AuthorityDAO implements AuthorityDAO_interface{
 				authorityVO = new AuthorityVO();
 				authorityVO.setEmpno(rs.getInt("EMPNO"));
 				authorityVO.setFunction_no(rs.getInt("FUNCTION_NO"));
-				authorityVO.setStatus(rs.getString("STATUS"));
+				authorityVO.setAuth_status(rs.getString("AUTH_STATUS"));
 				list.add(authorityVO); // Store the row in the list
 			}
 

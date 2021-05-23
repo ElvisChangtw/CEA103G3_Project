@@ -16,6 +16,8 @@
 	EmployeeVO employeeVO = (EmployeeVO) request.getAttribute("employeeVO");
 %>
 
+<jsp:useBean id="authoritytSvc" scope="page" class="com.authority.model.AuthorityService" />
+
 
 <!doctype html>
 <html lang="en">
@@ -31,9 +33,9 @@
 <!-- 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
 <!-- 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
 
-	<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
+<!-- 	<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'> -->
 
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<!-- 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
 	
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/back-end/employee/css/style.css">
  
@@ -73,7 +75,7 @@
 						    <tr>
 						      <th class="th1">員工編號</th>
 							  <th>員工姓名</th>
-							  <th>員工密碼</th>
+<!-- 							  <th>員工密碼</th> -->
 							  <th>性別</th>
 							  <th>電話</th>
 							  <th>電子郵件</th>
@@ -91,16 +93,30 @@
 						    <tr data-toggle="collapse" data-target="#collapse${status.count}" aria-expanded="true" aria-controls="collapse${status.count}" class="collapsed">
 								<td>${employeeVO.empno}</td>
 								<td>${employeeVO.empname}</td>
-								<td>${employeeVO.emppwd}</td>
-								<td>${employeeVO.gender}</td>
+<%-- 								<td>${employeeVO.emppwd}</td> --%>
+								<td>${employeeVO.gender eq 1?"男":"女"}</td>
 								<td>${employeeVO.tel}</td> 
 								<td>${employeeVO.email}</td>
 								<td>${employeeVO.title}</td>
 								<td><fmt:formatDate value="${employeeVO.hiredate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 								<td><fmt:formatDate value="${employeeVO.quitdate}" pattern="yyyy-MM-dd HH:mm:ss"/>
-								<td>${employeeVO.status}</td>
+								<td>
+									 <c:choose>
+   									 <c:when test= "${employeeVO.status eq 0}">已離職</c:when>
+   									 <c:when test= "${employeeVO.status eq 1}">在職中</c:when>
+   									 <c:when test= "${employeeVO.status eq 2}">留職停薪</c:when>
+   									</c:choose>
+								</td>
 						      	<td>
-						      		<i class="fa" aria-hidden="true"></i>
+						      		<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/back-end/employee/employee.do" style="margin-bottom: 0px;">
+<!-- 						      			 <i class="fa" aria-hidden="true"></i> -->
+<!-- 			   							 <input type="submit" value="送出查詢">  -->
+									     <input type="submit" class="btn btn-success edit" value="查看">
+			  							 <input type="hidden" name="empno" value="${employeeVO.empno}">
+			  							 <input type="hidden" name="requestURL"	value="<%=request.getServletPath()%>"><!--送出本網頁的路徑給Controller-->
+			    						 <input type="hidden" name="whichPage"	value="<%=whichPage%>">               <!--送出當前是第幾頁給Controller-->
+			   							 <input type="hidden" name="action" value="listAuthority_ByEmpno">
+			   						</FORM>
 				        		</td>
 				        		<td>
 				        		 <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/back-end/employee/employee.do" style="margin-bottom: 0px;">
@@ -112,9 +128,11 @@
 			</td>
 						    </tr>
 						    <tr>
-						    	<td colspan="6" id="collapse${status.count}" class="collapse acc" data-parent="#accordion">
-						    		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro iste, facere sunt sequi nostrum ipsa, amet doloremque magnam reiciendis tempore sapiente. Necessitatibus recusandae harum nam sit perferendis quia inventore natus.</p>
-						    	</td>
+						    	<td colspan="6" id="collapse${status.count}" class="collapse acc">
+						    		<%if (request.getAttribute("listAuths_ByEmpno")!=null){%>
+    								   <jsp:include page="listAuths_ByEmpno.jsp" />
+									<%} %>
+			   					</td>
 						    </tr>
    							</c:forEach>
 						  </tbody>
@@ -184,6 +202,43 @@
 						<input type="radio" name="status" value="1" checked>在職中
 						<input type="radio" name="status" value="2" >留職停薪
 					</div>	
+					<hr>
+					<div class="form-group">
+						<label>權限:</label><br>
+						<input type="checkbox" name="function_no" value="1"> 員工管理  
+						 &nbsp;&nbsp;
+						<input type="checkbox" name="function_no" value="2" > 員工權限管理
+						 &nbsp;&nbsp;
+						<input type="checkbox" name="function_no" value="3" > 場次管理
+						 &nbsp;&nbsp;
+						<input type="checkbox" name="function_no" value="4" > 電影資訊管理
+						<br>
+						<input type="checkbox" name="function_no" value="5" > 廳院管理
+						 &nbsp;&nbsp;
+						<input type="checkbox" name="function_no" value="6" > 座位管理
+						 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" name="function_no" value="7" > 票種管理
+						 &nbsp;&nbsp;
+						<input type="checkbox" name="function_no" value="8" > 餐點管理
+						<br>
+						<input type="checkbox" name="function_no" value="9" > 會員資料管理
+						 &nbsp;&nbsp;
+						<input type="checkbox" name="function_no" value="10" > 會員審核
+						 &nbsp;&nbsp;
+						<input type="checkbox" name="function_no" value="11" > 專業評論審核
+						 &nbsp;&nbsp;
+						<input type="checkbox" name="function_no" value="12" > 現場劃位
+						<br>
+						<input type="checkbox" name="function_no" value="13" > 查詢線上訂單
+						 &nbsp;&nbsp;
+						<input type="checkbox" name="function_no" value="14" > 檢舉管理
+						 &nbsp;&nbsp;
+						<input type="checkbox" name="function_no" value="15" > 最新消息管理
+						 &nbsp;&nbsp;
+						<input type="checkbox" name="function_no" value="16" > 客服小幫手
+					</div>	
+					
+					
 									
 				</div>
 				<div class="modal-footer">
@@ -197,84 +252,7 @@
 	</div>
 </div>
 
-<!-- 修改員工modal -->
-<!-- <div id="editEmployeeModal" class="modal fade"> -->
-<!-- 	<div class="modal-dialog"> -->
-<!-- 		<div class="modal-content"> -->
-<%-- 			<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/back-end/employee/employee.do"> --%>
-<!-- 				<div class="modal-header">						 -->
-<!-- 					<h4 class="modal-title">Edit Employee</h4> -->
-<!-- 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> -->
-<!-- 				</div> -->
-<!-- 				<div class="modal-body">	 -->
-<!-- 					<div class="form-group"> -->
-<!-- 						<label>員工編號:</label><br> -->
-<%-- 						<%=employeeVO.getEmpno()%> --%>
-<!-- 					</div> -->
-					
-<!-- 					<div class="form-group"> -->
-<!-- 						<label>員工姓名:</label> -->
-<%-- 						<input type="TEXT" name="empname" size="45" value="<%=employeeVO.getEmpname()%>" class="form-control" required> --%>
-<!-- 					</div> -->
-					
-<!-- 					<div class="form-group"> -->
-<!-- 						<label>員工密碼:</label> -->
-<%-- 						<input type="password" name="emppwd" size="45"	value="<%=employeeVO.getEmppwd()%>" class="form-control" required> --%>
-<!-- 					</div> -->
-					
-<!-- 					<div class="form-group"> -->
-<!-- 						<label>性別:</label> -->
-<!-- 						<select size="1" name="gender"> -->
-<!-- 							<option value="0">女 -->
-<!-- 							<option value="1">男 -->
-<!-- 						</select> -->
-<!-- 					</div>	 -->
-					
-<!-- 					<div class="form-group"> -->
-<!-- 						<label>電話:</label> -->
-<%-- 						<input type="TEXT" name="tel" size="45"	value="<%=employeeVO.getTel()%>" class="form-control" required> --%>
-<!-- 					</div> -->
-					
-<!-- 					<div class="form-group"> -->
-<!-- 						<label>電子郵件:</label> -->
-<%-- 						<input type="TEXT" name="email" size="45" value="<%=employeeVO.getEmail()%>" class="form-control" required> --%>
-<!-- 					</div> -->
-					
-<!-- 					<div class="form-group"> -->
-<!-- 						<label>職稱:</label> -->
-<%-- 						<input type="TEXT" name="title" size="45" value="<%=employeeVO.getTitle()%>" class="form-control" required> --%>
-<!-- 					</div> -->
-					
-<!-- 					<div class="form-group"> -->
-<!-- 						<label>雇用日期:</label> -->
-<%-- 						<input type="TEXT" name="hiredate" id="f_date1" value="<%=employeeVO.getHiredate()%>" class="form-control" required> --%>
-<!-- 					</div> -->
-					
-<!-- 					<div class="form-group"> -->
-<!-- 						<label>離職日期:</label> -->
-<%-- 						<input type="TEXT" name="quitdate" id="f_date2" value="<%=employeeVO.getQuitdate()%>" class="form-control" required> --%>
-<!-- 					</div> -->
-					
-<!-- 					<div class="form-group"> -->
-<!-- 						<label>在職狀態:</label> -->
-<!-- 							<input type="radio" name="status" value="0">已離職 -->
-<!-- 							<input type="radio" name="status" value="1" checked>在職中 -->
-<!-- 							<input type="radio" name="status" value="2">留職停薪 -->
-<!-- 					</div> -->
-					
-					
-									
-<!-- 				</div> -->
-<!-- 				<div class="modal-footer"> -->
-<!-- 					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel"> -->
-<%-- 					<input type="hidden" name="empno"  value="${employeeVO.empno}"> --%>
-<!-- 			     	<input type="hidden" name="action"	value="getOne_For_Update">	 -->
-<!-- 					<input type="submit" class="btn btn-info" value="Save"> -->
-<!-- 				</div> -->
-<!-- 			</form> -->
-<!-- 		</div> -->
-<!-- 	</div> -->
-<!-- </div> -->
+
 
 	<script src="js/jquery.min.js"></script>
   <script src="js/popper.js"></script>

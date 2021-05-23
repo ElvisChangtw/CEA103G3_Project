@@ -226,8 +226,8 @@ public class AuthorityServlet extends HttpServlet {
 					errorMsgs.add("功能編號只能是數字, 且數值必須小於999");
 				}
 				
-				String status = req.getParameter("status").trim();
-				if (status == null || status.trim().length() == 0) {
+				String auth_status = req.getParameter("auth_status").trim();
+				if (auth_status == null || auth_status.trim().length() == 0) {
 					errorMsgs.add("權限狀態請勿空白");
 				}
 				
@@ -235,7 +235,7 @@ public class AuthorityServlet extends HttpServlet {
 				AuthorityVO authorityVO = new AuthorityVO();
 				authorityVO.setEmpno(empno);
 				authorityVO.setFunction_no(function_no);
-				authorityVO.setStatus(status);
+				authorityVO.setAuth_status(auth_status);
 
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
@@ -247,7 +247,7 @@ public class AuthorityServlet extends HttpServlet {
 
 				/*************************** 2.開始修改資料 *****************************************/
 				AuthorityService authoritySvc = new AuthorityService();
-				authorityVO = authoritySvc.updateAuthority(empno, function_no, status);
+				authorityVO = authoritySvc.updateAuthority(empno, function_no, auth_status);
 
 				/*************************** 3.修改完成,準備轉交(Send the Success view) *************/
 				req.setAttribute("authorityVO", authorityVO); // 資料庫update成功後,正確的的authorityVO物件,存入req
@@ -291,15 +291,15 @@ public class AuthorityServlet extends HttpServlet {
 					errorMsgs.add("功能編號只能是數字, 且數值必須小於999");
 				}
 				
-				String status = req.getParameter("status").trim();
-				if (status == null || status.trim().length() == 0) {
+				String auth_status = req.getParameter("auth_status").trim();
+				if (auth_status == null || auth_status.trim().length() == 0) {
 					errorMsgs.add("權限狀態請勿空白");
 				}
 				
 				AuthorityVO authorityVO = new AuthorityVO();
 				authorityVO.setEmpno(empno);
 				authorityVO.setFunction_no(function_no);
-				authorityVO.setStatus(status);
+				authorityVO.setAuth_status(auth_status);
 
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
@@ -311,7 +311,7 @@ public class AuthorityServlet extends HttpServlet {
 
 				/*************************** 2.開始新增資料 ***************************************/
 				AuthorityService authoritySvc = new AuthorityService();
-				authorityVO = authoritySvc.addAuthority(empno, function_no, status);
+				authorityVO = authoritySvc.addAuthority(empno, function_no, auth_status);
 
 				/*************************** 3.新增完成,準備轉交(Send the Success view) ***********/
 				String url = "/back-end/authority/listAllAuthority.jsp";
