@@ -5,7 +5,6 @@
 <%@ page import="com.authority.model.*"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%-- 此頁練習採用 EL 的寫法取值 --%>
-
 <%
     EmployeeService employeeSvc = new EmployeeService();
     List<EmployeeVO> list = employeeSvc.getAll();
@@ -18,30 +17,139 @@
 
 <jsp:useBean id="authoritytSvc" scope="page" class="com.authority.model.AuthorityService" />
 
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-  	<title>Table 08</title>
-    <meta charset="Big5">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <head>
+    	<title>後台瀏覽所有電影</title>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <link href="<%=request.getContextPath()%>/back-home/css/styles.css" rel="stylesheet" />
+        <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
+    	
+    	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/styleForListAllEmp.css" />
+    	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    	<link rel="stylesheet" href="<%=request.getContextPath()%>/back-end/employee/css/style.css">
+     	
+     	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/back-home/css/back_frontpage.css" />
     
-    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/styleForListAllEmp.css" />
+    </head>
+    <body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <a class="navbar-brand" href="index.html">MOVIESHIT後台系統</a>
+        <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
+        <!-- Navbar Search-->
+        <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+            <div class="input-group">
+            </div>
+        </form>
+        <!-- Navbar-->
+        <ul class="navbar-nav ml-auto ml-md-0">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle1" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+            </li>
+            <a class="nav-link" href="index.html">
+               	 登出
+            </a>
+        </ul>
+    </nav>
     
-<!--     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round"> -->
-	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<!-- 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
-<!-- 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
-
-<!-- 	<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'> -->
-
-<!-- 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
-	
-	<link rel="stylesheet" href="<%=request.getContextPath()%>/back-end/employee/css/style.css">
- 
-	</head> 
-	<body>
-	
+    
+    
+    
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                <div class="sb-sidenav-menu">
+                    <div class="nav">
+                        <img src="<%=request.getContextPath()%>/back-home/img/logo2-1-5.png">
+                        <a class="nav-link collapsed" href="tables3.html">
+                            <div class="sb-nav-link-icon"><i class="fas fa-user-alt"></i></div>
+                           	 基本資料
+                        </a>
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapseLayouts1">
+                            <div class="sb-nav-link-icon"><i class="fas fa-user-cog"></i></div>
+                           	 員工管理系統
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseLayouts1" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/employee/listAllEmployee2.jsp">員工管理</a>
+                            </nav>
+                        </div>
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                            <div class="sb-nav-link-icon"><i class="fas fa-video"></i></div>
+                         	   影城基本資料系統
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="layout-static.html">場次管理</a>
+                                <a class="nav-link" href="<%=request.getContextPath()%>/back-home/table.jsp">電影資料管理</a>
+                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/report_comment/listAllReportComment.jsp">評論檢舉</a>
+                                <a class="nav-link" href="layout-sidenav-light.html"> 廳院管理</a>
+                                <a class="nav-link" href="layout-sidenav-light.html">座位管理</a>
+                                <a class="nav-link" href="layout-sidenav-light.html">票種管理</a>
+                                <a class="nav-link" href="layout-sidenav-light.html">餐點管理</a>
+                            </nav>
+                        </div>
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages2" aria-expanded="false" aria-controls="collapsePages2">
+                            <div class="sb-nav-link-icon"><i class="fas fa-user-clock"></i></div>
+                            	會員管理系統
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapsePages2" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/mem/listAllMem2.jsp">會員資料管理</a>
+                                <a class="nav-link" href="layout-sidenav-light.html">會員審核</a>
+                                <a class="nav-link" href="layout-sidenav-light.html"> 專業評論審核</a>
+                            </nav>
+                        </div>
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages3" aria-expanded="false" aria-controls="collapsePages3">
+                            <div class="sb-nav-link-icon"><i class="fas fa-ticket-alt"></i></div>
+                        	    售票管理
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapsePages3" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="layout-static.html">現場劃位</a>
+                                <a class="nav-link" href="layout-sidenav-light.html">查詢線上訂單</a>
+                            </nav>
+                        </div>
+           				 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages4" aria-expanded="false" aria-controls="collapsePages4">
+                            <div class="sb-nav-link-icon"><i class="fas fa-user-alt-slash"></i></div>
+                          	  檢舉管理
+                          	<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapsePages4" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/report_comment/listAllReportComment.jsp">評論檢舉</a>
+                                <a class="nav-link" href="layout-sidenav-light.html">XXX檢舉</a>
+                            </nav>
+                        </div>
+                        <a class="nav-link" href="tables1.html">
+                            <div class="sb-nav-link-icon"><i class="fas fa-bullhorn"></i></div>
+                           	 管理最新消息
+                        </a>
+                        <a class="nav-link" href="tables2.html">
+                            <div class="sb-nav-link-icon"><i class="fas fa-hands-helping"></i></div>
+                       	     回應客服小幫手
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+            
+            
+            
+            
+            
+<!--       ======這邊貼自己的檔案內容====== -->
+            <div id="layoutSidenav_content">
+                <main>
 	<%-- 錯誤表列 --%>
 	<c:if test="${not empty errorMsgs}">
 		<font style="color:red">請修正以下錯誤:</font>
@@ -252,17 +360,25 @@
 	</div>
 </div>
 
+                </main>
 
-
-  <script src="js/jquery.min.js"></script>
-  <script src="js/popper.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/main.js"></script>
-<!--   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
-<!-- 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
-
-	</body>
-	
+            </div>
+     
+        </div>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="<%=request.getContextPath()%>/back-home/js/scripts.js"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+        <script src="<%=request.getContextPath()%>/css/demo/datatables-demo.js"></script>
+    	
+<script src="js/jquery.min.js"></script>
+<script src="js/popper.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/main.js"></script>
+    </body>
+    
+    
 	<!-- =========================================以下為 datetimepicker 之相關設定========================================== -->
 
 <%
@@ -327,6 +443,6 @@
 	//maxDate:               '+1970-01-01'  // 去除今日(不含)之後
 	});
         
-</script>
+</script>    
+    
 </html>
-
