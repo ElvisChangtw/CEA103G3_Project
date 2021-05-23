@@ -2,9 +2,11 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="Big5"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="com.article.model.*"%>
+<%@ page import="com.mem.model.*"%>
 
 <%
 	ArticleVO articleVO = (ArticleVO) request.getAttribute("articleVO"); //EmpServlet.java (Concroller) 存入req的empVO物件 (包括幫忙取出的empVO, 也包括輸入資料錯誤時的empVO物件)
+	MemVO memVO = (MemVO) session.getAttribute("memVO");
 %>
 <%-- 	<%= articleVO==null %>--${articleVO.articleno} --%>
 <html>
@@ -144,6 +146,7 @@
 </table>
 <br>
 <input type="hidden" name="action" value="insert">
+<input type="hidden" name="memberno" value="${memVO.member_no}">
 <input type="submit" value="送出新增" class="btn btn-success"></FORM>
 </body>
 
