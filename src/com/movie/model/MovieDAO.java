@@ -34,33 +34,33 @@ public class MovieDAO implements MovieDAO_interface{
 	private static final String DELETE_MOVIE = 
 			"delete from MOVIE where MOVIE_NO = ?";	
 	private static final String GET_ONE_STMT = 
-			"select * from MOVIE where MOVIE_NO = ?";
+			"select MOVIE_NO, MOVIE_NAME, DIRECTOR, ACTOR, CATEGORY, LENGTH, STATUS, PREMIERE_DT, OFF_DT, TRAILOR, EMBED, GRADE, RATING, EXPECTATION from MOVIE where MOVIE_NO = ?";
 	private static final String GET_ALL_STMT = 
-			"select * from MOVIE order by PREMIERE_DT desc";
+			"select MOVIE_NO, MOVIE_NAME, DIRECTOR, ACTOR, CATEGORY, LENGTH, STATUS, PREMIERE_DT, OFF_DT, TRAILOR, EMBED, GRADE, RATING, EXPECTATION from MOVIE order by PREMIERE_DT desc";
 	private static final String GET_Comments_ByMovieno_STMT = 
-			"select * from COMMENT where MOVIE_NO = ? order by COMMENT_NO";
+			"select MOVIE_NO, MOVIE_NAME, DIRECTOR, ACTOR, CATEGORY, LENGTH, STATUS, PREMIERE_DT, OFF_DT, TRAILOR, EMBED, GRADE, RATING, EXPECTATION from COMMENT where MOVIE_NO = ? order by COMMENT_NO";
 	private static final String GET_TOP_TEN_STMT = 
-			"select * from MOVIE order by RATING desc limit 12";
+			"select MOVIE_NO, MOVIE_NAME, DIRECTOR, ACTOR, CATEGORY, LENGTH, STATUS, PREMIERE_DT, OFF_DT, TRAILOR, EMBED, GRADE, RATING, EXPECTATION from MOVIE order by RATING desc limit 12";
 	private static final String GET_TOP_FIVE_STMT = 
-			"select * from MOVIE order by RATING desc limit 5";
+			"select MOVIE_NO, MOVIE_NAME, DIRECTOR, ACTOR, CATEGORY, LENGTH, STATUS, PREMIERE_DT, OFF_DT, TRAILOR, EMBED, GRADE, RATING, EXPECTATION from MOVIE order by RATING desc limit 5";
 	private static final String GET_BEST_STMT = 
-			"select * from MOVIE order by RATING desc limit 1";
+			"select MOVIE_NO, MOVIE_NAME, DIRECTOR, ACTOR, CATEGORY, LENGTH, STATUS, PREMIERE_DT, OFF_DT, TRAILOR, EMBED, GRADE, RATING, EXPECTATION from MOVIE order by RATING desc limit 1";
 	private static final String GET_YEAR_MOVIE_STMT = 
-			"select * from MOVIE where YEAR(PREMIERE_DT) = ";
+			"select MOVIE_NO, MOVIE_NAME, DIRECTOR, ACTOR, CATEGORY, LENGTH, STATUS, PREMIERE_DT, OFF_DT, TRAILOR, EMBED, GRADE, RATING, EXPECTATION from MOVIE where YEAR(PREMIERE_DT) = ";
 	private static final String GET_LATEST_STMT = 
-			"select * from MOVIE order by PREMIERE_DT desc limit 6";
+			"select MOVIE_NO, MOVIE_NAME, DIRECTOR, ACTOR, CATEGORY, LENGTH, STATUS, PREMIERE_DT, OFF_DT, TRAILOR, EMBED, GRADE, RATING, EXPECTATION from MOVIE order by PREMIERE_DT desc limit 6";
 	private static final String GET_INTHEATERS_MOVIE_STMT = 
-			"select * from MOVIE where cast(now() as date) between PREMIERE_DT and OFF_DT order by PREMIERE_DT desc";
+			"select MOVIE_NO, MOVIE_NAME, DIRECTOR, ACTOR, CATEGORY, LENGTH, STATUS, PREMIERE_DT, OFF_DT, TRAILOR, EMBED, GRADE, RATING, EXPECTATION from MOVIE where cast(now() as date) between PREMIERE_DT and OFF_DT order by PREMIERE_DT desc";
 	private static final String GET_ONE_NEWEST_INTHEATERS_MOVIE_STMT = 
-			"select * from MOVIE where cast(now() as date) between PREMIERE_DT and OFF_DT order by PREMIERE_DT desc limit 1";
+			"select MOVIE_NO, MOVIE_NAME, DIRECTOR, ACTOR, CATEGORY, LENGTH, STATUS, PREMIERE_DT, OFF_DT, TRAILOR, EMBED, GRADE, RATING, EXPECTATION from MOVIE where cast(now() as date) between PREMIERE_DT and OFF_DT order by PREMIERE_DT desc limit 1";
 	private static final String GET_COMINGSOON_MOVIE_STMT = 
-			"select * from MOVIE where PREMIERE_DT between now() and date_sub(now(),interval -30 day)";	
+			"select MOVIE_NO, MOVIE_NAME, DIRECTOR, ACTOR, CATEGORY, LENGTH, STATUS, PREMIERE_DT, OFF_DT, TRAILOR, EMBED, GRADE, RATING, EXPECTATION from MOVIE where PREMIERE_DT between now() and date_sub(now(),interval -30 day)";	
 	private static final String GET_ONE_NEWEST_COMINGSOON_MOVIE_STMT = 
-			"select * from MOVIE where PREMIERE_DT between now() and date_sub(now(),interval -30 day) order by PREMIERE_DT desc limit 1";	
+			"select MOVIE_NO, MOVIE_NAME, DIRECTOR, ACTOR, CATEGORY, LENGTH, STATUS, PREMIERE_DT, OFF_DT, TRAILOR, EMBED, GRADE, RATING, EXPECTATION from MOVIE where PREMIERE_DT between now() and date_sub(now(),interval -30 day) order by PREMIERE_DT desc limit 1";	
 	private static final String GET_ALL_TOPRATING_INTHEATERS_MOVIE_STMT = 
-			"select * from MOVIE where cast(now() as date) between PREMIERE_DT and OFF_DT order by RATING desc";
+			"select MOVIE_NO, MOVIE_NAME, DIRECTOR, ACTOR, CATEGORY, LENGTH, STATUS, PREMIERE_DT, OFF_DT, TRAILOR, EMBED, GRADE, RATING, EXPECTATION from MOVIE where cast(now() as date) between PREMIERE_DT and OFF_DT order by RATING desc";
 	private static final String GET_ALL_TOPEXPECTATION_COMINGSOON_MOVIE_STMT = 
-			"select * from MOVIE where PREMIERE_DT between now() and date_sub(now(),interval -30 day) order by EXPECTATION desc";		
+			"select MOVIE_NO, MOVIE_NAME, DIRECTOR, ACTOR, CATEGORY, LENGTH, STATUS, PREMIERE_DT, OFF_DT, TRAILOR, EMBED, GRADE, RATING, EXPECTATION from MOVIE where PREMIERE_DT between now() and date_sub(now(),interval -30 day) order by EXPECTATION desc";		
 	
 	private static final String UPDATE_MOVIE_RATING_STMT = 
 			"update MOVIE set RATING=? where MOVIE_NO = ?";
@@ -100,8 +100,8 @@ public class MovieDAO implements MovieDAO_interface{
 			pstmt = con.prepareStatement(INSERT_STMT);
 
 			pstmt.setString(1, movieVO.getMoviename());
-			pstmt.setBytes(2, movieVO.getMoviepicture1());
-			pstmt.setBytes(3, movieVO.getMoviepicture2());
+//			pstmt.setBytes(2, movieVO.getMoviepicture1());
+//			pstmt.setBytes(3, movieVO.getMoviepicture2());
 			pstmt.setString(4, movieVO.getDirector());
 			pstmt.setString(5, movieVO.getActor());
 			pstmt.setString(6, movieVO.getCategory());
@@ -276,8 +276,8 @@ public class MovieDAO implements MovieDAO_interface{
 				movieVO = new MovieVO();
 				movieVO.setMovieno(rs.getInt("MOVIE_NO"));
 				movieVO.setMoviename(rs.getString("MOVIE_NAME"));
-				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
-				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
+//				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
+//				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
 				movieVO.setDirector(rs.getString("DIRECTOR"));
 				movieVO.setActor(rs.getString("ACTOR"));
 				movieVO.setCategory(rs.getString("CATEGORY"));
@@ -344,8 +344,8 @@ public class MovieDAO implements MovieDAO_interface{
 				movieVO = new MovieVO();
 				movieVO.setMovieno(rs.getInt("MOVIE_NO"));
 				movieVO.setMoviename(rs.getString("MOVIE_NAME"));
-				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
-				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
+//				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
+//				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
 				movieVO.setDirector(rs.getString("DIRECTOR"));
 				movieVO.setActor(rs.getString("ACTOR"));
 				movieVO.setCategory(rs.getString("CATEGORY"));
@@ -431,8 +431,8 @@ public class MovieDAO implements MovieDAO_interface{
 				movieVO = new MovieVO();
 				movieVO.setMovieno(rs.getInt("MOVIE_NO"));
 				movieVO.setMoviename(rs.getString("MOVIE_NAME"));
-				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
-				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
+//				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
+//				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
 				movieVO.setDirector(rs.getString("DIRECTOR"));
 				movieVO.setActor(rs.getString("ACTOR"));
 				movieVO.setCategory(rs.getString("CATEGORY"));
@@ -555,7 +555,7 @@ public class MovieDAO implements MovieDAO_interface{
 				movieVO = new MovieVO();
 				movieVO.setMovieno(rs.getInt("MOVIE_NO"));
 				movieVO.setMoviename(rs.getString("MOVIE_NAME"));
-				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
+//				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
 //				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
 				movieVO.setDirector(rs.getString("DIRECTOR"));
 				movieVO.setActor(rs.getString("ACTOR"));
@@ -622,7 +622,7 @@ public class MovieDAO implements MovieDAO_interface{
 				movieVO = new MovieVO();
 				movieVO.setMovieno(rs.getInt("MOVIE_NO"));
 				movieVO.setMoviename(rs.getString("MOVIE_NAME"));
-				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
+//				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
 //				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
 				movieVO.setDirector(rs.getString("DIRECTOR"));
 				movieVO.setActor(rs.getString("ACTOR"));
@@ -688,7 +688,7 @@ public class MovieDAO implements MovieDAO_interface{
 				bestMovie = new MovieVO();
 				bestMovie.setMovieno(rs.getInt("MOVIE_NO"));
 				bestMovie.setMoviename(rs.getString("MOVIE_NAME"));
-				bestMovie.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
+//				bestMovie.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
 //				bestMovie.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
 				bestMovie.setDirector(rs.getString("DIRECTOR"));
 				bestMovie.setActor(rs.getString("ACTOR"));
@@ -755,7 +755,7 @@ public class MovieDAO implements MovieDAO_interface{
 				movieVO = new MovieVO();
 				movieVO.setMovieno(rs.getInt("MOVIE_NO"));
 				movieVO.setMoviename(rs.getString("MOVIE_NAME"));
-				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
+//				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
 //				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
 				movieVO.setDirector(rs.getString("DIRECTOR"));
 				movieVO.setActor(rs.getString("ACTOR"));
@@ -822,7 +822,7 @@ public class MovieDAO implements MovieDAO_interface{
 				movieVO = new MovieVO();
 				movieVO.setMovieno(rs.getInt("MOVIE_NO"));
 				movieVO.setMoviename(rs.getString("MOVIE_NAME"));
-				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
+//				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
 //				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
 				movieVO.setDirector(rs.getString("DIRECTOR"));
 				movieVO.setActor(rs.getString("ACTOR"));
@@ -889,7 +889,7 @@ public class MovieDAO implements MovieDAO_interface{
 				movieVO = new MovieVO();
 				movieVO.setMovieno(rs.getInt("MOVIE_NO"));
 				movieVO.setMoviename(rs.getString("MOVIE_NAME"));
-				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
+//				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
 //				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
 				movieVO.setDirector(rs.getString("DIRECTOR"));
 				movieVO.setActor(rs.getString("ACTOR"));
@@ -955,7 +955,7 @@ public class MovieDAO implements MovieDAO_interface{
 				oneNewestInTheatersMovie = new MovieVO();
 				oneNewestInTheatersMovie.setMovieno(rs.getInt("MOVIE_NO"));
 				oneNewestInTheatersMovie.setMoviename(rs.getString("MOVIE_NAME"));
-				oneNewestInTheatersMovie.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
+//				oneNewestInTheatersMovie.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
 //				oneNewestInTheatersMovie.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
 				oneNewestInTheatersMovie.setDirector(rs.getString("DIRECTOR"));
 				oneNewestInTheatersMovie.setActor(rs.getString("ACTOR"));
@@ -1021,7 +1021,7 @@ public class MovieDAO implements MovieDAO_interface{
 				movieVO = new MovieVO();
 				movieVO.setMovieno(rs.getInt("MOVIE_NO"));
 				movieVO.setMoviename(rs.getString("MOVIE_NAME"));
-				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
+//				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
 //				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
 				movieVO.setDirector(rs.getString("DIRECTOR"));
 				movieVO.setActor(rs.getString("ACTOR"));
@@ -1087,7 +1087,7 @@ public class MovieDAO implements MovieDAO_interface{
 				oneNewestComingSoonMovie = new MovieVO();
 				oneNewestComingSoonMovie.setMovieno(rs.getInt("MOVIE_NO"));
 				oneNewestComingSoonMovie.setMoviename(rs.getString("MOVIE_NAME"));
-				oneNewestComingSoonMovie.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
+//				oneNewestComingSoonMovie.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
 //				oneNewestComingSoonMovie.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
 				oneNewestComingSoonMovie.setDirector(rs.getString("DIRECTOR"));
 				oneNewestComingSoonMovie.setActor(rs.getString("ACTOR"));
@@ -1153,7 +1153,7 @@ public class MovieDAO implements MovieDAO_interface{
 				movieVO = new MovieVO();
 				movieVO.setMovieno(rs.getInt("MOVIE_NO"));
 				movieVO.setMoviename(rs.getString("MOVIE_NAME"));
-				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
+//				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
 //				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
 				movieVO.setDirector(rs.getString("DIRECTOR"));
 				movieVO.setActor(rs.getString("ACTOR"));
@@ -1220,7 +1220,7 @@ public class MovieDAO implements MovieDAO_interface{
 				movieVO = new MovieVO();
 				movieVO.setMovieno(rs.getInt("MOVIE_NO"));
 				movieVO.setMoviename(rs.getString("MOVIE_NAME"));
-				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
+//				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
 //				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
 				movieVO.setDirector(rs.getString("DIRECTOR"));
 				movieVO.setActor(rs.getString("ACTOR"));
@@ -1476,8 +1476,8 @@ public class MovieDAO implements MovieDAO_interface{
 					movieVO = new MovieVO();
 					movieVO.setMovieno(rs.getInt("MOVIE_NO"));
 					movieVO.setMoviename(rs.getString("MOVIE_NAME"));
-					movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
-					movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
+//					movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
+//					movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
 					movieVO.setDirector(rs.getString("DIRECTOR"));
 					movieVO.setActor(rs.getString("ACTOR"));
 					movieVO.setCategory(rs.getString("CATEGORY"));
