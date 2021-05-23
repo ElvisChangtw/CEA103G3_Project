@@ -74,7 +74,7 @@
                         <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="layout-static.html">場次管理</a>
-                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/report_comment/table.jsp">電影資料管理</a>
+                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/movie/backEndlistAllMovie.jsp">電影資料管理</a>
                                 <a class="nav-link" href="layout-sidenav-light.html"> 廳院管理</a>
                                 <a class="nav-link" href="layout-sidenav-light.html">座位管理</a>
                                 <a class="nav-link" href="layout-sidenav-light.html">票種管理</a>

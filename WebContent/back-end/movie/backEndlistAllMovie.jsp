@@ -19,7 +19,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <link href="<%=request.getContextPath()%>/後台畫面/css/styles.css" rel="stylesheet" />
+        <link href="<%=request.getContextPath()%>/back-home/css/styles.css" rel="stylesheet" />
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
     </head>
@@ -51,14 +51,14 @@
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                        <img src="<%=request.getContextPath()%>/後台畫面/img/logo2-1-5.png">
+                   	 <img src="<%=request.getContextPath()%>/back-home/img/logo2-1-5.png">                       
                         <a class="nav-link collapsed" href="tables3.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-user-alt"></i></div>
-                            基本資料
+                      	      基本資料
                         </a>
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapseLayouts1">
                             <div class="sb-nav-link-icon"><i class="fas fa-user-cog"></i></div>
-                            員工管理系統
+                       	     員工管理系統
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapseLayouts1" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
@@ -69,7 +69,7 @@
                         </div>
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                             <div class="sb-nav-link-icon"><i class="fas fa-video"></i></div>
-                            影城基本資料系統
+                           	 影城基本資料系統
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
@@ -84,7 +84,7 @@
                         </div>
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages2" aria-expanded="false" aria-controls="collapsePages2">
                             <div class="sb-nav-link-icon"><i class="fas fa-user-clock"></i></div>
-                            會員管理系統
+                       	     會員管理系統
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapsePages2" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
@@ -96,7 +96,7 @@
                         </div>
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages3" aria-expanded="false" aria-controls="collapsePages3">
                             <div class="sb-nav-link-icon"><i class="fas fa-ticket-alt"></i></div>
-                            售票管理
+                            	售票管理
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapsePages3" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
@@ -107,15 +107,15 @@
                         </div>
                         <a class="nav-link collapsed" href="tables3.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-user-alt-slash"></i></div>
-                            檢舉管理
+                          	  檢舉管理
                         </a>
                         <a class="nav-link" href="tables1.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-bullhorn"></i></div>
-                            管理最新消息
+                           	 管理最新消息
                         </a>
                         <a class="nav-link" href="tables2.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-hands-helping"></i></div>
-                            回應客服小幫手
+                         	   回應客服小幫手
                         </a>
                     </div>
                 </div>
@@ -352,7 +352,7 @@
         </div>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="<%=request.getContextPath()%>/後台畫面/js/scripts.js"></script>
+        <script src="<%=request.getContextPath()%>/back-home/js/scripts.js"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
         <script src="<%=request.getContextPath()%>/css/demo/datatables-demo.js"></script>
