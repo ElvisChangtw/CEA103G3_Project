@@ -51,14 +51,14 @@
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                   	 <img src="<%=request.getContextPath()%>/back-home/img/logo2-1-5.png">                       
+                        <img src="<%=request.getContextPath()%>/back-home/img/logo2-1-5.png">
                         <a class="nav-link collapsed" href="tables3.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-user-alt"></i></div>
-                      	      基本資料
+                            基本資料
                         </a>
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapseLayouts1">
                             <div class="sb-nav-link-icon"><i class="fas fa-user-cog"></i></div>
-                       	     員工管理系統
+                            員工管理系統
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapseLayouts1" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
@@ -69,7 +69,7 @@
                         </div>
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                             <div class="sb-nav-link-icon"><i class="fas fa-video"></i></div>
-                           	 影城基本資料系統
+                            影城基本資料系統
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
@@ -84,7 +84,7 @@
                         </div>
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages2" aria-expanded="false" aria-controls="collapsePages2">
                             <div class="sb-nav-link-icon"><i class="fas fa-user-clock"></i></div>
-                       	     會員管理系統
+                            會員管理系統
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapsePages2" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
@@ -96,7 +96,7 @@
                         </div>
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages3" aria-expanded="false" aria-controls="collapsePages3">
                             <div class="sb-nav-link-icon"><i class="fas fa-ticket-alt"></i></div>
-                            	售票管理
+                            售票管理
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapsePages3" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
@@ -107,15 +107,15 @@
                         </div>
                         <a class="nav-link collapsed" href="tables3.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-user-alt-slash"></i></div>
-                          	  檢舉管理
+                            檢舉管理
                         </a>
                         <a class="nav-link" href="tables1.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-bullhorn"></i></div>
-                           	 管理最新消息
+                            管理最新消息
                         </a>
                         <a class="nav-link" href="tables2.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-hands-helping"></i></div>
-                         	   回應客服小幫手
+                            回應客服小幫手
                         </a>
                     </div>
                 </div>
@@ -240,7 +240,7 @@
 											
 <%-- 											<td width="50px;">${movieVO.director}</td> --%>
 <%-- 											<td width="50px;">${movieVO.actor}</td> --%>
-											<td width="60px;">${movieVO.category}</td>
+											<td width="90px;">${movieVO.category}</td>
 											
 											<c:choose>
 												<c:when test="${movieVO.length >0}">
@@ -253,43 +253,43 @@
 											
 											<c:choose>
 												<c:when test="${movieVO.status.equals('0')}">
-													<td width="70px;">上映中</td>
+													<td width="90px;">上映中</td>
 												</c:when>
 												<c:when test="${movieVO.status.equals('1')}">
-													<td width="70px;">未上映</td>
+													<td width="90px;">未上映</td>
 												</c:when>
 												<c:when test="${movieVO.status.equals('2')}">
-													<td width="70px;">已下檔</td>
+													<td width="90px;">已下檔</td>
 												</c:when>
 												<c:otherwise>
-													<td width="70px;">無效狀態</td>
+													<td width="90px;">無效狀態</td>
 												</c:otherwise>
 											</c:choose>
 											
-											<td width="105px;">
+											<td width="125px;">
 												<fmt:formatDate value="${movieVO.premiredate}" pattern="yyyy-MM-dd" /><br>
 												<fmt:formatDate value="${movieVO.offdate}" pattern="yyyy-MM-dd" />
 											</td>
 											
 											<c:choose>
 												<c:when test="${movieVO.grade.equals('0')}">
-													<td width="70px;">普遍級</td>
+													<td width="90px;">普遍級</td>
 												</c:when>
 												<c:when test="${movieVO.grade.equals('1')}">
-													<td width="70px;">保護級</td>
+													<td width="90px;">保護級</td>
 												</c:when>
 												<c:when test="${movieVO.grade.equals('2')}">
-													<td width="70px;">輔導級</td>
+													<td width="90px;">輔導級</td>
 												</c:when>
 												<c:when test="${movieVO.grade.equals('3')}">
-													<td width="70px;">限制級</td>
+													<td width="90px;">限制級</td>
 												</c:when>
 												<c:otherwise>
-													<td width="70px;">尚未分級</td>
+													<td width="90px;">尚未分級</td>
 												</c:otherwise>
 											</c:choose>
 												
-											<td width="70px !important;;"><a href="${movieVO.trailor}" class="btn btn-outline-danger"
+											<td width="90px;"><a href="${movieVO.trailor}" class="btn btn-outline-danger"
 											style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#F5CA5E; font-weight:bold; color:white;">觀賞</a></td>
 		<!-- 									<td> -->
 		<!-- 										<div id="coverImg" onclick="onPlayerReady()">  -->
