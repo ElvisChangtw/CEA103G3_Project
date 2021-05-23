@@ -8,6 +8,7 @@
     MemService memSvc = new MemService();
     List<MemVO> list = memSvc.getAll();
     pageContext.setAttribute("list",list);
+	MemVO memVO = (MemVO)session.getAttribute("memVO");
 %>
 
 
@@ -16,7 +17,9 @@
 
 
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/front/notification.css" />
-	
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css">
 	
 <title>所有會員資料 - listAllMem.jsp</title>
 
@@ -63,52 +66,32 @@
 </style>
 
 </head>
-<body bgcolor='white' onload="connect();" onunload="disconnection();">
+<body bgcolor='white'>
 <%@ include file="page1.file" %> 
 
-<h4>此頁練習採用 EL 的寫法取值:</h4>
-<table id="table-1">
-	<tr><td>
-		 <h3>所有員工資料 - listAllMem.jsp</h3>
-		 <h4><a href="<%=request.getContextPath()%>/back-end/mem/select_page.jsp"><img src="images/back1.gif" width="100" height="32" border="0">回首頁</a></h4>
-	</td></tr>
-</table>
 
-<%-- 錯誤表列 --%>
-<c:if test="${not empty errorMsgs}">
-	<font style="color:red">請修正以下錯誤:</font>
-	<ul>
-		<c:forEach var="message" items="${errorMsgs}">
-			<li style="color:red">${message}</li>
-		</c:forEach>
-	</ul>
-</c:if>
-
-<table>
+<table class="table table-secondary table-hover" data-toggle="table">
+<thead>
 	<tr>
-		<th>會員編號<button>XX</button></th>
-		<th>會員姓名</th>
-		<th>會員信箱</th>
-		<th>會員密碼</th>
-		<th>會員生日</th>
-		<th>會員照片</th>
-		<th>會員電話</th>
-		<th>會員地址</th>
-		<th>會員狀態</th>
-		<th>會員積分</th>
-		<th>會員身分</th>
-		<th>會員註冊日</th>
-		
-		
+		<th data-field="member_no" data-sortable="true">會員編號</th>
+		<th data-field="member_name" data-sortable="true">會員姓名</th>
+		<th data-field="member_email" data-sortable="false">會員信箱</th>
+		<th data-field="member_bd" data-sortable="true">會員生日</th>
+		<th data-field="member_pic" data-sortable="false">會員照片</th>
+		<th data-field="member_phone" data-sortable="false">會員電話</th>
+		<th data-field="member_address" data-sortable="false">會員地址</th>
+		<th data-field="member_status" data-sortable="true">會員狀態</th>
+		<th data-field="member_level" data-sortable="true">會員身分</th>
+		<th data-field="member_rgDate" data-sortable="true">會員註冊日</th>
+		<th data-field="member_edit" data-sortable="false"></th>
 	</tr>
-	
-	<c:forEach var="memVO" items="${list}">
-		
+</thead>	
+<tbody>
+	<c:forEach var="memVO" items="${list}" begin="<%=pageIndex%>" end="<%=pageIndex+rowsPerPage-1%>">
 		<tr>
 			<td>${memVO.member_no}</td>
 			<td>${memVO.mb_name}</td>
 			<td>${memVO.mb_email}</td>
-			<td>${memVO.mb_pwd}</td>
 			<td>${memVO.mb_bd}</td>
 			<td><img src="${pageContext.request.contextPath}/mem/mem.do?action=view_memPic&member_no=${memVO.member_no}"></td>
 			<td>${memVO.mb_phone}</td>
@@ -131,73 +114,29 @@
 				<td>無效狀態</td>
 				</c:otherwise>
 			</c:choose>
-			<td>${memVO.mb_point}</td>
 			<td>${(memVO.mb_level=="1")? "一般會員":"專職影評"}</td>
 			<td>${memVO.crt_dt}</td>
 			
 			<td>
 			  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/mem/mem.do" style="margin-bottom: 0px;">
-			     <input type="submit" value="修改">
+			     <button type="submit" class="btn-primary">修改</button>
 			     <input type="hidden" name="member_no"  value="${memVO.member_no}">
 			     <input type="hidden" name="action"	value="getOne_For_Update"></FORM>
 			</td>
-			<td>
-			  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/mem/mem.do" style="margin-bottom: 0px;">
-			     <input type="submit" value="刪除">
-			     <input type="hidden" name="member_no"  value="${memVO.member_no}">
-			     <input type="hidden" name="action" value="delete"></FORM>
-			</td>
 		</tr>
-
 	</c:forEach>
-	
-	<button type="button" class="addFriend" value="addFriend">加好友 <input type="hidden" class="friendNO"  value="4"></button>
-	<button type="button" class="addFriend" value="addFriend">加好友 <input type="hidden" class="friendNO"  value="1"></button>
-	<button type="button" class="addFriend" value="addFriend">加好友 <input type="hidden" class="friendNO"  value="3"></button>
-    <br>
-	
-	<button type="button" class="addGroup" value="addGroup">加入揪團<input type="hidden" class="groupNO"  value="4"></button>
-	<button type="button" class="addGroup" value="addGroup">加入揪團<input type="hidden" class="groupNO"  value="5"></button>
-	<button type="button" class="addGroup" value="addGroup">加入揪團<input type="hidden" class="groupNO"  value="1"></button>
-	<br>
-	
-	<button type="button" class="buyTicket" value="buyTicket">確認購票<input type="hidden" class="movieNO"  value="4"></button>
-	<button type="button" class="buyTicket" value="buyTicket">確認購票<input type="hidden" class="movieNO"  value="5"></button>
-	<button type="button" class="buyTicket" value="buyTicket">確認購票<input type="hidden" class="movieNO"  value="6"></button>
-	<br>
-	
-	<input type="text" id="groupName">
-	<button type="button" class="createGroup" value="createGroup">建立揪團</button>
-	<br>
-	
-	<button type="button" class="addfriend_check_btn" value=1>確定 <input type="hidden" class="friendNO"  value="4"></button> &emsp;<button type="button" class="addfriend_check_btn" value=0>拒絕</button>
-	<button type="button" class="addfriend_check_btn" value=1>確定 <input type="hidden" class="friendNO"  value="1"></button> &emsp;<button type="button" class="addfriend_check_btn" value=0>拒絕</button>
-	<button type="button" class="addfriend_check_btn" value=1>確定 <input type="hidden" class="friendNO"  value="3"></button> &emsp;<button type="button" class="addfriend_check_btn" value=0>拒絕</button>
-	<br>
-	
-	<button type="button" class="goGroup" value="goGroup">出團<input type="hidden" class="goGroupName"  value="4"></button>
-	<button type="button" class="goGroup" value="goGroup">出團<input type="hidden" class="goGroupName"  value="5"></button>
-	<button type="button" class="goGroup" value="goGroup">出團<input type="hidden" class="goGroupName"  value="1"></button>
-	<br>
-	
-	<button type="button" class="kickoffGroup" value="kickoffGroup">修改出團條件<input type="hidden" class="kickGroupName"  value="4"></button>
-	<button type="button" class="kickoffGroup" value="kickoffGroup">修改出團條件<input type="hidden" class="kickGroupName"  value="5"></button>
-	<button type="button" class="kickoffGroup" value="kickoffGroup">修改出團條件<input type="hidden" class="kickGroupName"  value="1"></button>
-	<br>
-	
-	<button type="button" class="reminder" value="reminder">提醒<input type="hidden" class="memberNO"  value="4"></button>
-	<button type="button" class="reminder" value="reminder">提醒<input type="hidden" class="memberNO"  value="3"></button>
-    <br>
-	
-	我是${memVO.member_no}
-	
-	
+</tbody>
 </table>
- <div class="alert-container">
-  </div>
 <%@ include file="page2.file" %> 
-</body>
+ <div class="alert-container">
+ </div>
 <script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.js"></script>
+
+</body>
 
 
 <script>

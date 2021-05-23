@@ -10,26 +10,26 @@ public class AuthorityService {
 		dao = new AuthorityDAO();
 	}
 
-	public AuthorityVO addAuthority(Integer empno, Integer function_no, String status) {
+	public AuthorityVO addAuthority(Integer empno, Integer function_no, String auth_status) {
 
 		AuthorityVO authorityVO = new AuthorityVO();
 
 		authorityVO.setEmpno(empno);
 		authorityVO.setFunction_no(function_no);
-		authorityVO.setStatus(status);
+		authorityVO.setAuth_status(auth_status);
 				
 		dao.insert(authorityVO);
 
 		return authorityVO;
 	}
 
-	public AuthorityVO updateAuthority(Integer empno, Integer function_no, String status) {
+	public AuthorityVO updateAuthority(Integer empno, Integer function_no, String auth_status) {
 
 		AuthorityVO authorityVO = new AuthorityVO();
 
 		authorityVO.setEmpno(empno);
 		authorityVO.setFunction_no(function_no);
-		authorityVO.setStatus(status);
+		authorityVO.setAuth_status(auth_status);
 		
 		dao.update(authorityVO);
 

@@ -149,13 +149,13 @@ License URL: http://creativecommons.org/licenses/by/3.0/
             background: none !important;
         }
         .navbar-nav>li {
-            margin: 0 0.3em;
+            margin: 0 0.2em;
         }
         ul.nav.navbar-nav.navbar-right {
             margin-left: 10%;
         }
         .navbar-default .navbar-nav>li>a {
-            font-size: 1.3em;
+            font-size: 1.1em;
             padding: 0.7em 0.7em;
             position: relative;
             font-weight: 400;
@@ -1977,7 +1977,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
             width: 35%;
         }
         .footer-grid1-right {
-            float: right;
+            float: left;
             width: 60%;
         }
         .footer-grid1-right a {
@@ -2536,9 +2536,10 @@ License URL: http://creativecommons.org/licenses/by/3.0/
         }
         @media (max-width:1366px) {
             .cd-header-buttons {
+/*             	display:none; */
                 position: absolute;
                 display: inline-block;
-                top: -60px;
+                top: -66px;
                 right: 0;
             }
         }
@@ -2611,7 +2612,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                 margin-bottom: 1em;
             }
             .footer-grid ul li a {
-                font-size: 13px;
+                font-size: 18px;
             }
             .footer-grid1-right a {
                 font-size: 0.93em;
@@ -2794,6 +2795,10 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
         }
         @media (max-width:991px) {
+            .cd-header-buttons {
+            	display:none;
+            }
+        
             ul.dropdown-menu.multi-column {
                 width: 336px;
                 left: 0;
@@ -3095,10 +3100,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                 text-align: left;
             }
             .cd-header-buttons {
-                position: absolute;
-                display: inline-block;
-                top: -66px;
-                right: 0;
+            	display:none;
+/*                 position: absolute; */
+/*                 display: inline-block; */
+/*                 top: -66px; */
+/*                 right: 0; */
             }
         }
         @media (max-width:736px) {

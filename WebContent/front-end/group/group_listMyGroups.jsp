@@ -324,15 +324,20 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!--     </div> -->
     
     <div class="list-btn">
-<%--         <button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/front-end/group/group_front_page.jsp'">進行中揪團</button>    --%>
-<%--         <button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=0'">我的揪團(尚未出團)</button> --%>
-<%--         <button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=1'">我的歷史揪團(準備出團)</button> --%>
-<%--         <button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=2'">我的歷史揪團(已結束)</button>        --%>
-		<ul class="nav nav-tabs">
-		  <li role="presentation"><a href="<%=request.getContextPath()%>/front-end/group/group_front_page.jsp">所有揪團</a></li>
-		  <li id="tabs0" role="presentation"><a href="<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=0">我的揪團(尚未出團)</a></li>
-		  <li id="tabs1" role="presentation"><a href="<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=1">我的揪團(已成行)</a></li>
-		  <li id="tabs2" role="presentation"><a href="<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=2">我的歷史揪團</a></li>
+    	<ul class="nav nav-tabs">
+		  <li role="presentation" class="active"><a href="<%=request.getContextPath()%>/front-end/group/group_front_page.jsp">所有揪團</a></li>
+		  <c:choose>
+			  <c:when test="${memVO.member_no != 999}">
+				  <li role="presentation"><a href="<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=0">我的揪團(尚未出團)</a></li>
+				  <li role="presentation"><a href="<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=1">我的揪團(已成行)</a></li>
+				  <li role="presentation"><a href="<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=2">我的歷史揪團</a></li>
+			  </c:when>
+			  <c:otherwise>
+			  	  <li><a href="#" onclick="loginFirst()">我的揪團(尚未出團)</a></li>
+				  <li><a href="#" onclick="loginFirst()">我的揪團(已成行)</a></li>
+				  <li><a href="#" onclick="loginFirst()">我的歷史揪團</a></li>
+			  </c:otherwise>
+		  </c:choose>
 		</ul>
     </div>
     <!-- //breadcrumb -->
@@ -782,7 +787,10 @@ fit: true
         //              }
         //              return [true, ""];
         //      }});
-        
+          function loginFirst(){
+        	alert("請先登入");
+        	window.location.href = "<%=request.getContextPath()%>/front-end/mem/MemLogin.jsp";
+        }
         
 </script>
 

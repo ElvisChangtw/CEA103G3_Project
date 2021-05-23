@@ -1,6 +1,9 @@
 package com.employee.model;
 
 import java.util.List;
+import java.util.Set;
+
+import com.authority.model.AuthorityVO;
 
 public class EmployeeService {
 	
@@ -67,5 +70,9 @@ public class EmployeeService {
 
 	public void updateRandomPws(String email, String randomPwd) {
 		dao.updateRandomPws(email, randomPwd);
+	}
+
+	public Set<AuthorityVO> getAuthsByEmpno(Integer empno) {
+		return dao.getAuthsByEmpno(empno);
 	}
 } 

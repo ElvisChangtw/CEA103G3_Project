@@ -6,7 +6,7 @@
 /* 覆蓋MAIN CSS */
 body {
     font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-    background-image: url("../../img/background.png");
+/*     background-image: url("../../img/background.png"); */
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;

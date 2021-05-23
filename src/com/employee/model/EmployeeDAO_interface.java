@@ -1,7 +1,9 @@
 package com.employee.model;
 
 import java.util.List;
+import java.util.Set;
 
+import com.authority.model.AuthorityVO;
 import com.employee.model.EmployeeVO;
 
 public interface EmployeeDAO_interface {
@@ -12,4 +14,5 @@ public interface EmployeeDAO_interface {
     public List<EmployeeVO> getAll();
 	public EmployeeVO login_check(String email, String emppwd);
 	public void updateRandomPws(String email, String randomPwd);
+	public Set<AuthorityVO> getAuthsByEmpno(Integer empno);
 }
