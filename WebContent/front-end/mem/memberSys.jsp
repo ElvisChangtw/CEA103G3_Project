@@ -213,6 +213,10 @@ text-align:center;
   margin-left:-5px !important;
 
 }
+.alertTxt .alertTime{
+	font-size:10px !important;
+	color:gray;
+}
 </style>
 </head>
 <body onload="connect();starbling();" onunload="disconnection();">
@@ -1612,6 +1616,7 @@ $(".hover_rating").hover(function(){
 	var self = '${memVO.member_no}';
 	var webSocket;
 	var type;
+	var activeDismissGroupNO;
 
 
 	$(".addFriend").click(function(){
@@ -1643,10 +1648,22 @@ $(".hover_rating").hover(function(){
 		kickGroupName = $(this).find("input.kickGroupName").val();
 		sendWebSocket($(this));
 	})
+	$(".activeDissmissGroup").click(function(){
+		dismissGroupNO = $(this).find("input.dismissGroupNO").val();
+		sendWebSocket($(this));
+	})
+	$(".Group").click(function(){
+		kickGroupName = $(this).find("input.kickGroupName").val();
+		sendWebSocket($(this));
+	})
 	$(".reminder").click(function(){
 		memberNO = $(this).find("input.memberNO").val();
 		sendWebSocket($(this));
 
+	})
+	$(".activeDismissGroup").click(function(){
+		activeDismissGroupNO = $(this).find("input.activeDismissGroupNO").val();
+		sendWebSocket($(this));
 	})
 	
 	
@@ -1654,7 +1671,7 @@ $(".hover_rating").hover(function(){
 		let timespan = new Date();
 		let timeStr = timespan.getFullYear() + "-" + (timespan.getMonth()+1).toString().padStart(2, "0") + "-" 
 					+ timespan.getDate() + " " + timespan.getHours().toString().padStart(2, "0") + ":" + timespan.getMinutes().toString().padStart(2, "0");
-		if(item.val()=="addFriend"){
+		if(item.hasClass("addFriend")){
 			type = item.val();
 			var jsonObj = {
 				"type" : type,
@@ -1664,7 +1681,7 @@ $(".hover_rating").hover(function(){
 				"time":timeStr
 			};
 		}
-		if(item.val()=="addGroup"){
+		if(item.hasClass("addGroup")){
 			type = item.val();
 			var jsonObj = {
 				"type" : type,
@@ -1674,7 +1691,7 @@ $(".hover_rating").hover(function(){
 				"time":timeStr
 			};
 		}
-		if(item.val()=="buyTicket"){
+		if(item.hasClass("buyTicket")){
 			type = item.val();
 			var jsonObj = {
 				"type" : type,
@@ -1693,7 +1710,7 @@ $(".hover_rating").hover(function(){
 				"time":timeStr
 			};
 		}
-		if(item.val()=="createGroup"){
+		if(item.hasClass("createGroup")){
 			type = item.val();
 			var jsonObj = {
 				"type" : type,
@@ -1703,7 +1720,7 @@ $(".hover_rating").hover(function(){
 				"time":timeStr
 			};
 		}
-		if(item.val()=="goGroup"){
+		if(item.hasClass("goGroup")){
 			type = item.val();
 			var jsonObj = {
 				"type" : type,
@@ -1713,7 +1730,7 @@ $(".hover_rating").hover(function(){
 				"time":timeStr
 			};
 		}
-		if(item.val()=="kickoffGroup"){
+		if(item.hasClass("kickoffGroup")){
 			type = item.val();
 			var jsonObj = {
 				"type" : type,
@@ -1723,7 +1740,7 @@ $(".hover_rating").hover(function(){
 				"time":timeStr
 			};
 		}
-		if(item.val()=="reminder"){
+		if(item.hasClass("reminder")){
 			type = item.val();
 			var jsonObj = {
 				"type" : type,
@@ -1733,6 +1750,17 @@ $(".hover_rating").hover(function(){
 				"time":timeStr
 			};
 		}
+		if(item.hasClass("activeDismissGroup")){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : activeDismissGroupNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		
 
 		webSocket.send(JSON.stringify(jsonObj));
 	}
@@ -1790,13 +1818,13 @@ $(".hover_rating").hover(function(){
 	  if (type==="addFriend"||type==="response"){
 		  img.src="<%=request.getContextPath()%>/images/notify_icons/friend.png"
 	  }
-	  if (type==="addGroup"||type==="createGroup"||type==="dismissGroup"||type==="goGroup"||type==="kickoffGroup"||type==="kickUnpaid"){
+	  if (type==="addGroup"||type==="createGroup"||type==="goGroup"||type==="activeDismissGroup"){
 			img.src="<%=request.getContextPath()%>/images/notify_icons/group.png"
 	  }
 	  if (type==="buyTicket"){
 			img.src="<%=request.getContextPath()%>/images/notify_icons/ticket.png"
 	  }
-	  if (type==="reminder"){
+	  if (type==="reminder"||type==="dismissGroup"||type==="kickoffGroup"||type==="kickUnpaid"){
 			img.src="<%=request.getContextPath()%>/images/notify_icons/warning.png"
 	  }
 	  
@@ -1805,6 +1833,7 @@ $(".hover_rating").hover(function(){
 		  txt.innerText = text;
 		  txt.classList.add("alertTxt");
 		  time_str.innerText = time;
+		  time_str.classList.add("alertTime");
 		  txt.append(time_str);
 		  newAlert.prepend(imgdiv);
 		  newAlert.append(txt)

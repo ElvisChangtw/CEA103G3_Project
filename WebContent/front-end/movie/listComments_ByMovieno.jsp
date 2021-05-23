@@ -24,14 +24,23 @@
 	List<CommentVO> list = commentSvc.getOneMovieComment(movieVO.getMovieno());
 	pageContext.setAttribute("list", list);
 	
+// MemVO memVO = (MemVO) session.getAttribute("memVO");
+// if (memVO == null){
+// 	memVO = new MemVO();
+// 	memVO.setMember_no(999);
+// 	pageContext.setAttribute("needLogin", memVO);
+// }else{
+// 	pageContext.setAttribute("memVO", memVO);
+// }
+
 MemVO memVO = (MemVO) session.getAttribute("memVO");
 if (memVO == null){
 	memVO = new MemVO();
 	memVO.setMember_no(999);
 	pageContext.setAttribute("needLogin", memVO);
-}else{
-	pageContext.setAttribute("memVO", memVO);
 }
+	pageContext.setAttribute("memVO", memVO);
+
 
 	
 %>

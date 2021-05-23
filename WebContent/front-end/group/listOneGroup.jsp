@@ -6,23 +6,12 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page import="com.mappingtool.*"%>
 <%@ page import="com.mappingtool.StatusMapping"%>
-<%@ page import="com.mem.model.*"%>
 
 
 <%-- 此頁暫練習採用 Script 的寫法取值 --%>
 
 <%
 	GroupVO groupVO = (GroupVO) request.getAttribute("groupVO");
-	
-	MemVO memVO = (MemVO) session.getAttribute("memVO");
-	if(memVO == null){
-		memVO = new MemVO();
-		memVO.setMember_no(999);
-}
-
-
-pageContext.setAttribute("memVO", memVO);
-
 %>
 <%-- <jsp:useBean id="memVO" scope="session" type="com.mem.model.MemVO" /> --%>
 <jsp:useBean id="memSvc" scope="page" class="com.mem.model.MemService" />
@@ -103,8 +92,78 @@ th, td {
 }
 </style>
 
+
+
+
+<style>
+  /* 通知用 */
+  @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+.fadeOut {
+  opacity: 0 !important;
+}
+
+#create {
+  border: none !important;
+  padding: 8px !important;
+  font-size:15px !important;
+  color: #FFF !important;
+  background-color: firebrick !important;
+  border-radius: 8px !important;
+}
+
+.alert-container{
+  position: fixed !important;
+  right: 10px !important;
+  bottom: 10px !important;
+}
+
+.alert {
+  position: relative !important;
+  background-color: white !important;
+  border: 5px solid lightblue !important;
+  height: 130px !important;
+  width: 290px !important;
+  border-radius: 15px !important;
+  margin-bottom: 15px !important;
+  color: #40bde6 !important;
+  padding: 20px 15px 0 15px !important;
+  transition: opacity 2s !important;
+}
+
+.alert span {
+  font-size: 1.3rem !important;
+  position: absolute !important;
+  top: 3px !important;
+  right: 12px !important;
+  cursor: pointer !important;
+
+}
+.alertTxt{
+  font-size: 17px !important;
+  position: absolute !important;
+  top: 0px !important;
+  right: 12px !important;
+  cursor: pointer !important;
+  margin-top:23px !important;
+  width:170px !important;
+
+}
+.alertImg{
+  width:80px !important;
+  margin-left:-5px !important;
+
+}
+
+.alertTxt .alertTime{
+	font-size:10px !important;
+	color:gray;
+}
+</style>
+
+
 </head>
-<body>
+<body onload="connect();" onunload="disconnection();">
 	<div id="display" class="container-fluid">
 <!-- 			<div class="row"> -->
 <!-- 			<table id="table-2"> -->
@@ -207,27 +266,28 @@ th, td {
 		    <div class="col-md lead">
 				<a id="backBtn" href="<%=request.getContextPath()%>/front-end/group/group_front_page.jsp" 
 				style="margin-bottom: 0px;" class="btn btn-lg">回首頁</a>
-				<button id="joinBtn" class="btn btn-lg btn-primary" ${(groupVO.member_cnt < groupVO.required_cnt) ?  '' : 'disabled'}>
-					${(groupVO.member_cnt < groupVO.required_cnt) ?  '現在加入' : '人數已滿'}
-					</button> 
+				<c:choose>
+					<c:when test="${memVO == null}">
+						<button id="joinBtn" onclick="loginFirst()"  class="btn btn-lg btn-primary">
+							現在加入
+						</button> 
+					</c:when>
+					<c:otherwise>
+						<button id="joinBtn" class="btn btn-lg btn-primary" ${(groupVO.member_cnt < groupVO.required_cnt) ?  '' : 'disabled'}>
+							${(groupVO.member_cnt < groupVO.required_cnt) ?  '現在加入' : '人數已滿'}
+						</button> 
+					</c:otherwise>
+				</c:choose>
 				<button id="leaveBtn" class="btn btn-lg btn-danger" style="display:none">退出揪團</button> 
 				<a id="modifyBtn" href="<%=request.getContextPath()%>/group/group.do?group_no=${groupVO.group_no}&action=getOne_For_Update" 
 				style="margin-bottom: 0px;" class="btn btn-lg btn-success">修改揪團</a>
-				<c:choose>
-					<c:when test="${memVO.member_no!=999}">
-						<a id="reportBtn" href="<%=request.getContextPath()%>/front-end/report_group/addReport_Group.jsp?group_no=${groupVO.group_no}" 
-						style="margin-bottom: 0px;" class="btn btn-lg btn-warning">檢舉揪團</a>
-					</c:when>
-					<c:otherwise>
-						<a id="reportBtn" href="#" onclick="loginFirst()"
-						style="margin-bottom: 0px;" class="btn btn-lg btn-warning">檢舉揪團</a>
-					</c:otherwise>
-				</c:choose>
+				<a id="reportBtn" href="<%=request.getContextPath()%>/front-end/report_group/addReport_Group.jsp?group_no=${groupVO.group_no}" 
+				style="margin-bottom: 0px;" class="btn btn-lg btn-warning">檢舉揪團</a>
 				<a id="dismissBtn" href="<%=request.getContextPath()%>/group/group.do?group_no=${groupVO.group_no}&action=delete" 
-				style="margin-bottom: 0px;" class="btn btn-lg btn-danger">解散揪團</a>
+				style="margin-bottom: 0px;" class="btn btn-lg btn-danger activeDismissGroup">解散揪團<input type="hidden" class="activeDismissGroupNO"  value="${groupVO.group_no}"></a>
 <%-- 					<a id="TimerdismissBtn" href="<%=request.getContextPath()%>/group/group.do?group_no=${groupVO.group_no}&action=SetDeleteTimerTask"  --%>
 <!-- 					style="margin-bottom: 0px;" class="btn btn-lg btn-danger">測試排程刪除</a> -->
-				<a id="gogoBtn" style="margin-bottom: 0px;" class="btn btn-lg btn-primary">出團(團長)</a>
+				<a id="gogoBtn" style="margin-bottom: 0px;" class="btn btn-lg btn-primary goGroup">出團(團長) <input type="hidden" class="goGroupName"  value="${groupVO.group_no}"></a>
 			    </div>
 			  </div>
 			</div>
@@ -237,7 +297,16 @@ th, td {
 	
 	<!--動態顯示的div-->
 	<div id="pop-out-div">
-		<button id="add-friend" type="button" class="btn btn-primary"><i class="fa fa-plus-circle " aria-hidden="true"></i>加好友</button>
+		
+		<c:choose>
+			<c:when test="${memVO==null }">
+				<button onclick="loginFirst()" id="add-friend" type="button" class="btn btn-primary"><i class="fa fa-plus-circle " aria-hidden="true"></i>加好友</button>
+			</c:when>
+			<c:otherwise>
+				<button id="add-friend" type="button" class="btn btn-primary"><i class="fa fa-plus-circle " aria-hidden="true"></i>加好友</button>
+			</c:otherwise>
+		</c:choose>
+		
 		<button id="already-friends" type="button" class="btn btn-info"  style="display:none;" disabled>已是朋友</button>
 		<button id="retrieve-invitation" type="button" class="btn btn-info"  style="display:none;">收回邀請</button>
 		<button id="myself" type="button" class="btn btn-info" style="display:none;" disabled>本人</button>
@@ -249,6 +318,9 @@ th, td {
 	</div>
 	<!--動態顯示的div-->
 
+<!-- 通知顯示div -->
+ <div class="alert-container">
+ </div>
 	<script>
 	
 	//起始動作
@@ -358,64 +430,59 @@ th, td {
 	//起始動作結束
 		
 		$("#joinBtn").click(function(){
-			if(${memVO.member_no == 999}){
-				loginFirst();
-			}
-			else{
+			$.ajax({
+				url: "<%=request.getContextPath()%>/group_member/group_member.do",
+				type:"POST",
+				data: {
+					group_no:"${groupVO.group_no}",
+					member_no:"${memVO.member_no}",
+					pay_status:"0",
+					status:"1",
+					action:"insert",
+					requestURL:"<%=request.getServletPath()%>"
+					
+				},
+				success: function(data){
+					$("#joinBtn").hide();
+					$("#member").append(
+						 '<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${memVO.member_no}" id="${groupVO.group_no}-${memVO.member_no}" '
+						+ 'alt="尚無圖片" width="90px;" height="90px" '
+						+ 'style="border-radius:50%;" class="clickable" />'
+						);
+					//動態繫結
+					$(".clickable").off("mouseenter").on("mouseenter",function(){
+						cancelTimer();
+						displayImg();
+					});
+					
+					$(".clickable").off("mouseleave").on("mouseleave", function(){
+						setTimer();
+					});
+					//動態繫結
+					 Swal.fire({
+	                        position: "center",
+	                        icon: "success",
+	                        title: "已成功加入揪團",
+	                        showConfirmButton: false,
+	                        timer: 1500,
+	                    });
+					 $("#leaveBtn").show();
+				}
+			}).done(function(){
+				//結束後才做的, 拉最新的時間
 				$.ajax({
 					url: "<%=request.getContextPath()%>/group_member/group_member.do",
 					type:"POST",
 					data: {
 						group_no:"${groupVO.group_no}",
-						member_no:"${memVO.member_no}",
-						pay_status:"0",
-						status:"1",
-						action:"insert",
+						action:"getGroupCount_Ajax",
 						requestURL:"<%=request.getServletPath()%>"
-						
 					},
 					success: function(data){
-						$("#joinBtn").hide();
-						$("#member").append(
-							 '<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${memVO.member_no}" id="${groupVO.group_no}-${memVO.member_no}" '
-							+ 'alt="尚無圖片" width="90px;" height="90px" '
-							+ 'style="border-radius:50%;" class="clickable" />'
-							);
-						//動態繫結
-						$(".clickable").off("mouseenter").on("mouseenter",function(){
-							cancelTimer();
-							displayImg();
-						});
-						
-						$(".clickable").off("mouseleave").on("mouseleave", function(){
-							setTimer();
-						});
-						//動態繫結
-						 Swal.fire({
-		                        position: "center",
-		                        icon: "success",
-		                        title: "已成功加入揪團",
-		                        showConfirmButton: false,
-		                        timer: 1500,
-		                    });
-						 $("#leaveBtn").show();
+						 $("#groupCnt").text('' +data + " / ${groupVO.required_cnt}");
 					}
-				}).done(function(){
-					//結束後才做的, 拉最新的時間
-					$.ajax({
-						url: "<%=request.getContextPath()%>/group_member/group_member.do",
-						type:"POST",
-						data: {
-							group_no:"${groupVO.group_no}",
-							action:"getGroupCount_Ajax",
-							requestURL:"<%=request.getServletPath()%>"
-						},
-						success: function(data){
-							 $("#groupCnt").text('' +data + " / ${groupVO.required_cnt}");
-						}
-					});
 				});
-			}
+			});
 		});
 		
 		$("#leaveBtn").click(function(){
@@ -460,30 +527,19 @@ th, td {
 		});
 		
 		$("#gogoBtn").click(function(){
-
-			Swal.fire({
-				  title: '你確定嗎?',
-				  text: "出團後無法反悔",
-				  icon: 'warning',
-				  showCancelButton: true,
-				  confirmButtonColor: '#3085d6',
-				  cancelButtonColor: '#d33',
-				  confirmButtonText: '確定出團!'
-				}).then((result) => {
-				  if (result.isConfirmed) {
-					  Swal.fire({
-		                   position: "center",
-		                   icon: "success",
-		                   title: "將導向付款頁面",
-		                   showConfirmButton: false,
-		                   timer: 1500,
-		               });
-					  setTimeout(function() {
-							 $(location).attr('href', '<%=request.getContextPath()%>/group/group.do?action=gogogo&group_no=${groupVO.group_no}&requestURL=<%=request.getServletPath()%>');
-						    }, 1500);
-				  }
-				})
-		});
+			goGroupName = $(this).find("input.goGroupName").val();
+			sendWebSocket($(this));
+			 Swal.fire({
+                 position: "center",
+                 icon: "success",
+                 title: "將導向付款頁面",
+                 showConfirmButton: false,
+                 timer: 1500,
+             });
+			  setTimeout(function() {
+					 $(location).attr('href', '<%=request.getContextPath()%>/group/group.do?action=gogogo&group_no=${groupVO.group_no}&requestURL=<%=request.getServletPath()%>');
+				    }, 1500);
+		  });
 
 
 		
@@ -727,11 +783,264 @@ th, td {
 			});
 		}
 		
-		function loginFirst(){
+
+
+
+
+	var MyPoint = "/NotifyWS/${memVO.member_no}";
+	var host = window.location.host;
+	var path = window.location.pathname;
+	var webCtx = path.substring(0, path.indexOf('/', 1));
+	var endPointURL = "ws://" + window.location.host + webCtx + MyPoint;
+	var friendNO;
+	var groupNO;
+	var movieNO;
+	var groupName;
+	var goGroupName;
+	var kickGroupName;
+	var memberNO;
+	var self = '${memVO.member_no}';
+	var webSocket;
+	var type;
+	var activeDismissGroupNO;
+
+
+	$(".addFriend").click(function(){
+		friendNO = $(this).find("input.friendNO").val();
+		sendWebSocket($(this));
+	})
+	$(".addGroup").click(function(){
+		groupNO = $(this).find("input.groupNO").val();
+		sendWebSocket($(this));
+	})
+	$(".buyTicket").click(function(){
+		movieNO = $(this).find("input.movieNO").val();
+		sendWebSocket($(this));
+	})
+	$(".addfriend_check_btn").click(function(){
+		friendNO = $(this).find("input.friendNO").val();
+		sendWebSocket($(this));
+		//這邊執行insertfriend的code
+	})
+	$(".createGroup").click(function(){
+		groupName = document.getElementById("groupName").value;  //不可放在上面宣告，因為groupname是使用者自己打要click後才會取直，所以要放在click事件內
+		sendWebSocket($(this));
+	})
+	$(".kickoffGroup").click(function(){
+		kickGroupName = $(this).find("input.kickGroupName").val();
+		sendWebSocket($(this));
+	})
+	$(".reminder").click(function(){
+		memberNO = $(this).find("input.memberNO").val();
+		sendWebSocket($(this));
+
+	})
+	$(".activeDismissGroup").click(function(){
+		activeDismissGroupNO = $(this).find("input.activeDismissGroupNO").val();
+		sendWebSocket($(this));
+	})
+	
+	
+	function sendWebSocket(item){
+		let timespan = new Date();
+		let timeStr = timespan.getFullYear() + "-" + (timespan.getMonth()+1).toString().padStart(2, "0") + "-" 
+					+ timespan.getDate() + " " + timespan.getHours().toString().padStart(2, "0") + ":" + timespan.getMinutes().toString().padStart(2, "0");
+		if(item.hasClass("addFriend")){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : friendNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.hasClass("addGroup")){
+			type = "addGroup";
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : groupNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.hasClass("buyTicket")){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : movieNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.val()==1){
+			var jsonObj = {
+				"type" : "response",
+				"sender" : self,
+				"receiver" : friendNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.hasClass("createGroup")){
+			type = "createGroup";
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : groupName,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.hasClass("goGroup")){
+			type = "goGroup";
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : goGroupName,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.hasClass("kickoffGroup")){
+			type = "kickoffGroup";
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : kickGroupName,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.hasClass("reminder")){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : memberNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+
+		if(item.hasClass("activeDismissGroup")){
+			type = "activeDismissGroup";
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : activeDismissGroupNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+
+		webSocket.send(JSON.stringify(jsonObj));
+	}
+	
+
+	function connect() {
+		console.log(endPointURL);
+		// create a websocket
+		webSocket = new WebSocket(endPointURL);
+
+		webSocket.onopen = function(event) {
+			
+
+		};
+
+		webSocket.onmessage = function(event) {
+			console.log(event.data);
+			var jsonObj = JSON.parse(event.data);
+			var text = jsonObj.message;
+			var time = jsonObj.time;
+			var type = jsonObj.type;
+			console.log(jsonObj)
+			createAlert(text,time,type);
+			
+		};
+
+		webSocket.onclose = function(event) {
+			console.log("Disconnected!");
+		};
+	}
+	
+	function disconnect() {
+		webSocket.close();
+	}
+	
+	
+// 	產生通知block在視窗右下角
+	  const alertContainer = document.querySelector('.alert-container');
+	  const btnCreate = document.getElementById('create');
+	  
+	  
+	  
+	  const createAlert = (text,time,type) => {
+		  
+	  const newAlert = document.createElement('div');
+	  const closeNewAlert = document.createElement('span');
+	  const imgdiv = document.createElement('div');
+	  const img = document.createElement('img');
+	  const txt = document.createElement('div');
+	  const time_str = document.createElement('div');
+	  
+	  if (type==="addFriend"||type==="response"){
+		  img.src="<%=request.getContextPath()%>/images/notify_icons/friend.png"
+	  }
+	  if (type==="addGroup"||type==="createGroup"||type==="goGroup"||type==="activeDismissGroup"){
+			img.src="<%=request.getContextPath()%>/images/notify_icons/group.png"
+	  }
+	  if (type==="buyTicket"){
+			img.src="<%=request.getContextPath()%>/images/notify_icons/ticket.png"
+	  }
+	  if (type==="reminder"||type==="dismissGroup"||type==="kickoffGroup"||type==="kickUnpaid"){
+			img.src="<%=request.getContextPath()%>/images/notify_icons/warning.png"
+	  }
+	  
+		  img.classList.add("alertImg");
+		  imgdiv.append(img);
+		  txt.innerText = text;
+		  txt.classList.add("alertTxt");
+		  time_str.innerText = time;
+		  time_str.classList.add("alertTime");
+		  txt.append(time_str);
+		  newAlert.prepend(imgdiv);
+		  newAlert.append(txt)
+		  closeNewAlert.innerHTML = '&times;';
+		  
+		  newAlert.appendChild(closeNewAlert);
+		  
+		  newAlert.classList.add('alert');
+		  
+		  alertContainer.appendChild(newAlert);
+		  
+		  setTimeout(()=> {
+		    newAlert.classList.add('fadeOut');
+		  },3000)
+		  
+		  setTimeout(()=> {
+		    newAlert.remove();
+		  },5000)
+		  
+		
+	};
+
+
+	alertContainer.addEventListener('click', (e) => {
+	    if(e.target.nodeName == 'SPAN') {
+	        e.target.parentNode.remove();
+	    }
+	})
+
+	function loginFirst(){
         	alert("請先登入");
         	window.location.href = "<%=request.getContextPath()%>/front-end/mem/MemLogin.jsp";
         }
-		
- 	</script> 
+
+
+
+</script>
 </body>
 </html>

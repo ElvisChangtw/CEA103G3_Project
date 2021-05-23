@@ -383,6 +383,46 @@ public class NotifyWS {
 			return;
 		}
 		
+		//團主主動解散揪團通知
+		if("activeDismissGroup".equals(notify.getType())){
+			String masterName = memSvc.getOneMem(gSvc.getOneGroup(new Integer(receiver)).getMember_no()).getMb_name();
+			String group_name = gSvc.getOneGroup(new Integer(receiver)).getGroup_title();
+			List<Group_MemberVO> list = gmSvc.getMembers(new Integer(receiver));
+			List<Integer> gmList = new ArrayList<Integer>();
+			Set<Integer> memNOs = sessionsMap.keySet();  //取出所有連線者
+			
+			for(Group_MemberVO gmVO : list) {
+				for(int memNO:memNOs) {
+					if(gmVO.getMember_no()==memNO) {
+						gmList.add(memNO);
+					}
+				}
+			}
+			String senderText = "團主:"+masterName+"已解散揪團:"+group_name;
+			Notify senderMsg = new Notify(notify.getType(),sender, receiver, senderText, timeStr, read);
+			String senderMsgJson = gson.toJson(senderMsg);
+
+			for(Integer memno : gmList) {
+				JedisHandleMessage.saveChatMessage(String.valueOf(memno), notify.getType(), senderMsgJson);
+			}
+			
+			//所有團員皆會收到解散揪團通知
+			for(Integer memno:gmList) {
+				for(Integer userName: sessionsMap.keySet()) {
+					if(memno==userName) {
+						Session sendSession = sessionsMap.get(userName);
+						if (sendSession != null && sendSession.isOpen()) {
+								sendSession.getAsyncRemote().sendText(senderMsgJson);
+						}
+					}
+					
+				} 
+				
+			}
+			return;
+			
+		}
+		
 		
 		
 	}
