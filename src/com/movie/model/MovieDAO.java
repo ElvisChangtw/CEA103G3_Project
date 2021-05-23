@@ -410,14 +410,19 @@ public class MovieDAO implements MovieDAO_interface{
 			
 			String finalSQL =
 					"WITH B AS( "
-				   +" select S0.MOVIE_NO,  COUNT(*) CNT from "
+				   +" select S0.MOVIE_NO,  COUNT(S0.MOVIE_NO) CNT from "
 				   +" `movie` S0 LEFT JOIN MOVIE_NAME_INDEX S1 "
 				   + " ON S0.MOVIE_NO = S1.MOVIE_NO "
 				   + jdbcUtil_CompositeQuery_Movie.get_OnCondition(map)
 				   + jdbcUtil_CompositeQuery_Movie.get_WhereCondition(map)
 				   +" GROUP BY S0.MOVIE_NO "
 				   + ") "			
-				   + "select S0.* from movie S0 LEFT JOIN "
+				   + "select  "
+				   + "S0.MOVIE_NO, S0.MOVIE_NAME, S0.DIRECTOR, S0.ACTOR, "
+				   + "S0.CATEGORY, S0.LENGTH, S0.STATUS, S0.PREMIERE_DT, "
+				   + "S0.OFF_DT, S0.TRAILOR, S0.EMBED, S0.GRADE, "
+				   + "S0.RATING, S0.EXPECTATION "
+				   + " from movie S0 LEFT JOIN "
 				   +" B ON S0.MOVIE_NO = B.MOVIE_NO "
 				   + jdbcUtil_CompositeQuery_Movie.get_WhereCondition(map)
 				   +" ORDER BY (CASE WHEN B.CNT IS NULL THEN 0 ELSE B.CNT END) DESC, MOVIE_NO DESC"
