@@ -197,7 +197,6 @@ height:50px;
 <script>
 		$(document).ready(function(){
 			$("#logout-btn").click(function(){
-				<% session.removeAttribute("memVO"); %>
 				window.location.href = '<%=request.getContextPath()%>/index.jsp';
 			});
 			

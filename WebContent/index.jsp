@@ -1620,7 +1620,6 @@ $(document).ready(drawPieChart1);
 $(document).ready(drawPieChart2);
 $(document).ready(function(){
 	$("#logout-btn").click(function(){
-		<% session.removeAttribute("memVO"); %>
 		window.location.href = '<%=request.getContextPath()%>/index.jsp';
 	});
 	let hasLoggedIn = <%= memVO.getMember_no() %>;
