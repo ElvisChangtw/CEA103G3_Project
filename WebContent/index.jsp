@@ -537,7 +537,7 @@ left: 1095px;
   
 <!--    訂票+文章區塊開始 -->
    <section class="booking_area">
-   	<div class="container-fluid">
+   	<div class="container-fluid" style="background-color:rgb(36, 36, 36);">
    		<div class="row">
    		
    		 <!-- 訂票開始-->
