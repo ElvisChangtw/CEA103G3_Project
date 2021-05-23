@@ -268,13 +268,13 @@ th, td {
 				style="margin-bottom: 0px;" class="btn btn-lg">回首頁</a>
 				<c:choose>
 					<c:when test="${memVO == null}">
-						<button id="joinBtn" onclick="loginFirst()"  class="btn btn-lg btn-primary">
+						<button style="border-radius: 10px;" onclick="loginFirst()"  class="btn btn-lg btn-primary">
 							現在加入
 						</button> 
 					</c:when>
 					<c:otherwise>
 						<button id="joinBtn" class="btn btn-lg btn-primary" ${(groupVO.member_cnt < groupVO.required_cnt) ?  '' : 'disabled'}>
-							${(groupVO.member_cnt < groupVO.required_cnt) ?  '現在加入' : '人數已滿'}
+						${(groupVO.member_cnt < groupVO.required_cnt) ?  '現在加入' : '人數已滿'}
 						</button> 
 					</c:otherwise>
 				</c:choose>
@@ -1035,9 +1035,10 @@ th, td {
 	})
 
 	function loginFirst(){
-        	alert("請先登入");
-        	window.location.href = "<%=request.getContextPath()%>/front-end/mem/MemLogin.jsp";
-        }
+		Swal.fire('請先登入').then((result)=>{
+			window.location.href = "<%=request.getContextPath()%>/front-end/mem/MemLogin.jsp";
+		});
+	}
 
 
 
