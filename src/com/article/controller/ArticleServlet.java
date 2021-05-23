@@ -320,13 +320,13 @@ String articleheadline = req.getParameter("articleheadline").trim();
 				/***********************1.接收請求參數 - 輸入格式的錯誤處理*************************/
 //Integer articleno = new Integer(req.getParameter("articleno").trim());
 
-				Integer memberno = 3;
-//				try {
-//memberno = new Integer(req.getParameter("memberno").trim());
-//				} catch (NumberFormatException e) {
-//					memberno = 0;
-//					errorMsgs.add("會員編號請填數字.");
-//				}
+				Integer memberno = null;
+				try {
+memberno = new Integer(req.getParameter("memberno").trim());
+				} catch (NumberFormatException e) {
+					memberno = 0;
+					errorMsgs.add("會員編號請填數字.");
+				}
 				
 String articletype = req.getParameter("articletype").trim();
 				if (articletype == null || articletype.trim().length() == 0) {

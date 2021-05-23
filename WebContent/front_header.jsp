@@ -49,6 +49,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <!--//web-fonts-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/styleForGroup.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
     <style>
         div.form-group>button.btn {
 border-radius: 3px;
@@ -58,6 +59,166 @@ width:50px;
 height:50px;
 }
 </style>
+
+<style>
+    .icons{
+  display: inline;
+  float: right
+}
+.notification{
+/*   bottom: 25px; */
+bottom: 50px; 
+/*   left: 340px; */
+left: 1130px; 
+  position: relative;
+  display: inline-block;
+}
+
+.number{
+  font-size:3px;
+  height: 22px;
+  width:  22px;
+  background-color: #21d207;
+  border-radius: 20px;
+  color: white;
+  text-align: center;
+  position: absolute;
+  top: -7px;
+  left: 65px;
+  padding: 3px;
+  border-style: solid;
+  border-width: 2px;
+}
+
+.number:empty {
+   display: none;
+}
+
+.notBtn{
+  transition: 0.5s;
+  cursor: pointer
+}
+
+.fas{
+  font-size: 25pt;
+  padding-bottom: 10px;
+  color: white;
+  margin-right: 40px;
+  margin-left: 40px;
+}
+
+.box{
+  width: 400px;
+  height: 0px;
+  border-radius: 10px;
+  transition: 0.5s;
+  position: absolute;
+  overflow-y: scroll;
+  padding: 0px;
+  left: -300px;
+  margin-top: 5px;
+  background-color: #F4F4F4;
+  -webkit-box-shadow: 10px 10px 23px 0px rgba(0,0,0,0.2);
+  -moz-box-shadow: 10px 10px 23px 0px rgba(0,0,0,0.1);
+  box-shadow: 10px 10px 23px 0px rgba(0,0,0,0.1);
+  cursor: context-menu;
+}
+
+.fas:hover {
+  color: #d63031;
+}
+
+.notBtn:hover > .box{
+  height: 60vh
+}
+
+.content{
+  padding: 20px;
+  color: black;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.gry{
+  background-color: #F4F4F4;
+}
+
+.top{
+  color: black;
+  padding: 10px
+}
+
+.display{
+  position: relative;
+  z-index:99;
+}
+
+.cont{
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #F4F4F4;
+}
+
+.cont:empty{
+  display: none;
+}
+
+.stick{
+  text-align: center;  
+  display: block;
+  font-size: 50pt;
+  padding-top: 70px;
+  padding-left: 80px
+}
+
+.stick:hover{
+  color: black;
+}
+
+.cent{
+  text-align: center;
+  display: block;
+}
+
+.sec{
+  padding: 25px 10px;
+  background-color: #F4F4F4;
+  transition: 0.5s;
+}
+
+.profCont{
+  padding-left: 15px;
+}
+
+.profile{
+  -webkit-clip-path: circle(50% at 50% 50%);
+  clip-path: circle(50% at 50% 50%);
+  width: 75px;
+  float: left;
+}
+
+.txt{
+  vertical-align: top;
+  font-size: 1.25rem;
+  padding: 5px 10px 0px 115px;
+}
+
+.sub{
+  font-size: 1rem;
+  color: grey;
+}
+
+.new{
+  border-style: none none solid none;
+  background-color: rgb(252, 255, 229);
+}
+
+.sec:hover{
+  background-color: #BFBFBF;
+}
+    </style>
 </head>
 
 <body>
@@ -141,6 +302,25 @@ height:50px;
                 </nav>
                 <div class="w3ls_search">
 						<div class="cd-main-header">
+									<div class = "notification">
+									  <a href = "#">
+									  <div class = "notBtn" href = "#">
+									    <div id="number" class = "number"></div>
+									    <i class="fas fa-bell"></i>
+									      <div class = "box">
+									        <div class = "display">
+									          <div class = "nothing"> 
+									            <i class="fas fa-child stick"></i> 
+									            <div class = "cent"></div>
+									          </div>
+									          <div class = "cont"><!-- Fold this div and try deleting evrything inbetween -->
+					
+									         </div>
+									        </div>
+									     </div>
+									  </div>
+									    </a>
+									</div>
 							<ul class="cd-header-buttons">
 								<c:choose>
 									<c:when test="${memVO.member_no == 99}">
@@ -269,4 +449,174 @@ height:50px;
 			return json;
 	}
 </script>
+<script>
+var count=0;
+
+	    $(document).ready(function(){
+	    	var notify_head = $(".cont");
+	    	var slice;
+	    	var memberno = ${memVO.member_no};
+	   	 $.ajax({
+	   		 url:"<%=request.getContextPath()%>/NotifyServlet?action=insert_For_Ajax",
+	   		 data:{
+	   			 "member_no":memberno
+	   		 },
+	   		 type:"POST",
+	   		 success:function(json){
+	   			 var number = document.getElementById("number");
+	   			 let jsonobj = JSON.parse(json);
+				 let all_list = jsonobj.all;
+				 let len = jsonobj.all.length;
+				 let slice="";
+			     let slice1="";
+
+				 for(let i = 0 ; i < len ; i++){
+					 let jsono = JSON.parse(all_list[i]);
+					 let type=jsono.type;
+					 let read=jsono.read;
+					 if(read==="Y"){
+						 
+						 if(type==="addFriend"||type==="response"){
+							 slice += `<div class = "sec">
+					          <a href = "<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">
+					          <div class = "profCont">
+					            <img class = "profile" src = "<%=request.getContextPath()%>/images/notify_icons/friend.png">
+					          </div>
+					          <div class = "txt">`+jsono.message+`</div>
+					         <div class = "txt sub">`+jsono.time+`</div>
+					          </a>
+					       </div>`;
+					       	}
+							 if(type==="addGroup"||type==="createGroup"||type==="goGroup"||type==="activeDismissGroup"){
+							 slice += `<div class = "sec">
+					          <a href = "<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">
+					          <div class = "profCont">
+					            <img class = "profile" src = "<%=request.getContextPath()%>/images/notify_icons/group.png">
+					          </div>
+					          <div class = "txt">`+jsono.message+`</div>
+					         <div class = "txt sub">`+jsono.time+`</div>
+					          </a>
+					       </div>`;
+					       	}
+							 if(type==="buyTicket"){
+							 slice += `<div class = "sec">
+					          <a href = "<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">
+					          <div class = "profCont">
+					            <img class = "profile" src = "<%=request.getContextPath()%>/images/notify_icons/ticket.png">
+					          </div>
+					          <div class = "txt">`+jsono.message+`</div>
+					         <div class = "txt sub">`+jsono.time+`</div>
+					          </a>
+					       </div>`;
+					       	}
+							 if(type==="reminder"||type==="dismissGroup"||type==="kickoffGroup"||type==="kickUnpaid"){
+							 slice += `<div class = "sec">
+					          <a href = "<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">
+					          <div class = "profCont">
+					            <img class = "profile" src = "<%=request.getContextPath()%>/images/notify_icons/warning.png">
+					          </div>
+					          <div class = "txt">`+jsono.message+`</div>
+					         <div class = "txt sub">`+jsono.time+`</div>
+					          </a>
+					       </div>`;
+					       	}
+						
+					 }else{
+						 
+						 if(type==="addFriend"||type==="response"){
+							 slice1 += `<div class = "sec new">
+					          <a href = "<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">
+					          <div class = "profCont">
+					            <img class = "profile" src = "<%=request.getContextPath()%>/images/notify_icons/friend.png">
+					          </div>
+					          <div class = "txt">`+jsono.message+`</div>
+					         <div class = "txt sub">`+jsono.time+`</div>
+					          </a>
+					       </div>`;
+					       	}
+							 if(type==="addGroup"||type==="createGroup"||type==="goGroup"||type==="activeDismissGroup"){
+							 slice1 += `<div class = "sec new">
+					          <a href = "<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">
+					          <div class = "profCont">
+					            <img class = "profile" src = "<%=request.getContextPath()%>/images/notify_icons/group.png">
+					          </div>
+					          <div class = "txt">`+jsono.message+`</div>
+					         <div class = "txt sub">`+jsono.time+`</div>
+					          </a>
+					       </div>`;
+					       	}
+							 if(type==="buyTicket"){
+							 slice1 += `<div class = "sec new">
+					          <a href = "<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">
+					          <div class = "profCont">
+					            <img class = "profile" src = "<%=request.getContextPath()%>/images/notify_icons/ticket.png">
+					          </div>
+					          <div class = "txt">`+jsono.message+`</div>
+					         <div class = "txt sub">`+jsono.time+`</div>
+					          </a>
+					       </div>`;
+					       	}
+							 if(type==="reminder"||type==="dismissGroup"||type==="kickoffGroup"||type==="kickUnpaid"){
+							 slice1 += `<div class = "sec new">
+					          <a href = "<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">
+					          <div class = "profCont">
+					            <img class = "profile" src = "<%=request.getContextPath()%>/images/notify_icons/warning.png">
+					          </div>
+					          <div class = "txt">`+jsono.message+`</div>
+					         <div class = "txt sub">`+jsono.time+`</div>
+					          </a>
+					       </div>`;
+					       	}
+							 
+							 count++;
+
+					 }
+				 }
+		   		 notify_head.append(slice1); 
+				 notify_head.append(slice); 
+		   		 number.innerText=count;
+		   		 if(number.innerText == 0){
+		   			 number.style.display="none";
+		   		 }
+		   		 
+	   			 }
+	   		 })
+	    	
+	    })
+	    
+	    $(".fa-bell").click(function(){
+	    	var notify_head = $(".cont");
+	    	var memberno = ${memVO.member_no};
+
+	    	 $.ajax({
+		   		 url:"<%=request.getContextPath()%>/NotifyServlet?action=readNotify",
+		   		 data:{
+		   			 "member_no":memberno
+		   		 },
+		   		 type:"POST",
+		   		 success:function(json){
+ 				 if(json=="success"){
+ 			   		 number.style.display="none";
+ 				 }else{
+ 					Swal.fire({
+	                      position: "center",
+	                      icon: "error",
+	                      title: "通知連線忙線中，請稍後再試",
+	                      showConfirmButton: false,
+	                      timer: 1000,
+	                  });
+ 				 }
+
+
+					 
+					 }
+
+
+	   			 
+	   			 })
+		   			
+		   		 });
+	    	
+
+	    </script>
 </html>
