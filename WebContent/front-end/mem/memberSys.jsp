@@ -214,6 +214,9 @@ text-align:center;
 
 }
 .alertTxt .alertTime{
+	position:fixed;
+	bottom:40px;
+	right:40px;
 	font-size:10px !important;
 	color:gray;
 }

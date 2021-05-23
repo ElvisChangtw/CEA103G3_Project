@@ -83,6 +83,7 @@
     <link href='//fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
     <!--//web-fonts-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
     
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/styleForGroup.css">
 <style>
@@ -95,10 +96,240 @@
 	}
 </style>
 
+<style>
+    .icons{
+  display: inline;
+  float: right
+}
+.notification{
+/*   bottom: 25px; */
+bottom: 50px; 
+/*   left: 340px; */
+left: 1095px; 
+  position: relative;
+  display: inline-block;
+}
+
+.number{
+  font-size:3px;
+  height: 22px;
+  width:  22px;
+  background-color: #21d207;
+  border-radius: 20px;
+  color: white;
+  text-align: center;
+  position: absolute;
+  top: -7px;
+  left: 65px;
+  padding: 3px;
+  border-style: solid;
+  border-width: 2px;
+}
+
+.number:empty {
+   display: none;
+}
+
+.notBtn{
+  transition: 0.5s;
+  cursor: pointer
+}
+
+.fas{
+  font-size: 25pt;
+  padding-bottom: 10px;
+  color: white;
+  margin-right: 40px;
+  margin-left: 40px;
+}
+
+.box{
+  width: 400px;
+  height: 0px;
+  border-radius: 10px;
+  transition: 0.5s;
+  position: absolute;
+  overflow-y: scroll;
+  padding: 0px;
+  left: -300px;
+  margin-top: 5px;
+  background-color: #F4F4F4;
+  -webkit-box-shadow: 10px 10px 23px 0px rgba(0,0,0,0.2);
+  -moz-box-shadow: 10px 10px 23px 0px rgba(0,0,0,0.1);
+  box-shadow: 10px 10px 23px 0px rgba(0,0,0,0.1);
+  cursor: context-menu;
+}
+
+.fas:hover {
+  color: #d63031;
+}
+
+.notBtn:hover > .box{
+  height: 60vh
+}
+
+.content{
+  padding: 20px;
+  color: black;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.gry{
+  background-color: #F4F4F4;
+}
+
+.top{
+  color: black;
+  padding: 10px
+}
+
+.display{
+  position: relative;
+  z-index:99;
+}
+
+.cont{
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #F4F4F4;
+}
+
+.cont:empty{
+  display: none;
+}
+
+.stick{
+  text-align: center;  
+  display: block;
+  font-size: 50pt;
+  padding-top: 70px;
+  padding-left: 80px
+}
+
+.stick:hover{
+  color: black;
+}
+
+.cent{
+  text-align: center;
+  display: block;
+}
+
+.sec{
+  padding: 25px 10px;
+  background-color: #F4F4F4;
+  transition: 0.5s;
+}
+
+.profCont{
+  padding-left: 15px;
+}
+
+.profile{
+  -webkit-clip-path: circle(50% at 50% 50%);
+  clip-path: circle(50% at 50% 50%);
+  width: 75px;
+  float: left;
+}
+
+.txt{
+  vertical-align: top;
+  font-size: 1.25rem;
+  padding: 5px 10px 0px 115px;
+}
+
+.sub{
+  font-size: 1rem;
+  color: grey;
+}
+
+.new{
+  border-style: none none solid none;
+  background-color: rgb(252, 255, 229);
+}
+
+.sec:hover{
+  background-color: #BFBFBF;
+}
+    </style>
+
+<style>
+  /* 通知用 */
+  @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+.fadeOut {
+  opacity: 0 !important;
+}
+
+#create {
+  border: none !important;
+  padding: 8px !important;
+  font-size:15px !important;
+  color: #FFF !important;
+  background-color: firebrick !important;
+  border-radius: 8px !important;
+}
+
+.alert-container{
+  z-index:99;
+  position: fixed !important;
+  right: 10px !important;
+  bottom: 10px !important;
+}
+
+.alert {
+  position: relative !important;
+  background-color: white !important;
+  border: 5px solid lightblue !important;
+  height: 130px !important;
+  width: 290px !important;
+  border-radius: 15px !important;
+  margin-bottom: 15px !important;
+  color: #40bde6 !important;
+  padding: 20px 15px 0 15px !important;
+  transition: opacity 2s !important;
+}
+
+.alert span {
+  font-size: 1.3rem !important;
+  position: absolute !important;
+  top: 3px !important;
+  right: 12px !important;
+  cursor: pointer !important;
+
+}
+.alertTxt{
+  font-size: 17px !important;
+  position: absolute !important;
+  top: 0px !important;
+  right: 12px !important;
+  cursor: pointer !important;
+  margin-top:23px !important;
+  width:170px !important;
+
+}
+.alertImg{
+  width:80px !important;
+  margin-left:-5px !important;
+
+}
+
+.alertTxt .alertTime{
+	position:fixed;
+	bottom:40px;
+	right:40px;
+	font-size:10px !important;
+	color:gray;
+}
+</style>
+
 
 </head>
 
-<body>
+<body onload="connect();" onunload="disconnection();">
 
 <%-- 錯誤表列 --%>
 <c:if test="${not empty errorMsgs}">
@@ -194,6 +425,25 @@
                     
                     <div class="w3ls_search">
 						<div class="cd-main-header">
+							<div class = "notification">
+									  <a href = "#">
+									  <div class = "notBtn" href = "#">
+									    <div id="number" class = "number"></div>
+									    <i class="fas fa-bell"></i>
+									      <div class = "box">
+									        <div class = "display">
+									          <div class = "nothing"> 
+									            <i class="fas fa-child stick"></i> 
+									            <div class = "cent"></div>
+									          </div>
+									          <div class = "cont"><!-- Fold this div and try deleting evrything inbetween -->
+					
+									         </div>
+									        </div>
+									     </div>
+									  </div>
+									    </a>
+									</div>
 							<ul class="cd-header-buttons">
 								<c:choose>
 									<c:when test="${memVO.member_no == 99}">
@@ -1203,6 +1453,9 @@
             </ul>
         </div>
     </div>
+    <!-- 通知顯示div -->
+ <div class="alert-container">
+ </div>
     <div class="w3agile_footer_copy">
         <p>2021 Movies Hit. All rights reserved | Design by <a>CEA103G3</a></p>
     </div>
@@ -1802,6 +2055,431 @@ function drawPieChart2() {
 	}
     	
     </script>
+<script>
+var count=0;
 
+	    $(document).ready(function(){
+	    	var notify_head = $(".cont");
+	    	var slice;
+	    	var memberno = ${memVO.member_no};
+	   	 $.ajax({
+	   		 url:"<%=request.getContextPath()%>/NotifyServlet?action=insert_For_Ajax",
+	   		 data:{
+	   			 "member_no":memberno
+	   		 },
+	   		 type:"POST",
+	   		 success:function(json){
+	   			 var number = document.getElementById("number");
+	   			 let jsonobj = JSON.parse(json);
+				 let all_list = jsonobj.all;
+				 let len = jsonobj.all.length;
+				 let slice="";
+			     let slice1="";
+
+				 for(let i = 0 ; i < len ; i++){
+					 let jsono = JSON.parse(all_list[i]);
+					 let type=jsono.type;
+					 let read=jsono.read;
+					 if(read==="Y"){
+						 
+						 if(type==="addFriend"||type==="response"){
+							 slice += `<div class = "sec">
+					          <a href = "<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">
+					          <div class = "profCont">
+					            <img class = "profile" src = "<%=request.getContextPath()%>/images/notify_icons/friend.png">
+					          </div>
+					          <div class = "txt">`+jsono.message+`</div>
+					         <div class = "txt sub">`+jsono.time+`</div>
+					          </a>
+					       </div>`;
+					       	}
+							 if(type==="addGroup"||type==="createGroup"||type==="goGroup"||type==="activeDismissGroup"){
+							 slice += `<div class = "sec">
+					          <a href = "<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">
+					          <div class = "profCont">
+					            <img class = "profile" src = "<%=request.getContextPath()%>/images/notify_icons/group.png">
+					          </div>
+					          <div class = "txt">`+jsono.message+`</div>
+					         <div class = "txt sub">`+jsono.time+`</div>
+					          </a>
+					       </div>`;
+					       	}
+							 if(type==="buyTicket"){
+							 slice += `<div class = "sec">
+					          <a href = "<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">
+					          <div class = "profCont">
+					            <img class = "profile" src = "<%=request.getContextPath()%>/images/notify_icons/ticket.png">
+					          </div>
+					          <div class = "txt">`+jsono.message+`</div>
+					         <div class = "txt sub">`+jsono.time+`</div>
+					          </a>
+					       </div>`;
+					       	}
+							 if(type==="reminder"||type==="dismissGroup"||type==="kickoffGroup"||type==="kickUnpaid"){
+							 slice += `<div class = "sec">
+					          <a href = "<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">
+					          <div class = "profCont">
+					            <img class = "profile" src = "<%=request.getContextPath()%>/images/notify_icons/warning.png">
+					          </div>
+					          <div class = "txt">`+jsono.message+`</div>
+					         <div class = "txt sub">`+jsono.time+`</div>
+					          </a>
+					       </div>`;
+					       	}
+						
+					 }else{
+						 
+						 if(type==="addFriend"||type==="response"){
+							 slice1 += `<div class = "sec new">
+					          <a href = "<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">
+					          <div class = "profCont">
+					            <img class = "profile" src = "<%=request.getContextPath()%>/images/notify_icons/friend.png">
+					          </div>
+					          <div class = "txt">`+jsono.message+`</div>
+					         <div class = "txt sub">`+jsono.time+`</div>
+					          </a>
+					       </div>`;
+					       	}
+							 if(type==="addGroup"||type==="createGroup"||type==="goGroup"||type==="activeDismissGroup"){
+							 slice1 += `<div class = "sec new">
+					          <a href = "<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">
+					          <div class = "profCont">
+					            <img class = "profile" src = "<%=request.getContextPath()%>/images/notify_icons/group.png">
+					          </div>
+					          <div class = "txt">`+jsono.message+`</div>
+					         <div class = "txt sub">`+jsono.time+`</div>
+					          </a>
+					       </div>`;
+					       	}
+							 if(type==="buyTicket"){
+							 slice1 += `<div class = "sec new">
+					          <a href = "<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">
+					          <div class = "profCont">
+					            <img class = "profile" src = "<%=request.getContextPath()%>/images/notify_icons/ticket.png">
+					          </div>
+					          <div class = "txt">`+jsono.message+`</div>
+					         <div class = "txt sub">`+jsono.time+`</div>
+					          </a>
+					       </div>`;
+					       	}
+							 if(type==="reminder"||type==="dismissGroup"||type==="kickoffGroup"||type==="kickUnpaid"){
+							 slice1 += `<div class = "sec new">
+					          <a href = "<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">
+					          <div class = "profCont">
+					            <img class = "profile" src = "<%=request.getContextPath()%>/images/notify_icons/warning.png">
+					          </div>
+					          <div class = "txt">`+jsono.message+`</div>
+					         <div class = "txt sub">`+jsono.time+`</div>
+					          </a>
+					       </div>`;
+					       	}
+							 
+							 count++;
+
+					 }
+				 }
+		   		 notify_head.append(slice1); 
+				 notify_head.append(slice); 
+		   		 number.innerText=count;
+		   		 if(number.innerText == 0){
+		   			 number.style.display="none";
+		   		 }
+		   		 
+	   			 }
+	   		 })
+	    	
+	    })
+	    
+	    $(".fa-bell").click(function(){
+	    	var notify_head = $(".cont");
+	    	var memberno = ${memVO.member_no};
+
+	    	 $.ajax({
+		   		 url:"<%=request.getContextPath()%>/NotifyServlet?action=readNotify",
+		   		 data:{
+		   			 "member_no":memberno
+		   		 },
+		   		 type:"POST",
+		   		 success:function(json){
+ 				 if(json=="success"){
+ 			   		 number.style.display="none";
+ 				 }else{
+ 					Swal.fire({
+	                      position: "center",
+	                      icon: "error",
+	                      title: "通知連線忙線中，請稍後再試",
+	                      showConfirmButton: false,
+	                      timer: 1000,
+	                  });
+ 				 }
+
+
+					 
+					 }
+
+
+	   			 
+	   			 })
+		   			
+		   		 });
+	    	
+
+	    </script>
+	    <script>
+	var MyPoint = "/NotifyWS/${memVO.member_no}";
+	var host = window.location.host;
+	var path = window.location.pathname;
+	var webCtx = path.substring(0, path.indexOf('/', 1));
+	var endPointURL = "ws://" + window.location.host + webCtx + MyPoint;
+	var friendNO;
+	var groupNO;
+	var movieNO;
+	var groupName;
+	var goGroupName;
+	var kickGroupName;
+	var memberNO;
+	var self = '${memVO.member_no}';
+	var webSocket;
+	var type;
+	var activeDismissGroupNO;
+
+
+	$(".addFriend").click(function(){
+		friendNO = $(this).find("input.friendNO").val();
+		sendWebSocket($(this));
+	})
+	$(".addGroup").click(function(){
+		groupNO = $(this).find("input.groupNO").val();
+		sendWebSocket($(this));
+	})
+	$(".buyTicket").click(function(){
+		movieNO = $(this).find("input.movieNO").val();
+		sendWebSocket($(this));
+	})
+	$(".addfriend_check_btn").click(function(){
+		friendNO = $(this).find("input.friendNO").val();
+		sendWebSocket($(this));
+		//這邊執行insertfriend的code
+	})
+	$(".createGroup").click(function(){
+		groupName = document.getElementById("groupName").value;  //不可放在上面宣告，因為groupname是使用者自己打要click後才會取直，所以要放在click事件內
+		sendWebSocket($(this));
+	})
+	$(".goGroup").click(function(){
+		goGroupName = $(this).find("input.goGroupName").val();
+		sendWebSocket($(this));
+	})
+	$(".kickoffGroup").click(function(){
+		kickGroupName = $(this).find("input.kickGroupName").val();
+		sendWebSocket($(this));
+	})
+	$(".reminder").click(function(){
+		memberNO = $(this).find("input.memberNO").val();
+		sendWebSocket($(this));
+
+	})
+	$(".activeDismissGroup").click(function(){
+		activeDismissGroupNO = $(this).find("input.activeDismissGroupNO").val();
+		sendWebSocket($(this));
+	})
+	
+	
+	function sendWebSocket(item){
+		let timespan = new Date();
+		let timeStr = timespan.getFullYear() + "-" + (timespan.getMonth()+1).toString().padStart(2, "0") + "-" 
+					+ timespan.getDate() + " " + timespan.getHours().toString().padStart(2, "0") + ":" + timespan.getMinutes().toString().padStart(2, "0");
+		if(item.hasClass("addFriend")){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : friendNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.hasClass("addGroup")){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : groupNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.hasClass("buyTicket")){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : movieNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.val()==1){
+			var jsonObj = {
+				"type" : "response",
+				"sender" : self,
+				"receiver" : friendNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.hasClass("createGroup")){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : groupName,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.hasClass("goGroup")){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : goGroupName,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.hasClass("kickoffGroup")){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : kickGroupName,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.hasClass("reminder")){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : memberNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.hasClass("activeDismissGroup")){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : activeDismissGroupNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+
+		webSocket.send(JSON.stringify(jsonObj));
+	}
+	
+
+	function connect() {
+		console.log(endPointURL);
+		// create a websocket
+		webSocket = new WebSocket(endPointURL);
+
+		webSocket.onopen = function(event) {
+			
+
+		};
+
+		webSocket.onmessage = function(event) {
+			console.log(event.data);
+			var jsonObj = JSON.parse(event.data);
+			var text = jsonObj.message;
+			var time = jsonObj.time;
+			var type = jsonObj.type;
+			console.log(jsonObj)
+			createAlert(text,time,type);
+			
+		};
+
+		webSocket.onclose = function(event) {
+			console.log("Disconnected!");
+		};
+	}
+	
+	function disconnect() {
+		webSocket.close();
+	}
+	
+	
+// 	產生通知block在視窗右下角
+	  const alertContainer = document.querySelector('.alert-container');
+	  const btnCreate = document.getElementById('create');
+	  
+	  
+	  
+	  const createAlert = (text,time,type) => {
+		  
+	  const newAlert = document.createElement('div');
+	  const closeNewAlert = document.createElement('span');
+	  const imgdiv = document.createElement('div');
+	  const img = document.createElement('img');
+	  const txt = document.createElement('div');
+	  const time_str = document.createElement('div');
+	  
+	  if (type==="addFriend"||type==="response"){
+		  img.src="<%=request.getContextPath()%>/images/notify_icons/friend.png"
+	  }
+	  if (type==="addGroup"||type==="createGroup"||type==="goGroup"||type==="activeDismissGroup"){
+			img.src="<%=request.getContextPath()%>/images/notify_icons/group.png"
+	  }
+	  if (type==="buyTicket"){
+			img.src="<%=request.getContextPath()%>/images/notify_icons/ticket.png"
+	  }
+	  if (type==="reminder"||type==="dismissGroup"||type==="kickoffGroup"||type==="kickUnpaid"){
+			img.src="<%=request.getContextPath()%>/images/notify_icons/warning.png"
+	  }
+	  
+		  img.classList.add("alertImg");
+		  imgdiv.append(img);
+		  txt.innerText = text;
+		  txt.classList.add("alertTxt");
+		  time_str.innerText = time;
+		  time_str.classList.add("alertTime");
+		  txt.append(time_str);
+		  newAlert.prepend(imgdiv);
+		  newAlert.append(txt)
+		  closeNewAlert.innerHTML = '&times;';
+		  
+		  newAlert.appendChild(closeNewAlert);
+		  
+		  newAlert.classList.add('alert');
+		  
+		  alertContainer.appendChild(newAlert);
+		  
+		  setTimeout(()=> {
+		    newAlert.classList.add('fadeOut');
+		  },3000)
+		  
+		  setTimeout(()=> {
+		    newAlert.remove();
+		  },5000)
+		  
+		
+	};
+
+
+	alertContainer.addEventListener('click', (e) => {
+	    if(e.target.nodeName == 'SPAN') {
+	        e.target.parentNode.remove();
+	    }
+	})
+
+
+
+
+</script>
+	    
 
 </html>
