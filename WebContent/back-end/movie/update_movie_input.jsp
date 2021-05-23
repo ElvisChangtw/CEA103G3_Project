@@ -251,7 +251,8 @@ function readURL(input){
 										<td></td>
 										<td>
 											&emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; 
-											<input type="submit" value="送出修改" class="btn btn-outline-primary" id="send" >
+											<input type="submit" value="送出修改" id="send" 
+											class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#FF4268; font-weight:bold; color:white;">
 										</td>
 									</tr>
 								</tbody>

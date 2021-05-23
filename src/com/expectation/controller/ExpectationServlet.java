@@ -247,7 +247,6 @@ public class ExpectationServlet extends HttpServlet {
 					jsonobj.put("newExpectation", newExpectation);
 					jsonobj.put("countExpectation", countExpectation);
 					out.print(jsonobj.toString());
-					System.out.println(jsonobj.toString());
 					return;
 				}catch(JSONException e) {
 					e.printStackTrace();

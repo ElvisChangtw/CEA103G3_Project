@@ -53,27 +53,20 @@ public class CommentServlet extends HttpServlet {
 			req.setAttribute("errorMsgs", errorMsgs);
 			try {
 				/***************************1.接收請求參數 - 輸入格式的錯誤處理**********************/
-				String str = req.getParameter("commentno");
-				if (str == null || (str.trim()).length() == 0) { //加str == null 防呆getParameter("commentno")的commentno取到空值的情況
-					errorMsgs.add("請輸入評論編號");
-				}
+				Integer commentno = new Integer(req.getParameter("commentno"));
+				
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					RequestDispatcher failureView = req
-							.getRequestDispatcher("/front-end/comment/select_comment_page.jsp");
+							.getRequestDispatcher("/index.jsp");
 					failureView.forward(req, res);
 					return;//程式中斷
 				}
-				Integer commentno = null;
-				try {
-					commentno = new Integer(str);
-				} catch (Exception e) {
-					errorMsgs.add("評論編號格式不正確");
-				}
+
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					RequestDispatcher failureView = req
-							.getRequestDispatcher("/front-end/comment/select_comment_page.jsp");
+							.getRequestDispatcher("/index.jsp");
 					failureView.forward(req, res);
 					return;//程式中斷
 				}
@@ -88,14 +81,32 @@ public class CommentServlet extends HttpServlet {
 //				 Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					RequestDispatcher failureView = req
-							.getRequestDispatcher("/front-end/comment/select_comment_page.jsp");
+							.getRequestDispatcher("/index.jsp");
 					failureView.forward(req, res);
 					return;//程式中斷
 				}
 				
 				/***************************3.查詢完成,準備轉交(Send the Success view)*************/
+//				MovieService movieSvc = new MovieService();
+//				MovieVO movieVO = movieSvc.getOneMovie(commentVO.getMovieno());
+//				req.setAttribute("movieVO", movieVO);
+//				
+//				RatingService ratingSvc = new RatingService();
+//				RatingVO ratingCount = ratingSvc.getThisMovieToatalRating(commentVO.getMovieno());
+//				req.setAttribute("ratingCount", ratingCount);
+//
+//				ExpectationService expectationSvc = new ExpectationService();
+//				ExpectationVO expectationCount = expectationSvc.getThisMovieToatalExpectation(commentVO.getMovieno());
+//				req.setAttribute("expectationCount", expectationCount);
+//				
+//				Integer openModal=0;
+//				req.setAttribute("openModal",openModal );
+				
+				
 				req.setAttribute("commentVO", commentVO); // 資料庫取出的commentVO物件,存入req
 				String url = "/front-end/comment/listOneComment.jsp";
+//				String url = "/front-end/movie/listOneMovie.jsp";
+				
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交 listOneComment.jsp
 				successView.forward(req, res);
 
@@ -103,7 +114,7 @@ public class CommentServlet extends HttpServlet {
 			} catch (Exception e) {
 				errorMsgs.add("無法取得資料:" + e.getMessage());
 				RequestDispatcher failureView = req
-						.getRequestDispatcher("/front-end/comment/select_comment_page.jsp");
+						.getRequestDispatcher("/index.jsp");
 				failureView.forward(req, res);
 			}
 		}
@@ -417,7 +428,7 @@ public class CommentServlet extends HttpServlet {
 			} catch (Exception e) {
 				errorMsgs.add(e.getMessage());
 				RequestDispatcher failureView = req
-						.getRequestDispatcher("/front-end/comment/select_comment_page.jsp");
+						.getRequestDispatcher("/front-end/movie/error.jsp");
 				failureView.forward(req, res);
 			}
 		}

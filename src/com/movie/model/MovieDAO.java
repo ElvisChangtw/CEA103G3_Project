@@ -556,7 +556,7 @@ public class MovieDAO implements MovieDAO_interface{
 				movieVO.setMovieno(rs.getInt("MOVIE_NO"));
 				movieVO.setMoviename(rs.getString("MOVIE_NAME"));
 				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
-				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
+//				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
 				movieVO.setDirector(rs.getString("DIRECTOR"));
 				movieVO.setActor(rs.getString("ACTOR"));
 				movieVO.setCategory(rs.getString("CATEGORY"));
@@ -623,7 +623,7 @@ public class MovieDAO implements MovieDAO_interface{
 				movieVO.setMovieno(rs.getInt("MOVIE_NO"));
 				movieVO.setMoviename(rs.getString("MOVIE_NAME"));
 				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
-				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
+//				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
 				movieVO.setDirector(rs.getString("DIRECTOR"));
 				movieVO.setActor(rs.getString("ACTOR"));
 				movieVO.setCategory(rs.getString("CATEGORY"));
@@ -689,7 +689,7 @@ public class MovieDAO implements MovieDAO_interface{
 				bestMovie.setMovieno(rs.getInt("MOVIE_NO"));
 				bestMovie.setMoviename(rs.getString("MOVIE_NAME"));
 				bestMovie.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
-				bestMovie.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
+//				bestMovie.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
 				bestMovie.setDirector(rs.getString("DIRECTOR"));
 				bestMovie.setActor(rs.getString("ACTOR"));
 				bestMovie.setCategory(rs.getString("CATEGORY"));
@@ -748,7 +748,6 @@ public class MovieDAO implements MovieDAO_interface{
 
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_YEAR_MOVIE_STMT +" " + year +  " order by PREMIERE_DT desc");
-			System.out.println(GET_YEAR_MOVIE_STMT +" " + year +  " order by PREMIERE_DT desc");
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
@@ -757,7 +756,7 @@ public class MovieDAO implements MovieDAO_interface{
 				movieVO.setMovieno(rs.getInt("MOVIE_NO"));
 				movieVO.setMoviename(rs.getString("MOVIE_NAME"));
 				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
-				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
+//				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
 				movieVO.setDirector(rs.getString("DIRECTOR"));
 				movieVO.setActor(rs.getString("ACTOR"));
 				movieVO.setCategory(rs.getString("CATEGORY"));
@@ -824,7 +823,7 @@ public class MovieDAO implements MovieDAO_interface{
 				movieVO.setMovieno(rs.getInt("MOVIE_NO"));
 				movieVO.setMoviename(rs.getString("MOVIE_NAME"));
 				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
-				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
+//				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
 				movieVO.setDirector(rs.getString("DIRECTOR"));
 				movieVO.setActor(rs.getString("ACTOR"));
 				movieVO.setCategory(rs.getString("CATEGORY"));
@@ -891,7 +890,7 @@ public class MovieDAO implements MovieDAO_interface{
 				movieVO.setMovieno(rs.getInt("MOVIE_NO"));
 				movieVO.setMoviename(rs.getString("MOVIE_NAME"));
 				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
-				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
+//				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
 				movieVO.setDirector(rs.getString("DIRECTOR"));
 				movieVO.setActor(rs.getString("ACTOR"));
 				movieVO.setCategory(rs.getString("CATEGORY"));
@@ -957,7 +956,7 @@ public class MovieDAO implements MovieDAO_interface{
 				oneNewestInTheatersMovie.setMovieno(rs.getInt("MOVIE_NO"));
 				oneNewestInTheatersMovie.setMoviename(rs.getString("MOVIE_NAME"));
 				oneNewestInTheatersMovie.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
-				oneNewestInTheatersMovie.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
+//				oneNewestInTheatersMovie.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
 				oneNewestInTheatersMovie.setDirector(rs.getString("DIRECTOR"));
 				oneNewestInTheatersMovie.setActor(rs.getString("ACTOR"));
 				oneNewestInTheatersMovie.setCategory(rs.getString("CATEGORY"));
@@ -1023,7 +1022,7 @@ public class MovieDAO implements MovieDAO_interface{
 				movieVO.setMovieno(rs.getInt("MOVIE_NO"));
 				movieVO.setMoviename(rs.getString("MOVIE_NAME"));
 				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
-				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
+//				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
 				movieVO.setDirector(rs.getString("DIRECTOR"));
 				movieVO.setActor(rs.getString("ACTOR"));
 				movieVO.setCategory(rs.getString("CATEGORY"));
@@ -1089,7 +1088,7 @@ public class MovieDAO implements MovieDAO_interface{
 				oneNewestComingSoonMovie.setMovieno(rs.getInt("MOVIE_NO"));
 				oneNewestComingSoonMovie.setMoviename(rs.getString("MOVIE_NAME"));
 				oneNewestComingSoonMovie.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
-				oneNewestComingSoonMovie.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
+//				oneNewestComingSoonMovie.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
 				oneNewestComingSoonMovie.setDirector(rs.getString("DIRECTOR"));
 				oneNewestComingSoonMovie.setActor(rs.getString("ACTOR"));
 				oneNewestComingSoonMovie.setCategory(rs.getString("CATEGORY"));
@@ -1155,7 +1154,7 @@ public class MovieDAO implements MovieDAO_interface{
 				movieVO.setMovieno(rs.getInt("MOVIE_NO"));
 				movieVO.setMoviename(rs.getString("MOVIE_NAME"));
 				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
-				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
+//				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
 				movieVO.setDirector(rs.getString("DIRECTOR"));
 				movieVO.setActor(rs.getString("ACTOR"));
 				movieVO.setCategory(rs.getString("CATEGORY"));
@@ -1222,7 +1221,7 @@ public class MovieDAO implements MovieDAO_interface{
 				movieVO.setMovieno(rs.getInt("MOVIE_NO"));
 				movieVO.setMoviename(rs.getString("MOVIE_NAME"));
 				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
-				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
+//				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
 				movieVO.setDirector(rs.getString("DIRECTOR"));
 				movieVO.setActor(rs.getString("ACTOR"));
 				movieVO.setCategory(rs.getString("CATEGORY"));

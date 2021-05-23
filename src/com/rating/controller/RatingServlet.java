@@ -248,7 +248,6 @@ public class RatingServlet extends HttpServlet {
 					jsonobj.put("newRating", newRating);
 					jsonobj.put("countRating", countRating);
 					out.print(jsonobj.toString());
-					System.out.println(jsonobj.toString());
 					return;
 				}catch(JSONException e) {
 					e.printStackTrace();

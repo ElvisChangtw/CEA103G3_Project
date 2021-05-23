@@ -152,9 +152,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<div class="w3_content_agilleinfo_inner">
 				<div class="agile_featured_movies">
 				<div class="inner-agile-w3l-part-head">
-			            <h3 class="w3l-inner-h-title">後台瀏覽所有電影</h3>
-			            <li><a href='<%=request.getContextPath()%>/back-end/movie/addMovie.jsp'>Add</a></li>
+			    <h3 class="w3l-inner-h-title">後台瀏覽所有電影</h3>
+			    	<div class="col-sm-3">
+						<a href="<%=request.getContextPath()%>/back-end/movie/addMovie.jsp" class="btn btn-success" ><i class="material-icons">&#xE147;</i><span>Add New Movie</span></a>
 					</div>
+<%-- 			            <li><a href='<%=request.getContextPath()%>/back-end/movie/addMovie.jsp'>Add</a></li> --%>
+				</div>
 		            <div class="bs-example bs-example-tabs" role="tabpanel" data-example-id="togglable-tabs">
 				<div id="myTabContent" class="tab-content">
 					<div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
@@ -186,12 +189,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									<td>
 										<a href="${pageContext.request.contextPath}/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}">
 										<img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${movieVO.movieno}" 
-										alt="尚無圖片" width="90px;" height="110px" title="${movieVO.moviename}"/> 
+										alt="尚無圖片" width="80px;" height="100px" title="${movieVO.moviename}"/> 
 										<span  style="text-align: center; display:block; font-size:10px; font-weight:bold;">${movieVO.moviename}</span></a></td>
 									<td>
 										<a href="${pageContext.request.contextPath}/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}">
 										<img src="${pageContext.request.contextPath}/movie/DBGifReader2.do?movieno=${movieVO.movieno}" 
-										alt="尚無圖片" width="90px;" height="110px" title="${movieVO.moviename}"/></a></td>
+										alt="尚無圖片" width="80px;" height="100px" title="${movieVO.moviename}"/></a></td>
 									
 									<td width="50px;">${movieVO.director}</td>
 									<td width="50px;">${movieVO.actor}</td>
@@ -244,11 +247,17 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 										</c:otherwise>
 									</c:choose>
 										
-									<td width="50px;"><a class="w3_play_icon1" href="${movieVO.trailor}">觀看</a></td>
+									<td width="50px;"><a class="w3_play_icon1" href="${movieVO.trailor}">觀賞</a></td>
+<!-- 									<td> -->
+<!-- 										<div id="coverImg" onclick="onPlayerReady()">  -->
+<!-- 										<a class="w3_play_icon1" >觀賞</a></div>  -->
+<!-- 										<div id="ytplayer" style="display:none"></div> -->
+<!-- 									</td> -->
 									
 									<td width="50px;">
 										<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/movie/movie.do" style="margin-bottom: 0px;">
-											<input type="submit" value="修改"> 
+											<input type="submit" value="修改"
+											 class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#73BDBE; font-weight:bold; color:white;"> 
 											<input type="hidden" name="movieno" value="${movieVO.movieno}"> 
 											<input type="hidden" name="requestURL" value="<%=request.getServletPath()%>">
 											<!--送出本網頁的路徑給Controller-->
@@ -260,7 +269,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									
 									<td width="50px;">
 										<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/movie/movie.do" style="margin-bottom: 0px;">
-											<input type="submit" value="刪除"> 
+											<input type="submit" value="刪除"
+											class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#FC9C9D; font-weight:bold; color:white;"> 
 											<input type="hidden" name="movieno" value="${movieVO.movieno}"> 
 											<input type="hidden" name="requestURL" value="<%=request.getServletPath()%>">
 											<!--送出本網頁的路徑給Controller-->
@@ -286,6 +296,38 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 </div>
 <!--//content-inner-section-->
 
+
+
+
+
+
+
+
+
+
+
+			<!-- pop-up-box -->  
+		<script src="<%=request.getContextPath()%>/js/jquery.magnific-popup.js" type="text/javascript"></script>
+	<!--//pop-up-box -->
+	<div id="small-dialog-${movieVO.movieno}" class="mfp-hide">
+		<iframe src="https://www.youtube.com/embed/${movieVO.embed}"></iframe>
+	</div>
+	<script>
+		$(document).ready(function() {
+		$('.w3_play_icon,.w3_play_icon1,.w3_play_icon2').magnificPopup({
+			type: 'inline',
+			fixedContentPos: false,
+			fixedBgPos: true,
+			overflowY: 'auto',
+			closeBtnInside: true,
+			preloader: false,
+			midClick: true,
+			removalDelay: 300,
+			mainClass: 'my-mfp-zoom-in'
+		});
+																		
+		});
+	</script>
 
 </body>
 </html>

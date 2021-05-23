@@ -16,6 +16,8 @@ import com.movie.model.*;
 import com.comment.model.*;
 import com.rating.model.*;
 import com.expectation.model.*;
+import com.mem.model.MemService;
+import com.mem.model.MemVO;
 
 
 @WebServlet("/MovieServlet")
@@ -67,7 +69,7 @@ public class MovieServlet extends HttpServlet {
 				}
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
-					RequestDispatcher failureView = req.getRequestDispatcher("/front-end/movie/select_movie_page.jsp");
+					RequestDispatcher failureView = req.getRequestDispatcher("/front-end/movie/error.jsp");
 					failureView.forward(req, res);
 					return;// 程式中斷
 				}
@@ -80,7 +82,7 @@ public class MovieServlet extends HttpServlet {
 				}
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
-					RequestDispatcher failureView = req.getRequestDispatcher("/front-end/movie/select_movie_page.jsp");
+					RequestDispatcher failureView = req.getRequestDispatcher("/front-end/movie/error.jsp");
 					failureView.forward(req, res);
 					return;// 程式中斷
 				}
@@ -93,7 +95,7 @@ public class MovieServlet extends HttpServlet {
 				}
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
-					RequestDispatcher failureView = req.getRequestDispatcher("/front-end/movie/select_movie_page.jsp");
+					RequestDispatcher failureView = req.getRequestDispatcher("/front-end/movie/error.jsp");
 					failureView.forward(req, res);
 					return;// 程式中斷
 				}
@@ -104,6 +106,9 @@ public class MovieServlet extends HttpServlet {
 				ExpectationService expectationSvc = new ExpectationService();
 				ExpectationVO expectationCount = expectationSvc.getThisMovieToatalExpectation(movieno);
 				req.setAttribute("expectationCount", expectationCount);
+				
+//				Integer openModal=1;
+//				req.setAttribute("openModal",openModal );
 
 				/*************************** 3.查詢完成,準備轉交(Send the Success view) *************/
 				req.setAttribute("movieVO", movieVO); // 資料庫取出的movieVO物件,存入req
@@ -114,7 +119,7 @@ public class MovieServlet extends HttpServlet {
 				/*************************** 其他可能的錯誤處理 *************************************/
 			} catch (Exception e) {
 				errorMsgs.add("無法取得資料:" + e.getMessage());
-				RequestDispatcher failureView = req.getRequestDispatcher("/front-end/movie/select_movie_page.jsp");
+				RequestDispatcher failureView = req.getRequestDispatcher("/front-end/movie/error.jsp");
 				failureView.forward(req, res);
 			}
 		}
@@ -128,18 +133,19 @@ public class MovieServlet extends HttpServlet {
 			PrintWriter out = res.getWriter();
 
 			try {
-				/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 **********************/
+				/***************************1.接收請求參數 - 輸入格式的錯誤處理**********************/
 				String str = req.getParameter("movieno");
 				if (str == null || (str.trim()).length() == 0) {
 					errorMsgs.add("請輸入電影編號");
 				}
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
-					RequestDispatcher failureView = req.getRequestDispatcher("/frontend/mem/memberSys.jsp");
+					RequestDispatcher failureView = req
+							.getRequestDispatcher("/front-end/mem/memberSys.jsp");
 					failureView.forward(req, res);
-					return;// 程式中斷
+					return;//程式中斷
 				}
-
+				
 				Integer movieno = null;
 				try {
 					movieno = new Integer(str);
@@ -148,12 +154,13 @@ public class MovieServlet extends HttpServlet {
 				}
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
-					RequestDispatcher failureView = req.getRequestDispatcher("/frontend/mem/memberSys.jsp");
+					RequestDispatcher failureView = req
+							.getRequestDispatcher("/front-end/mem/memberSys.jsp");
 					failureView.forward(req, res);
-					return;// 程式中斷
+					return;//程式中斷
 				}
-
-				/*************************** 2.開始查詢資料 *****************************************/
+				
+				/***************************2.開始查詢資料*****************************************/
 				MovieService movieSvc = new MovieService();
 				MovieVO movieVO = movieSvc.getOneMovie(movieno);
 				CommentService comSvc = new CommentService();
@@ -164,30 +171,44 @@ public class MovieServlet extends HttpServlet {
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 
-					RequestDispatcher failureView = req.getRequestDispatcher("/frontend/mem/memberSys.jsp");
+					RequestDispatcher failureView = req
+							.getRequestDispatcher("/front-end/mem/memberSys.jsp");
 					failureView.forward(req, res);
-					return;// 程式中斷
+					return;//程式中斷
+				}
+				MemService memSvc = new MemService();
+				double allRating=movieVO.getRating();
+				JSONArray allComment = new JSONArray(comVO);  //
+				
+				for(int i = 0; i< allComment.length(); i++) {
+					JSONObject obj = allComment.getJSONObject(i);
+					int memberno = obj.getInt("memberno");
+					MemVO vo = memSvc.getOneMem(memberno);
+					if(vo != null) {
+						String mb_name = vo.getMb_name();
+						obj.put("mb_name", mb_name);
+					}
 				}
 
-				double allRating = movieVO.getRating();
-				JSONArray allComment = new JSONArray(comVO); //
-				JSONObject jsonobj = new JSONObject();
+				
+				JSONObject jsonobj=new JSONObject();
 				try {
 					jsonobj.put("allRating", allRating);
 					jsonobj.put("allComment", allComment);
 					out.print(jsonobj.toString());
 					return;
-				} catch (JSONException e) {
+				}catch(JSONException e) {
 					e.printStackTrace();
-				} finally {
+				}finally {
 					out.flush();
 					out.close();
 				}
 
-				/*************************** 其他可能的錯誤處理 *************************************/
+				/***************************其他可能的錯誤處理*************************************/
 			} catch (Exception e) {
 				errorMsgs.add("無法取得資料:" + e.getMessage());
-				RequestDispatcher failureView = req.getRequestDispatcher("/frontend/mem/memberSys.jsp");
+				RequestDispatcher failureView = req
+						.getRequestDispatcher("/front-end/mem/memberSys.jsp");
 				failureView.forward(req, res);
 			}
 		}
@@ -219,7 +240,7 @@ public class MovieServlet extends HttpServlet {
 
 				/*************************** 其他可能的錯誤處理 ************************************/
 			} catch (Exception e) {
-				errorMsgs.put("1", "修改資料取出時失敗:" + e.getMessage());
+				errorMsgs.put("Exception", "修改資料取出時失敗:" + e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher(requestURL);
 				failureView.forward(req, res);
 			}
@@ -828,7 +849,7 @@ public class MovieServlet extends HttpServlet {
 				/*************************** 其他可能的錯誤處理 **********************************/
 			} catch (Exception e) {
 				errorMsgs.add(e.getMessage());
-				RequestDispatcher failureView = req.getRequestDispatcher("/front-end/movie/select_movie_page.jsp");
+				RequestDispatcher failureView = req.getRequestDispatcher("/front-end/movie/error.jsp");
 				failureView.forward(req, res);
 			}
 		}
@@ -949,7 +970,7 @@ public class MovieServlet extends HttpServlet {
 			} catch (Exception e) {
 				errorMsgs.add(e.getMessage());
 				RequestDispatcher failureView = req
-						.getRequestDispatcher("/front-end/movie/select_movie_page.jsp");
+						.getRequestDispatcher("/front-end/movie/error.jsp");
 				failureView.forward(req, res);
 			}
 		}

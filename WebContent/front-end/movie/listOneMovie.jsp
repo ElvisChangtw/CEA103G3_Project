@@ -7,6 +7,7 @@
 <%@ page import="com.rating.model.*"%>
 <%@ page import="com.expectation.model.*"%>
 <%@ page import="java.sql.Date"%>
+<%@ page import="com.mem.model.*"%>
 
 
 <%
@@ -28,8 +29,14 @@
 // 	int memberNumber = 9; //到時要換成從session取memVO出來
 // 	pageContext.setAttribute("memberNumber", memberNumber);
 
+MemVO memVO = (MemVO) session.getAttribute("memVO");
+if (memVO == null){
+	memVO = new MemVO();
+	memVO.setMember_no(999);
+}
+pageContext.setAttribute("memVO", memVO);
 %>
-<jsp:useBean id="memVO" scope="session" type="com.mem.model.MemVO" />
+<%-- <jsp:useBean id="memVO" scope="session" type="com.mem.model.MemVO" /> --%>
 <%-- <jsp:useBean id="listComments_ByMovieno" scope="request" type="java.util.Set<CommentVO>" /> --%>
 <%-- <jsp:useBean id="movieSvc" scope="page" class="com.movie.model.MovieService" /> --%>
 <!DOCTYPE html>
@@ -68,6 +75,41 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 #chart{
   width:50px;
   height:50px;
+}
+#s1:hover { 
+ color:#24BCE3 !important;                         
+ cursor: pointer; 
+ transform:scale(1.2,1.2);      
+}
+#s2:hover { 
+ color:#41A2E6 !important;                         
+ cursor: pointer; 
+ transform:scale(1.2,1.2);      
+}
+#s3:hover { 
+ color:#7F6CEE !important;                         
+ cursor: pointer; 
+ transform:scale(1.2,1.2);      
+}
+#s4:hover { 
+ color:#B63DF6 !important;                         
+ cursor: pointer;  
+ transform:scale(1.2,1.2);     
+}
+#s5:hover { 
+ color:#F407FE !important;                         
+ cursor: pointer;  
+ transform:scale(1.2,1.2);     
+}
+#t1:hover { 
+ color:#A5C4FC !important;                         
+ cursor: pointer;
+ transform:scale(1.2,1.2);       
+}
+#t2:hover { 
+ color:#fbc2eb !important;                         
+ cursor: pointer;
+ transform:scale(1.2,1.2);       
 }
 </style>
 </head>
@@ -385,9 +427,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							   <div class="latest-news-agile-info">
 								   <div class="col-md-8 latest-news-agile-left-content">
 											<div class="single video_agile_player">
-										            <div class="video-grid-single-page-agileits">
-														<div data-video="${movieVO.embed}" id="video"> <img src="${pageContext.request.contextPath}/movie/DBGifReader2.do?movieno=${movieVO.movieno}" alt="" > </div>
-													</div>
+												 <div class="video-grid-single-page-agileits"> 
+													<a class="w3_play_icon" href="#small-dialog">
+	                            						<img src="${pageContext.request.contextPath}/movie/DBGifReader2.do?movieno=${movieVO.movieno}" 
+	                            						alt="" class="img-responsive" title="點擊觀賞【${movieVO.moviename}】最新預告" /> 
+ 	                       							</a>
+ 	                       						</div>
+<!-- 										            <div class="video-grid-single-page-agileits"> -->
+<%-- 														<div data-video="${movieVO.embed}" id="video"> <img src="${pageContext.request.contextPath}/movie/DBGifReader2.do?movieno=${movieVO.movieno}" alt="" > </div> --%>
+<!-- 													</div> -->
 													 <h4>Official Trailer | ${movieVO.actor}</h4>
 													 <c:if test="${today.before(movieVO.offdate)}">
 													 	<c:if test="${today.after(movieVO.premiredate)}">
@@ -406,8 +454,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 														 <c:if test="${today.before(movieVO.premiredate)}">													 
 															 <tr>
 																<td><span style="color:#524066; font-weight:1000; font-size:30px;">期待度:&emsp;</span></td>
-																	<i class="fa fa-thumbs-up fa-2x thumbsup" id="t1" style="color:gray"></i>&ensp;
-																	<i class="fa fa-thumbs-down fa-2x thumbsdown" id="t2" style="color:gray"></i>
+																	<i class="fa fa-thumbs-up fa-2x thumbs" id="t1" style="color:gray"></i>&ensp;
+																	<i class="fa fa-thumbs-down fa-2x thumbs" id="t2" style="color:gray"></i>
 															 </tr>
 													 	</c:if>
 													 </c:if>
@@ -418,28 +466,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 							
 	<div class="col-md-4 latest-news-agile-right-content">
-		<!-- 		<h4 class="side-t-w3l-agile"> -->
-		<!-- 			For Latest <span>Movies</span> -->
-		<!-- 		</h4> -->
-		<!-- 		<div class="side-bar-form"> -->
-		<!-- 			<form action="#" method="post"> -->
-		<!-- 				<input type="search" name="email" placeholder="Search here...." -->
-		<!-- 					required="required"> <input type="submit" value=" "> -->
-		<!-- 			</form> -->
-		<!-- 		</div> -->
-
-
-
-
-
-
-		<!-- 			<h4 class="side-t-w3l-agile"> -->
-		<!-- 				Latest <span>Trailer</span> -->
-		<!-- 				</h4> -->
-		<!-- 				-->
-<!-- 		<div class="clearfix"></div> -->
-<!-- <h4 class="side-t-w3l-agile">Latest <span>Trailer</span></h3> -->
-<!-- 	<div class="video_agile_player sidebar-player">  -->
 			<div class="video-grid-single-page-agileits">
 				<img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${movieVO.movieno}"
 					alt="" class="img-responsive">
@@ -530,85 +556,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					<div id="ratingValue" style="display:none;">${movieVO.rating}</div>
 					<p id="rating" class="fexi_header_para fexi_header_para1"> </p>
 					<p id="noRating" class="fexi_header_para "></p>
-					
-					
-<%-- 					<c:choose> --%>
-<%-- 						<c:when test="${movieVO.rating <= 1.0}"> --%>
-<!-- 							<p class="fexi_header_para fexi_header_para1"> -->
-<!-- 										<a><i class="fa fa-star" aria-hidden="true"></i></a> -->
-<!-- 										<a><i class="fa fa-star-o" aria-hidden="true"></i></a> -->
-<!-- 										<a><i class="fa fa-star-o" aria-hidden="true"></i></a> -->
-<!-- 										<a><i class="fa fa-star-o" aria-hidden="true"></i></a> -->
-<!-- 										<a><i class="fa fa-star-o" aria-hidden="true"></i></a> -->
-<!-- 									</p> -->
-<!-- 							</div> -->
-<!-- 							<div class="clearfix"></div> -->
-<%-- 						</c:when> --%>
-<%-- 						<c:when test="${movieVO.rating <= 2.0}"> --%>
-<!-- 							<p class="fexi_header_para fexi_header_para1"> -->
-<!-- 										<a><i class="fa fa-star" aria-hidden="true"></i></a> -->
-<!-- 										<a><i class="fa fa-star" aria-hidden="true"></i></a> -->
-<!-- 										<a><i class="fa fa-star-o" aria-hidden="true"></i></a> -->
-<!-- 										<a><i class="fa fa-star-o" aria-hidden="true"></i></a> -->
-<!-- 										<a><i class="fa fa-star-o" aria-hidden="true"></i></a> -->
-<!-- 									</p> -->
-<!-- 							</div> -->
-<!-- 							<div class="clearfix"></div> -->
-<%-- 						</c:when> --%>
-<%-- 						<c:when test="${movieVO.rating <= 3.0}"> --%>
-<!-- 							<p class="fexi_header_para fexi_header_para1"> -->
-<!-- 										<a><i class="fa fa-star" aria-hidden="true"></i></a> -->
-<!-- 										<a><i class="fa fa-star" aria-hidden="true"></i></a> -->
-<!-- 										<a><i class="fa fa-star" aria-hidden="true"></i></a> -->
-<!-- 										<a><i class="fa fa-star-o" aria-hidden="true"></i></a> -->
-<!-- 										<a><i class="fa fa-star-o" aria-hidden="true"></i></a> -->
-<!-- 									</p> -->
-<!-- 							</div> -->
-<!-- 							<div class="clearfix"></div> -->
-<%-- 						</c:when> --%>
-<%-- 						<c:when test="${movieVO.rating <= 4.0}"> --%>
-<!-- 							<p class="fexi_header_para fexi_header_para1"> -->
-<!-- 										<a><i class="fa fa-star" aria-hidden="true"></i></a> -->
-<!-- 										<a><i class="fa fa-star" aria-hidden="true"></i></a> -->
-<!-- 										<a><i class="fa fa-star" aria-hidden="true"></i></a> -->
-<!-- 										<a><i class="fa fa-star" aria-hidden="true"></i></a> -->
-<!-- 										<a><i class="fa fa-star-o" aria-hidden="true"></i></a> -->
-<!-- 									</p> -->
-<!-- 							</div> -->
-<!-- 							<div class="clearfix"></div> -->
-<%-- 						</c:when> --%>
-<%-- 						<c:when test="${movieVO.rating <= 5.0}"> --%>
-<!-- 							<p class="fexi_header_para fexi_header_para1"> -->
-<!-- 										<a><i class="fa fa-star" aria-hidden="true"></i></a> -->
-<!-- 										<a><i class="fa fa-star" aria-hidden="true"></i></a> -->
-<!-- 										<a><i class="fa fa-star" aria-hidden="true"></i></a> -->
-<!-- 										<a><i class="fa fa-star" aria-hidden="true"></i></a> -->
-<!-- 										<a><i class="fa fa-star" aria-hidden="true"></i></a> -->
-<!-- 									</p> -->
-<!-- 							<div class="clearfix"></div> -->
-<%-- 						</c:when> --%>
-<%-- 						<c:otherwise> --%>
-<!-- 							<td width="100px;"><font color="gray">尚無評分</font></td> -->
-<%-- 						</c:otherwise> --%>
-<%-- 					</c:choose> --%>
-<!-- 					<p class="fexi_header_para fexi_header_para1"> -->
-<!-- 						<span>電影期待度<label>:</label></span> -->
-<%-- 						<canvas id="chart"></canvas>		 --%>
-<!-- 					</p> -->
+
 					<p class="fexi_header_para ">
 						<span>電影期待度<label>:</label></span>
 					</p>
 					<div id="expectationValue" style="display:none;">${movieVO.expectation}</div>
-<%-- 					<td><fmt:formatNumber type="number" value="${movieVO.expectation*100}"/>測試數字格式化</td>					 --%>
 					<p id="expectation" class="fexi_header_para ">
-<%-- 						<c:choose> --%>
-<%-- 							<c:when test="${movieVO.expectation != null}"> --%>
-<%-- 								<canvas id="chart"></canvas> --%>
-<%-- 							</c:when> --%>
-<%-- 							<c:otherwise> --%>
-<!-- 								<td>尚無期待度</td> -->
-<%-- 							</c:otherwise> --%>
-<%-- 						</c:choose> --%>
 					</p>
 					<p id="noExpectation" class="fexi_header_para "></p>
 			</div>
@@ -625,12 +578,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							<c:forEach var="movieVO" items="${movieSvc.all}">
 								<option value="${movieVO.movieno}" ${(commentVO.movieno==movieVO.movieno)? 'selected':'' } >${movieVO.moviename} 
  							</c:forEach> 
-								
-<!-- 								<option>正義聯盟</option> -->
-<!-- 								<option>即刻救援</option> -->
-<!-- 								<option>星際大戰 天行者的崛起</option> -->
-<!-- 								<option>讓子彈飛</option> -->
-<!-- 								<option>哥吉拉大戰金剛</option> -->
 							</select> <span class="select-arrow"></span>
 						</div>
 						<div class="form-group">
@@ -803,6 +750,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     </div>
     <a href="#home" id="toTop" class="scroll" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
 
+
+
+
+
+
+
 <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 	<!-- Dropdown-Menu-JavaScript -->
 			
@@ -870,12 +823,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<!-- pop-up-box -->  
 		<script src="<%=request.getContextPath()%>/js/jquery.magnific-popup.js" type="text/javascript"></script>
 	<!--//pop-up-box -->
-
-			<div id="small-dialog1" class="mfp-hide">
-		<iframe src="https://player.vimeo.com/video/165197924?color=ffffff&title=0&byline=0&portrait=0"></iframe>
-	</div>
-	<div id="small-dialog2" class="mfp-hide">
-		<iframe src="https://player.vimeo.com/video/165197924?color=ffffff&title=0&byline=0&portrait=0"></iframe>
+	<div id="small-dialog" class="mfp-hide">
+		<iframe src="https://www.youtube.com/embed/${movieVO.embed}"></iframe>
 	</div>
 	<script>
 		$(document).ready(function() {
@@ -1088,99 +1037,126 @@ function thumbsDownDrawPieChart(newExpectation, countExpectation) {
 	
 $(document).ready(function(){
 	$("#t1").click(function(){
-		$(".thumbsup").css("color","gray");
-		$("#t1").css("color","#4194CA");	
-		$("#t2").css("color","gray");
-		$("#con1").val("1.0");
-		
-		let movieno = "${movieVO.movieno}";
-		let memberno = "${memVO.member_no}";
-		let expectation = "1.0";
-		
-		$.ajax({
-			url:"<%=request.getContextPath()%>/expectation/expectation.do?action=insertOrUpdate",
-			data:{
-				"memberno":memberno,	
-				"movieno":movieno,
-				"expectation":expectation		   
-			},
-			type:"POST",
-			success:function(json){
-				let jsonobj = JSON.parse(json);
-				console.log("json = " + json);
-				console.log(jsonobj);
-				let newExpectation = jsonobj.newExpectation;
-				let countExpectation = jsonobj.countExpectation;
-				thumbsUpDrawPieChart(newExpectation , countExpectation);
+		if(${memVO.member_no}==999){
+			Swal.fire({
+				  position: 'center',
+				  icon: 'error',
+				  title: '請先登入',
+				  showConfirmButton: false,
+				  timer: 1500
+				})
 				
-			}
-		 });
-		
-		Swal.fire({
-            position: "center",
-            icon: "success",
-            title: "我好期待RRRRR",
-            showConfirmButton: false,
-            timer: 5000,
-			width: 600,
-			padding: '3em',
-			background: '#fff url(/images/trees.png)',
-			backdrop: `
-			  rgba(0,0,0,0.4)
-			  url("<%=request.getContextPath()%>/images/gif/hotBoy.gif")
-			  left center
-			  no-repeat
-			`
-        });
-		 $("#leaveBtn").show();
-		 
+			setTimeout(function(){
+				document.location.href="<%=request.getContextPath()%>/front-end/mem/MemLogin.jsp";
+			}, 1500);
+		}else{
+			$(".thumbs").css("color","gray");
+			$("#t1").css("color","#4194CA");	
+			$("#t2").css("color","gray");
+			$("#con1").val("1.0");
+			
+			let movieno = "${movieVO.movieno}";
+			let memberno = "${memVO.member_no}";
+			let expectation = "1.0";
+			
+			$.ajax({
+				url:"<%=request.getContextPath()%>/expectation/expectation.do?action=insertOrUpdate",
+				data:{
+					"memberno":memberno,	
+					"movieno":movieno,
+					"expectation":expectation		   
+				},
+				type:"POST",
+				success:function(json){
+					let jsonobj = JSON.parse(json);
+					console.log("json = " + json);
+					console.log(jsonobj);
+					let newExpectation = jsonobj.newExpectation;
+					let countExpectation = jsonobj.countExpectation;
+					thumbsUpDrawPieChart(newExpectation , countExpectation);
+					
+				}
+			 });
+			
+			Swal.fire({
+	            position: "center",
+	            icon: "success",
+	            title: "我好期待RRRRR",
+	            showConfirmButton: false,
+	            timer: 5000,
+				width: 600,
+				padding: '3em',
+				background: '#fff url(/images/trees.png)',
+				backdrop: `
+				  rgba(0,0,0,0.4)
+				  url("<%=request.getContextPath()%>/images/gif/hotBoy.gif")
+				  left center
+				  no-repeat
+				`
+	        });
+			 $("#leaveBtn").show();
+		}
 	})
+	
 	$("#t2").click(function(){
-		$(".thumbsdown").css("color","gray");
-		$("#t2").css("color","#D66B75");
-		$("#t1").css("color","gray");
-		$("#con1").val("0.0");
-		
-		let movieno = "${movieVO.movieno}";
-		let memberno = "${memVO.member_no}";
-		let expectation = "0.0";
-		
-		$.ajax({
-			url:"<%=request.getContextPath()%>/expectation/expectation.do?action=insertOrUpdate",
-			data:{
-				"memberno":memberno,	
-				"movieno":movieno,
-				"expectation":expectation		   
-			},
-			type:"POST",
-			success:function(json){
-				let jsonobj = JSON.parse(json);
-				console.log("json = " + json);
-				console.log(jsonobj);
-				let newExpectation = jsonobj.newExpectation;
-				let countExpectation = jsonobj.countExpectation;
-				thumbsDownDrawPieChart(newExpectation , countExpectation);
-			}
-		 });
-		
-		Swal.fire({
-            position: "center",
-            icon: "success",
-            title: "我好失望RRRRR",
-            showConfirmButton: false,
-            timer: 5000,
-			width: 600,
-			padding: '3em',
-			background: '#fff url(/images/trees.png)',
-			backdrop: `
-			  rgba(0,0,0,0.4)
-			  url("https://zodiac.tw/uploads/1455625798-jI266.jpg")
-			  left center
-			  no-repeat
-			`
-        });
-		 $("#leaveBtn").show();
-		
+		if(${memVO.member_no}==999){
+			Swal.fire({
+				  position: 'center',
+				  icon: 'error',
+				  title: '請先登入',
+				  showConfirmButton: false,
+				  timer: 1500
+				})
+				
+			setTimeout(function(){
+				document.location.href="<%=request.getContextPath()%>/front-end/mem/MemLogin.jsp";
+			}, 1500);
+		}else{
+			$(".thumbs").css("color","gray");
+			$("#t2").css("color","#D66B75");
+			$("#t1").css("color","gray");
+			$("#con1").val("0.0");
+			
+			let movieno = "${movieVO.movieno}";
+			let memberno = "${memVO.member_no}";
+			let expectation = "0.0";
+			
+			$.ajax({
+				url:"<%=request.getContextPath()%>/expectation/expectation.do?action=insertOrUpdate",
+				data:{
+					"memberno":memberno,	
+					"movieno":movieno,
+					"expectation":expectation		   
+				},
+				type:"POST",
+				success:function(json){
+					let jsonobj = JSON.parse(json);
+					console.log("json = " + json);
+					console.log(jsonobj);
+					let newExpectation = jsonobj.newExpectation;
+					let countExpectation = jsonobj.countExpectation;
+					thumbsDownDrawPieChart(newExpectation , countExpectation);
+				}
+			 });
+			
+			Swal.fire({
+	            position: "center",
+	            icon: "success",
+	            title: "我好失望RRRRR",
+	            showConfirmButton: false,
+	            timer: 5000,
+				width: 600,
+				padding: '3em',
+				background: '#fff url(/images/trees.png)',
+				backdrop: `
+				  rgba(0,0,0,0.4)
+				  url("https://zodiac.tw/uploads/1455625798-jI266.jpg")
+				  left center
+				  no-repeat
+				`
+	        });
+			 $("#leaveBtn").show();
+		}
 	})
 })
 
@@ -1360,230 +1336,299 @@ function drawRating(newRating,countRating) {
 
 $(document).ready(function(){
 	$("#s1").click(function(){
-		$(".all-star").css("color","gray");
-		$("#s1").css("color","yellow");
-		$("#con").val("1.0");
-		
-		let movieno = "${movieVO.movieno}";
-		let memberno = "${memVO.member_no}";
-		let rating = "1.0";
-		
-		$.ajax({
-			url:"<%=request.getContextPath()%>/rating/rating.do?action=insertOrUpdate",
-			data:{
-				"memberno":memberno,	
-				"movieno":movieno,
-				"rating":rating		   
-			},
-			type:"POST",
-			success:function(json){
-				let jsonobj = JSON.parse(json);
-				let newRating = jsonobj.newRating;
-				let countRating = jsonobj.countRating;
-				$('#ratingValue').text(newRating);
-				drawRating(newRating,countRating); 
-			}
-		 });
-		
-		Swal.fire({
-            position: "center",
-            icon: "success",
-            title: "一星摳摳",
-            showConfirmButton: false,
-            timer: 3000,
-			width: 600,
-			padding: '3em',
-			background: '#fff url(/images/trees.png)',
-			backdrop: `
-			  rgba(0,0,0,0.4)
-			  url("<%=request.getContextPath()%>/images/gif/11.gif")
-			  left center
-			  no-repeat
-			`
-        });
-		 $("#leaveBtn").show();
+		if(${memVO.member_no}==999){
+			Swal.fire({
+				  position: 'center',
+				  icon: 'error',
+				  title: '請先登入',
+				  showConfirmButton: false,
+				  timer: 1500
+				})
+				
+			setTimeout(function(){
+				document.location.href="<%=request.getContextPath()%>/front-end/mem/MemLogin.jsp";
+			}, 1500);
+		}else{
+			$(".all-star").css("color","gray");
+			$("#s1").css("color","yellow");
+			$("#con").val("1.0");
+			
+			let movieno = "${movieVO.movieno}";
+			let memberno = "${memVO.member_no}";
+			let rating = "1.0";
+			
+			$.ajax({
+				url:"<%=request.getContextPath()%>/rating/rating.do?action=insertOrUpdate",
+				data:{
+					"memberno":memberno,	
+					"movieno":movieno,
+					"rating":rating		   
+				},
+				type:"POST",
+				success:function(json){
+					let jsonobj = JSON.parse(json);
+					let newRating = jsonobj.newRating;
+					let countRating = jsonobj.countRating;
+					$('#ratingValue').text(newRating);
+					drawRating(newRating,countRating); 
+				}
+			 });
+			
+			Swal.fire({
+	            position: "center",
+	            icon: "success",
+	            title: "一星摳摳",
+	            showConfirmButton: false,
+	            timer: 3000,
+				width: 600,
+				padding: '3em',
+				background: '#fff url(/images/trees.png)',
+				backdrop: `
+				  rgba(0,0,0,0.4)
+				  url("<%=request.getContextPath()%>/images/gif/11.gif")
+				  left center
+				  no-repeat
+				`
+	        });
+			 $("#leaveBtn").show();
+		}
 	})
 	
 	$("#s2").click(function(){
-		$(".all-star").css("color","gray");
-		$("#s1,#s2").css("color","yellow");
-		$("#con").val("2.0");
-		
-		let movieno = "${movieVO.movieno}";
-		let memberno = "${memVO.member_no}";
-		let rating = "2.0";
-		
-		$.ajax({
-			url:"<%=request.getContextPath()%>/rating/rating.do?action=insertOrUpdate",
-			data:{
-				"memberno":memberno,	
-				"movieno":movieno,
-				"rating":rating		   
-			},
-			type:"POST",
-			success:function(json){
-				let jsonobj = JSON.parse(json);
-				let newRating = jsonobj.newRating;
-				let countRating = jsonobj.countRating;
-				$('#ratingValue').text(newRating);
-				drawRating(newRating,countRating); 
-			}
-		 });
-		
-		Swal.fire({
-            position: "center",
-            icon: "success",
-            title: "二星舔舔",
-            showConfirmButton: false,
-            timer: 3000,
-			width: 600,
-			padding: '3em',
-			background: '#fff url(/images/trees.png)',
-			backdrop: `
-			  rgba(0,0,0,0.4)
-			  url("https://memes.tw/user-maker-thumbnail/a1c21b379244a82960756bf4f8def57a.gif")
-			  left center
-			  no-repeat
-			`
-        });
-		 $("#leaveBtn").show();
+		if(${memVO.member_no}==999){
+			Swal.fire({
+				  position: 'center',
+				  icon: 'error',
+				  title: '請先登入',
+				  showConfirmButton: false,
+				  timer: 1500
+				})
+				
+			setTimeout(function(){
+				document.location.href="<%=request.getContextPath()%>/front-end/mem/MemLogin.jsp";
+			}, 1500);
+		}else{
+			$(".all-star").css("color","gray");
+			$("#s1,#s2").css("color","yellow");
+			$("#con").val("2.0");
+			
+			let movieno = "${movieVO.movieno}";
+			let memberno = "${memVO.member_no}";
+			let rating = "2.0";
+			
+			$.ajax({
+				url:"<%=request.getContextPath()%>/rating/rating.do?action=insertOrUpdate",
+				data:{
+					"memberno":memberno,	
+					"movieno":movieno,
+					"rating":rating		   
+				},
+				type:"POST",
+				success:function(json){
+					let jsonobj = JSON.parse(json);
+					let newRating = jsonobj.newRating;
+					let countRating = jsonobj.countRating;
+					$('#ratingValue').text(newRating);
+					drawRating(newRating,countRating); 
+				}
+			 });
+			
+			Swal.fire({
+	            position: "center",
+	            icon: "success",
+	            title: "二星舔舔",
+	            showConfirmButton: false,
+	            timer: 3000,
+				width: 600,
+				padding: '3em',
+				background: '#fff url(/images/trees.png)',
+				backdrop: `
+				  rgba(0,0,0,0.4)
+				  url("https://memes.tw/user-maker-thumbnail/a1c21b379244a82960756bf4f8def57a.gif")
+				  left center
+				  no-repeat
+				`
+	        });
+			 $("#leaveBtn").show();
+		}
 	})
 	
 	$("#s3").click(function(){
-		$(".all-star").css("color","gray");
-		$("#s1,#s2,#s3").css("color","yellow");
-		$("#con").val("3.0");
-		
-		let movieno = "${movieVO.movieno}";
-		let memberno = "${memVO.member_no}";
-		let rating = "3.0";
-		
-		$.ajax({
-			url:"<%=request.getContextPath()%>/rating/rating.do?action=insertOrUpdate",
-			data:{
-				"memberno":memberno,	
-				"movieno":movieno,
-				"rating":rating		   
-			},
-			type:"POST",
-			success:function(json){
-				let jsonobj = JSON.parse(json);
-				let newRating = jsonobj.newRating;
-				let countRating = jsonobj.countRating;
-				$('#ratingValue').text(newRating);
-				drawRating(newRating,countRating); 
+		if(${memVO.member_no}==999){
+			Swal.fire({
+				  position: 'center',
+				  icon: 'error',
+				  title: '請先登入',
+				  showConfirmButton: false,
+				  timer: 1500
+				})
 				
-			}
-		 });
-		
-		Swal.fire({
-            position: "center",
-            icon: "success",
-            title: "三星吸吸",
-            showConfirmButton: false,
-            timer: 3000,
-			width: 600,
-			padding: '3em',
-			background: '#fff url(/images/trees.png)',
-			backdrop: `
-			  rgba(0,0,0,0.4)
-			  url("https://64.media.tumblr.com/8210fd413c5ce209678ef82d65731443/tumblr_mjphnqLpNy1s5jjtzo1_400.gifv")
-			  left top
-			  no-repeat
-			`
-        });
-		 $("#leaveBtn").show();
+			setTimeout(function(){
+				document.location.href="<%=request.getContextPath()%>/front-end/mem/MemLogin.jsp";
+			}, 1500);
+		}else{
+			$(".all-star").css("color","gray");
+			$("#s1,#s2,#s3").css("color","yellow");
+			$("#con").val("3.0");
+			
+			let movieno = "${movieVO.movieno}";
+			let memberno = "${memVO.member_no}";
+			let rating = "3.0";
+			
+			$.ajax({
+				url:"<%=request.getContextPath()%>/rating/rating.do?action=insertOrUpdate",
+				data:{
+					"memberno":memberno,	
+					"movieno":movieno,
+					"rating":rating		   
+				},
+				type:"POST",
+				success:function(json){
+					let jsonobj = JSON.parse(json);
+					let newRating = jsonobj.newRating;
+					let countRating = jsonobj.countRating;
+					$('#ratingValue').text(newRating);
+					drawRating(newRating,countRating); 
+					
+				}
+			 });
+			
+			Swal.fire({
+	            position: "center",
+	            icon: "success",
+	            title: "三星吸吸",
+	            showConfirmButton: false,
+	            timer: 3000,
+				width: 600,
+				padding: '3em',
+				background: '#fff url(/images/trees.png)',
+				backdrop: `
+				  rgba(0,0,0,0.4)
+				  url("https://64.media.tumblr.com/8210fd413c5ce209678ef82d65731443/tumblr_mjphnqLpNy1s5jjtzo1_400.gifv")
+				  left top
+				  no-repeat
+				`
+	        });
+			 $("#leaveBtn").show();
+		}
 	})
 	
 	$("#s4").click(function(){
-		$(".all-star").css("color","gray");
-		$("#s1,#s2,#s3,#s4").css("color","yellow");
-		$("#con").val("4.0");
-		
-		let movieno = "${movieVO.movieno}";
-		let memberno = "${memVO.member_no}";
-		let rating = "4.0";
-		
-		$.ajax({
-			url:"<%=request.getContextPath()%>/rating/rating.do?action=insertOrUpdate",
-			data:{
-				"memberno":memberno,	
-				"movieno":movieno,
-				"rating":rating		   
-			},
-			type:"POST",
-			success:function(json){
-				let jsonobj = JSON.parse(json);
-				let newRating = jsonobj.newRating;
-				let countRating = jsonobj.countRating;
-				$('#ratingValue').text(newRating);
-				drawRating(newRating,countRating); 
-			}
-		 });
-		
-		Swal.fire({
-            position: "center",
-            icon: "success",
-            title: "四星含含",
-            showConfirmButton: false,
-            timer: 3000,
-			width: 600,
-			padding: '3em',
-			background: '#fff url(/images/trees.png)',
-			backdrop: `
-			  rgba(0,0,0,0.4)
-			  url("<%=request.getContextPath()%>/images/gif/yee.gif")
-			  left top
-			  no-repeat
-			`
-        });
-		 $("#leaveBtn").show();
+		if(${memVO.member_no}==999){
+			Swal.fire({
+				  position: 'center',
+				  icon: 'error',
+				  title: '請先登入',
+				  showConfirmButton: false,
+				  timer: 1500
+				})
+				
+			setTimeout(function(){
+				document.location.href="<%=request.getContextPath()%>/front-end/mem/MemLogin.jsp";
+			}, 1500);
+		}else{
+			$(".all-star").css("color","gray");
+			$("#s1,#s2,#s3,#s4").css("color","yellow");
+			$("#con").val("4.0");
+			
+			let movieno = "${movieVO.movieno}";
+			let memberno = "${memVO.member_no}";
+			let rating = "4.0";
+			
+			$.ajax({
+				url:"<%=request.getContextPath()%>/rating/rating.do?action=insertOrUpdate",
+				data:{
+					"memberno":memberno,	
+					"movieno":movieno,
+					"rating":rating		   
+				},
+				type:"POST",
+				success:function(json){
+					let jsonobj = JSON.parse(json);
+					let newRating = jsonobj.newRating;
+					let countRating = jsonobj.countRating;
+					$('#ratingValue').text(newRating);
+					drawRating(newRating,countRating); 
+				}
+			 });
+			
+			Swal.fire({
+	            position: "center",
+	            icon: "success",
+	            title: "四星含含",
+	            showConfirmButton: false,
+	            timer: 3000,
+				width: 600,
+				padding: '3em',
+				background: '#fff url(/images/trees.png)',
+				backdrop: `
+				  rgba(0,0,0,0.4)
+				  url("<%=request.getContextPath()%>/images/gif/yee.gif")
+				  left top
+				  no-repeat
+				`
+	        });
+			 $("#leaveBtn").show();
+		}
 	})
 	
 	$("#s5").click(function(){
-	
-		$(".all-star").css("color","gray");
-		$("#s1,#s2,#s3,#s4,#s5").css("color","yellow");
-		$("#con").val("5.0");
-		
-		let movieno = "${movieVO.movieno}";
-		let memberno = "${memVO.member_no}";
-		let rating = "5.0";
-		
-		$.ajax({
-			url:"<%=request.getContextPath()%>/rating/rating.do?action=insertOrUpdate",
-			data:{
-				"memberno":memberno,	
-				"movieno":movieno,
-				"rating":rating		   
-			},
-			type:"POST",
-			success:function(json){
-				let jsonobj = JSON.parse(json);
-				let newRating = jsonobj.newRating;
-				let countRating = jsonobj.countRating;
-				$('#ratingValue').text(newRating);
-				drawRating(newRating,countRating); 
-			}
-		 });
-		
-		Swal.fire({
-            position: "center",
-            icon: "success",
-            title: "五星吹吹",
-            showConfirmButton: false,
-            timer: 3000,
-			width: 600,
-			padding: '3em',
-			background: '#fff url(/images/trees.png)',
-			backdrop: `
-			  rgba(123,123,123,0.4)
-			  url("<%=request.getContextPath()%>/images/gif/2.gif")
-			  left center
-			  no-repeat
-			`
-        });
-		 $("#leaveBtn").show();
+		if(${memVO.member_no}==999){
+			Swal.fire({
+				  position: 'center',
+				  icon: 'error',
+				  title: '請先登入',
+				  showConfirmButton: false,
+				  timer: 1500
+				})
+				
+			setTimeout(function(){
+				document.location.href="<%=request.getContextPath()%>/front-end/mem/MemLogin.jsp";
+			}, 1500);
+		}else{
+			$(".all-star").css("color","gray");
+			$("#s1,#s2,#s3,#s4,#s5").css("color","yellow");
+			$("#con").val("5.0");
+			
+			let movieno = "${movieVO.movieno}";
+			let memberno = "${memVO.member_no}";
+			let rating = "5.0";
+			
+			$.ajax({
+				url:"<%=request.getContextPath()%>/rating/rating.do?action=insertOrUpdate",
+				data:{
+					"memberno":memberno,	
+					"movieno":movieno,
+					"rating":rating		   
+				},
+				type:"POST",
+				success:function(json){
+					let jsonobj = JSON.parse(json);
+					let newRating = jsonobj.newRating;
+					let countRating = jsonobj.countRating;
+					$('#ratingValue').text(newRating);
+					drawRating(newRating,countRating); 
+				}
+			 });
+			
+			Swal.fire({
+	            position: "center",
+	            icon: "success",
+	            title: "五星吹吹",
+	            showConfirmButton: false,
+	            timer: 3000,
+				width: 600,
+				padding: '3em',
+				background: '#fff url(/images/trees.png)',
+				backdrop: `
+				  rgba(123,123,123,0.4)
+				  url("<%=request.getContextPath()%>/images/gif/2.gif")
+				  left center
+				  no-repeat
+				`
+	        });
+			 $("#leaveBtn").show();
+		}
 	})
 })
 </script> 

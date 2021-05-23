@@ -43,7 +43,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!--//web-fonts-->
 <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>	
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
-
+<script src="<%=request.getContextPath()%>/js/jquery-1.11.1.min.js"></script>
 <style>
 
 </style>
@@ -114,7 +114,42 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									 	</c:forEach>
 									</td>	
 									
-									<td width="450px;">${commentVO.content}</td>
+									<td width="450px;">
+										<div class="essence">
+											<div class="essence_item">
+												<div class="essence_item_content" >
+													<span id="content-${commentVO.commentno}" style="word-break: break-all;">${commentVO.content}</span>
+													<p id="seeAbout-${commentVO.commentno}" style="cursor: pointer; color:#89bdd3;">繼續閱讀</p>
+												</div>
+											</div>
+										</div>
+<script type="text/javascript">
+	$(function(){
+		var onoff = false;
+		$('.essence .essence_item').each(function(){
+			var content = $(this).find('#content-${commentVO.commentno}');
+			var str = content.text();
+			var see =  $(this).find('#seeAbout-${commentVO.commentno}');
+			if(str.length > 15){
+				content.text(str.substr(0,15)+'......');
+			} 
+			else{
+				see.hide();
+			}
+			see.on('click',function(){
+				if(onoff){
+					content.text(str.substr(0,15)+'......');
+					see.text('繼續閱讀');
+				}else{
+					content.text(str);
+					see.text("收起評論");
+				}
+			onoff =! onoff
+			})
+		})
+	});
+</script>	
+									</td>
 									<td width="180px;"><fmt:formatDate value="${commentVO.creatdate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 									<td width="180px;"><fmt:formatDate value="${commentVO.modifydate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 								</tr>
@@ -133,6 +168,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	</div>
 </div>
 <!--//content-inner-section-->
+
 
 
 
