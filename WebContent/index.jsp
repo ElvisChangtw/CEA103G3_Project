@@ -1800,6 +1800,7 @@ function drawPieChart2() {
 				});
 			return json;
 	}
+    	
     </script>
 
 
