@@ -137,136 +137,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
     <!--/main-header-->
     <!--/banner-section-->
-    <div id="demo-1" class="banner-inner">
-        <div class="banner-inner-dott">
-            <!--/header-w3l-->
-            <div class="header-w3-agileits" id="home">
-                <div class="inner-header-agile part2">
-                    <nav class="navbar navbar-default">
-                        <div class="navbar-header">
-                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                                <span class="sr-only">Toggle navigation</span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                            </button>
-                            <h1><a href="<%=request.getContextPath()%>/index.jsp"><span>M</span>ovies<span>H</span>it</a></h1>
-                        </div>
-                        <!-- navbar-header -->
-                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                            <ul class="nav navbar-nav">
-                                <li><a href="<%=request.getContextPath()%>/front-end/group/select_page.jsp">首頁</a></li>
-                                <li class="dropdown active">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Genre <b class="caret"></b></a>
-                                    <ul class="dropdown-menu multi-column columns-3">
-                                        <li>
-                                            <div class="col-sm-4">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">Action</a></li>
-                                                    <li><a href="genre.html">Biography</a></li>
-                                                    <li><a href="genre.html">Crime</a></li>
-                                                    <li><a href="genre.html">Family</a></li>
-                                                    <li><a href="horror.html">Horror</a></li>
-                                                    <li><a href="genre.html">Romance</a></li>
-                                                    <li><a href="genre.html">Sports</a></li>
-                                                    <li><a href="genre.html">War</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">Adventure</a></li>
-                                                    <li><a href="comedy.html">Comedy</a></li>
-                                                    <li><a href="genre.html">Documentary</a></li>
-                                                    <li><a href="genre.html">Fantasy</a></li>
-                                                    <li><a href="genre.html">Thriller</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">Animation</a></li>
-                                                    <li><a href="genre.html">Costume</a></li>
-                                                    <li><a href="genre.html">Drama</a></li>
-                                                    <li><a href="genre.html">History</a></li>
-                                                    <li><a href="genre.html">Musical</a></li>
-                                                    <li><a href="genre.html">Psychological</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li><a href="series.html">tv - series</a></li>
-                                <li><a href="news.html">news</a></li>
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Country <b class="caret"></b></a>
-                                    <ul class="dropdown-menu multi-column columns-3">
-                                        <li>
-                                            <div class="col-sm-4">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">Asia</a></li>
-                                                    <li><a href="genre.html">France</a></li>
-                                                    <li><a href="genre.html">Taiwan</a></li>
-                                                    <li><a href="genre.html">United States</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">China</a></li>
-                                                    <li><a href="genre.html">HongCong</a></li>
-                                                    <li><a href="genre.html">Japan</a></li>
-                                                    <li><a href="genre.html">Thailand</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">Euro</a></li>
-                                                    <li><a href="genre.html">India</a></li>
-                                                    <li><a href="genre.html">Korea</a></li>
-                                                    <li><a href="genre.html">United Kingdom</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li><a href="list.html">A - z list</a></li>
-                                <li><a href="<%=request.getContextPath()%>/front-end/group/group_front_page.jsp">揪團</a></li>
-                            </ul>
-                        </div>
-                        <div class="clearfix"> </div>
-                    </nav>
-                    <div class="w3ls_search">
-                        <div class="cd-main-header">
-                            <ul class="cd-header-buttons">
-                                <li><a class="cd-search-trigger" href="#cd-search"> <span></span></a></li>
-                            </ul> <!-- cd-header-buttons -->
-                        </div>
-                        <div id="cd-search" class="cd-search">
-                            <form action="#" method="post">
-                                <input name="Search" type="search" placeholder="Search...">
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--//header-w3l-->
-        </div>
-    </div>
+    <jsp:include page="/front_header.jsp"/>
     <!--/banner-section-->
     <!--//main-header-->
     <!--/banner-bottom-->
-    <div class="w3_agilits_banner_bootm">
-        <div class="w3_agilits_inner_bottom">
-            <div class="col-md-6 wthree_agile_login">
-                <ul>
-                    <li><i class="fa fa-phone" aria-hidden="true"></i> (+000) 009 455 4088</li>
-                    <li><a href="#" class="login" data-toggle="modal" data-target="#myModal4">Login</a></li>
-                    <li><a href="#" class="login reg" data-toggle="modal" data-target="#myModal5">Register</a></li>
-                </ul>
-            </div>
-        
-        </div>
-    </div>
+    
     
     <!-- 萬用查詢navbar -->
     
@@ -471,271 +346,14 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 </div>
     <!--//content-inner-section-->
     <!--揪團列表外層div -->
-    
-    
     <!--/footer-bottom-->
-    <div class="contact-w3ls" id="contact">
-        <div class="footer-w3lagile-inner">
-            <h2>Sign up for our <span>Newsletter</span></h2>
-            <p class="para">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vitae eros eget tellus
-                tristique bibendum. Donec rutrum sed sem quis venenatis.</p>
-            <div class="footer-contact">
-                <form action="#" method="post">
-                    <input type="email" name="Email" placeholder="Enter your email...." required=" ">
-                    <input type="submit" value="Subscribe">
-                </form>
-            </div>
-            <div class="footer-grids w3-agileits">
-                <div class="col-md-2 footer-grid">
-                    <h4>Release</h4>
-                    <ul>
-                        <li><a href="#" title="Release 2016">2016</a></li>
-                        <li><a href="#" title="Release 2015">2015</a></li>
-                        <li><a href="#" title="Release 2014">2014</a></li>
-                        <li><a href="#" title="Release 2013">2013</a></li>
-                        <li><a href="#" title="Release 2012">2012</a></li>
-                        <li><a href="#" title="Release 2011">2011</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-2 footer-grid">
-                    <h4>Movies</h4>
-                    <ul>
-                        <li><a href="genre.html">ADVENTURE</a></li>
-                        <li><a href="comedy.html">COMEDY</a></li>
-                        <li><a href="series.html">FANTASY</a></li>
-                        <li><a href="series.html">ACTION </a></li>
-                        <li><a href="genre.html">MOVIES </a></li>
-                        <li><a href="horror.html">HORROR </a></li>
-                    </ul>
-                </div>
-                <div class="col-md-2 footer-grid">
-                    <h4>Review Movies</h4>
-                    <ul class="w3-tag2">
-                        <li><a href="comedy.html">Comedy</a></li>
-                        <li><a href="horror.html">Horror</a></li>
-                        <li><a href="series.html">Historical</a></li>
-                        <li><a href="series.html">Romantic</a></li>
-                        <li><a href="series.html">Love</a></li>
-                        <li><a href="genre.html">Action</a></li>
-                        <li><a href="single.html">Reviews</a></li>
-                        <li><a href="comedy.html">Comedy</a></li>
-                        <li><a href="horror.html">Horror</a></li>
-                        <li><a href="series.html">Historical</a></li>
-                        <li><a href="series.html">Romantic</a></li>
-                        <li><a href="genre.html">Love</a></li>
-                        <li><a href="comedy.html">Comedy</a></li>
-                        <li><a href="horror.html">Horror</a></li>
-                        <li><a href="genre.html">Historical</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-2 footer-grid">
-                    <h4>Latest Movies</h4>
-                    <div class="footer-grid1">
-                        <div class="footer-grid1-left">
-                            <a href="single.html"><img src="<%=request.getContextPath()%>/images/1.jpg" alt=" " class="img-responsive"></a>
-                        </div>
-                        <div class="footer-grid1-right">
-                            <a href="single.html">eveniet ut molesti</a>
-                        </div>
-                        <div class="clearfix"> </div>
-                    </div>
-                    <div class="footer-grid1">
-                        <div class="footer-grid1-left">
-                            <a href="single.html"><img src="<%=request.getContextPath()%>/images/2.jpg" alt=" " class="img-responsive"></a>
-                        </div>
-                        <div class="footer-grid1-right">
-                            <a href="single.html">earum rerum tenet</a>
-                        </div>
-                        <div class="clearfix"> </div>
-                    </div>
-                    <div class="footer-grid1">
-                        <div class="footer-grid1-left">
-                            <a href="single.html"><img src="<%=request.getContextPath()%>/images/4.jpg" alt=" " class="img-responsive"></a>
-                        </div>
-                        <div class="footer-grid1-right">
-                            <a href="single.html">eveniet ut molesti</a>
-                        </div>
-                        <div class="clearfix"> </div>
-                    </div>
-                    <div class="footer-grid1">
-                        <div class="footer-grid1-left">
-                            <a href="single.html"><img src="<%=request.getContextPath()%>/images/3.jpg" alt=" " class="img-responsive"></a>
-                        </div>
-                        <div class="footer-grid1-right">
-                            <a href="single.html">earum rerum tenet</a>
-                        </div>
-                        <div class="clearfix"> </div>
-                    </div>
-                </div>
-                <div class="col-md-2 footer-grid">
-                    <h4 class="b-log"><a href="index.html"><span>M</span>ovies <span>P</span>ro</a></h4>
-                    <div class="footer-grid-instagram">
-                        <a href="single.html"><img src="<%=request.getContextPath()%>/images/m1.jpg" alt=" " class="img-responsive"></a>
-                    </div>
-                    <div class="footer-grid-instagram">
-                        <a href="single.html"><img src="<%=request.getContextPath()%>/images/m2.jpg" alt=" " class="img-responsive"></a>
-                    </div>
-                    <div class="footer-grid-instagram">
-                        <a href="single.html"><img src="<%=request.getContextPath()%>/images/m3.jpg" alt=" " class="img-responsive"></a>
-                    </div>
-                    <div class="footer-grid-instagram">
-                        <a href="single.html"><img src="<%=request.getContextPath()%>/images/m4.jpg" alt=" " class="img-responsive"></a>
-                    </div>
-                    <div class="footer-grid-instagram">
-                        <a href="single.html"><img src="<%=request.getContextPath()%>/images/m5.jpg" alt=" " class="img-responsive"></a>
-                    </div>
-                    <div class="footer-grid-instagram">
-                        <a href="single.html"><img src="<%=request.getContextPath()%>/images/m6.jpg" alt=" " class="img-responsive"></a>
-                    </div>
-                    <div class="clearfix"> </div>
-                </div>
-                <div class="clearfix"> </div>
-                <ul class="bottom-links-agile">
-                    <li><a href="icons.html" title="Font Icons">Icons</a></li>
-                    <li><a href="short-codes.html" title="Short Codes">Short Codes</a></li>
-                    <li><a href="contact.html" title="contact">Contact</a></li>
-                </ul>
-            </div>
-            <h3 class="text-center follow">Connect <span>Us</span></h3>
-            <ul class="social-icons1 agileinfo">
-                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                <li><a href="#"><i class="fa fa-youtube"></i></a></li>
-                <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-            </ul>
-        </div>
-    </div>
-    <div class="w3agile_footer_copy">
-        <p> 2017 Movies Pro. All rights reserved | Design by <a href="http://w3layouts.com/">W3layouts</a></p>
-    </div>
-    <a href="#home" id="toTop" class="scroll" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
-<%--     <script src="<%=request.getContextPath()%>/js/jquery-1.11.1.min.js"></script> --%>
-    <!-- Dropdown-Menu-JavaScript -->
- <div class="alert-container">
- </div>
-   
-    <script>
-        $(document).ready(function() {
-<%--         	let hasLoggedIn = <%=  %> --%>
-            $(".dropdown").hover(
-                function() {
-                    $('.dropdown-menu', this).stop(true, true).slideDown("fast");
-                    $(this).toggleClass('open');
-                },
-                function() {
-                    $('.dropdown-menu', this).stop(true, true).slideUp("fast");
-                    $(this).toggleClass('open');
-                }
-            );
-        });
-    </script>
-    <!-- //Dropdown-Menu-JavaScript -->
-    <!-- search-jQuery -->
-    <script src="<%=request.getContextPath()%>js/main.js"></script>
-    <!-- //search-jQuery -->
-    <script src="<%=request.getContextPath()%>js/simplePlayer.js"></script>
-    <script>
-        $("document").ready(function() {
-            $("#video").simplePlayer();
-        });
-    </script>
-    <script>
-        $("document").ready(function() {
-            $("#video1").simplePlayer();
-        });
-    </script>
-    <script>
-        $("document").ready(function() {
-            $("#video2").simplePlayer();
-        });
-    </script>
-    <script>
-        $("document").ready(function() {
-            $("#video3").simplePlayer();
-        });
-    </script>
-    <script>
-        $("document").ready(function() {
-            $("#video4").simplePlayer();
-        });
-    </script>
-    <script>
-        $("document").ready(function() {
-            $("#video5").simplePlayer();
-        });
-    </script>
-    <script>
-        $("document").ready(function() {
-            $("#video6").simplePlayer();
-        });
-    </script>
+    <jsp:include page="/front_footer_copy.jsp"/>
+    <!--/footer-bottom-->
+
     <!-- pop-up-box -->
-    <script src="js/jquery.magnific-popup.js" type="text/javascript"></script>
-    <!--//pop-up-box -->
-    <div id="small-dialog1" class="mfp-hide">
-        <iframe src="https://player.vimeo.com/video/165197924?color=ffffff&title=0&byline=0&portrait=0"></iframe>
-    </div>
-    <div id="small-dialog2" class="mfp-hide">
-        <iframe src="https://player.vimeo.com/video/165197924?color=ffffff&title=0&byline=0&portrait=0"></iframe>
-    </div>
-    <script>
-        $(document).ready(function() {
-		$('.w3_play_icon,.w3_play_icon1,.w3_play_icon2').magnificPopup({
-			type: 'inline',
-			fixedContentPos: false,
-			fixedBgPos: true,
-			overflowY: 'auto',
-			closeBtnInside: true,
-			preloader: false,
-			midClick: true,
-			removalDelay: 300,
-			mainClass: 'my-mfp-zoom-in'
-		});
-																		
-		});
-	</script>
+   
+
     <script src="<%=request.getContextPath()%>/js/easy-responsive-tabs.js"></script>
-    <script>
-        $(document).ready(function () {
-$('#horizontalTab').easyResponsiveTabs({
-type: 'default', //Types: default, vertical, accordion           
-width: 'auto', //auto or any width like 600px
-fit: true,   // 100% fit in a container
-closed: 'accordion', // Start closed if in accordion view
-activate: function(event) { // Callback function if tab is switched
-var $tab = $(this);
-var $info = $('#tabInfo');
-var $name = $('span', $info);
-$name.text($tab.text());
-$info.show();
-}
-});
-$('#verticalTab').easyResponsiveTabs({
-type: 'vertical',
-width: 'auto',
-fit: true
-});
-});
-</script>
-    <link href="<%=request.getContextPath()%>/css/owl.carousel.css" rel="stylesheet" type="text/css" media="all">
-    <script src="<%=request.getContextPath()%>/js/owl.carousel.js"></script>
-    <script>
-        $(document).ready(function() {
-            $("#owl-demo").owlCarousel({
-
-                autoPlay: 3000, //Set AutoPlay to 3 seconds
-                autoPlay: true,
-                navigation: true,
-
-                items: 5,
-                itemsDesktop: [640, 4],
-                itemsDesktopSmall: [414, 3]
-
-            });
-
-        });
-    </script>
     <!--/script-->
     <script type="text/javascript" src="<%=request.getContextPath()%>/js/move-top.js"></script>
     <script type="text/javascript" src="<%=request.getContextPath()%>/js/easing.js"></script>
@@ -749,23 +367,13 @@ fit: true
     </script>
     <script type="text/javascript">
         $(document).ready(function() {
-            /*
-							var defaults = {
-					  			containerID: 'toTop', // fading element id
-								containerHoverID: 'toTopHover', // fading element hover id
-								scrollSpeed: 1200,
-								easingType: 'linear' 
-					 		};
-							*/
-
-            $().UItoTop({ easingType: 'easeOutQuart' });
+        $().UItoTop({ easingType: 'easeOutQuart' });
 
         });
     </script>
     <!--end-smooth-scrolling-->
     <script src="<%=request.getContextPath()%>/js/bootstrap.js"></script>
 
-  
 </body>
 	
 <% 
@@ -773,11 +381,8 @@ fit: true
   java.sql.Timestamp crt_dt_end = null;
   final long DIFF = System.currentTimeMillis() - (1000 * 60 * 60 *24 * 14); //30天前
   
-	crt_dt = new java.sql.Timestamp(DIFF);
-// 	System.out.println("crt_dt = " + crt_dt);
-	
+	crt_dt = new java.sql.Timestamp(DIFF);	
 	crt_dt_end = new java.sql.Timestamp(System.currentTimeMillis());
-// 	System.out.println("crt_dt_end = " + crt_dt_end);
 
 
 %>
@@ -810,55 +415,6 @@ fit: true
             //minDate:               '-1970-01-01', // 去除今日(不含)之前
             //maxDate:               '+1970-01-01'  // 去除今日(不含)之後
          });
-   
-        // ----------------------------------------------------------以下用來排定無法選擇的日期-----------------------------------------------------------
-
-        //      1.以下為某一天之前的日期無法選擇
-        //      var somedate1 = new Date('2017-06-15');
-        //      $('#f_date1').datetimepicker({
-        //          beforeShowDay: function(date) {
-        //        	  if (  date.getYear() <  somedate1.getYear() || 
-        //		           (date.getYear() == somedate1.getYear() && date.getMonth() <  somedate1.getMonth()) || 
-        //		           (date.getYear() == somedate1.getYear() && date.getMonth() == somedate1.getMonth() && date.getDate() < somedate1.getDate())
-        //              ) {
-        //                   return [false, ""]
-        //              }
-        //              return [true, ""];
-        //      }});
-
-        
-        //      2.以下為某一天之後的日期無法選擇
-        //      var somedate2 = new Date('2017-06-15');
-        //      $('#f_date1').datetimepicker({
-        //          beforeShowDay: function(date) {
-        //        	  if (  date.getYear() >  somedate2.getYear() || 
-        //		           (date.getYear() == somedate2.getYear() && date.getMonth() >  somedate2.getMonth()) || 
-        //		           (date.getYear() == somedate2.getYear() && date.getMonth() == somedate2.getMonth() && date.getDate() > somedate2.getDate())
-        //              ) {
-        //                   return [false, ""]
-        //              }
-        //              return [true, ""];
-        //      }});
-
-
-        //      3.以下為兩個日期之外的日期無法選擇 (也可按需要換成其他日期)
-        //      var somedate1 = new Date('2017-06-15');
-        //      var somedate2 = new Date('2017-06-25');
-        //      $('#f_date1').datetimepicker({
-        //          beforeShowDay: function(date) {
-        //        	  if (  date.getYear() <  somedate1.getYear() || 
-        //		           (date.getYear() == somedate1.getYear() && date.getMonth() <  somedate1.getMonth()) || 
-        //		           (date.getYear() == somedate1.getYear() && date.getMonth() == somedate1.getMonth() && date.getDate() < somedate1.getDate())
-        //		             ||
-        //		            date.getYear() >  somedate2.getYear() || 
-        //		           (date.getYear() == somedate2.getYear() && date.getMonth() >  somedate2.getMonth()) || 
-        //		           (date.getYear() == somedate2.getYear() && date.getMonth() == somedate2.getMonth() && date.getDate() > somedate2.getDate())
-        //              ) {
-        //                   return [false, ""]
-        //              }
-        //              return [true, ""];
-        //      }});
-        
         function loginFirst(){
         	alert("請先登入");
         	window.location.href = "<%=request.getContextPath()%>/front-end/mem/MemLogin.jsp";
@@ -1052,9 +608,6 @@ var MyPoint = "/NotifyWS/${memVO.member_no}";
 // 	產生通知block在視窗右下角
 	  const alertContainer = document.querySelector('.alert-container');
 	  const btnCreate = document.getElementById('create');
-	  
-	  
-	  
 	  const createAlert = (text,time,type) => {
 		  
 	  const newAlert = document.createElement('div');

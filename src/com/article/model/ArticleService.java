@@ -65,6 +65,9 @@ public class ArticleService {
 	public List<ArticleVO> getAll() {
 		return dao.getAll();
 	}
+	public List<ArticleVO> getArticleLikeCount() {
+		return dao.getArticleLikeCount();
+	}
 	public Set<ReplyVO> getReplysByArticleno(Integer articleno) {
 		return dao.getReplysByArticleno(articleno);
 	}

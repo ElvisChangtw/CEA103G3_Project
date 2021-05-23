@@ -13,7 +13,7 @@
 <%
 	GroupVO groupVO = (GroupVO) request.getAttribute("groupVO");
 %>
-<jsp:useBean id="memVO" scope="session" type="com.mem.model.MemVO" />
+<%-- <jsp:useBean id="memVO" scope="session" type="com.mem.model.MemVO" /> --%>
 <jsp:useBean id="memSvc" scope="page" class="com.mem.model.MemService" />
 <jsp:useBean id="groupSvc" scope="page"	class="com.group.model.GroupService" />
 <jsp:useBean id="movieSvc" scope="page"	class="com.movie.model.MovieService" />
@@ -266,9 +266,18 @@ th, td {
 		    <div class="col-md lead">
 				<a id="backBtn" href="<%=request.getContextPath()%>/front-end/group/group_front_page.jsp" 
 				style="margin-bottom: 0px;" class="btn btn-lg">回首頁</a>
-				<button id="joinBtn" class="btn btn-lg btn-primary" ${(groupVO.member_cnt < groupVO.required_cnt) ?  '' : 'disabled'}>
-					${(groupVO.member_cnt < groupVO.required_cnt) ?  '現在加入' : '人數已滿'}
-					</button> 
+				<c:choose>
+					<c:when test="${memVO == null}">
+						<button style="border-radius: 10px;" onclick="loginFirst()"  class="btn btn-lg btn-primary">
+							現在加入
+						</button> 
+					</c:when>
+					<c:otherwise>
+						<button id="joinBtn" class="btn btn-lg btn-primary" ${(groupVO.member_cnt < groupVO.required_cnt) ?  '' : 'disabled'}>
+						${(groupVO.member_cnt < groupVO.required_cnt) ?  '現在加入' : '人數已滿'}
+						</button> 
+					</c:otherwise>
+				</c:choose>
 				<button id="leaveBtn" class="btn btn-lg btn-danger" style="display:none">退出揪團</button> 
 				<a id="modifyBtn" href="<%=request.getContextPath()%>/group/group.do?group_no=${groupVO.group_no}&action=getOne_For_Update" 
 				style="margin-bottom: 0px;" class="btn btn-lg btn-success">修改揪團</a>
@@ -288,7 +297,16 @@ th, td {
 	
 	<!--動態顯示的div-->
 	<div id="pop-out-div">
-		<button id="add-friend" type="button" class="btn btn-primary"><i class="fa fa-plus-circle " aria-hidden="true"></i>加好友</button>
+		
+		<c:choose>
+			<c:when test="${memVO==null }">
+				<button onclick="loginFirst()" id="add-friend" type="button" class="btn btn-primary"><i class="fa fa-plus-circle " aria-hidden="true"></i>加好友</button>
+			</c:when>
+			<c:otherwise>
+				<button id="add-friend" type="button" class="btn btn-primary"><i class="fa fa-plus-circle " aria-hidden="true"></i>加好友</button>
+			</c:otherwise>
+		</c:choose>
+		
 		<button id="already-friends" type="button" class="btn btn-info"  style="display:none;" disabled>已是朋友</button>
 		<button id="retrieve-invitation" type="button" class="btn btn-info"  style="display:none;">收回邀請</button>
 		<button id="myself" type="button" class="btn btn-info" style="display:none;" disabled>本人</button>
@@ -1016,7 +1034,11 @@ th, td {
 	    }
 	})
 
-
+	function loginFirst(){
+		Swal.fire('請先登入').then((result)=>{
+			window.location.href = "<%=request.getContextPath()%>/front-end/mem/MemLogin.jsp";
+		});
+	}
 
 
 

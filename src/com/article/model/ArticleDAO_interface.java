@@ -14,6 +14,7 @@ public interface ArticleDAO_interface {
     public void delete(Integer articleno);
     public ArticleVO findByPrimaryKey(Integer articleno);
     public List<ArticleVO> getAll();
+    public List<ArticleVO> getArticleLikeCount();
     
     public Set<ReplyVO> getReplysByArticleno(Integer articleno); // 一對多
     //萬用複合查詢(傳入參數型態Map)(回傳 List)

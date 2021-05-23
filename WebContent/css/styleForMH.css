@@ -53,11 +53,10 @@
         	font-size:1.1em;
         }
         .front_header{
-        	background-color: #616161;
+        	background-color: rgb(12, 13, 13);
         }
         .front_footer{
-        	background-color: #616161;
-        	padding-top: 30px;
+        	background-color: rgb(12, 13, 13);
         }
         .footer-grid>ul>li>a{
         	color: darkgoldenrod;

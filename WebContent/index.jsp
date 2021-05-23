@@ -201,7 +201,7 @@
 									</c:when>
 									<c:otherwise>
 										<li class="active rhs">
-												<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${memVO.member_no}" 
+											<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${memVO.member_no}" 
 												id="${groupVO.group_no}-${memVO.member_no}" alt="©|µL¹Ï¤ù" width="60px;" height="60px" 
 												style="border-radius:50%;" class="clickable" />
 											<a id="welcome"> ${memVO.mb_name } &nbsp</a>
@@ -1620,7 +1620,6 @@ $(document).ready(drawPieChart1);
 $(document).ready(drawPieChart2);
 $(document).ready(function(){
 	$("#logout-btn").click(function(){
-		<% session.removeAttribute("memVO"); %>
 		window.location.href = '<%=request.getContextPath()%>/index.jsp';
 	});
 	let hasLoggedIn = <%= memVO.getMember_no() %>;
@@ -1801,6 +1800,7 @@ function drawPieChart2() {
 				});
 			return json;
 	}
+    	
     </script>
 
 

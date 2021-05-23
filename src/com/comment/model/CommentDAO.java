@@ -41,6 +41,9 @@ public class CommentDAO implements CommentDAO_interface{
 			"select * from COMMENT where MOVIE_NO = ? and STATUS = 0 order by CRT_DT desc";
 //	private static final String GET_MEMBER_COMMENT_STMT = 
 //	"select * from COMMENT where MEMBER_NO = ?";
+	private static final String GET_MOVIE_COMMENT_BY_MEM = 
+			"select * from COMMENT where MEMBER_NO = ?";
+	
 	
 	
 	@Override
@@ -540,6 +543,68 @@ public class CommentDAO implements CommentDAO_interface{
 			pstmt = con.prepareStatement(GET_MOVIE_COMMENT_STMT);
 
 			pstmt.setInt(1, movieno);
+
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// commentVo ¤]ºÙ¬° Domain objects
+				commentVO = new CommentVO();
+				commentVO.setCommentno(rs.getInt("COMMENT_NO"));
+				commentVO.setMemberno(rs.getInt("MEMBER_NO"));
+				commentVO.setMovieno(rs.getInt("MOVIE_NO"));
+				commentVO.setContent(rs.getString("CONTENT"));
+				commentVO.setCreatdate(rs.getTimestamp("CRT_DT"));
+				commentVO.setModifydate(rs.getTimestamp("MODIFY_DT"));
+				commentVO.setStatus(rs.getString("STATUS"));
+				list.add(commentVO);
+			}
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}
+	
+	@Override
+	public List<CommentVO> findByMemberNo(Integer memberno) {
+		List<CommentVO> list = new ArrayList<CommentVO>();
+		CommentVO commentVO = null;
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_MOVIE_COMMENT_BY_MEM);
+
+			pstmt.setInt(1, memberno);
 
 			rs = pstmt.executeQuery();
 
