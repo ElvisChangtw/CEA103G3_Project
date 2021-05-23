@@ -336,7 +336,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			     <div class="w3_agilits_inner_bottom">
 			            <div class="col-md-6 wthree_agile_login">
 						      <ul>
-									<li><i class="fa fa-phone" aria-hidden="true"></i> (+886) 0912 345 678</li>
+									<li><i class="fa fa-phone" aria-hidden="true"></i> (+886) 0912 345 678 ${memVO.member_no}</li>
 									<li><a href="#" class="login"  data-toggle="modal" data-target="#myModal4">µn¤J</a></li>
 									<li><a href="#" class="login reg"  data-toggle="modal" data-target="#myModal5">µù¥U</a></li>
 								</ul>
