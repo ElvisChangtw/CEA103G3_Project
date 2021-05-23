@@ -120,19 +120,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<jsp:include page="/front_header.jsp"/>
   <!--/banner-section-->
  <!--//main-header-->
-	         <!--/banner-bottom-->
-			  <div class="w3_agilits_banner_bootm">
-			     <div class="w3_agilits_inner_bottom">
-			            <div class="col-md-6 wthree_agile_login">
-						      <ul>
-									<li><i class="fa fa-phone" aria-hidden="true"></i> (+886) 0912 345 678 ${memVO.member_no}</li>
-									<li><a href="#" class="login"  data-toggle="modal" data-target="#myModal4">µn¤J</a></li>
-									<li><a href="#" class="login reg"  data-toggle="modal" data-target="#myModal5">µù¥U</a></li>
-								</ul>
-						</div>
-				</div>
-			</div>
-			<!--//banner-bottom-->
+
 		     <!-- Modal1 -->
 					<div class="modal fade" id="myModal4" tabindex="-1" role="dialog" >
 
@@ -197,13 +185,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						</div>
 				<!-- //Modal1 -->
 						<!-- breadcrumb -->
-	<div class="w3_breadcrumb">
-	<div class="breadcrumb-inner">	
-			<ul>
-				<li><a href="<%=request.getContextPath()%>/index.jsp">Home</a></li>
-			</ul>
-		</div>
-	</div>
+	
 
 <!-- //breadcrumb -->
 			<!--/content-inner-section-->
