@@ -14,8 +14,8 @@
 <%-- 此頁暫練習採用 Script 的寫法取值 --%>
 
 <%
-// ArticleVO articleVO = (ArticleVO) request.getAttribute("articleVO"); //ArticleServlet.java(Concroller), 存入req的ArticleVO物件 
-RelationshipVO relationshipVO = (RelationshipVO) request.getAttribute("relationshipVO"); //EmpServlet.java (Concroller) 存入req的empVO物件 (包括幫忙取出的empVO, 也包括輸入資料錯誤時的empVO物件)
+	// ArticleVO articleVO = (ArticleVO) request.getAttribute("articleVO"); //ArticleServlet.java(Concroller), 存入req的ArticleVO物件 
+	RelationshipVO relationshipVO = (RelationshipVO) request.getAttribute("relationshipVO"); //EmpServlet.java (Concroller) 存入req的empVO物件 (包括幫忙取出的empVO, 也包括輸入資料錯誤時的empVO物件)
 
 	Integer articleno = new Integer(request.getParameter("articleno"));
 	ArticleService articleSvc = new ArticleService();
@@ -28,9 +28,7 @@ RelationshipVO relationshipVO = (RelationshipVO) request.getAttribute("relations
 	int count = 0;
 	LikeService likeSvc = new LikeService();
 	
-
-	
-	int myNumber = 6; //到時要換成從session取memVO出來
+	int myNumber = ((MemVO) session.getAttribute("memVO")).getMember_no(); //到時要換成從session取memVO出來
 	pageContext.setAttribute("myNumber", myNumber);
 	//(為了ajax)找此文章有無此會員按讚紀錄
 	
@@ -101,18 +99,19 @@ RelationshipVO relationshipVO = (RelationshipVO) request.getAttribute("relations
 	</div>
 
 	 <div class="card-header bg-transparent border-success" > 		 			 	 		 	
- 		 	<div>
+ 		 	<div>		 		
 				<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/front-end/article/article.do" style="margin-bottom: 0px;" >
 					<button type="button" class="btn btn-outline-success" onclick="location.href='<%=request.getContextPath()%>/front-end/article/listAllArticle.jsp'">回上一列表</button>
-						<input type="submit" value="修改文章" class="btn btn-danger">
-				<input type="hidden" name="requestURL"	value="<%=request.getServletPath()%>">
-	<!-- 			送出請求到update_article_input.jsp   -->				
-				<input type="hidden" name="articleno"  value="${articleVO.articleno}">
-				<input type="hidden" name="action"	value="getOne_For_Update"></FORM>	
- 		 	</div>	
-	 		
- 		 	<br>
- 		 	
+					<c:if test="${articleVO.memberno == memVO.member_no}">
+					<input type="submit" value="修改文章" class="btn btn-danger">
+					<input type="hidden" name="requestURL"	value="<%=request.getServletPath()%>">
+					<!-- 送出請求到update_article_input.jsp -->				
+					<input type="hidden" name="articleno"  value="${articleVO.articleno}">
+					<input type="hidden" name="action"	value="getOne_For_Update">
+					</c:if>
+				</FORM>			 		
+ 		 	</div>		 		
+ 		 <br>
  		 	<div class="container">
  		 		<div class="row">
  		 			<div class="col-md-3" style="text-align:center;">
@@ -135,13 +134,11 @@ RelationshipVO relationshipVO = (RelationshipVO) request.getAttribute("relations
 				</div>
 			</div>
  		 </div>
-  			<div class="card-body ">
-  		
-    		<p class="card-text" style="font-size:1.45rem;  text-indent:2em;">${articleVO.content}</p>
-  			
+  			<div class="card-body ">  		
+    			<p class="card-text" style="font-size:1.45rem;  text-indent:2em;">${articleVO.content}</p>			
   		</div>
   			<div class="card-footer bg-transparent border-success" style="text-align:right">
-<%--   						新增文章時間:<fmt:formatDate value="${articleVO.crtdt}" pattern="yyyy-MM-dd HH:mm:ss"/> --%>
+<%--   					新增文章時間:<fmt:formatDate value="${articleVO.crtdt}" pattern="yyyy-MM-dd HH:mm:ss"/> --%>
 					<h4 id="hao" style="text-align:left;">
 						文章點讚數:${articleVO.likecount}											
 					</h4>
@@ -150,34 +147,34 @@ RelationshipVO relationshipVO = (RelationshipVO) request.getAttribute("relations
 			</div>
 			  	<div class="card-footer bg-transparent border-success">
 <%-- 					文章狀態:${articleVO.status} --%>
-											
 					<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/like/like.do">
 					<input type="hidden" name="expectation" id="con1" size="50" value=""/>						
-<!-- 					<input type="submit" value="LIKE" class="button1">	 -->
+<!-- 				<input type="submit" value="LIKE" class="button1">	 -->
 					<input type="hidden" name="articleno" value="<%=articleVO.getArticleno()%>">
-					<input type="hidden" name="memberno" value="<%=myNumber%>">
+					<input type="hidden" name="memberno" value="<%=memVO.getMember_no()%>">
 					<input type="hidden" name="requestURL"	value="<%=request.getServletPath()%>">
 					<input type="hidden" name="action" value="insert"></FORM>
-
-			</div>
+				</div>
 			
- 		<jsp:useBean id="replySvc" scope="page" class="com.reply.model.ReplyService" /> 
-<!-- 			<hr> -->
+ 		<jsp:useBean id="replySvc" scope="page" class="com.reply.model.ReplyService" />
+ 		 
 		<%@ include file="pages/page1.file" %> 	
 			<c:forEach var="replyVO" items="${set}" begin="<%=pageIndex%>" end="<%=pageIndex+rowsPerPage-1%>"> 
 			<div class="container">
 				<div class="row alert alert-dark" style="margin-bottom:0px">
 					
-						<%count++;%>	
+							<%count++;%>	
 						<div class="col-md-10" role="alert">
 		  					<%=count%>樓
 		  				</div>
 		  				<div class="col-md-2">
-			  				 <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/reply/reply.do" style="margin-bottom: 0px;">
-						     <input type="submit" value="修改回覆" class="btn btn-outline-danger">
-						     <input type="hidden" name="reply_no"  value="${replyVO.reply_no}">
-						     <input type="hidden" name="requestURL"	value="<%=request.getServletPath()%>">
-						     <input type="hidden" name="action"	value="getOne_For_Update"></FORM>
+		  					<c:if test="${replyVO.member_no == memVO.member_no}">
+				  				<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/reply/reply.do" style="margin-bottom: 0px;">						     
+							    <input type="submit" value="修改回覆" class="btn btn-outline-danger">
+							    <input type="hidden" name="reply_no"  value="${memVO.member_no}">
+							    <input type="hidden" name="requestURL"	value="<%=request.getServletPath()%>">
+							    <input type="hidden" name="action"	value="getOne_For_Update"></FORM>
+							</c:if>
 						</div>
 					</div>	
 						<div class="row">
@@ -207,19 +204,16 @@ RelationshipVO relationshipVO = (RelationshipVO) request.getAttribute("relations
 			<div class="form-group form-group-lg" style="text-align:center">
 				<h5><label for="content">回覆內容:</label></h5>
 				<textarea id="content" cols="60" name="content" rows="5" value="${replyVO.content}" style="width:80%" placeholder="message..."></textarea>
-			</div>
-	
-						
+			</div>						
 				<input type="hidden" name="action" value="insert">
 				<input type="hidden" name="article_no" value="<%=articleVO.getArticleno()%>">
+				<input type="hidden" name="member_no" value="<%=memVO.getMember_no()%>">
 			<hr>
 			<div style="text-align:center">
 				<input type="button" value="送出回覆" class="btn btn-info" onclick="fun1()" >
 			</div>
 		</FORM>
 		<hr>
-
-
 
 <script>    
 	   function fun1(){
@@ -231,7 +225,7 @@ RelationshipVO relationshipVO = (RelationshipVO) request.getAttribute("relations
 	      }
 	   }
 	let likeCnt2 = ${articleVO.likecount};
-	console.log("我現在是= " + ${myNumber});
+	console.log("我現在是= " + ${memVO.member_no});
 	
 	let isLiked = <%=((likeSvc.getOneLike(articleno, myNumber)==null)? false:true)%>
 	
@@ -265,7 +259,7 @@ RelationshipVO relationshipVO = (RelationshipVO) request.getAttribute("relations
 	   }   
 	   
 	   let articleno = "${articleVO.articleno}";
-	   let memberno = "${myNumber}";
+	   let memberno = "${memVO.member_no}";
 	   $.ajax({
 		   url:"<%=request.getContextPath()%>/LikeServlet?action=insert_Ajax",
 		   data:{
@@ -311,7 +305,7 @@ RelationshipVO relationshipVO = (RelationshipVO) request.getAttribute("relations
 		   }   
 		   
 		   let article_no = "${articleVO.articleno}";
-		   let member_no = "${myNumber}";
+		   let member_no = "${memVO.member_no}";
 		   $.ajax({
 			   url:"<%=request.getContextPath()%>/ArticleCollectionServlet?action=insert",
 			   data:{				   

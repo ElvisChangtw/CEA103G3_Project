@@ -47,7 +47,9 @@ public class ArticleDAO implements ArticleDAO_interface{
 				"update ARTICLE set LIKE_COUNT= LIKE_COUNT+1 where ARTICLE_NO = ?";
 		private static final String SUBTRACT_ARTICLE_LIKE_STMT = 
 				"update ARTICLE set LIKE_COUNT=LIKE_COUNT-1 where ARTICLE_NO = ?";
-		
+		private static final String GET_ARTICLE_LIKE_COUNT_5 = 
+				"SELECT * FROM ARTICLE order by LIKE_COUNT desc limit 5";
+			
 		
 		
 	public void insert(ArticleVO articleVO) {
@@ -337,6 +339,65 @@ public class ArticleDAO implements ArticleDAO_interface{
 				list.add(articleVO); // Store the row in the list
 			}
 
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}
+	public List<ArticleVO> getArticleLikeCount() {
+		List<ArticleVO> list = new ArrayList<ArticleVO>();
+		ArticleVO articleVO = null;
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_ARTICLE_LIKE_COUNT_5);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				// empVO ¤]ºÙ¬° Domain objects
+				articleVO = new ArticleVO();
+				articleVO.setArticleno(rs.getInt("article_no"));
+				articleVO.setMemberno(rs.getInt("member_no"));
+				articleVO.setArticletype(rs.getString("article_type"));
+				articleVO.setContent(rs.getString("content"));
+				articleVO.setArticleheadline(rs.getString("article_headline"));
+				articleVO.setCrtdt(rs.getTimestamp("crt_dt"));
+				articleVO.setUpdatedt(rs.getTimestamp("update_dt"));
+				articleVO.setStatus(rs.getInt("status"));
+				articleVO.setLikecount(rs.getInt("like_count"));
+				list.add(articleVO); // Store the row in the list
+			}
+			
 			// Handle any driver errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "

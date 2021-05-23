@@ -13,7 +13,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-    	<title>後台　瀏覽所有電影</title>
+    	<title>後台瀏覽所有電影</title>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -38,7 +38,7 @@
                 <a class="nav-link dropdown-toggle1" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
             </li>
             <a class="nav-link" href="index.html">
-                登出
+               	 登出
             </a>
         </ul>
     </nav>
@@ -51,31 +51,32 @@
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                   	 <img src="<%=request.getContextPath()%>/back-home/img/logo2-1-5.png">                       
+                        <img src="<%=request.getContextPath()%>/back-home/img/logo2-1-5.png">
                         <a class="nav-link collapsed" href="tables3.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-user-alt"></i></div>
-                      	      基本資料
+                           	 基本資料
                         </a>
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapseLayouts1">
                             <div class="sb-nav-link-icon"><i class="fas fa-user-cog"></i></div>
-                       	     員工管理系統
+                           	 員工管理系統
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapseLayouts1" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="layout-static.html">員工管理</a>
+                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/employee/listAllEmployee.jsp">員工管理</a>
                                 <a class="nav-link" href="layout-sidenav-light.html">員工權限管理</a>
                             </nav>
                         </div>
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                             <div class="sb-nav-link-icon"><i class="fas fa-video"></i></div>
-                           	 影城基本資料系統
+                         	   影城基本資料系統
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="layout-static.html">場次管理</a>
-                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/movie/backEndlistAllMovie.jsp">電影資料管理</a>
+                                <a class="nav-link" href="<%=request.getContextPath()%>/back-home/table.jsp">電影資料管理</a>
+                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/report_comment/listAllReportComment.jsp">評論檢舉</a>
                                 <a class="nav-link" href="layout-sidenav-light.html"> 廳院管理</a>
                                 <a class="nav-link" href="layout-sidenav-light.html">座位管理</a>
                                 <a class="nav-link" href="layout-sidenav-light.html">票種管理</a>
@@ -84,19 +85,19 @@
                         </div>
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages2" aria-expanded="false" aria-controls="collapsePages2">
                             <div class="sb-nav-link-icon"><i class="fas fa-user-clock"></i></div>
-                       	     會員管理系統
+                            	會員管理系統
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapsePages2" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="layout-static.html">會員資料管理</a>
+                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/mem/listAllMem.jsp">會員資料管理</a>
                                 <a class="nav-link" href="layout-sidenav-light.html">會員審核</a>
                                 <a class="nav-link" href="layout-sidenav-light.html"> 專業評論審核</a>
                             </nav>
                         </div>
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages3" aria-expanded="false" aria-controls="collapsePages3">
                             <div class="sb-nav-link-icon"><i class="fas fa-ticket-alt"></i></div>
-                            	售票管理
+                        	    售票管理
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapsePages3" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
@@ -105,17 +106,24 @@
                                 <a class="nav-link" href="layout-sidenav-light.html">查詢線上訂單</a>
                             </nav>
                         </div>
-                        <a class="nav-link collapsed" href="tables3.html">
+           				 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages4" aria-expanded="false" aria-controls="collapsePages4">
                             <div class="sb-nav-link-icon"><i class="fas fa-user-alt-slash"></i></div>
                           	  檢舉管理
+                          	<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
+                        <div class="collapse" id="collapsePages4" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/report_comment/listAllReportComment.jsp">評論檢舉</a>
+                                <a class="nav-link" href="layout-sidenav-light.html">XXX檢舉</a>
+                            </nav>
+                        </div>
                         <a class="nav-link" href="tables1.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-bullhorn"></i></div>
                            	 管理最新消息
                         </a>
                         <a class="nav-link" href="tables2.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-hands-helping"></i></div>
-                         	   回應客服小幫手
+                       	     回應客服小幫手
                         </a>
                     </div>
                 </div>
@@ -126,24 +134,24 @@
             
             
             
-            
+<!--       ======這邊貼自己的檔案內容====== -->
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4" style="text-align:center;">後台　瀏覽所有電影</h1>
-                        <a href="<%=request.getContextPath()%>/back-end/movie/addMovie.jsp" class="btn btn-primary btn-lg" ><i class="material-icons">&#xE147;&ensp;</i><span>新增電影</span></a>
+                        <h1 class="mt-4">後台瀏覽所有電影</h1>
+                        <a href="<%=request.getContextPath()%>/back-end/movie/addMovie.jsp" class="btn btn-success" ><i class="material-icons">&#xE147;</i><span>Add New Movie</span></a>
 <!--                         <ol class="breadcrumb mb-4"> -->
 <!--                             <li class="breadcrumb-item"> -->
                             
 <!--                             </li> -->
 <!--                         </ol> -->
-							<nav class="navbar navbar-light breadcrumb mb-4" style="background-color: #B1DFEF;">
+							<nav class="navbar navbar-light breadcrumb mb-4" style="background-color: #75D9B5;">
 							    <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/movie/movie.do" name="form1" class="form-inline my-2 my-lg-0 composite-query">
-									<br><div class="form-row" style="text-align:center; font-weight:bold">搜尋電影:&ensp;&ensp;</div>
-										
+									<br><div class="form-row">
+										搜尋電影:&ensp;
 										<div class="form-group col-2">
 											 <input type="text" name="MOVIE_NAME" value="" class="form-control" placeholder="輸入電影名稱" size="10"><br>
-										</div>&ensp;
+										</div>
 										
 <!-- 										<div class="form-group col-2"> -->
 <!-- 											<input type="text" name="DIRECTOR" value="" class="form-control" placeholder="請輸入導演" size="10"><br> -->
@@ -154,7 +162,7 @@
 <!-- 										</div>&ensp; -->
 								      
 										<div class="form-group col-2">
-								       <select  name="category" class="form-control form-control-sm" style="height:38px; font-size:16px;">
+								       <select  name="category" class="form-control form-control-sm" style="height:38px;">
 											<option value="">選擇類型</option>
 											<option value="動作片">動作片</option>
 											<option value="冒險片">冒險片</option>
@@ -164,38 +172,36 @@
 											<option value="喜劇片">喜劇片</option>
 											<option value="劇情片">劇情片</option>
 											<option value="愛情片">愛情片</option>
-								       	</select>
-								       	</div>&ensp;
+								       	</select><br>
+								       	</div>
 								       	
 								       	<div class="form-group col-2">
-								       	<select size="1" name="STATUS" class="form-control form-control-sm" style="height:38px; font-size:16px;">
+								       	<select size="1" name="STATUS" class="form-control form-control-sm" style="height:38px;">
 											<option value="">選擇電影狀態</option>
 											<option value="0">上映中</option>
 											<option value="1">未上映</option>
 											<option value="2">已下檔</option>
-							      		</select>&ensp;
+							      		</select><br>
 							    		</div>
 							    		
 							    		<div class="form-group col-2">
 											<input type="text" name="PREMIERE_DT" id="f_date1" class="form-control" placeholder="輸入上映日期" size="12">&ensp;
-							 		       <input type="text" name="OFF_DT" id="f_date2" class="form-control" placeholder="輸入下映日期" size="12">&ensp;
+							 		       <input type="text" name="OFF_DT" id="f_date2" class="form-control" placeholder="輸入下映日期" size="12"><br> 
 										</div>
 								       	
 							       		<div class="form-group col-2">
-							       		<select size="1" name="GRADE" class="form-control form-control-sm" style="height:38px; font-size:16px;">
+							       		<select size="1" name="GRADE" class="form-control form-control-sm" style="height:38px;">
 											<option value="">選擇分級</option>
 											<option value="0">普遍級</option>
 											<option value="1">保護級</option>
 											<option value="2">輔導級</option>
 											<option value="3">限制級</option>
-							       		</select>&ensp;
+							       		</select><br>
 										</div>
 										
 										<div class="form-group col-2">
 											<input type="hidden" name="action" value="listMovies_ByCompositeQuery_back">
-									      	<button class="btn btn-primary" type="submit" value="送出"
-									      	style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#AE67D8; font-weight:bold; color:white;"
-									      	>搜尋</button>
+									      	<button class="btn btn-danger btn-sm" type="submit" value="送出">搜尋</button>
 								      	</div>
 									</div><br>
 							     </FORM>
@@ -205,9 +211,9 @@
                            
                             <div class="card-body">
                                 <div class="table-responsive">
-                                <%@ include file="pages/page1.file"%>
-                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="text-align:center;">
-                                        <thead style="background-color:#9099AA; color:white;; white-space: nowrap;" >
+<%--                                 <%@ include file="pages/page1.file"%> --%>
+                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                        <thead>
                                             <tr>
                                                 <th align="center">劇照1</th>
 												<th align="center">劇照2</th>
@@ -224,27 +230,26 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        <c:forEach var="movieVO" items="${list}" begin="<%=pageIndex%>"
-									end="<%=pageIndex+rowsPerPage-1%>">
+                                        <c:forEach var="movieVO" items="${list}">
 
-										  <tr  ${(movieVO.movieno == param.movieno) ? 'style="background-color:#C9B8DC;"':''}>
+										  <tr  ${(movieVO.movieno == param.movieno) ? 'style="background-color:#7d4627;"':''}>
 											<td>
 												<a href="${pageContext.request.contextPath}/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}">
 												<img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${movieVO.movieno}" 
-												alt="尚無圖片" width="100px;" height="120px" title="${movieVO.moviename}"/> 
-												<span  style="text-align: center; display:block; font-size:12px; font-weight:bold;">${movieVO.moviename}</span></a></td>
+												alt="尚無圖片" width="80px;" height="100px" title="${movieVO.moviename}"/> 
+												<span  style="text-align: center; display:block; font-size:10px; font-weight:bold;">${movieVO.moviename}</span></a></td>
 											<td>
 												<a href="${pageContext.request.contextPath}/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}">
 												<img src="${pageContext.request.contextPath}/movie/DBGifReader2.do?movieno=${movieVO.movieno}" 
-												alt="尚無圖片" width="100px;" height="120px" title="${movieVO.moviename}"/></a></td>
+												alt="尚無圖片" width="80px;" height="100px" title="${movieVO.moviename}"/></a></td>
 											
 <%-- 											<td width="50px;">${movieVO.director}</td> --%>
 <%-- 											<td width="50px;">${movieVO.actor}</td> --%>
-											<td width="60px;">${movieVO.category}</td>
+											<td width="80px;">${movieVO.category}</td>
 											
 											<c:choose>
 												<c:when test="${movieVO.length >0}">
-													<td width="90px">${movieVO.length}分鐘</td>
+													<td width="90px;">${movieVO.length}分鐘</td>
 												</c:when>
 												<c:otherwise>
 													<td width="90px;">尚無時間</td>
@@ -289,8 +294,7 @@
 												</c:otherwise>
 											</c:choose>
 												
-											<td width="70px !important;;"><a href="${movieVO.trailor}" class="btn btn-outline-danger"
-											style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#F5CA5E; font-weight:bold; color:white;">觀賞</a></td>
+											<td width="50px;"><a class="w3_play_icon1" href="${movieVO.trailor}">觀賞</a></td>
 		<!-- 									<td> -->
 		<!-- 										<div id="coverImg" onclick="onPlayerReady()">  -->
 		<!-- 										<a class="w3_play_icon1" >觀賞</a></div>  -->
@@ -304,7 +308,7 @@
 													<input type="hidden" name="movieno" value="${movieVO.movieno}"> 
 													<input type="hidden" name="requestURL" value="<%=request.getServletPath()%>">
 													<!--送出本網頁的路徑給Controller-->
-													<input type="hidden" name="whichPage" value="<%=whichPage%>">
+													<input type="hidden" name="whichPage">
 													<!--送出當前是第幾頁給Controller-->
 													<input type="hidden" name="action" value="getOne_For_Update">
 												</FORM>
@@ -317,13 +321,14 @@
 													<input type="hidden" name="movieno" value="${movieVO.movieno}"> 
 													<input type="hidden" name="requestURL" value="<%=request.getServletPath()%>">
 													<!--送出本網頁的路徑給Controller-->
-													<input type="hidden" name="whichPage" value="<%=whichPage%>">
+													<input type="hidden" name="whichPage" >
 													<!--送出當前是第幾頁給Controller-->
 													<input type="hidden" name="action" value="delete">
 												</FORM>
 											</td>
 										</tr>
 									</c:forEach>
+<!-- 							======到這邊===== -->
                                             <tr>
                                                 <td></td>
                                                 <td></td>
@@ -340,15 +345,14 @@
                                            
                                         </tbody>
                                     </table>
-                                    <%@ include file="pages/page2.file"%>
+<%--                                     <%@ include file="pages/page2.file"%> --%>
                                 </div>
                             </div>
                     </div>
                 </main>
 
             </div>
-        
-        
+     
         </div>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>

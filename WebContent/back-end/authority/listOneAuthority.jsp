@@ -65,7 +65,7 @@
 	<tr>
 		<td><%=authorityVO.getEmpno()%></td>
 		<td><%=authorityVO.getFunction_no()%></td>
-		<td><%=authorityVO.getStatus()%></td>
+		<td><%=authorityVO.getAuth_status()%></td>
 	</tr>
 </table>
 </body>
