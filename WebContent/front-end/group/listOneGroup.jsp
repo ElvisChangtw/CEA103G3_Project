@@ -92,8 +92,78 @@ th, td {
 }
 </style>
 
+
+
+
+<style>
+  /* 通知用 */
+  @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+.fadeOut {
+  opacity: 0 !important;
+}
+
+#create {
+  border: none !important;
+  padding: 8px !important;
+  font-size:15px !important;
+  color: #FFF !important;
+  background-color: firebrick !important;
+  border-radius: 8px !important;
+}
+
+.alert-container{
+  position: fixed !important;
+  right: 10px !important;
+  bottom: 10px !important;
+}
+
+.alert {
+  position: relative !important;
+  background-color: white !important;
+  border: 5px solid lightblue !important;
+  height: 130px !important;
+  width: 290px !important;
+  border-radius: 15px !important;
+  margin-bottom: 15px !important;
+  color: #40bde6 !important;
+  padding: 20px 15px 0 15px !important;
+  transition: opacity 2s !important;
+}
+
+.alert span {
+  font-size: 1.3rem !important;
+  position: absolute !important;
+  top: 3px !important;
+  right: 12px !important;
+  cursor: pointer !important;
+
+}
+.alertTxt{
+  font-size: 17px !important;
+  position: absolute !important;
+  top: 0px !important;
+  right: 12px !important;
+  cursor: pointer !important;
+  margin-top:23px !important;
+  width:170px !important;
+
+}
+.alertImg{
+  width:80px !important;
+  margin-left:-5px !important;
+
+}
+
+.alertTxt .alertTime{
+	font-size:10px !important;
+	color:gray;
+}
+</style>
+
+
 </head>
-<body>
+<body onload="connect();" onunload="disconnection();">
 	<div id="display" class="container-fluid">
 <!-- 			<div class="row"> -->
 <!-- 			<table id="table-2"> -->
@@ -205,10 +275,10 @@ th, td {
 				<a id="reportBtn" href="<%=request.getContextPath()%>/front-end/report_group/addReport_Group.jsp?group_no=${groupVO.group_no}" 
 				style="margin-bottom: 0px;" class="btn btn-lg btn-warning">檢舉揪團</a>
 				<a id="dismissBtn" href="<%=request.getContextPath()%>/group/group.do?group_no=${groupVO.group_no}&action=delete" 
-				style="margin-bottom: 0px;" class="btn btn-lg btn-danger">解散揪團</a>
+				style="margin-bottom: 0px;" class="btn btn-lg btn-danger activeDismissGroup">解散揪團<input type="hidden" class="activeDismissGroupNO"  value="${groupVO.group_no}"></a>
 <%-- 					<a id="TimerdismissBtn" href="<%=request.getContextPath()%>/group/group.do?group_no=${groupVO.group_no}&action=SetDeleteTimerTask"  --%>
 <!-- 					style="margin-bottom: 0px;" class="btn btn-lg btn-danger">測試排程刪除</a> -->
-				<a id="gogoBtn" style="margin-bottom: 0px;" class="btn btn-lg btn-primary">出團(團長)</a>
+				<a id="gogoBtn" style="margin-bottom: 0px;" class="btn btn-lg btn-primary goGroup">出團(團長) <input type="hidden" class="goGroupName"  value="${groupVO.group_no}"></a>
 			    </div>
 			  </div>
 			</div>
@@ -230,6 +300,9 @@ th, td {
 	</div>
 	<!--動態顯示的div-->
 
+<!-- 通知顯示div -->
+ <div class="alert-container">
+ </div>
 	<script>
 	
 	//起始動作
@@ -436,30 +509,19 @@ th, td {
 		});
 		
 		$("#gogoBtn").click(function(){
-
-			Swal.fire({
-				  title: '你確定嗎?',
-				  text: "出團後無法反悔",
-				  icon: 'warning',
-				  showCancelButton: true,
-				  confirmButtonColor: '#3085d6',
-				  cancelButtonColor: '#d33',
-				  confirmButtonText: '確定出團!'
-				}).then((result) => {
-				  if (result.isConfirmed) {
-					  Swal.fire({
-		                   position: "center",
-		                   icon: "success",
-		                   title: "將導向付款頁面",
-		                   showConfirmButton: false,
-		                   timer: 1500,
-		               });
-					  setTimeout(function() {
-							 $(location).attr('href', '<%=request.getContextPath()%>/group/group.do?action=gogogo&group_no=${groupVO.group_no}&requestURL=<%=request.getServletPath()%>');
-						    }, 1500);
-				  }
-				})
-		});
+			goGroupName = $(this).find("input.goGroupName").val();
+			sendWebSocket($(this));
+			 Swal.fire({
+                 position: "center",
+                 icon: "success",
+                 title: "將導向付款頁面",
+                 showConfirmButton: false,
+                 timer: 1500,
+             });
+			  setTimeout(function() {
+					 $(location).attr('href', '<%=request.getContextPath()%>/group/group.do?action=gogogo&group_no=${groupVO.group_no}&requestURL=<%=request.getServletPath()%>');
+				    }, 1500);
+		  });
 
 
 		
@@ -703,6 +765,261 @@ th, td {
 			});
 		}
 		
- 	</script> 
+
+
+
+
+	var MyPoint = "/NotifyWS/${memVO.member_no}";
+	var host = window.location.host;
+	var path = window.location.pathname;
+	var webCtx = path.substring(0, path.indexOf('/', 1));
+	var endPointURL = "ws://" + window.location.host + webCtx + MyPoint;
+	var friendNO;
+	var groupNO;
+	var movieNO;
+	var groupName;
+	var goGroupName;
+	var kickGroupName;
+	var memberNO;
+	var self = '${memVO.member_no}';
+	var webSocket;
+	var type;
+	var activeDismissGroupNO;
+
+
+	$(".addFriend").click(function(){
+		friendNO = $(this).find("input.friendNO").val();
+		sendWebSocket($(this));
+	})
+	$(".addGroup").click(function(){
+		groupNO = $(this).find("input.groupNO").val();
+		sendWebSocket($(this));
+	})
+	$(".buyTicket").click(function(){
+		movieNO = $(this).find("input.movieNO").val();
+		sendWebSocket($(this));
+	})
+	$(".addfriend_check_btn").click(function(){
+		friendNO = $(this).find("input.friendNO").val();
+		sendWebSocket($(this));
+		//這邊執行insertfriend的code
+	})
+	$(".createGroup").click(function(){
+		groupName = document.getElementById("groupName").value;  //不可放在上面宣告，因為groupname是使用者自己打要click後才會取直，所以要放在click事件內
+		sendWebSocket($(this));
+	})
+	$(".kickoffGroup").click(function(){
+		kickGroupName = $(this).find("input.kickGroupName").val();
+		sendWebSocket($(this));
+	})
+	$(".reminder").click(function(){
+		memberNO = $(this).find("input.memberNO").val();
+		sendWebSocket($(this));
+
+	})
+	$(".activeDismissGroup").click(function(){
+		activeDismissGroupNO = $(this).find("input.activeDismissGroupNO").val();
+		sendWebSocket($(this));
+	})
+	
+	
+	function sendWebSocket(item){
+		let timespan = new Date();
+		let timeStr = timespan.getFullYear() + "-" + (timespan.getMonth()+1).toString().padStart(2, "0") + "-" 
+					+ timespan.getDate() + " " + timespan.getHours().toString().padStart(2, "0") + ":" + timespan.getMinutes().toString().padStart(2, "0");
+		if(item.hasClass("addFriend")){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : friendNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.hasClass("addGroup")){
+			type = "addGroup";
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : groupNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.hasClass("buyTicket")){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : movieNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.val()==1){
+			var jsonObj = {
+				"type" : "response",
+				"sender" : self,
+				"receiver" : friendNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.hasClass("createGroup")){
+			type = "createGroup";
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : groupName,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.hasClass("goGroup")){
+			type = "goGroup";
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : goGroupName,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.hasClass("kickoffGroup")){
+			type = "kickoffGroup";
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : kickGroupName,
+				"message":"",
+				"time":timeStr
+			};
+		}
+		if(item.hasClass("reminder")){
+			type = item.val();
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : memberNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+
+		if(item.hasClass("activeDismissGroup")){
+			type = "activeDismissGroup";
+			var jsonObj = {
+				"type" : type,
+				"sender" : self,
+				"receiver" : activeDismissGroupNO,
+				"message":"",
+				"time":timeStr
+			};
+		}
+
+		webSocket.send(JSON.stringify(jsonObj));
+	}
+	
+
+	function connect() {
+		console.log(endPointURL);
+		// create a websocket
+		webSocket = new WebSocket(endPointURL);
+
+		webSocket.onopen = function(event) {
+			
+
+		};
+
+		webSocket.onmessage = function(event) {
+			console.log(event.data);
+			var jsonObj = JSON.parse(event.data);
+			var text = jsonObj.message;
+			var time = jsonObj.time;
+			var type = jsonObj.type;
+			console.log(jsonObj)
+			createAlert(text,time,type);
+			
+		};
+
+		webSocket.onclose = function(event) {
+			console.log("Disconnected!");
+		};
+	}
+	
+	function disconnect() {
+		webSocket.close();
+	}
+	
+	
+// 	產生通知block在視窗右下角
+	  const alertContainer = document.querySelector('.alert-container');
+	  const btnCreate = document.getElementById('create');
+	  
+	  
+	  
+	  const createAlert = (text,time,type) => {
+		  
+	  const newAlert = document.createElement('div');
+	  const closeNewAlert = document.createElement('span');
+	  const imgdiv = document.createElement('div');
+	  const img = document.createElement('img');
+	  const txt = document.createElement('div');
+	  const time_str = document.createElement('div');
+	  
+	  if (type==="addFriend"||type==="response"){
+		  img.src="<%=request.getContextPath()%>/images/notify_icons/friend.png"
+	  }
+	  if (type==="addGroup"||type==="createGroup"||type==="goGroup"||type==="activeDismissGroup"){
+			img.src="<%=request.getContextPath()%>/images/notify_icons/group.png"
+	  }
+	  if (type==="buyTicket"){
+			img.src="<%=request.getContextPath()%>/images/notify_icons/ticket.png"
+	  }
+	  if (type==="reminder"||type==="dismissGroup"||type==="kickoffGroup"||type==="kickUnpaid"){
+			img.src="<%=request.getContextPath()%>/images/notify_icons/warning.png"
+	  }
+	  
+		  img.classList.add("alertImg");
+		  imgdiv.append(img);
+		  txt.innerText = text;
+		  txt.classList.add("alertTxt");
+		  time_str.innerText = time;
+		  time_str.classList.add("alertTime");
+		  txt.append(time_str);
+		  newAlert.prepend(imgdiv);
+		  newAlert.append(txt)
+		  closeNewAlert.innerHTML = '&times;';
+		  
+		  newAlert.appendChild(closeNewAlert);
+		  
+		  newAlert.classList.add('alert');
+		  
+		  alertContainer.appendChild(newAlert);
+		  
+		  setTimeout(()=> {
+		    newAlert.classList.add('fadeOut');
+		  },3000)
+		  
+		  setTimeout(()=> {
+		    newAlert.remove();
+		  },5000)
+		  
+		
+	};
+
+
+	alertContainer.addEventListener('click', (e) => {
+	    if(e.target.nodeName == 'SPAN') {
+	        e.target.parentNode.remove();
+	    }
+	})
+
+
+
+
+
+</script>
 </body>
 </html>

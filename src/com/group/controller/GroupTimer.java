@@ -93,7 +93,7 @@ class TimerTask_Dismiss extends TimerTask {
 		// open websocket
         WebsocketClientEndpoint clientEndPoint;
 		try {
-			clientEndPoint = new WebsocketClientEndpoint(new URI("ws://localhost:8081/CEA103_G3_git/NotifyWS/-1"));
+			clientEndPoint = new WebsocketClientEndpoint(new URI("ws://localhost:8081/CEA103G3_Project/NotifyWS/-1"));
 
 			if("dismissGroup".equals(type)) {
 				// send message to websocket
@@ -141,7 +141,7 @@ class TimerTask_KickOut extends TimerTask {
 		// open websocket
         WebsocketClientEndpoint clientEndPoint;
 		try {
-			clientEndPoint = new WebsocketClientEndpoint(new URI("ws://localhost:8081/CEA103_G3_git/NotifyWS/-1"));
+			clientEndPoint = new WebsocketClientEndpoint(new URI("ws://localhost:8081/CEA103G3_Project/NotifyWS/-1"));
 
 			if("kickUnpaid".equals(type)) {
 				// send message to websocket
