@@ -14,6 +14,7 @@
 
 <html>
 <head>
+<link href="https://i2.bahamut.com.tw/css/basic.css?v=1618977484" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 <title>所有文章類型資料 - listAllTopic.jsp</title>
 
@@ -21,7 +22,7 @@
    body {  
      width: 1200px;  
      margin: 0 auto;  
-     padding: 10px 20px 20px 20px;  
+     padding: 10px 20px 20px 15px;  
  	        }  
   table#table-1 {
 	background-color: #CCCCFF;
@@ -86,81 +87,34 @@
 <!-- <ul> -->
 <%--   <li><a href='<%=request.getContextPath()%>/article/listAllArticle.jsp'>查看全部文章</a></li> --%>
 <!-- </ul> -->
-<div class="shadow-none p-2 mb-2 bg-light rounded">
- 	<button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/front-end/article/listAllArticle.jsp'">HOME</button>
+<div class="shadow-none p-2 mb-2 bg-light rounded">	
+ 	<%-- 萬用複合查詢-以下欄位-可隨意增減 --%>
+          
+    <button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/front-end/article/listAllArticle.jsp'">HOME</button>
 	<button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/topic/topic.do?action=listArticles_ByTopicno_B&topicno=1'">電影情報</button>
 	<button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/topic/topic.do?action=listArticles_ByTopicno_B&topicno=2'">劇情討論</button>
-	<button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/topic/topic.do?action=listArticles_ByTopicno_B&topicno=3'">影城活動</button>   
+	<button type="button" class="btn btn-outline-dark" onclick="location.href='<%=request.getContextPath()%>/topic/topic.do?action=listArticles_ByTopicno_B&topicno=3'">影城活動</button>          
+	<b>●符 合 查 詢 條 件 如 下 所 示:</b>
 </div>
-
-<!-- <table> -->
-<!-- 	<tr> -->
-<!-- 		<th>討論主題編號</th> -->
-<!-- 		<th>討論主題</th>		 -->
-<!-- <!-- 		<th>修改</th>	 --> 
-<!-- <!-- 		<th>刪除</th>	 --> 
-<!-- 		<th>送出查詢</th>	 -->
-		
-<!-- 	</tr> -->
-<%-- 	<c:forEach var="topicVO" items="${topicSvc.all}"> --%>
-		
-<!-- 		<tr> -->
-<%-- 			<td>${topicVO.topicno}</td> --%>
-<%-- 			<td>${topicVO.topic}</td> --%>
-
-<!-- 			<td> -->
-<%-- 			  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/topic/topic.do" style="margin-bottom: 0px;"> --%>
-<!-- 			     <input type="submit" value="修改"> -->
-<%-- 			     <input type="hidden" name="topicno"  value="${topicVO.topicno}"> --%>
-<!-- 			     <input type="hidden" name="action"	value="getOne_For_Update"></FORM> -->
-<!-- 			</td> -->
-<!-- 			<td> -->
-<%-- 			  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/topic/topic.do" style="margin-bottom: 0px;"> --%>
-<!-- 			     <input type="submit" value="刪除"> -->
-<%-- 			     <input type="hidden" name="topicno"  value="${topicVO.topicno}"> --%>
-<!-- 			     <input type="hidden" name="action" value="delete"></FORM> -->
-<!-- 			</td> -->
-<!-- 			<td> -->
-<%-- 			  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/topic/topic.do" style="margin-bottom: 0px;"> --%>
-<!-- 			    <input type="submit" value="送出查詢">  -->
-<%-- 			    <input type="hidden" name="topicno" value="${topicVO.topicno}"> --%>
-<!-- 			    <input type="hidden" name="action" value="listArticles_ByTopicno_B"></FORM> -->
-<!-- 			</td> -->
-<!-- 		</tr> -->
-<%-- 	</c:forEach> --%>
-<!-- </table> -->
-
-<%if (request.getAttribute("listArticles_ByTopicno")!=null){%>
-      <jsp:include page="listArticles_ByTopicno.jsp" />
-<%} %>
-<%-- 萬用複合查詢-以下欄位-可隨意增減 --%>
-<ul>  
-  <li>   
-    <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/article/article.do" name="form1">
-        <b><font color=blue>萬用複合查詢:</font></b> <br>
-<!--         <b>輸入文章編號:</b> -->
-<!--         <input type="text" name="article_no" value=""><br> -->
-      
-<!--         <b>輸入會員編號:</b> -->
-<!--         <input type="text" name="member_no" value=""><br> -->
-        
-                <b>選擇會員編號:</b>
+	<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/front-end/article/article.do" name="form1">
+       <b><font color=blue>搜尋本站的作者或文章主題:</font></b> 
+        <b>選擇文章作者:</b>
         <select size="1" name="member_no" >
           <option value="">
          <c:forEach var="memberVO" items="${memSvc.all}" > 
           <option value="${memberVO.member_no}">${memberVO.mb_name}
          </c:forEach>   
-        </select><br>
-        
-        <b>輸入文章標題:</b>
-        <input type="text" name="article_headline" value=""><br>
+        </select>       
+        <b>輸入文章主題:</b>
+        <input type="text" name="article_headline" value="">
 		        
-        <input type="submit" value="送出">
+        <input type="submit" value="送出" class="btn btn-primary">
         <input type="hidden" name="action" value="listArticles_ByCompositeQuery">
      </FORM>
-  </li>
-</ul>
 
+<%if (request.getAttribute("listArticles_ByTopicno")!=null){%>
+      <jsp:include page="listArticles_ByTopicno.jsp" />
+<%} %>
 
 </body>
 </html>
