@@ -39,8 +39,8 @@
 	List<MovieVO> latestMovie = movieSvc.getLatestMovie();
 	pageContext.setAttribute("latestMovie", latestMovie);
 	
-	List<MovieVO> listTopFive = movieSvc.getTopFive();
-	pageContext.setAttribute("listTopFive", listTopFive);
+// 	List<MovieVO> listTopFive = movieSvc.getTopFive();
+// 	pageContext.setAttribute("listTopFive", listTopFive);
 	
 	movieSvc.createMovieIdex();
 	
@@ -1186,7 +1186,7 @@
                 <div class="col-md-2 footer-grid">
                     <h4 class="b-log"><a><span>精</span>選 <span></span> <span>電</span>影</a></h4>
                     <ul>
-                        <c:forEach var="movieVO" items="${listTopFive}">
+                        <c:forEach var="movieVO" items="${listTopTen}" begin="0" end ="4">
                             <li><a href="genre.html">${movieVO.moviename}</a></li>
                         </c:forEach>
                     </ul>
