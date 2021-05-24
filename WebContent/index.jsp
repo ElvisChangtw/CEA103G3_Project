@@ -84,7 +84,7 @@
     <!--//web-fonts-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
-    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/styleForGroup.css">
 <style>
 	div.form-group>button.btn {
@@ -411,8 +411,18 @@ left: 1095px;
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">會員專區<b class="caret"></b></a>
                                     <ul class="dropdown-menu multi-column columns-1">
-                                        <li><a href="<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">會員中心</a></li>
-                                        <li><a href="<%=request.getContextPath()%>/front-end/mem/memberInfo.jsp">會員資訊</a></li>
+                                        <c:choose>
+	                                        <c:when test="${memVO==null || memVO.member_no==99 }">
+	                                        	<li><a href="#" onclick="loginFirst()" >會員中心</a></li>
+	                                        	<li><a href="#" onclick="loginFirst()" >會員資訊</a></li>
+	                                        	<li><a href="#" onclick="loginFirst()" >好友管理</a></li>
+	                                        </c:when>
+	                                        <c:otherwise>
+	                                        	<li><a href="<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">會員中心</a></li>
+	                                        	<li><a href="<%=request.getContextPath()%>/front-end/mem/memberInfo.jsp">會員資訊</a></li>
+	                                        	<li><a href="<%=request.getContextPath()%>/front-end/relationship/select_page.jsp">好友管理</a></li>
+	                                        </c:otherwise>
+                                        </c:choose>
                                     </ul>
                                 </li>
                             </ul>
@@ -2477,7 +2487,11 @@ var count=0;
 	})
 
 
-
+	function loginFirst(){
+		Swal.fire('請先登入').then((result)=>{
+			window.location.href = "<%=request.getContextPath()%>/front-end/mem/MemLogin.jsp";
+		});
+	}
 
 </script>
 	    
