@@ -50,6 +50,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/styleForGroup.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <style>
         div.form-group>button.btn {
 border-radius: 3px;
@@ -67,9 +68,9 @@ height:50px;
 }
 .notification{
 /*   bottom: 25px; */
-bottom: 50px; 
+bottom: 58px; 
 /*   left: 340px; */
-left: 1130px; 
+left: 1095px; 
   position: relative;
   display: inline-block;
 }
@@ -292,8 +293,18 @@ left: 1130px;
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">會員專區<b class="caret"></b></a>
                                 <ul class="dropdown-menu multi-column columns-1">
-                                    <li><a href="<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">會員中心</a></li>
-                                    <li><a href="<%=request.getContextPath()%>/front-end/mem/memberInfo.jsp">會員資訊</a></li>
+                                   <c:choose>
+                                     <c:when test="${memVO==null || memVO.member_no==99 }">
+                                     	<li><a href="#" onclick="loginFirst()" >會員中心</a></li>
+                                     	<li><a href="#" onclick="loginFirst()" >會員資訊</a></li>
+                                     	<li><a href="#" onclick="loginFirst()" >好友管理</a></li>
+                                     </c:when>
+                                     <c:otherwise>
+                                     	<li><a href="<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">會員中心</a></li>
+                                     	<li><a href="<%=request.getContextPath()%>/front-end/mem/memberInfo.jsp">會員資訊</a></li>
+                                     	<li><a href="<%=request.getContextPath()%>/front-end/relationship/select_page.jsp">好友管理</a></li>
+                                     </c:otherwise>
+                                   </c:choose>
                                 </ul>
                             </li>
                         </ul>
@@ -605,18 +616,15 @@ var count=0;
 	                      showConfirmButton: false,
 	                      timer: 1000,
 	                  });
- 				 }
-
-
-					 
-					 }
-
-
-	   			 
+ 				 }	 
+					 }	 
 	   			 })
 		   			
 		   		 });
-	    	
-
+	    function loginFirst(){
+			Swal.fire('請先登入').then((result)=>{
+				window.location.href = "<%=request.getContextPath()%>/front-end/mem/MemLogin.jsp";
+			});
+		}
 	    </script>
 </html>
