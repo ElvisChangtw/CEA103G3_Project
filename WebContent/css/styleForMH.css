@@ -84,3 +84,32 @@
         div.cd-main-header{
         	height:20px;
         }
+        #hide-content>div{
+        	width:300px;
+		  	text-overflow : ellipsis;
+		  	overflow : hidden;
+		  	white-space : nowrap;
+        }
+        #hide-title>div{
+/*         	width:400px; */
+		  	text-overflow : ellipsis;
+		  	overflow : hidden;
+		  	white-space : nowrap;
+        }
+        .article-link{
+        	cursor: pointer;
+        	color: lightpink !important;
+        }
+        .article-link a{
+        	color: white !important;
+        }
+        .article-link a:hover{
+        	color: #75D9B5 !important;
+        }
+        #go-to-forum{
+        	color: #FFC001 !important;
+        }
+        #go-to-forum:hover{
+        	color: #75D9B5 !important;
+        }
+       
