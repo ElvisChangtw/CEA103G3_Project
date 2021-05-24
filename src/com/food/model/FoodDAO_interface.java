@@ -10,4 +10,5 @@ public interface FoodDAO_interface {
 	public List<FoodVO> getAll();
 	 //萬用複合查詢(傳入參數型態Map)(回傳 List)
 //  public List<Theater> getAll(Map<String, String[]> map);
+	public void onOrDownFoodStatus(Integer food_no);
 }

@@ -5,278 +5,318 @@
 <%
 	MovieVO movieVO = (MovieVO) request.getAttribute("movieVO"); //EmpServlet.java (Concroller) 存入req的empVO物件 (包括幫忙取出的empVO, 也包括輸入資料錯誤時的empVO物件)
 %>
-<%-- <%= empVO==null %>--${empVO.deptno}-- --%>
-movieVO. === ${movieVO.grade} movieVO.grade.equals("0") ===
-${movieVO.grade.equals("0")}
-${movieVO.category.contains("動作片")}
-<html>
-<head>
-<title>後台 修改電影</title>
-<!-- for-mobile-apps -->
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="keywords" content="Movies Pro Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
-Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
-<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
-		function hideURLbar(){ window.scrollTo(0,1); } </script>
-<!-- //for-mobile-apps -->
-<link href="<%=request.getContextPath()%>/css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
-<!-- pop-up -->
-<link href="<%=request.getContextPath()%>/css/popuo-box.css" rel="stylesheet" type="text/css" media="all" />
-<!-- //pop-up -->
-<link href="<%=request.getContextPath()%>/css/easy-responsive-tabs.css" rel='stylesheet' type='text/css'/>
-<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/zoomslider.css" />
-<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/table-style.css" />
-<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/basictable.css" />
-<!-- list-css -->
-<link rel="stylesheet" href="<%=request.getContextPath()%>/css/list.css" type="text/css" media="all" />
-<!-- //list-css -->
-<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/style.css" />
-<link href="<%=request.getContextPath()%>/css/font-awesome.css" rel="stylesheet"> 
-<script type="text/javascript" src="<%=request.getContextPath()%>/js/modernizr-2.6.2.min.js"></script>
-<!--/web-fonts-->
-<link href='//fonts.googleapis.com/css?family=Tangerine:400,700' rel='stylesheet' type='text/css'>
-<link href="//fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900" rel="stylesheet">
-<link href='//fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
-<!--//web-fonts-->
-<script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>	
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    	<title>後台　修改電影</title>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <link href="<%=request.getContextPath()%>/back-home/css/styles.css" rel="stylesheet" />
+        <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
+<script> 
+ function readURL(input){
+   if(input.files && input.files[0]){
+     var imageTagID = input.getAttribute("targetID");
+     var reader = new FileReader();
+     reader.onload = function (e) {
+        var img = document.getElementById(imageTagID);
+        img.setAttribute("src", e.target.result)
+     }
+     reader.readAsDataURL(input.files[0]);
+   }
+ }
+</script> 
 
 <style>
 tr td>img {
 	width: 180px;
 	height: 200px;
 }
-
 #th1{
-	width: 150px;
-	height:100px;
-	align:center;
+	font-size:20px;
 }
 #th2{
-	width: 50px;
-	align:center;
+	font-size:20px;
 }
-#th3{
-	width: 150px;
-	align:right;
-}
-#send{
-align:center;	
-color:red;
-}
+
 </style>
 
-<script>
-function readURL(input){
-  if(input.files && input.files[0]){
-    var imageTagID = input.getAttribute("targetID");
-    var reader = new FileReader();
-    reader.onload = function (e) {
-       var img = document.getElementById(imageTagID);
-       img.setAttribute("src", e.target.result)
-    }
-    reader.readAsDataURL(input.files[0]);
-  }
-}
-</script>
-
-
 </head>
-<body>
-	
-<!--/content-inner-section-->
-	<div class="w3_content_agilleinfo_inner">
-		<div class="agile_featured_movies">
-			<div class="inner-agile-w3l-part-head">
-		    	<h3 class="w3l-inner-h-title">後台 修改電影</h3>
-			</div>
-	        <div class="bs-example bs-example-tabs" role="tabpanel" data-example-id="togglable-tabs">
-				<div id="myTabContent" class="tab-content">
-					<div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
-						<div class="agile-news-table">
-							
-							<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/movie/movie.do" name="form1" enctype="multipart/form-data">
-							<table>
-								<thead class="thead">
-								  <tr>
-								  	<th id="th1">電影編號</th>
-								  	<th id="th2"><%=movieVO.getMovieno()%></th>
-<!-- 								  	<th id="th3">&emsp;&emsp;&emsp;&emsp;&emsp;<input type="submit" value="送出修改" class="btn btn-outline-primary" id="send"></th> -->
-								  	<th></th>
-								  </tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>電影名稱:</td>
-										<td ><input type="TEXT" name="moviename" size="70"
-											value="<%=(movieVO.getMoviename() == null) ? "" : movieVO.getMoviename()%>" /></td>
-<!-- 										<td colspan="1" rowspan="3" style="vertical-align:text-top; bgcolor=white"> -->
-<%-- 											<c:if test="${not empty errorMsgs}"> --%>
-<!-- 												<font style="color: red">請修正以下錯誤:</font> -->
-<!-- 												<ul> -->
-<%-- 													<c:forEach var="message" items="${errorMsgs}"> --%>
-<%-- 														<li style="color: red">${message}</li> --%>
-<%-- 													</c:forEach> --%>
-<!-- 												</ul> -->
-<%-- 											</c:if> --%>
-<!-- 										</td> -->
-										<td >${errorMsgs.moviename}</td>
-									</tr>
-									<tr>
-										<td>電影照片1:</td>
-										<td>
-										<img id="preview_img" src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${movieVO.movieno}">
-										<input multiple type="file" name="moviepicture1" accept="image/*" onchange="readURL(this)" targetID="preview_img"
-										value="<%=(movieVO.getMoviepicture1() == null) ? "" : movieVO.getMoviepicture1()%>" /></td>
-<!-- 										<td colspan="1"></td> -->
-										<td >${errorMsgs.moviepicture1}</td> 
-									</tr>	
-									<tr>
-										<td>電影照片2:</td>
-										<td>
-										<img id="preview_img2" src="${pageContext.request.contextPath}/movie/DBGifReader2.do?movieno=${movieVO.movieno}"">
-										<input multiple type="file" name="moviepicture2" accept="image/*" onchange="readURL(this)" targetID="preview_img2"
-										value="<%=(movieVO.getMoviepicture2() == null) ? "" : movieVO.getMoviepicture2()%>" /></td>
-<!-- 										<td colspan="1"></td> -->
-										<td >${errorMsgs.moviepicture2}</td> 
-									</tr>	
-									<tr>
-										<td>導演:</td>
-										<td><input type="TEXT" name="director" size="70"
-											value="<%=(movieVO.getDirector() == null) ? "" : movieVO.getDirector()%>" /></td>
-<!-- 										<td colspan="1"></td> -->
-										<td >${errorMsgs.director}</td>
-									</tr>
-									<tr>
-										<td>演員:</td>
-										<td><textarea name="actor" rows="5" cols="70" maxlength="300"><%=(movieVO.getActor() == null) ? "" : movieVO.getActor()%></textarea></td>
-<!-- 										<td><input type="TEXT" name="actor" size="70" -->
-<%-- 											value="<%=(movieVO == null) ? "" : movieVO.getActor()%>" /></td> --%>
-<!-- 										<td colspan="1"></td> -->
-										<td >${errorMsgs.actor}</td>
-									</tr>
-									<tr>
-										<td>電影類型:</td>
-										<td>
-										<input type="checkbox" name="category" value="動作片" <%= movieVO.getCategory().contains("動作片") ? "checked" : "" %>>動作片
-										<input type="checkbox" name="category" value="冒險片" <%= movieVO.getCategory().contains("冒險片") ? "checked" : "" %>>冒險片
-										<input type="checkbox" name="category" value="科幻片" <%= movieVO.getCategory().contains("科幻片") ? "checked" : "" %>>科幻片
-										<input type="checkbox" name="category" value="劇情片" <%= movieVO.getCategory().contains("劇情片") ? "checked" : "" %>>劇情片
-										<input type="checkbox" name="category" value="戰爭片" <%= movieVO.getCategory().contains("戰爭片") ? "checked" : "" %>>戰爭片
-										<input type="checkbox" name="category" value="史詩片" <%= movieVO.getCategory().contains("史詩片") ? "checked" : "" %>>史詩片
-										<input type="checkbox" name="category" value="犯罪片" <%= movieVO.getCategory().contains("犯罪片") ? "checked" : "" %>>犯罪片
-										<input type="checkbox" name="category" value="警匪片" <%= movieVO.getCategory().contains("警匪片") ? "checked" : "" %>>警匪片
-										<input type="checkbox" name="category" value="奇幻片" <%= movieVO.getCategory().contains("奇幻片") ? "checked" : "" %>>奇幻片
-										<br>
-										<input type="checkbox" name="category" value="恐怖片" <%= movieVO.getCategory().contains("恐怖片") ? "checked" : "" %>>恐怖片
-										<input type="checkbox" name="category" value="驚悚片" <%= movieVO.getCategory().contains("驚悚片") ? "checked" : "" %>>驚悚片
-										<input type="checkbox" name="category" value="懸疑片" <%= movieVO.getCategory().contains("懸疑片") ? "checked" : "" %>>懸疑片
-										<input type="checkbox" name="category" value="喜劇片" <%= movieVO.getCategory().contains("喜劇片") ? "checked" : "" %>>喜劇片
-										<input type="checkbox" name="category" value="愛情片" <%= movieVO.getCategory().contains("愛情片") ? "checked" : "" %>>愛情片
-										<input type="checkbox" name="category" value="文藝片" <%= movieVO.getCategory().contains("文藝片") ? "checked" : "" %>>文藝片
-										<input type="checkbox" name="category" value="動畫片" <%= movieVO.getCategory().contains("動畫片") ? "checked" : "" %>>動畫片
-										<input type="checkbox" name="category" value="音樂片" <%= movieVO.getCategory().contains("音樂片") ? "checked" : "" %>>音樂片
-										<input type="checkbox" name="category" value="歌舞劇" <%= movieVO.getCategory().contains("歌舞劇") ? "checked" : "" %>>歌舞劇
-										</td>
-<!-- 										<td colspan="1"></td> -->
-										<td >${errorMsgs.category}</td>
-									</tr>
-									<tr>
-										<td>電影長度:</td>
-										<td><input type="TEXT" name="length" size="70"
-											value="<%=(movieVO.getLength() == null) ? "" : movieVO.getLength()%>" /></td>
-<!-- 										<td colspan="1"></td> -->
-										<td >${errorMsgs.length}</td>
-									</tr>
-									<tr>
-										<td>電影狀態:</td>
-										<td><select name="status" size="1">
-												<option value="9"
-													<%=(movieVO.getStatus().equals("9") ? "selected" : "")%>></option>
-												<option value="0"
-													<%=(movieVO.getStatus().equals("0") ? "selected" : "")%>>上映中</option>
-												<option value="1"
-													<%=(movieVO.getStatus().equals("1") ? "selected" : "")%>>未上映</option>
-												<option value="2"
-													<%=(movieVO.getStatus().equals("2") ? "selected" : "")%>>已下檔</option>
-										</select></td>
-<!-- 										<td colspan="1"></td> -->
-										<td >${errorMsgs.status}</td>
-									</tr>
-									<tr>
-										<td>上映日期:</td>
-										<td><input name="premiredate" id="f_date1" type="text" value="<%=(movieVO.getPremiredate() == null) ? " " : movieVO.getPremiredate()%>"></td>
-<!-- 										<td colspan="1"></td> -->
-										<td >${errorMsgs.premiredate}</td>
-									</tr>
-									<tr>
-										<td>下檔日期:</td>
-										<td><input name="offdate" id="f_date2" type="text"  value="<%=(movieVO.getOffdate() == null) ? " " : movieVO.getOffdate()%>"></td>
-<!-- 										<td colspan="1"></td> -->
-										<td >${errorMsgs.offdate}</td> 
+    <body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <a class="navbar-brand" href="index.html">MOVIESHIT後台系統</a>
+        <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
+        <!-- Navbar Search-->
+        <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+            <div class="input-group">
+            </div>
+        </form>
+        <!-- Navbar-->
+        <ul class="navbar-nav ml-auto ml-md-0">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle1" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+            </li>
+            <a class="nav-link" href="index.html">
+                登出
+            </a>
+        </ul>
+    </nav>
+    
+   
+    
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                <div class="sb-sidenav-menu">
+                    <div class="nav">
+                        <img src="<%=request.getContextPath()%>/back-home/img/logo2-1-5.png">
+                        <a class="nav-link collapsed" href="tables3.html">
+                            <div class="sb-nav-link-icon"><i class="fas fa-user-alt"></i></div>
+                            基本資料
+                        </a>
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapseLayouts1">
+                            <div class="sb-nav-link-icon"><i class="fas fa-user-cog"></i></div>
+                            員工管理系統
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseLayouts1" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="layout-static.html">員工管理</a>
+                                <a class="nav-link" href="layout-sidenav-light.html">員工權限管理</a>
+                            </nav>
+                        </div>
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                            <div class="sb-nav-link-icon"><i class="fas fa-video"></i></div>
+                            影城基本資料系統
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="layout-static.html">場次管理</a>
+                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/movie/backEndlistAllMovie.jsp">電影資料管理</a>
+                                <a class="nav-link" href="layout-sidenav-light.html"> 廳院管理</a>
+                                <a class="nav-link" href="layout-sidenav-light.html">座位管理</a>
+                                <a class="nav-link" href="layout-sidenav-light.html">票種管理</a>
+                                <a class="nav-link" href="layout-sidenav-light.html">餐點管理</a>
+                            </nav>
+                        </div>
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages2" aria-expanded="false" aria-controls="collapsePages2">
+                            <div class="sb-nav-link-icon"><i class="fas fa-user-clock"></i></div>
+                            會員管理系統
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapsePages2" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="layout-static.html">會員資料管理</a>
+                                <a class="nav-link" href="layout-sidenav-light.html">會員審核</a>
+                                <a class="nav-link" href="layout-sidenav-light.html"> 專業評論審核</a>
+                            </nav>
+                        </div>
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages3" aria-expanded="false" aria-controls="collapsePages3">
+                            <div class="sb-nav-link-icon"><i class="fas fa-ticket-alt"></i></div>
+                            售票管理
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapsePages3" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="layout-static.html">現場劃位</a>
+                                <a class="nav-link" href="layout-sidenav-light.html">查詢線上訂單</a>
+                            </nav>
+                        </div>
+                        <a class="nav-link collapsed" href="tables3.html">
+                            <div class="sb-nav-link-icon"><i class="fas fa-user-alt-slash"></i></div>
+                            檢舉管理
+                        </a>
+                        <a class="nav-link" href="tables1.html">
+                            <div class="sb-nav-link-icon"><i class="fas fa-bullhorn"></i></div>
+                            管理最新消息
+                        </a>
+                        <a class="nav-link" href="tables2.html">
+                            <div class="sb-nav-link-icon"><i class="fas fa-hands-helping"></i></div>
+                            回應客服小幫手
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+            
+            
+            
+            
+            
+            
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid">
+                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">後台　修改電影</h1>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                   <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/movie/movie.do" name="form1" enctype="multipart/form-data">
+                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="text-align:left;">
+                                        <thead style="background-color:#9099AA; color:white;; white-space: nowrap;" >
+                                            <tr>
+                                            	<th id="th1">電影編號</th>
+								  				<th id="th2" colspan="2"><%=movieVO.getMovieno()%></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+											<tr>
+												<td width="110px;"><span style="font-weight:bolder;">電影名稱:</td>
+												<td width="620px;"><input type="TEXT" name="moviename" size="70"
+													value="<%=(movieVO.getMoviename() == null) ? "" : movieVO.getMoviename()%>" /></td>
+												<td><font color=red>${errorMsgs.moviename}</font></td>
+											</tr>
+											<tr>
+												<td><span style="font-weight:bolder;">電影照片1:</span></td>
+												<td>
+												<img id="preview_img" src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${movieVO.movieno}"><br>
+												<input multiple type="file" name="moviepicture1" accept="image/*" onchange="readURL(this)" targetID="preview_img"
+												value="<%=(movieVO.getMoviepicture1() == null) ? "" : movieVO.getMoviepicture1()%>" /></td>
+												<td style="word-break: break-all;"><font color=red>${errorMsgs.moviepicture1}</font></td> 
+											</tr>	
+											<tr>
+												<td><span style="font-weight:bolder;">電影照片2:</span></td>
+												<td>
+												<img id="preview_img2" src="${pageContext.request.contextPath}/movie/DBGifReader2.do?movieno=${movieVO.movieno}""><br>
+												<input multiple type="file" name="moviepicture2" accept="image/*" onchange="readURL(this)" targetID="preview_img2"
+												value="<%=(movieVO.getMoviepicture2() == null) ? "" : movieVO.getMoviepicture2()%>" /></td>
+												<td style="word-break: break-all;"><font color=red>${errorMsgs.moviepicture2}</font></td> 
+											</tr>	
+											<tr>
+												<td><span style="font-weight:bolder;">導演:</span></td>
+												<td><input type="TEXT" name="director" size="70"
+													value="<%=(movieVO.getDirector() == null) ? "" : movieVO.getDirector()%>" /></td>
+												<td><font color=red>${errorMsgs.director}</font></td>
+											</tr>
+											<tr>
+												<td><span style="font-weight:bolder;">演員:</span></td>
+												<td><textarea name="actor" rows="5" cols="73" maxlength="300"><%=(movieVO.getActor() == null) ? "" : movieVO.getActor()%></textarea></td>
+												<td><font color=red>${errorMsgs.actor}</font></td>
+											</tr>
+											<tr>
+												<td><span style="font-weight:bolder;">電影類型:</span></td>
+												<td>
+												<input type="checkbox" name="category" value="動作片" <%= movieVO.getCategory().contains("動作片") ? "checked" : "" %>>動作片
+												<input type="checkbox" name="category" value="冒險片" <%= movieVO.getCategory().contains("冒險片") ? "checked" : "" %>>冒險片
+												<input type="checkbox" name="category" value="科幻片" <%= movieVO.getCategory().contains("科幻片") ? "checked" : "" %>>科幻片
+												<input type="checkbox" name="category" value="劇情片" <%= movieVO.getCategory().contains("劇情片") ? "checked" : "" %>>劇情片
+												<input type="checkbox" name="category" value="戰爭片" <%= movieVO.getCategory().contains("戰爭片") ? "checked" : "" %>>戰爭片
+												<input type="checkbox" name="category" value="史詩片" <%= movieVO.getCategory().contains("史詩片") ? "checked" : "" %>>史詩片
+												<input type="checkbox" name="category" value="犯罪片" <%= movieVO.getCategory().contains("犯罪片") ? "checked" : "" %>>犯罪片
+												<input type="checkbox" name="category" value="警匪片" <%= movieVO.getCategory().contains("警匪片") ? "checked" : "" %>>警匪片
+												<input type="checkbox" name="category" value="奇幻片" <%= movieVO.getCategory().contains("奇幻片") ? "checked" : "" %>>奇幻片
+												<br>
+												<input type="checkbox" name="category" value="恐怖片" <%= movieVO.getCategory().contains("恐怖片") ? "checked" : "" %>>恐怖片
+												<input type="checkbox" name="category" value="驚悚片" <%= movieVO.getCategory().contains("驚悚片") ? "checked" : "" %>>驚悚片
+												<input type="checkbox" name="category" value="懸疑片" <%= movieVO.getCategory().contains("懸疑片") ? "checked" : "" %>>懸疑片
+												<input type="checkbox" name="category" value="喜劇片" <%= movieVO.getCategory().contains("喜劇片") ? "checked" : "" %>>喜劇片
+												<input type="checkbox" name="category" value="愛情片" <%= movieVO.getCategory().contains("愛情片") ? "checked" : "" %>>愛情片
+												<input type="checkbox" name="category" value="文藝片" <%= movieVO.getCategory().contains("文藝片") ? "checked" : "" %>>文藝片
+												<input type="checkbox" name="category" value="動畫片" <%= movieVO.getCategory().contains("動畫片") ? "checked" : "" %>>動畫片
+												<input type="checkbox" name="category" value="音樂片" <%= movieVO.getCategory().contains("音樂片") ? "checked" : "" %>>音樂片
+												<input type="checkbox" name="category" value="歌舞劇" <%= movieVO.getCategory().contains("歌舞劇") ? "checked" : "" %>>歌舞劇
+												</td>
+												<td><font color=red>${errorMsgs.category}</font></td>
+											</tr>
+											<tr>
+												<td><span style="font-weight:bolder;">電影長度:</span></td>
+												<td><input type="TEXT" name="length" size="70"
+													value="<%=(movieVO.getLength() == null) ? "" : movieVO.getLength()%>" /></td>
+												<td><font color=red>${errorMsgs.length}</font></td>
+											</tr>
+											<tr>
+												<td><span style="font-weight:bolder;">電影狀態:</span></td>
+												<td><select name="status" size="1" style="width:555px;">
+														<option value="9"
+															<%=(movieVO.getStatus().equals("9") ? "selected" : "")%>></option>
+														<option value="0"
+															<%=(movieVO.getStatus().equals("0") ? "selected" : "")%>>上映中</option>
+														<option value="1"
+															<%=(movieVO.getStatus().equals("1") ? "selected" : "")%>>未上映</option>
+														<option value="2"
+															<%=(movieVO.getStatus().equals("2") ? "selected" : "")%>>已下檔</option>
+												</select></td>
+												<td><font color=red>${errorMsgs.status}</font></td>
+											</tr>
+											<tr>
+												<td><span style="font-weight:bolder;">上映日期:</span></td>
+												<td><input name="premiredate" id="f_date1" type="text" size="70" 
+												value="<%=(movieVO.getPremiredate() == null) ? " " : movieVO.getPremiredate()%>"></td>
+												<td><font color=red>${errorMsgs.premiredate}</font></td>
+											</tr>
+											<tr>
+												<td><span style="font-weight:bolder;">下檔日期:</span></td>
+												<td><input name="offdate" id="f_date2" type="text" size="70"  
+												value="<%=(movieVO.getOffdate() == null) ? " " : movieVO.getOffdate()%>"></td>
+												<td><font color=red>${errorMsgs.offdate}</font></td> 
+		
+											</tr>
+											<tr>
+												<td><span style="font-weight:bolder;">預告片:</span></td>
+												<td><input type="TEXT" name="trailor" size="70" value="<%=(movieVO.getTrailor() == null) ? " " : movieVO.getTrailor()%>" /></td>
+												<td><font color=red>${errorMsgs.trailor}</font></td>
+											</tr>
+											<tr>
+												<td><span style="font-weight:bolder;">短預告片:</span></td> 
+												<td><input type="TEXT" name="embed" size="70" value="<%=(movieVO.getEmbed() == null) ? " " : movieVO.getEmbed()%>" /></td>
+												<td><font color=red>${errorMsgs.embed}</font></td>
+											</tr>
+											<tr>
+												<td><span style="font-weight:bolder;">電影分級:</span></td>
+												<td><select name="grade" size="1" style="width:555px;">
+														<option value="9"
+															<%=(movieVO.getGrade().equals("9") ? "selected" : "")%>></option>
+														<option value="0"
+															<%=(movieVO.getGrade().equals("0") ? "selected" : "")%>>普遍級</option>
+														<option value="1"
+															<%=(movieVO.getGrade().equals("1") ? "selected" : "")%>>保護級</option>
+														<option value="2"
+															<%=(movieVO.getGrade().equals("2") ? "selected" : "")%>>輔導級</option>
+														<option value="3"
+															<%=(movieVO.getGrade().equals("3") ? "selected" : "")%>>限制級</option>
+												</select></td>
+												<td><font color=red>${errorMsgs.grade}</font></td>
+											</tr>
+											
+											
+											<tr>
+												<td></td>
+												<td></td>
+												<td>
+													<input type="hidden" name="action" value="update"> 
+													<input type="hidden" name="movieno" value="<%=movieVO.getMovieno()%>">
+													<input type="hidden" name="requestURL" value="<%=request.getParameter("requestURL")%>"> <!--接收原送出修改的來源網頁路徑後,再送給Controller準備轉交之用-->
+													<input type="hidden" name="whichPage"  value="<%=request.getParameter("whichPage")%>">
+													<input type="submit" value="送出修改" id="send" 
+													class="btn btn-outline-danger" style="float:right; border:2px #B7B7B7 solid;border-radius:10px; background-color:#FF4268; font-weight:bold; color:white;">
+											</tr>
+                                            <tr>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+								</FORM>
+                                </div>
+                            </div>
+                    </div>
+                </main>
 
-									</tr>
-									<tr>
-										<td>預告片:</td>
-										<td><input type="TEXT" name="trailor" size="70" value="<%=(movieVO.getTrailor() == null) ? " " : movieVO.getTrailor()%>" /></td>
-<!-- 										<td colspan="1"></td> -->
-										<td >${errorMsgs.trailor}</td>
-									</tr>
-									<tr>
-										<td>短預告片:</td> 
-										<td><input type="TEXT" name="embed" size="70" value="<%=(movieVO.getEmbed() == null) ? " " : movieVO.getEmbed()%>" /></td>
-<!-- 										<td colspan="1"></td> -->
-										<td >${errorMsgs.embed}</td>
-									</tr>
-									<tr>
-										<td>電影分級:</td>
-										<td><select name="grade" size="1">
-												<option value="9"
-													<%=(movieVO.getGrade().equals("9") ? "selected" : "")%>></option>
-												<option value="0"
-													<%=(movieVO.getGrade().equals("0") ? "selected" : "")%>>普遍級</option>
-												<option value="1"
-													<%=(movieVO.getGrade().equals("1") ? "selected" : "")%>>保護級</option>
-												<option value="2"
-													<%=(movieVO.getGrade().equals("2") ? "selected" : "")%>>輔導級</option>
-												<option value="3"
-													<%=(movieVO.getGrade().equals("3") ? "selected" : "")%>>限制級</option>
-										</select></td>
-<!-- 										<td colspan="1"></td> -->
-										<td >${errorMsgs.grade}</td>
-									</tr>
-									<tr>
-										<td></td>
-										<td></td>
-										<td>
-											&emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; 
-											<input type="submit" value="送出修改" id="send" 
-											class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#FF4268; font-weight:bold; color:white;">
-										</td>
-									</tr>
-								</tbody>
-							</table>
-							<input type="hidden" name="action" value="update"> 
-							<input type="hidden" name="movieno" value="<%=movieVO.getMovieno()%>">
-							<input type="hidden" name="requestURL" value="<%=request.getParameter("requestURL")%>"> <!--接收原送出修改的來源網頁路徑後,再送給Controller準備轉交之用-->
-							<input type="hidden" name="whichPage"  value="<%=request.getParameter("whichPage")%>">
-						</FORM>
-						</div>
-					</div>
-					<div class="blog-pagenat-wthree">
-				</div>	
-			</div>
-		</div>
-	</div>
-</div>
-<!--//content-inner-section-->
-
-
-
-
-</body>
-
+            </div>
+        
+        
+        </div>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="<%=request.getContextPath()%>/back-home/js/scripts.js"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+        <script src="<%=request.getContextPath()%>/back-home/dist/assets/demo/datatables-demo.js"></script>
+    </body>
+    
 
 
 <!-- =========================================以下為 datetimepicker 之相關設定========================================== -->

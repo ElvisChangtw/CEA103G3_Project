@@ -14,7 +14,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-    	<title>後台　瀏覽所有檢舉評論</title>
+    	<title>後台　所有檢舉評論資料</title>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -140,7 +140,7 @@
 					</ul>
 				</c:if>
                     <div class="container-fluid">
-                        <h1 class="mt-4" style="text-align:center;">後台　瀏覽所有檢舉評論</h1>
+                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">後台　所有檢舉評論資料</h1>
                             <div class="card-body">
                                 <div class="table-responsive">
                                 <%@ include file="pages/page1.file"%>
@@ -165,21 +165,21 @@
 
 										  <tr  ${(reportCommentVO.reportno == param.reportno) ? 'style="background-color:#C9B8DC;"':''}>
 											<td width="10px;">${reportCommentVO.reportno}</td>
-											<td><img src="${pageContext.request.contextPath}/mem/mem.do?action=view_memPic&member_no=${reportCommentVO.memberno}" 
+											<td width="100px;"><img src="${pageContext.request.contextPath}/mem/mem.do?action=view_memPic&member_no=${reportCommentVO.memberno}" 
 													style="border-radius:50%; width:60px; height:60px;"></td>
 											<td width="150px;" style= "word-break: break-all;">${reportCommentVO.content}</td>
 											<c:forEach var="commentVO" items="${commentSvc.all}">
 												<c:if test="${reportCommentVO.commentno == commentVO.commentno}">
-													<td><img src="${pageContext.request.contextPath}/mem/mem.do?action=view_memPic&member_no=${commentVO.memberno}" 
+													<td width="100px;"><img src="${pageContext.request.contextPath}/mem/mem.do?action=view_memPic&member_no=${commentVO.memberno}" 
 													style="border-radius:50%; width:60px; height:60px;"></td>
 												</c:if>
 											</c:forEach>
 											<td width="10px;">${reportCommentVO.commentno}
 											</td>
-											<td width="105px;">
+											<td width="125px;">
 												<fmt:formatDate value="${reportCommentVO.creatdate}" pattern="yyyy-MM-dd" />
 											</td>
-											<td width="105px;">
+											<td width="125px;">
 												<fmt:formatDate value="${reportCommentVO.executedate}" pattern="yyyy-MM-dd" />
 											</td>
 											<c:choose>
@@ -243,6 +243,6 @@
         <script src="<%=request.getContextPath()%>/back-home/js/scripts.js"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
-        <script src="<%=request.getContextPath()%>/css/demo/datatables-demo.js"></script>
+        <script src="<%=request.getContextPath()%>/back-home/dist/assets/demo/datatables-demo.js"></script>
     </body>
 </html>
