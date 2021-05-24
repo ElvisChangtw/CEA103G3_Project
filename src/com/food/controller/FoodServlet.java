@@ -2,8 +2,11 @@ package com.food.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,6 +16,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.food.model.FoodService;
 import com.food.model.FoodVO;
@@ -104,7 +110,8 @@ public class FoodServlet extends HttpServlet {
 		
 		if ("getOne_For_Update".equals(action)) { // 來自listAllFood.jsp 
 
-			List<String> errorMsgs = new LinkedList<String>();
+			Map<String, String> errorMsgs = new LinkedHashMap<String, String>();
+//			List<String> errorMsgs = new LinkedList<String>();
 			// Store this set in the request scope, in case we need to
 			// send the ErrorPage view.
 			req.setAttribute("errorMsgs", errorMsgs);
@@ -121,13 +128,13 @@ public class FoodServlet extends HttpServlet {
 								
 				/***************************3.查詢完成,準備轉交(Send the Success view)************/
 				req.setAttribute("foodVO", foodVO); // 資料庫取出的foodVO物件,存入req
-				String url = "/back-end//food/update_food_input.jsp";
+				String url = "/back-end/food/update_food_input.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交update_food_input.jsp
 				successView.forward(req, res);
 
 				/***************************其他可能的錯誤處理************************************/
 			} catch (Exception e) {
-				errorMsgs.add("修改資料取出時失敗:"+e.getMessage());
+				errorMsgs.put("Exception", "修改資料取出時失敗:" + e.getMessage());
 				RequestDispatcher failureView = req
 						.getRequestDispatcher("/back-end/food/listAllFood.jsp");
 				failureView.forward(req, res);
@@ -148,7 +155,8 @@ public class FoodServlet extends HttpServlet {
 		
 		if ("update".equals(action)) { // 來自update_food_input.jsp的請求
 			
-			List<String> errorMsgs = new LinkedList<String>();
+			Map<String, String> errorMsgs = new LinkedHashMap<String, String>();
+//			List<String> errorMsgs = new LinkedList<String>();
 			// Store this set in the request scope, in case we need to
 			// send the ErrorPage view.
 			req.setAttribute("errorMsgs", errorMsgs);
@@ -162,9 +170,9 @@ public class FoodServlet extends HttpServlet {
 				String food_name = req.getParameter("food_name");
 				String food_nameReg = "^[(\u4e00-\u9fa5)(a-zA-Z0-9_)]{1,10}$";
 				if (food_name == null || food_name.trim().length() == 0) {
-					errorMsgs.add("餐點名稱: 請勿空白");
+					errorMsgs.put("food_name","餐點名稱: 請勿空白");
 				} else if(!food_name.trim().matches(food_nameReg)) { //以下練習正則(規)表示式(regular-expression)
-					errorMsgs.add("餐點名稱: 只能是中、英文字母、數字和_ , 且長度必需在1到10之間");
+					errorMsgs.put("food_name","餐點名稱: 只能是中、英文字母、數字和_ , 且長度必需在1到10之間");
 	            }
 				
 				
@@ -175,7 +183,7 @@ public class FoodServlet extends HttpServlet {
 					food_price = new Integer(req.getParameter("food_price").trim());
 				} catch (NumberFormatException e) {
 					food_price = 0;
-					errorMsgs.add("餐點價格請填數字.");
+					errorMsgs.put("food_price","餐點價格請填數字.");
 				}
 				
 				Part part = req.getPart("food_pic");
@@ -213,13 +221,13 @@ public class FoodServlet extends HttpServlet {
 				
 				/***************************3.修改完成,準備轉交(Send the Success view)*************/				
 				req.setAttribute("foodVO", foodVO); // 資料庫update成功後,正確的的foodVO物件,存入req
-				String url = "/back-end/food/listOneFood.jsp";
+				String url = "/back-end/food/listAllFood.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 修改成功後,轉交listOneFood.jsp
 				successView.forward(req, res);
 
 				/***************************其他可能的錯誤處理*************************************/
 			} catch (Exception e) {
-				errorMsgs.add("修改資料失敗:"+e.getMessage());
+				errorMsgs.put("Exception", "修改資料取出時失敗:" + e.getMessage());
 				RequestDispatcher failureView = req
 						.getRequestDispatcher("/back-end/food/update_food_input.jsp");
 				failureView.forward(req, res);
@@ -324,6 +332,49 @@ public class FoodServlet extends HttpServlet {
 				failureView.forward(req, res);
 			}
 		}
-	}
+		
+		
+		if ("updateStatus".equals(action)) { // 來自listAllEmp.jsp 或  /dept/listEmps_ByDeptno.jsp的請求
 
+			List<String> errorMsgs = new LinkedList<String>();
+			req.setAttribute("errorMsgs", errorMsgs);
+			PrintWriter out = res.getWriter();
+
+			try {
+				/***************************1.接收請求參數***************************************/
+				Integer food_no = new Integer(req.getParameter("food_no"));
+		
+				/***************************2.開始修改資料***************************************/
+				FoodService foodSvc = new FoodService();
+				foodSvc.onOrDownFoodStatus(food_no);
+				FoodVO foodVO = foodSvc.getOneFood(food_no);
+				
+				//將最新的狀態丟回去
+				String newStatus=foodVO.getFood_status();
+				JSONObject jsonobj = new JSONObject();
+				try {
+					jsonobj.put("newStatus", newStatus);
+					out.print(jsonobj.toString());
+					return;
+				}catch(JSONException e) {
+					e.printStackTrace();
+				}finally {
+					out.flush();
+					out.close();
+				}
+				
+				/***************************3.修改完成,準備轉交(Send the Success view)***********/
+				String url = "/back-end/food/listAllFood2.jsp";
+				RequestDispatcher successView = req.getRequestDispatcher(url);// 刪除成功後,轉交回送出刪除的來源網頁
+				successView.forward(req, res);
+
+				/***************************其他可能的錯誤處理**********************************/
+			} catch (Exception e) {
+				errorMsgs.add("修改資料失敗:"+e.getMessage());
+				RequestDispatcher failureView = req
+						.getRequestDispatcher("/back-end/food/listAllFood.jsp");
+				failureView.forward(req, res);
+			}
+		}
+	}
 }

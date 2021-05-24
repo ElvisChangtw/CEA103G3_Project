@@ -1,16 +1,16 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="Big5"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ page import="com.order.model.*"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page import="java.util.*"%>
+<%@ page import="com.report_comment.model.*"%>
 
 <%
-  OrderVO orderVO = (OrderVO) request.getAttribute("orderVO");
+	ReportCommentVO reportCommentVO = (ReportCommentVO) request.getAttribute("reportCommentVO");
 %>
-
-
+<jsp:useBean id="commentSvc" scope="page" class="com.comment.model.CommentService" />
 <html>
 <head>
-<title>後台　修改訂單</title>
+<title>後台 修改檢舉評論</title>
 <!-- for-mobile-apps -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -51,8 +51,6 @@ tr td>img {
 	width: 150px;
 	height:100px;
 	align:center;
-
-	
 }
 #th2{
 	width: 50px;
@@ -69,118 +67,126 @@ color:red;
 </style>
 
 
+
+
 </head>
-
 <body>
-
-
+	
 <!--/content-inner-section-->
 	<div class="w3_content_agilleinfo_inner">
 		<div class="agile_featured_movies">
 			<div class="inner-agile-w3l-part-head">
-		    	<h3 class="w3l-inner-h-title">後台　修改訂單</h3>
+		    	<h3 class="w3l-inner-h-title">後台　修改檢舉評論</h3>
 			</div>
 	        <div class="bs-example bs-example-tabs" role="tabpanel" data-example-id="togglable-tabs">
 				<div id="myTabContent" class="tab-content">
 					<div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
 						<div class="agile-news-table">
-						
-						<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/order/order.do" name="form1">
+							
+							<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/report_comment/reportcomment.do" name="form1">
 							<table>
 								<thead class="thead">
 								  <tr>
-								  	<th id="th1">訂單編號</th>
-								  	<th id="th2">${orderVO.order_no}</th>
+								  	<th id="th1">檢舉編號</th>
+								  	<th id="th2">${reportCommentVO.reportno}</th>
+<!-- 								  	<th id="th3">&emsp;&emsp;&emsp;&emsp;&emsp;<input type="submit" value="送出修改" class="btn btn-outline-primary" id="send"></th> -->
 								  	<th></th>
 								  </tr>
 								</thead>
 								<tbody>
 									<tr>
-										<td>會員編號</td>
+										<td>檢舉會員:</td>
 										<td>
-											<input type="number" name="member_no" value="${orderVO.member_no}">
-										</td>
-										<td>
-										<%-- 錯誤表列 --%>
-											<c:if test="${not empty errorMsgs}">
-												<font style="color:red">請修正以下錯誤:</font>
-												<ul>
-													<c:forEach var="message" items="${errorMsgs}">
-														<li style="color:red">${message}</li>
-													</c:forEach>
-												</ul>
+										<img src="${pageContext.request.contextPath}/mem/mem.do?action=view_memPic&member_no=${reportCommentVO.memberno}" 
+										width="130px" height="130px"></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>檢舉原因:</td>
+										<td style= "max-width:170px; word-break: break-all;">${reportCommentVO.content}</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>評論作者:</td>
+										
+										<c:forEach var="commentVO" items="${commentSvc.all}">
+											<c:if test="${reportCommentVO.commentno == commentVO.commentno}">
+												<td><img src="${pageContext.request.contextPath}/mem/mem.do?action=view_memPic&member_no=${commentVO.memberno}" 
+												width="130px" height="130px"></td>
 											</c:if>
-										</td> 
+										</c:forEach>
+										<td></td>
+									</tr>	
+									<tr>
+										<td>評論編號:</td>
+										<td>${reportCommentVO.commentno}</td>
+										<td></td>
 									</tr>
 									<tr>
-										<td>場次編號</td>
-										<td>
-											<input type="number" name="showtime_no" value="${orderVO.showtime_no}">
-										</td>
+										<td>評論內容:</td>
+										<c:forEach var="commentVO" items="${commentSvc.all}">
+											<c:if test="${reportCommentVO.commentno == commentVO.commentno}">
+												<td>${commentVO.content}</td>
+											</c:if>
+										</c:forEach>
+										<td></td>
+									</tr>
+
+									
+									<tr>
+										<td>檢舉時間:</td>
+										<td><fmt:formatDate value="${reportCommentVO.creatdate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
+										<td></td>
 									</tr>
 									<tr>
-										<td>成立時間</td>
-										<td>
-											<input name="crt_dt" id="f_date1" type="text" value="${orderVO.crt_dt}">
-										</td>
-										<td></td> 
+										<td>處理時間:</td>
+										<td><fmt:formatDate value="${reportCommentVO.executedate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
+										<td></td>
 									</tr>
+									
 									<tr>
-										<td>訂單狀態</td>
-										<td>
-											<select name="order_status">
-												<option value= "0" ${(orderVO.order_status == null) ? "" : (orderVO.order_status == 0 ? "selected" : "")}>未付款</option>
-												<option value= "1" ${(orderVO.order_status == null) ? "" : (orderVO.order_status == 1 ? "selected" : "")}>已付款</option>
-												<option value= "2" ${(orderVO.order_status == null) ? "" : (orderVO.order_status == 2 ? "selected" : "")}>已取消</option>
-											</select>
-										</td>
-										<td></td> 
+										<td>處理狀態:</td>
+										<td><select name="status" size="1">
+												<option value="9"
+													<%=(reportCommentVO.getStatus().equals("9") ? "selected" : "")%>></option>
+												<option value="0"
+													<%=(reportCommentVO.getStatus().equals("0") ? "selected" : "")%>>未審核</option>
+												<option value="1"
+													<%=(reportCommentVO.getStatus().equals("1") ? "selected" : "")%>>審核通過</option>
+												<option value="2"
+													<%=(reportCommentVO.getStatus().equals("2") ? "selected" : "")%>>審核未通過</option>
+										</select></td>
+										<td><font color=red>${errorMsgs.status}</font></td>
 									</tr>
+										
 									<tr>
-										<td>訂單種類</td>
-										<td>
-											<select name="order_type">
-													<option value= "0" ${orderVO.order_type == 0 ? "selected" : ""}>現場購票</option>
-													<option value= "1" ${orderVO.order_type == 1 ? "selected" : ""}>線上購票</option>
-											</select>
-										</td>
-										<td></td> 
+										<td>備註:</td>
+										<td><textarea name="desc" rows="5" cols="70" maxlength="300"><%=(reportCommentVO.getDesc() == null) ? "" : reportCommentVO.getDesc()%></textarea></td>
+										<td></td>
 									</tr>
-									<tr>
-										<td>付款方式</td>
-										<td>
-											<select name="payment_type">
-													<option value= "0" ${orderVO.payment_type == 0 ? "selected" : ""}>信用卡</option>
-													<option value= "1" ${orderVO.payment_type == 1 ? "selected" : ""}>現金</option>
-											</select>
-										</td>
-										<td></td> 
-									</tr>
-									<tr>
-										<td>訂單總價</td>
-										<td>
-											<input type="number"  min="0" name="total_price" value="${orderVO.total_price}">
-										</td>
-									</tr>
-									<tr>
-										<td>座位</td>
-										<td>
-											<input type="text" name="seat_name" value="${orderVO.seat_name}">
-										</td>
-									</tr>
+									
+									
 									<tr>
 										<td></td>
 										<td></td>
-										<td style="text-align: right;">
-											<input type="hidden" name="action" value="update">
-											<input type="hidden" name="order_no" value="${orderVO.order_no}">
-											<input type="submit" value="送出修改" id="send"
+										<td>
+											&emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; 
+											<input type="submit" value="送出修改" id="send" 
 											class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#FF4268; font-weight:bold; color:white;">
 										</td>
 									</tr>
-									</tbody>
-								</table>
-							</FORM>
+								</tbody>
+							</table>
+							<input type="hidden" name="action" value="update"> 
+							<input type="hidden" name="reportno" value="${reportCommentVO.reportno}">
+							<input type="hidden" name="commentno" value="${reportCommentVO.commentno}">
+							<input type="hidden" name="memberno" value="${reportCommentVO.memberno}">
+							<input type="hidden" name="content" value="${reportCommentVO.content}">
+							<input type="hidden" name="creatdate" value="${reportCommentVO.creatdate}">
+							<input type="hidden" name="executedate" value="${reportCommentVO.executedate}">
+							<input type="hidden" name="requestURL" value="<%=request.getParameter("requestURL")%>"> <!--接收原送出修改的來源網頁路徑後,再送給Controller準備轉交之用-->
+							<input type="hidden" name="whichPage"  value="<%=request.getParameter("whichPage")%>">
+						</FORM>
 						</div>
 					</div>
 					<div class="blog-pagenat-wthree">
@@ -190,20 +196,63 @@ color:red;
 	</div>
 </div>
 <!--//content-inner-section-->
-		
-		
+
+
+
+
+
+
+<!-- <h1 class="shadow p-3 mb-1  rounded" align="center" style="background-color:#7d4627;" > -->
+<!-- 	<span class="badge badge-secondary" style="background-color:#7d4627;"> -->
+<!-- 		檢舉資料修改 -->
+<!-- 	</span> -->
+<!-- </h1> -->
+
+<%-- <c:if test="${not empty errorMsgs}"> --%>
+<!-- 	<font style="color:red">請修正以下錯誤:</font> -->
+<!-- 	<ul> -->
+<%-- 		<c:forEach var="message" items="${errorMsgs}"> --%>
+<%-- 			<li style="color:red">${message}</li> --%>
+<%-- 		</c:forEach> --%>
+<!-- 	</ul> -->
+<%-- </c:if> --%>
+
+<%-- <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/report_comment/reportcomment.do" name="form1"> --%>
+<!-- <table> -->
+
+<!-- 	<tr> -->
+<!-- 		<td><span class="badge badge-danger" style="font-size:20px; background-color:#729f98; margin:5px 5px 5px 5px">評論內容</span></td> -->
+<!-- 	</tr>	 -->
+<!-- 	<tr> -->
+<%-- 		<td><textarea name="content" rows="5" cols="73" maxlength="300">${commentVO.content}</textarea></td> --%>
+<!-- 	</tr>	 -->
+<!-- 	<tr> -->
+<%-- 		<td><span class="badge badge-warning" style="font-size:15px; margin:5px 5px 5px 5px">建立時間</span> <fmt:formatDate value="${commentVO.creatdate}" pattern="yyyy-MM-dd  HH:mm:ss" /></td> --%>
+<!-- 	</tr> -->
+<!-- 	<tr> -->
+<%-- 		<td><span class="badge badge-warning" style="font-size:15px; margin:5px 5px 5px 5px">修改時間</span> <fmt:formatDate value="${commentVO.modifydate}" pattern="yyyy-MM-dd  HH:mm:ss" /></td> --%>
+	
+<!-- 	</tr> -->
+<!-- </table> -->
+<!-- <br> -->
+<!-- <input type="hidden" name="action" value="update"> -->
+<%-- <input type="hidden" name="commentno" value="${commentVO.commentno}"> --%>
+<%-- <input type="hidden" name="movieno" value="${commentVO.movieno}"> --%>
+<%-- <input type="hidden" name="requestURL" value="<%=request.getParameter("requestURL")%>"> <!--接收原送出修改的來源網頁路徑後,再送給Controller準備轉交之用--> --%>
+<%-- <input type="hidden" name="whichPage"  value="<%=request.getParameter("whichPage")%>">  <!--只用於:istAllComment.jsp--> --%>
+<%-- <center><input type="submit" value="送出修改" class="btn btn-outline-danger"></center></FORM> --%>
 
 </body>
+
+<!-- <br>送出修改的來源網頁路徑:<br><b> -->
+<%--    <font color=blue>request.getParameter("requestURL"):</font> <%=request.getParameter("requestURL")%><br> --%>
+<%--    <font color=blue>request.getParameter("whichPage"): </font> <%=request.getParameter("whichPage")%> (此範例目前只用於:istAllComment.jsp))</b> --%>
+<!-- </body> -->
+
+
+
 <!-- =========================================以下為 datetimepicker 之相關設定========================================== -->
 
-<% 
-  java.sql.Timestamp crt_dt = null;
-  try {
-	  crt_dt = orderVO.getCrt_dt();
-   } catch (Exception e) {
-	   crt_dt = new java.sql.Timestamp(System.currentTimeMillis());
-   }
-%>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/datetimepicker/jquery.datetimepicker.css" />
 <script src="<%=request.getContextPath()%>/datetimepicker/jquery.js"></script>
 <script src="<%=request.getContextPath()%>/datetimepicker/jquery.datetimepicker.full.js"></script>
@@ -220,11 +269,11 @@ color:red;
 <script>
         $.datetimepicker.setLocale('zh');
         $('#f_date1').datetimepicker({
-	       theme: '',              //theme: 'dark',
-	       timepicker:true,       //timepicker:true,
-	       step: 1,                //step: 60 (這是timepicker的預設間隔60分鐘)
-	       format:'Y-m-d H:i:00',         //format:'Y-m-d H:i:s',
-		   value: '<%=crt_dt%>', // value:   new Date(),
+           theme: '',              //theme: 'dark',
+  	       timepicker:false,       //timepicker:true,
+  	       step: 1,                //step: 60 (這是timepicker的預設間隔60分鐘)
+  	       format:'Y-m-d',         //format:'Y-m-d H:i:s',
+  		   value: '', // value:   new Date(),
            //disabledDates:        ['2017/06/08','2017/06/09','2017/06/10'], // 去除特定不含
            //startDate:	            '2017/07/10',  // 起始日
            //minDate:               '-1970-01-01', // 去除今日(不含)之前
@@ -273,7 +322,7 @@ color:red;
         //		           (date.getYear() == somedate1.getYear() && date.getMonth() == somedate1.getMonth() && date.getDate() < somedate1.getDate())
         //		             ||
         //		            date.getYear() >  somedate2.getYear() || 
-		//         		           (date.getYear() == somedate2.getYear() && date.getMonth() >  somedate2.getMonth()) || 
+        //		           (date.getYear() == somedate2.getYear() && date.getMonth() >  somedate2.getMonth()) || 
         //		           (date.getYear() == somedate2.getYear() && date.getMonth() == somedate2.getMonth() && date.getDate() > somedate2.getDate())
         //              ) {
         //                   return [false, ""]
@@ -282,6 +331,4 @@ color:red;
         //      }});
         
 </script>
-
-
 </html>

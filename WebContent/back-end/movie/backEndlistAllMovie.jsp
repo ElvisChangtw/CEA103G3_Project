@@ -13,7 +13,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-    	<title>後台　瀏覽所有電影</title>
+    	<title>後台　所有電影資料</title>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -38,7 +38,7 @@
                 <a class="nav-link dropdown-toggle1" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
             </li>
             <a class="nav-link" href="index.html">
-               	 登出
+                登出
             </a>
         </ul>
     </nav>
@@ -130,7 +130,7 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4" style="text-align:center;">後台　瀏覽所有電影</h1>
+                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">後台　所有電影資料</h1>
                         <a href="<%=request.getContextPath()%>/back-end/movie/addMovie.jsp" class="btn btn-primary btn-lg" ><i class="material-icons">&#xE147;&ensp;</i><span>新增電影</span></a>
 <!--                         <ol class="breadcrumb mb-4"> -->
 <!--                             <li class="breadcrumb-item"> -->
@@ -325,15 +325,15 @@
 										</tr>
 									</c:forEach>
                                             <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
+<!--                                                 <td></td> -->
+<!--                                                 <td></td> -->
+<!--                                                 <td></td> -->
+<!--                                                 <td></td> -->
+<!--                                                 <td></td> -->
+<!--                                                 <td></td> -->
+<!--                                                 <td></td> -->
+<!--                                                 <td></td> -->
+<!--                                                 <td></td> -->
 <!--                                                 <td></td> -->
                                             </tr>
                                          
@@ -355,6 +355,6 @@
         <script src="<%=request.getContextPath()%>/back-home/js/scripts.js"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
-        <script src="<%=request.getContextPath()%>/css/demo/datatables-demo.js"></script>
+        <script src="<%=request.getContextPath()%>/back-home/dist/assets/demo/datatables-demo.js"></script>
     </body>
 </html>

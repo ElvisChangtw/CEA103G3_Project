@@ -100,8 +100,8 @@ public class MovieDAO implements MovieDAO_interface{
 			pstmt = con.prepareStatement(INSERT_STMT);
 
 			pstmt.setString(1, movieVO.getMoviename());
-//			pstmt.setBytes(2, movieVO.getMoviepicture1());
-//			pstmt.setBytes(3, movieVO.getMoviepicture2());
+			pstmt.setBytes(2, movieVO.getMoviepicture1());
+			pstmt.setBytes(3, movieVO.getMoviepicture2());
 			pstmt.setString(4, movieVO.getDirector());
 			pstmt.setString(5, movieVO.getActor());
 			pstmt.setString(6, movieVO.getCategory());

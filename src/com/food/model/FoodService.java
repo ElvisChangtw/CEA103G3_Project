@@ -50,4 +50,8 @@ public class FoodService {
 		return dao.getAll();
 	}	
 	
+	public void onOrDownFoodStatus(Integer food_no) {
+		dao.onOrDownFoodStatus(food_no);
+	}
+	
 }
