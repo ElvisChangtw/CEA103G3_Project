@@ -103,7 +103,7 @@
 }
 .notification{
 /*   bottom: 25px; */
-bottom: 62px; 
+bottom: 58px; 
 /*   left: 340px; */
 left: 1095px; 
   position: relative;
@@ -537,7 +537,7 @@ left: 1095px;
   
 <!--    訂票+文章區塊開始 -->
    <section class="booking_area">
-   	<div class="container-fluid" style="background-color:white;">
+   	<div class="container-fluid">
    		<div class="row">
    		
    		 <!-- 訂票開始-->
