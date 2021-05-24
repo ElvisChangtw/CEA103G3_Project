@@ -18,7 +18,7 @@
 	<jsp:useBean id="replyDAO"  scope="page" class="com.reply.model.ReplyDAO" />
 	<jsp:useBean id="articleDAO" scope="page" class="com.article.model.ArticleDAO" />	
 	
-	<jsp:useBean id="memVO" scope="session" class="com.mem.model.MemVO" />
+<%-- 	<jsp:useBean id="memVO" scope="session" class="com.mem.model.MemVO" /> --%>
 <html>
 <head>
 <link href="https://i2.bahamut.com.tw/css/basic.css?v=1618977484" rel="stylesheet">

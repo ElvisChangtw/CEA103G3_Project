@@ -6,7 +6,7 @@
 <%@ page import="com.comment.model.*"%>
 <%@ page import="com.expectation.model.*"%>
 <%@ page import="com.mem.model.*"%>
-
+<%@ page import="com.article.model.*"%>
 <%
 	MovieService movieSvc = new MovieService();	
 	List<MovieVO> inTheatersMovie = movieSvc.getInTheatersMovie();
@@ -43,6 +43,10 @@
 // 	pageContext.setAttribute("listTopFive", listTopFive);
 	
 	movieSvc.createMovieIdex();
+	
+	ArticleService articleSvc = new ArticleService();
+	List<ArticleVO> listTopFiveArticles = articleSvc.getArticleLikeCount();
+	pageContext.setAttribute("listTopFiveArticles", listTopFiveArticles);
 	
 	MemVO memVO = (MemVO) session.getAttribute("memVO");
 	if(memVO == null){
@@ -103,7 +107,7 @@
 }
 .notification{
 /*   bottom: 25px; */
-bottom: 50px; 
+bottom: 58px; 
 /*   left: 340px; */
 left: 1095px; 
   position: relative;
@@ -500,17 +504,7 @@ left: 1095px;
     <!--/banner-section-->
     <!--//main-header-->
     <!--/banner-bottom-->
-    <div class="w3_agilits_banner_bootm">
-        <div class="w3_agilits_inner_bottom">
-            <div class="col-md-6 wthree_agile_login">
-                <ul>
-                    <li><i class="fa fa-phone" aria-hidden="true"></i> (+886) 0912 345 678</li>
-                    <li><a href="#" class="login" data-toggle="modal" data-target="#myModal4">登入</a></li>
-                    <li><a href="#" class="login reg" data-toggle="modal" data-target="#myModal5">註冊</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+    
     <!--//banner-bottom-->
     <!-- Modal1 -->
     <div class="modal fade" id="myModal4" tabindex="-1" role="dialog">
@@ -547,7 +541,7 @@ left: 1095px;
   
 <!--    訂票+文章區塊開始 -->
    <section class="booking_area">
-   	<div class="container-fluid" style="background-color:rgb(36, 36, 36);">
+   	<div class="container-fluid">
    		<div class="row">
    		
    		 <!-- 訂票開始-->
@@ -594,52 +588,48 @@ left: 1095px;
    			</div>
    			<!-- 訂票結束-->
 			<!--文章開始 -->
+			
    			<div class="col-sm-8">
 				 <div class="container article-form">
                     <div class="article-table table-responsive">
                         <div class="table-header">
-                            <h1>熱門文章</h1>
+                            <h1>熱門文章<p style="display: inline-block; font-size:16px;">
+                            <a href="<%=request.getContextPath()%>/front-end/article/listAllArticle.jsp" id="go-to-forum">&nbsp→前往討論區</a></p></h1>
                         </div>
                         <table class="table">
                             <thead class="thead-light">
                                 <tr class="success">
                                     <th scope="col">#</th>
-                                    <th scope="col">標題</th>
-                                    <th scope="col">內容</th>
-                                    <th scope="col">發文時間</th>
+                                    <th scope="col" style="text-align:center;">標題</th>
+<!--                                     <th scope="col">內容</th> -->
+                                    <th scope="col" style="text-align:center;">發文日期</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>聽說惡靈古堡將重開機</td>
-                                    <td>重開機</td>
-                                    <td>2021-03-20 00:00</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>你的名子好好看喔</td>
-                                    <td>故事很感人，畫的很優美。配音也很到位!</td>
-                                    <td>2021-03-20 00:00</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">3</th>
-                                    <td>天能的觀後心得</td>
-                                    <td>我看不懂啦!!!</td>
-                                    <td>2021-03-12 00:00</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">4</th>
-                                    <td>連恩·尼遜最新消息</td>
-                                    <td>我會找到你，不管你在哪裡，GOODLUCK!</td>
-                                    <td>2021-03-12 00:00</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">5</th>
-                                    <td>用MOVIESHIT網站訂票</td>
-                                    <td>首儲送500點數，再送魔關羽!</td>
-                                    <td>2021-04-01 00:00</td>
-                                </tr>
+                            <% int article_cnt = 0; %>
+                            	
+	                            <c:forEach var="articleVO" items="${listTopFiveArticles}">
+	                            	<tr> 
+	                            		<%article_cnt++; %>
+		                            		<th scope="row" class="article-link">
+		                            			<a class="JQellipsis"  style="color:white;"><%=article_cnt %>
+		                            			</a>
+	                            			</th>
+		                                    <td class="article-link">
+		                                    	<div>
+		                                    		<a style="color:white;" onclick="loginArticle(${articleVO.articleno})">
+		                                    		${articleVO.articleheadline}
+		                                    		</a>	
+	                                    		</div>
+                                    		</td>
+	                                    
+		                                    <td  class="article-link">
+		                                    	<a style="color:white;">
+		                                    		<fmt:formatDate value="${articleVO.crtdt}" pattern="yyyy-MM-dd" />
+		                                    	</a>			
+											</td>
+	                            	</tr>
+	                            </c:forEach>
                             </tbody>
                         </table>
                     </div>
@@ -1453,14 +1443,7 @@ left: 1095px;
                 </div>
                 <div class="clearfix"> </div>
             </div>
-            <h3 class="text-center follow">Connect <span>Us</span></h3>
-            <ul class="social-icons1 agileinfo">
-                <li><a href="https://zh-tw.facebook.com/"><i class="fa fa-facebook"></i></a></li>
-                <li><a href="https://www.youtube.com/"><i class="fa fa-youtube"></i></a></li>
-                <li><a href="https://tw.linkedin.com/"><i class="fa fa-linkedin"></i></a></li>
-                <li><a href="https://www.google.com/"><i class="fa fa-google"></i></a></li>
-                <li><a href="https://github.com/"><i class="fa fa-github"></i></a></li>
-            </ul>
+
         </div>
     </div>
     <!-- 通知顯示div -->
@@ -2492,7 +2475,17 @@ var count=0;
 			window.location.href = "<%=request.getContextPath()%>/front-end/mem/MemLogin.jsp";
 		});
 	}
-
+	function loginArticle(e){
+		if(${memVO==null || memVO.member_no == 99}){
+			Swal.fire('請先登入').then((result)=>{
+				window.location.href = "<%=request.getContextPath()%>/front-end/mem/MemLogin.jsp";
+			});
+		} else{
+			window.location.href =  
+				"<%=request.getContextPath()%>/front-end/article/listOneArticle2.jsp?articleno=" + e;
+		}
+		
+	}
 </script>
 	    
 

@@ -1,7 +1,27 @@
         section.booking_area {
             font-family: 'Montserrat', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             background-size: cover;
             background-position: center;
+
+            background:
+                radial-gradient(circle, transparent 40%, var(--color-v) 75%),
+                linear-gradient(to right, var(--color), var(--color)),
+                var(--image2);
+            background-position: center center;
+            background-size: cover;
+            background-blend-mode:
+                var(--blend-top, normal),
+                var(--blend-bottom, saturation),
+                normal;
+/*             --image: url(https://images.unsplash.com/photo-1519522800923-7999b95cb3c6?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NTg5fQ&s=81c09a0eae279992234d18e52c8857fa); */
+
+/*             --image2: url(https://wallpapercave.com/wp/wp2043918.jpg); */
+            --image2: url(https://wallpapercave.com/wp/wp5483894.jpg);
+            --color-v: black;
+            --color: grey;
+            flex: 1;
+            
         }
 
         section.booking_area>div.container-fluid>div.row>div>div.booking-form {
@@ -27,12 +47,13 @@
         }
         .rhs{
         	position:relative; 
-        	top:-15px; 
+        	top:-10px; 
+        	right: 20px;
         }
         .rhs>a{
         	color:white;
         	font-family: 'Lato', sans-serif;
-        	font-size:1.1em;
+        	font-size:1.2em;
         }
         .front_header{
         	background-color: rgb(12, 13, 13);
@@ -49,4 +70,46 @@
         .rhs>a:hover{
         	color:#02a388 !important;
         }
-        
+        ul.cd-header-buttons>li:last-child{
+        	position:relative;
+        	right:20px;
+        	top:4px;
+        }
+        ul.navbar-nav>li{
+        	margin:0px;
+        }
+        div.inner-header-agile{
+        	padding:0 3.5em;	
+        }
+        div.cd-main-header{
+        	height:20px;
+        }
+        #hide-content>div{
+        	width:300px;
+		  	text-overflow : ellipsis;
+		  	overflow : hidden;
+		  	white-space : nowrap;
+        }
+        #hide-title>div{
+/*         	width:400px; */
+		  	text-overflow : ellipsis;
+		  	overflow : hidden;
+		  	white-space : nowrap;
+        }
+        .article-link{
+        	cursor: pointer;
+        	color: lightpink !important;
+        }
+        .article-link a{
+        	color: white !important;
+        }
+        .article-link a:hover{
+        	color: #75D9B5 !important;
+        }
+        #go-to-forum{
+        	color: #FFC001 !important;
+        }
+        #go-to-forum:hover{
+        	color: #75D9B5 !important;
+        }
+       

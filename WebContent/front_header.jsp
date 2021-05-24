@@ -68,9 +68,9 @@ height:50px;
 }
 .notification{
 /*   bottom: 25px; */
-bottom: 50px; 
+bottom: 58px; 
 /*   left: 340px; */
-left: 1130px; 
+left: 1095px; 
   position: relative;
   display: inline-block;
 }
