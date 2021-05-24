@@ -103,7 +103,7 @@
 }
 .notification{
 /*   bottom: 25px; */
-bottom: 50px; 
+bottom: 62px; 
 /*   left: 340px; */
 left: 1095px; 
   position: relative;
@@ -500,17 +500,7 @@ left: 1095px;
     <!--/banner-section-->
     <!--//main-header-->
     <!--/banner-bottom-->
-    <div class="w3_agilits_banner_bootm">
-        <div class="w3_agilits_inner_bottom">
-            <div class="col-md-6 wthree_agile_login">
-                <ul>
-                    <li><i class="fa fa-phone" aria-hidden="true"></i> (+886) 0912 345 678</li>
-                    <li><a href="#" class="login" data-toggle="modal" data-target="#myModal4">登入</a></li>
-                    <li><a href="#" class="login reg" data-toggle="modal" data-target="#myModal5">註冊</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+    
     <!--//banner-bottom-->
     <!-- Modal1 -->
     <div class="modal fade" id="myModal4" tabindex="-1" role="dialog">
@@ -547,7 +537,7 @@ left: 1095px;
   
 <!--    訂票+文章區塊開始 -->
    <section class="booking_area">
-   	<div class="container-fluid" style="background-color:rgb(36, 36, 36);">
+   	<div class="container-fluid" style="background-color:white;">
    		<div class="row">
    		
    		 <!-- 訂票開始-->
@@ -1453,14 +1443,7 @@ left: 1095px;
                 </div>
                 <div class="clearfix"> </div>
             </div>
-            <h3 class="text-center follow">Connect <span>Us</span></h3>
-            <ul class="social-icons1 agileinfo">
-                <li><a href="https://zh-tw.facebook.com/"><i class="fa fa-facebook"></i></a></li>
-                <li><a href="https://www.youtube.com/"><i class="fa fa-youtube"></i></a></li>
-                <li><a href="https://tw.linkedin.com/"><i class="fa fa-linkedin"></i></a></li>
-                <li><a href="https://www.google.com/"><i class="fa fa-google"></i></a></li>
-                <li><a href="https://github.com/"><i class="fa fa-github"></i></a></li>
-            </ul>
+
         </div>
     </div>
     <!-- 通知顯示div -->

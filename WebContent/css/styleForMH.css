@@ -28,11 +28,12 @@
         .rhs{
         	position:relative; 
         	top:-15px; 
+        	right: 20px;
         }
         .rhs>a{
         	color:white;
         	font-family: 'Lato', sans-serif;
-        	font-size:1.1em;
+        	font-size:1.2em;
         }
         .front_header{
         	background-color: rgb(12, 13, 13);
@@ -49,4 +50,16 @@
         .rhs>a:hover{
         	color:#02a388 !important;
         }
-        
+        ul.cd-header-buttons>li:last-child{
+        	position:relative;
+        	right:20px;
+        }
+        ul.navbar-nav>li{
+        	margin:0px;
+        }
+        div.inner-header-agile{
+        	padding:0 3.5em;	
+        }
+        div.cd-main-header{
+        	height:20px;
+        }
