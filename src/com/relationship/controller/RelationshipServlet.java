@@ -392,9 +392,10 @@ public class RelationshipServlet extends HttpServlet {
 			Integer member_no = new Integer(req.getParameter("member_no"));
 			Integer friend_no = new Integer(req.getParameter("friend_no"));
 			
-//			RelationshipVO relationshipVO = new RelationshipService().addOneWay(member_no, friend_no);
+			RelationshipVO relationshipVO = new RelationshipService().addOneWay(member_no, friend_no);
 			String status = "0";
 			String isBlock = "0";
+			System.out.println("我有近來加" + friend_no +"好友");
 			JSONObject jsonobj=new JSONObject();
 			try {
 				jsonobj.put("member_no", member_no);
@@ -420,10 +421,12 @@ public class RelationshipServlet extends HttpServlet {
 			
 			RelationshipService relationshipSvc = new RelationshipService();
 			RelationshipVO relationshipVO = relationshipSvc.getOneRelationship(member_no, friend_no);
-			
-			String status = relationshipVO.getStatus();
-			String isBlock = relationshipVO.getIsblock();
 
+				String status  = (relationshipVO == null)? "XX": relationshipVO.getStatus();
+				String isBlock = (relationshipVO == null)? "XX": relationshipVO.getIsblock();
+
+			
+			
 			JSONObject jsonobj=new JSONObject();
 			try {
 				jsonobj.put("member_no", member_no);

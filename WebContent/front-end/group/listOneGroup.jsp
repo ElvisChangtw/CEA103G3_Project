@@ -617,7 +617,7 @@ th, td {
 				$("#add-friend").show();
 				$("#retrieve-invitation").hide();
 				$("#already-friends").hide();
-				if (relationshipVO == null){ //對方沒有你的好友
+				if (relationshipVO.status == "XX"){ //對方沒有你的好友
 					console.log("對方未加你為好友");
 				} else if(relationshipVO.status == 0){ //對方未接受邀請，可收回邀請
 					$("#add-friend").hide();
