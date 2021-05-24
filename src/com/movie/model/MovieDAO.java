@@ -34,9 +34,9 @@ public class MovieDAO implements MovieDAO_interface{
 	private static final String DELETE_MOVIE = 
 			"delete from MOVIE where MOVIE_NO = ?";	
 	private static final String GET_ONE_STMT = 
-			"select MOVIE_NO, MOVIE_NAME, DIRECTOR, ACTOR, CATEGORY, LENGTH, STATUS, PREMIERE_DT, OFF_DT, TRAILOR, EMBED, GRADE, RATING, EXPECTATION from MOVIE where MOVIE_NO = ?";
+			"select * from MOVIE where MOVIE_NO = ?";
 	private static final String GET_ALL_STMT = 
-			"select MOVIE_NO, MOVIE_NAME, DIRECTOR, ACTOR, CATEGORY, LENGTH, STATUS, PREMIERE_DT, OFF_DT, TRAILOR, EMBED, GRADE, RATING, EXPECTATION from MOVIE order by PREMIERE_DT desc";
+			"select MOVIE_NO, MOVIE_NAME, DIRECTOR, ACTOR, CATEGORY, LENGTH, STATUS, PREMIERE_DT, OFF_DT, TRAILOR, EMBED, GRADE, RATING, EXPECTATION from MOVIE order by MOVIE_NO desc";
 	private static final String GET_Comments_ByMovieno_STMT = 
 			"select MOVIE_NO, MOVIE_NAME, DIRECTOR, ACTOR, CATEGORY, LENGTH, STATUS, PREMIERE_DT, OFF_DT, TRAILOR, EMBED, GRADE, RATING, EXPECTATION from COMMENT where MOVIE_NO = ? order by COMMENT_NO";
 	private static final String GET_TOP_TEN_STMT = 
@@ -276,8 +276,8 @@ public class MovieDAO implements MovieDAO_interface{
 				movieVO = new MovieVO();
 				movieVO.setMovieno(rs.getInt("MOVIE_NO"));
 				movieVO.setMoviename(rs.getString("MOVIE_NAME"));
-//				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
-//				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
+				movieVO.setMoviepicture1(rs.getBytes("MOVIE_PIC1"));
+				movieVO.setMoviepicture2(rs.getBytes("MOVIE_PIC2"));
 				movieVO.setDirector(rs.getString("DIRECTOR"));
 				movieVO.setActor(rs.getString("ACTOR"));
 				movieVO.setCategory(rs.getString("CATEGORY"));

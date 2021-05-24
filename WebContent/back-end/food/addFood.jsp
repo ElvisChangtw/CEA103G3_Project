@@ -3,14 +3,12 @@
 <%@ page import="com.food.model.*"%>
 
 <%
-	FoodVO foodVO = (FoodVO) request.getAttribute("foodVO"); //TheaterServlet.java (Concroller) 存入req的theaeterVO物件 (包括幫忙取出的theaterVO, 也包括輸入資料錯誤時的theaterVO物件)
+  FoodVO foodVO = (FoodVO) request.getAttribute("foodVO");
 %>
-<jsp:useBean id="foodSvc" scope="page" class="com.food.model.FoodService" />
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
-    	<title>後台　修改餐點</title>
+    	<title>後台　新增餐點</title>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -32,18 +30,15 @@
    }
  }
 </script> 
+
 <style>
 tr td>img {
 	width: 180px;
 	height: 200px;
 }
 #th1{
-	font-size:20px;
+	font-size:40px;
 }
-#th2{
-	font-size:20px;
-}
-
 </style>
 
 </head>
@@ -67,7 +62,8 @@ tr td>img {
         </ul>
     </nav>
     
-   
+    
+    
     
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
@@ -153,83 +149,80 @@ tr td>img {
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">後台　修改餐點</h1>
+                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">後台　新增餐點</h1>
                             <div class="card-body">
                                 <div class="table-responsive">
                                    <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/food/food.do" name="form1" enctype="multipart/form-data">
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="text-align:left;">
                                         <thead style="background-color:#9099AA; color:white;; white-space: nowrap;" >
                                             <tr>
-                                            	<th id="th1">餐點編號</th>
-								  				<th id="th2" colspan="2">${foodVO.food_no}</th>
+                                            	<th id="th1" colspan="3" align="center"><CENTER>請輸入餐點資料</CENTER></th>
                                             </tr>
                                         </thead>
                                         <tbody>
 											<tr>
-												<td width="110px;"><span style="font-weight:bolder;">餐點圖片</td>
+												<td width="110px;"><span style="font-weight:bolder;">餐點圖片</span></td>
 												<td width="620px;">
-													<img id="preview_img" src="<%=request.getContextPath()%>/food/food.do?action=getPic&food_no=${foodVO.food_no}"><br>
+													<img id="preview_img" src="<%=request.getContextPath()%>/images/NoData/none2.jpg" /><br> 
  													<input type="file" name="food_pic" size="45" accept="image/*" onchange="readURL(this)" targetID="preview_img" 
- 													value="<%=(foodVO.getFood_pic() == null) ? "" : foodVO.getFood_pic()%>" />
-												</td>
+ 													value="<%=(foodVO == null) ? "" : foodVO.getFood_pic()%>" />
+ 												</td>
 												<td>
-												<%-- 錯誤表列 --%>
-													<c:if test="${not empty errorMsgs}">
-														<font style="color:red">請修正以下錯誤:</font>
-														<ul>
-															<c:forEach var="message" items="${errorMsgs}">
-																<li style="color:red">${message}</li>
-															</c:forEach>
-														</ul>
-													</c:if>
-												</td> 
+													<font color=red><%-- 錯誤表列 --%>
+														<c:if test="${not empty errorMsgs}">
+															<font style="color:red">請修正以下錯誤:</font>
+															<ul>
+																<c:forEach var="message" items="${errorMsgs}">
+																	<li style="color:red">${message}</li>
+																</c:forEach>
+															</ul>
+														</c:if>
+													</font>
+												</td>
 											</tr>
 											<tr>
 												<td><span style="font-weight:bolder;">餐點名稱</span></td>
-												<td>
-													<input name="food_name" type="text" size="19"
-													value="<%=(foodVO.getFood_name() == null) ? "" : foodVO.getFood_name()%>" />
+												<td><input name="food_name" type="text" size="19"
+													value="<%=(foodVO == null) ? "" : foodVO.getFood_name()%>" />
+												</td>
 												<td></td> 
-											</tr>	
+											</tr>
 											<tr>
 												<td><span style="font-weight:bolder;">餐點種類</span></td>
 												<td>
 													<select name="food_type" style="width:180px;">
-															<option value= "0" <%= ((foodVO.getFood_type() == null) ? "" : (foodVO.getFood_type().equals("0") ? "selected" : ""))%>>熟食類</option>
-															<option value= "1" <%= ((foodVO.getFood_type() == null) ? "" : (foodVO.getFood_type().equals("1") ? "selected" : ""))%>>飲料類</option>
-															<option value= "2" <%= ((foodVO.getFood_type() == null) ? "" : (foodVO.getFood_type().equals("2") ? "selected" : ""))%>>爆米花類</option>
+														<option value= "0" <%= ((foodVO == null) ? "" : (foodVO.getFood_type().equals("0") ? "selected" : ""))%>>熟食類</option>
+														<option value= "1" <%= ((foodVO == null) ? "" : (foodVO.getFood_type().equals("1") ? "selected" : ""))%>>飲料類</option>
+														<option value= "2" <%= ((foodVO == null) ? "" : (foodVO.getFood_type().equals("2") ? "selected" : ""))%>>爆米花類</option>
 													</select>
 												</td>
 												<td></td> 
-											</tr>	
+											</tr>
 											<tr>
 												<td><span style="font-weight:bolder;">餐點價格</span></td>
 												<td>
 													<input name="food_price"  type="number" max="2000" min="0" style="width:180px;"
-													value="<%=(foodVO.getFood_price() == null) ? "" : foodVO.getFood_price()%>" />
+													value="<%=(foodVO == null) ? "" : foodVO.getFood_price()%>" />
 												</td>
-												<td></td> 
+												<td></td>
 											</tr>
 											<tr>
 												<td><span style="font-weight:bolder;">餐點狀態</span></td>
 												<td>
 													<select name="food_status" style="width:180px;">
-														<option value="0" <%= ((foodVO.getFood_status() == null) ? "" : (foodVO.getFood_status().equals("0") ? "selected" : ""))%>>下架</option>
-														<option value="1" <%= ((foodVO.getFood_status() == null) ? "" : (foodVO.getFood_status().equals("1") ? "selected" : ""))%>>上架</option>
+														<option value="0" <%= ((foodVO == null) ? "" : (foodVO.getFood_status().equals("0") ? "selected" : ""))%>>下架</option>
+														<option value="1" <%= ((foodVO == null) ? "" : (foodVO.getFood_status().equals("1") ? "selected" : ""))%>>上架</option>
 													</select>
 												</td>
-												<td></td> 
+												<td></td>
 											</tr>
-											
-											
 											
 											<tr>
 												<td></td>
 												<td></td>
-												<td style="text-align: right;">
-													<input type="hidden" name="action" value="update">
-													<input type="hidden" name="food_no" value="${foodVO.food_no}">
-													<input type="submit" value="送出修改" id="send"
+												<td>
+													<input type="hidden" name="action" value="insert">
+													<input type="submit" value="送出新增" id="send"
 													class="btn btn-outline-danger" style="float:right; border:2px #B7B7B7 solid;border-radius:10px; background-color:#FF4268; font-weight:bold; color:white;">
 												</td>
 											</tr>
@@ -254,6 +247,5 @@ tr td>img {
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
         <script src="<%=request.getContextPath()%>/back-home/dist/assets/demo/datatables-demo.js"></script>
     </body>
-    
-
+ 
 </html>

@@ -37,6 +37,12 @@ tr td>img {
 	width: 180px;
 	height: 200px;
 }
+#th1{
+	font-size:20px;
+}
+#th2{
+	font-size:20px;
+}
 
 </style>
 
@@ -61,8 +67,7 @@ tr td>img {
         </ul>
     </nav>
     
-    
-    
+   
     
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
@@ -161,56 +166,40 @@ tr td>img {
                                         </thead>
                                         <tbody>
 											<tr>
-												<td>電影名稱:</td>
-												<td ><input type="TEXT" name="moviename" size="70"
+												<td width="110px;"><span style="font-weight:bolder;">電影名稱:</td>
+												<td width="620px;"><input type="TEXT" name="moviename" size="70"
 													value="<%=(movieVO.getMoviename() == null) ? "" : movieVO.getMoviename()%>" /></td>
-		<!-- 										<td colspan="1" rowspan="3" style="vertical-align:text-top; bgcolor=white"> -->
-		<%-- 											<c:if test="${not empty errorMsgs}"> --%>
-		<!-- 												<font style="color: red">請修正以下錯誤:</font> -->
-		<!-- 												<ul> -->
-		<%-- 													<c:forEach var="message" items="${errorMsgs}"> --%>
-		<%-- 														<li style="color: red">${message}</li> --%>
-		<%-- 													</c:forEach> --%>
-		<!-- 												</ul> -->
-		<%-- 											</c:if> --%>
-		<!-- 										</td> -->
-												<td >${errorMsgs.moviename}</td>
+												<td><font color=red>${errorMsgs.moviename}</font></td>
 											</tr>
 											<tr>
-												<td>電影照片1:</td>
+												<td><span style="font-weight:bolder;">電影照片1:</span></td>
 												<td>
-												<img id="preview_img" src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${movieVO.movieno}">
+												<img id="preview_img" src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${movieVO.movieno}"><br>
 												<input multiple type="file" name="moviepicture1" accept="image/*" onchange="readURL(this)" targetID="preview_img"
 												value="<%=(movieVO.getMoviepicture1() == null) ? "" : movieVO.getMoviepicture1()%>" /></td>
-		<!-- 										<td colspan="1"></td> -->
-												<td >${errorMsgs.moviepicture1}</td> 
+												<td style="word-break: break-all;"><font color=red>${errorMsgs.moviepicture1}</font></td> 
 											</tr>	
 											<tr>
-												<td>電影照片2:</td>
+												<td><span style="font-weight:bolder;">電影照片2:</span></td>
 												<td>
-												<img id="preview_img2" src="${pageContext.request.contextPath}/movie/DBGifReader2.do?movieno=${movieVO.movieno}"">
+												<img id="preview_img2" src="${pageContext.request.contextPath}/movie/DBGifReader2.do?movieno=${movieVO.movieno}""><br>
 												<input multiple type="file" name="moviepicture2" accept="image/*" onchange="readURL(this)" targetID="preview_img2"
 												value="<%=(movieVO.getMoviepicture2() == null) ? "" : movieVO.getMoviepicture2()%>" /></td>
-		<!-- 										<td colspan="1"></td> -->
-												<td >${errorMsgs.moviepicture2}</td> 
+												<td style="word-break: break-all;"><font color=red>${errorMsgs.moviepicture2}</font></td> 
 											</tr>	
 											<tr>
-												<td>導演:</td>
+												<td><span style="font-weight:bolder;">導演:</span></td>
 												<td><input type="TEXT" name="director" size="70"
 													value="<%=(movieVO.getDirector() == null) ? "" : movieVO.getDirector()%>" /></td>
-		<!-- 										<td colspan="1"></td> -->
-												<td >${errorMsgs.director}</td>
+												<td><font color=red>${errorMsgs.director}</font></td>
 											</tr>
 											<tr>
-												<td>演員:</td>
-												<td><textarea name="actor" rows="5" cols="70" maxlength="300"><%=(movieVO.getActor() == null) ? "" : movieVO.getActor()%></textarea></td>
-		<!-- 										<td><input type="TEXT" name="actor" size="70" -->
-		<%-- 											value="<%=(movieVO == null) ? "" : movieVO.getActor()%>" /></td> --%>
-		<!-- 										<td colspan="1"></td> -->
-												<td >${errorMsgs.actor}</td>
+												<td><span style="font-weight:bolder;">演員:</span></td>
+												<td><textarea name="actor" rows="5" cols="73" maxlength="300"><%=(movieVO.getActor() == null) ? "" : movieVO.getActor()%></textarea></td>
+												<td><font color=red>${errorMsgs.actor}</font></td>
 											</tr>
 											<tr>
-												<td>電影類型:</td>
+												<td><span style="font-weight:bolder;">電影類型:</span></td>
 												<td>
 												<input type="checkbox" name="category" value="動作片" <%= movieVO.getCategory().contains("動作片") ? "checked" : "" %>>動作片
 												<input type="checkbox" name="category" value="冒險片" <%= movieVO.getCategory().contains("冒險片") ? "checked" : "" %>>冒險片
@@ -232,19 +221,17 @@ tr td>img {
 												<input type="checkbox" name="category" value="音樂片" <%= movieVO.getCategory().contains("音樂片") ? "checked" : "" %>>音樂片
 												<input type="checkbox" name="category" value="歌舞劇" <%= movieVO.getCategory().contains("歌舞劇") ? "checked" : "" %>>歌舞劇
 												</td>
-		<!-- 										<td colspan="1"></td> -->
-												<td >${errorMsgs.category}</td>
+												<td><font color=red>${errorMsgs.category}</font></td>
 											</tr>
 											<tr>
-												<td>電影長度:</td>
+												<td><span style="font-weight:bolder;">電影長度:</span></td>
 												<td><input type="TEXT" name="length" size="70"
 													value="<%=(movieVO.getLength() == null) ? "" : movieVO.getLength()%>" /></td>
-		<!-- 										<td colspan="1"></td> -->
-												<td >${errorMsgs.length}</td>
+												<td><font color=red>${errorMsgs.length}</font></td>
 											</tr>
 											<tr>
-												<td>電影狀態:</td>
-												<td><select name="status" size="1" style="width:531px;">
+												<td><span style="font-weight:bolder;">電影狀態:</span></td>
+												<td><select name="status" size="1" style="width:555px;">
 														<option value="9"
 															<%=(movieVO.getStatus().equals("9") ? "selected" : "")%>></option>
 														<option value="0"
@@ -254,39 +241,34 @@ tr td>img {
 														<option value="2"
 															<%=(movieVO.getStatus().equals("2") ? "selected" : "")%>>已下檔</option>
 												</select></td>
-		<!-- 										<td colspan="1"></td> -->
-												<td >${errorMsgs.status}</td>
+												<td><font color=red>${errorMsgs.status}</font></td>
 											</tr>
 											<tr>
-												<td>上映日期:</td>
+												<td><span style="font-weight:bolder;">上映日期:</span></td>
 												<td><input name="premiredate" id="f_date1" type="text" size="70" 
 												value="<%=(movieVO.getPremiredate() == null) ? " " : movieVO.getPremiredate()%>"></td>
-		<!-- 										<td colspan="1"></td> -->
-												<td >${errorMsgs.premiredate}</td>
+												<td><font color=red>${errorMsgs.premiredate}</font></td>
 											</tr>
 											<tr>
-												<td>下檔日期:</td>
+												<td><span style="font-weight:bolder;">下檔日期:</span></td>
 												<td><input name="offdate" id="f_date2" type="text" size="70"  
 												value="<%=(movieVO.getOffdate() == null) ? " " : movieVO.getOffdate()%>"></td>
-		<!-- 										<td colspan="1"></td> -->
-												<td >${errorMsgs.offdate}</td> 
+												<td><font color=red>${errorMsgs.offdate}</font></td> 
 		
 											</tr>
 											<tr>
-												<td>預告片:</td>
+												<td><span style="font-weight:bolder;">預告片:</span></td>
 												<td><input type="TEXT" name="trailor" size="70" value="<%=(movieVO.getTrailor() == null) ? " " : movieVO.getTrailor()%>" /></td>
-		<!-- 										<td colspan="1"></td> -->
-												<td >${errorMsgs.trailor}</td>
+												<td><font color=red>${errorMsgs.trailor}</font></td>
 											</tr>
 											<tr>
-												<td>短預告片:</td> 
+												<td><span style="font-weight:bolder;">短預告片:</span></td> 
 												<td><input type="TEXT" name="embed" size="70" value="<%=(movieVO.getEmbed() == null) ? " " : movieVO.getEmbed()%>" /></td>
-		<!-- 										<td colspan="1"></td> -->
-												<td >${errorMsgs.embed}</td>
+												<td><font color=red>${errorMsgs.embed}</font></td>
 											</tr>
 											<tr>
-												<td>電影分級:</td>
-												<td><select name="grade" size="1" style="width:531px;">
+												<td><span style="font-weight:bolder;">電影分級:</span></td>
+												<td><select name="grade" size="1" style="width:555px;">
 														<option value="9"
 															<%=(movieVO.getGrade().equals("9") ? "selected" : "")%>></option>
 														<option value="0"
@@ -298,8 +280,7 @@ tr td>img {
 														<option value="3"
 															<%=(movieVO.getGrade().equals("3") ? "selected" : "")%>>限制級</option>
 												</select></td>
-		<!-- 										<td colspan="1"></td> -->
-												<td >${errorMsgs.grade}</td>
+												<td><font color=red>${errorMsgs.grade}</font></td>
 											</tr>
 											
 											
