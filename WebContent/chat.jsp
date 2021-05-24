@@ -14,24 +14,93 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/css1/friendchat.css" type="text/css" />
+<link href="<%=request.getContextPath()%>/css1/friendchat_frontpage.css" rel="friendchat_frontpage" />
+
 <link href="https://i2.bahamut.com.tw/css/basic.css?v=1618977484" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+<link href="<%=request.getContextPath()%>/css1/friendchat_frontpage.css" rel="friendchat_frontpage" />
 
 <style type="text/css">
+	   body {  
+     width: 888px;  
+     margin: 0 auto;  
+     padding: 10px 20px 20px 20px;  
 
+ 	        }  
+  table#table-1 {
+	background-color: #CCCCFF;
+    border: 2px solid black;
+    text-align: center;
+  }
+  table#table-1 h4 {
+    color: red;
+    display: block;
+    margin-bottom: 1px;
+  }
+  h4 {
+    color: blue;
+    display: inline;
+  }
+</style>
+
+<style>
+  table {
+	width: 100%;
+	background-color: white;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	
+  }
+  table, th, td {
+/*     border: 1px solid #CCCCFF; */
+  }
+  th, td {
+    padding: 5px;
+    text-align: center;
+  }
 </style>
 <title>最大私人聊天室</title>
 </head>
+
+
 <body onload="connect();" onunload="disconnect();">
-	<h3 id="statusOutput" class="statusOutput"></h3>
-	<div id="row"></div>
-	<div id="messagesArea" class="panel message-area" ></div>
+
+		<div class="shadow p-3 mb-1 bg-white rounded" style="font-size:40px">
+			<span class="badge badge-secondary">
+				MoviesHit好友聊天室
+			</span>
+			<div class="btn-group">
+		        <button type="button" class="btn btn-success">回前頁</button>
+		        <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	            	<span class="sr-only">Toggle Dropdown</span>
+	       		</button>
+		       		<div class="dropdown-menu">
+			            <a class="dropdown-item" href="<%=request.getContextPath()%>/mem/mem.do?action=listRelationships_ByMemberno_B&member_no=${memVO.member_no}">我的好友</a>
+			            <a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/relationship/friend_invite.jsp">好友邀請</a>
+		        	</div>
+	      	 </div>
+		</div>	
+
+	<h3 id="statusOutput" class="statusOutput">請選擇聊天對象</h3>
+		<div class="container" id="row">
+			
+		</div>
+	<div id="messagesArea" class="panel1 message-area" ></div>
 	<div class="panel input-area">
 		<input id="message" class="text-field" type="text" placeholder="Message" onkeydown="if (event.keyCode == 13) sendMessage();" /> 
 		<input type="submit" id="sendMessage" class="button" value="送出" onclick="sendMessage();" /> 
 		<input type="button" id="connect" class="button" value="上線" onclick="connect();" /> 
 		<input type="button" id="disconnect" class="button" value="下線" onclick="disconnect();" />
 	</div>
-</body>
+	
+	
+	
+	
+	
+	
+	
+	
+<!-- </body> -->
 
 <script>
 	var MyPoint = "/FriendWS/${userName}";
@@ -129,7 +198,7 @@
 				console.log("${memSvc.getOneMem(relationshipVO.friend_no).mb_name}");
 				if (friends[i]==="${memSvc.getOneMem(relationshipVO.friend_no).mb_name}"){
 
-					row.innerHTML +='<div id=' + i + ' class="column" name="friendName" value=' + friends[i] + ' ><h2>' + friends[i] + '</h2></div>';
+					row.innerHTML +='<div class="row mem-block" id=' + i + ' class="column" name="friendName" value=' + friends[i] + ' ><h2>' + friends[i] + '</h2></div>';
 					}
 				</c:forEach>
 		}
@@ -162,4 +231,5 @@
 		statusOutput.innerHTML = name;
 	}
 </script>
+</body>
 </html>
