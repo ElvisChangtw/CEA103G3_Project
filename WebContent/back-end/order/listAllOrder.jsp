@@ -232,12 +232,14 @@
                                         </tbody>
                                     </table>
                                     <%@ include file="pages/page2.file"%>
-                                    <%if (request.getAttribute("orderVO")!=null){%>
-										<jsp:include page="listOneOrder.jsp" />
-									<%} %>
+                                   
                                 </div>
                             </div>
                     </div>
+                    
+                     <%if (request.getAttribute("orderVO")!=null){%>
+						<jsp:include page="listOneOrderForListAll.jsp" />
+					<%} %>
                 </main>
             </div>
         
