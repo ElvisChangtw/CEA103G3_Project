@@ -563,7 +563,7 @@ function getOption() {
 					option.text(timeFormat(lstShowtime[i].showtime_time));
 					$('#showtime_selection').append(option);  
 				} else{
-					alert("24小時內場次:" + lstShowtime[i].showtime_no + "未顯示!");
+// 					alert("24小時內場次:" + lstShowtime[i].showtime_no + "未顯示!");
 				}
  			}
 			

@@ -928,7 +928,7 @@ left: 1095px;
                             <div class="tab_movies_agileinfo">
                                 <div class="w3_agile_featured_movies">
 						            <!--//tab-section-->
-						            <h3 class="agile_w3_title"> 評分排序(上映中) <span>Movies</span></h3>
+						            <h3 class="agile_w3_title"> 網友評分榜 <span>現正熱映</span></h3>
 						            <!--/movies-->
 						            <div class="w3_agile_latest_movies">
 						                <div id="owl-demo" class="owl-carousel owl-theme">
@@ -1031,7 +1031,7 @@ left: 1095px;
 						                </div>
 						            </div>
 						            
-						            <h3 class="agile_w3_title"> 期待排序(即將上映) <span>Movies</span></h3>
+						            <h3 class="agile_w3_title"> 網友期待榜 <span>即將上映</span></h3>
 						            <!--/movies-->
 						            <div class="w3_agile_latest_movies">
 						                <div id="owl-demo2" class="owl-carousel owl-theme">

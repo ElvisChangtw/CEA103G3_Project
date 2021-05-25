@@ -148,7 +148,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								<%@ include file="pages/page1.file"%>
 <!-- 									<table id="table-breakpoint"> -->
 										<table>
-										<thead  align="center">
+										<thead  align="center" style="white-space: nowrap;">
 										  <tr>
 											<th align="center">電影名稱</th>
 											<th align="center">電影長度</th>
@@ -227,7 +227,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 													<td width="70px;">尚未分級</td>
 												</c:otherwise>
 											</c:choose>
-												<td width="80px;">${movieVO.category}</td>
+												<td width="80px; !important">${movieVO.category}</td>
 											<c:choose>
 												<c:when test="${movieVO.rating == 0.0}">
  													<td width="100px;">尚無評分</td> 
@@ -306,12 +306,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 													<td width="100px;">尚無評分</td>
 												</c:otherwise>
 											</c:choose>	
-											<td id="abc_${movieVO.movieno}" style="display:none;">${movieVO.expectation}</td>
+											<td id="abc_${movieVO.movieno}" style="display:none; white-space: nowrap;">${movieVO.expectation}</td>
 											<td width="30px;" id="expectation_${movieVO.movieno}"> 
 													
 											</td>
-											<td width="80px;"><a class="w3_play_icon1" href="#small-dialog_${movieVO.movieno}">觀看</a></td>
-<%-- 												<td width="50px;"><a class="w3_play_icon1" href="${movieVO.trailor}">觀看</a></td> --%>
+<%-- 											<td width="80px;"><a class="w3_play_icon1" href="#small-dialog_${movieVO.movieno}">觀看</a></td> --%>
+												<td width="80px;"><a class="w3_play_icon1" href="${movieVO.trailor}">觀看</a></td>
 											
 <!-- 											<td width="100px;"> -->
 <%-- 												<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/movie/movie.do" style="margin-bottom: 0px;"> --%>
@@ -589,7 +589,7 @@ $(document).ready( function() {
 		}
 		else{
 		
-			$("#expectation_${movieVO.movieno}").text("尚無期待度");
+			$("#expectation_${movieVO.movieno}").text("尚無");
 		}
 	</c:forEach>
 	

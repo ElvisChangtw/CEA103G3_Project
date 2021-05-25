@@ -380,22 +380,44 @@ public class MovieServlet extends HttpServlet {
 					}
 				}
 
-				String trailor = req.getParameter("trailor").trim();
-				String embed = req.getParameter("embed").trim();
-				String trailorReg = "^(https?\\:\\/\\/)?(www\\.)?(youtube\\.com|youtu\\.?be)\\/.+$";
+//				String trailor = req.getParameter("trailor").trim();
+//				String embed = req.getParameter("embed").trim();
+//				String trailorReg = "^(https?\\:\\/\\/)?(www\\.)?(youtube\\.com|youtu\\.?be)\\/.+$";
+//				
+//				if(trailor.length() ==0  && embed.length() ==0) {
+//					trailor = null;
+//					embed = null;
+//				}else if(trailor.length() !=0  && embed.length() ==0) {
+//					if (!trailor.trim().matches(trailorReg)) {
+//						errorMsgs.put("trailor", "請輸入正確格式網址");
+//					}
+//					errorMsgs.put("embed", "有輸入預告片網址,記得附上短網址");
+//				}else if(trailor.length() ==0  && embed.length() !=0) {
+//					errorMsgs.put("trailor", "請記得輸入預告片網址");
+//				}else if(trailor.length() !=0  && embed.length() !=0) {
+//					if (!trailor.trim().matches(trailorReg)) {
+//						errorMsgs.put("trailor", "請輸入正確格式網址");
+//					}
+//				}
 				
-				if(trailor.length() ==0  && embed.length() ==0) {
-					trailor = null;
-					embed = null;
-				}else if(trailor.length() !=0  && embed.length() ==0) {
-					if (!trailor.trim().matches(trailorReg)) {
-						errorMsgs.put("trailor", "請輸入正確格式網址");
-					}
-					errorMsgs.put("embed", "有輸入預告片網址,記得附上短網址");
-				}else if(trailor.length() ==0  && embed.length() !=0) {
-					errorMsgs.put("trailor", "請記得輸入預告片網址");
-				}else if(trailor.length() !=0  && embed.length() !=0) {
-					if (!trailor.trim().matches(trailorReg)) {
+				String trailor = req.getParameter("trailor").trim();
+				String trailorReg = "^(https?\\:\\/\\/)?(www\\.)?(youtube\\.com|youtu\\.?be)\\/.+$";
+				String embed = null;
+				if(trailor.length() ==0) {
+					trailor = "https://www.youtube.com/watch?v=";
+					embed = "26Q8duJW11s";
+				}else {
+					if (trailor.trim().matches(trailorReg)) {
+						if(trailor.equals("https://www.youtube.com/watch?v=")) {
+							embed = "26Q8duJW11s";
+						}else {
+							String[] strs= trailor.split("=");
+							int len=strs.length;
+							for(int i=0;i<len;i++  ){
+								embed = strs[1].toString();
+							}
+						}
+					}else {
 						errorMsgs.put("trailor", "請輸入正確格式網址");
 					}
 				}
@@ -579,22 +601,44 @@ System.out.println("我錯了"+e.getMessage());
 					}
 				}
 
-				String trailor = req.getParameter("trailor").trim();
-				String embed = req.getParameter("embed").trim();
-				String trailorReg = "^(https?\\:\\/\\/)?(www\\.)?(youtube\\.com|youtu\\.?be)\\/.+$";
+//				String trailor = req.getParameter("trailor").trim();
+//				String embed = req.getParameter("embed").trim();
+//				String trailorReg = "^(https?\\:\\/\\/)?(www\\.)?(youtube\\.com|youtu\\.?be)\\/.+$";
+//				
+//				if(trailor.length() ==0  && embed.length() ==0) {
+//					trailor = null;
+//					embed = null;
+//				}else if(trailor.length() !=0  && embed.length() ==0) {
+//					if (!trailor.trim().matches(trailorReg)) {
+//						errorMsgs.put("trailor", "請輸入正確格式網址");
+//					}
+//					errorMsgs.put("embed", "有輸入預告片網址,記得附上短網址");
+//				}else if(trailor.length() ==0  && embed.length() !=0) {
+//					errorMsgs.put("trailor", "請記得輸入預告片網址");
+//				}else if(trailor.length() !=0  && embed.length() !=0) {
+//					if (!trailor.trim().matches(trailorReg)) {
+//						errorMsgs.put("trailor", "請輸入正確格式網址");
+//					}
+//				}
 				
-				if(trailor.length() ==0  && embed.length() ==0) {
-					trailor = null;
-					embed = null;
-				}else if(trailor.length() !=0  && embed.length() ==0) {
-					if (!trailor.trim().matches(trailorReg)) {
-						errorMsgs.put("trailor", "請輸入正確格式網址");
-					}
-					errorMsgs.put("embed", "有輸入預告片網址,記得附上短網址");
-				}else if(trailor.length() ==0  && embed.length() !=0) {
-					errorMsgs.put("trailor", "請記得輸入預告片網址");
-				}else if(trailor.length() !=0  && embed.length() !=0) {
-					if (!trailor.trim().matches(trailorReg)) {
+				String trailor = req.getParameter("trailor").trim();
+				String trailorReg = "^(https?\\:\\/\\/)?(www\\.)?(youtube\\.com|youtu\\.?be)\\/.+$";
+				String embed = null;
+				if(trailor.length() ==0) {
+					trailor = "https://www.youtube.com/watch?v=";
+					embed = "26Q8duJW11s";
+				}else {
+					if (trailor.trim().matches(trailorReg)) {
+						if(trailor.equals("https://www.youtube.com/watch?v=")) {
+							embed = "26Q8duJW11s";
+						}else {
+							String[] strs= trailor.split("=");
+							int len=strs.length;
+							for(int i=0;i<len;i++  ){
+								embed = strs[1].toString();
+							}
+						}
+					}else {
 						errorMsgs.put("trailor", "請輸入正確格式網址");
 					}
 				}
@@ -642,6 +686,7 @@ System.out.println("我錯了"+e.getMessage());
 				/*************************** 其他可能的錯誤處理 **********************************/
 			} catch (Exception e) {
 				errorMsgs.put("Exception", e.getMessage());
+System.out.println("出錯了"+e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/back-end/movie/addMovie.jsp");
 				failureView.forward(req, res);
 			}
