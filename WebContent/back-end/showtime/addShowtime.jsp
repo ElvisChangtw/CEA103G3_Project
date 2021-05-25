@@ -51,14 +51,21 @@ tr td>img {
     padding: 1px;
   }
   .delete{
-		background-color: black;
-		color: white;
-		font-size: 8px;
-		width: 40px;
-		height: 20px;
-		line-height: 20px;
-		text-align: center;
-		cursor: pointer;
+/* 		background-color: black; */
+ 		color: white;
+/* 		width: 90px; */
+/* 		height: 40px; */
+/*  	line-height: 20px;  */
+/* 		text-align: center; */
+/*  		cursor: pointer;  */
+   		margin: 7px 6px;
+		position: relative;
+ 		left: 20%; 
+		border: 2px #B7B7B7 solid;
+		border-radius: 10px;
+		background-color: #ED583A;
+		font-weight: bold;
+		text-align:center;
 		}
   #table{
   text-align:center;
@@ -221,25 +228,31 @@ tr td>img {
 												<td></td> 
 											</tr>
 											<tr>
-												<td><span style="font-weight:bolder;">日期</span></td>
+												<td><span style="font-weight:bolder;">上映日期</span></td>
 												<td>
 													<input name="showtime_date" class="f_date1" type="text">
 												</td>
 												<td></td> 
 											</tr>
 											<tr>
-												<td><span style="font-weight:bolder;"></span></td>
+												<td><span style="font-weight:bolder;">下映日期</span></td>
 												<td>
 													<input name="showtime_date" class="f_date1" type="text">
 												</td>
 												<td></td>
 											</tr>
 											<tr>
-<!-- 												<td><span style="font-weight:bolder;">新增時間</span></td> -->
 												<td>
 													<input type="button" value="新增時間" id="insert_time"
 											     	class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#AE67D8; font-weight:bold; color:white;">
 												</td>
+												<td></td>
+												<td></td>
+ 												
+											</tr>
+											
+											<tr>
+												<td></td>
 												<td></td>
 												<td>
 													<input type="hidden" name="action" value="insert2">
@@ -247,21 +260,27 @@ tr td>img {
 													class="btn btn-outline-danger" style="float:right; border:2px #B7B7B7 solid;border-radius:10px; background-color:#FF4268; font-weight:bold; color:white;">
 												</td>
 											</tr>
-											<tr>
-											</tr>
-                                        </tbody>
-                                    </table>
-                                    <table class="table table-bordered" id="table" width="100%" cellspacing="0" style="text-align:left;">
-                                        
-                                        <tbody>
-											<tr>
-												<td>編號</td>
-												<td>時間</td>
-												<td></td>
-											</tr>
+                                            <tr>
+                                            </tr>
                                         </tbody>
                                     </table>
                                     
+                                    
+                                    
+                                    
+                                    <table class="table table-bordered" id="table" width="100%" cellspacing="0" style="text-align:left;">
+                                        <tbody>
+											<tr>
+												<td style="width:129px; background-color:#524066; font-size:22px; color:white">
+													<span style="font-weight:bolder; ">場次編號</span>
+												</td>
+												<td style="width:820px; background-color:#524066; text-align:center; font-size:30px; color:white">
+													<span style="font-weight:bolder; ">時間</span>
+												</td>
+												<td style="width:129px; background-color:#524066;"></td>
+											</tr>
+                                        </tbody>
+                                    </table>
 								</FORM>
                                 </div>
                             </div>
@@ -326,71 +345,21 @@ tr td>img {
            });
         
         
-        
-        
-   
-        // ----------------------------------------------------------以下用來排定無法選擇的日期-----------------------------------------------------------
-
-        //      1.以下為某一天之前的日期無法選擇
-        //      var somedate1 = new Date('2017-06-15');
-        //      $('#f_date1').datetimepicker({
-        //          beforeShowDay: function(date) {
-        //        	  if (  date.getYear() <  somedate1.getYear() || 
-        //		           (date.getYear() == somedate1.getYear() && date.getMonth() <  somedate1.getMonth()) || 
-        //		           (date.getYear() == somedate1.getYear() && date.getMonth() == somedate1.getMonth() && date.getDate() < somedate1.getDate())
-        //              ) {
-        //                   return [false, ""]
-        //              }
-        //              return [true, ""];
-        //      }});
-
-        
-        //      2.以下為某一天之後的日期無法選擇
-        //      var somedate2 = new Date('2017-06-15');
-        //      $('#f_date1').datetimepicker({
-        //          beforeShowDay: function(date) {
-        //        	  if (  date.getYear() >  somedate2.getYear() || 
-        //		           (date.getYear() == somedate2.getYear() && date.getMonth() >  somedate2.getMonth()) || 
-        //		           (date.getYear() == somedate2.getYear() && date.getMonth() == somedate2.getMonth() && date.getDate() > somedate2.getDate())
-        //              ) {
-        //                   return [false, ""]
-        //              }
-        //              return [true, ""];
-        //      }});
-
-
-        //      3.以下為兩個日期之外的日期無法選擇 (也可按需要換成其他日期)
-        //      var somedate1 = new Date('2017-06-15');
-        //      var somedate2 = new Date('2017-06-25');
-        //      $('#f_date1').datetimepicker({
-        //          beforeShowDay: function(date) {
-        //        	  if (  date.getYear() <  somedate1.getYear() || 
-        //		           (date.getYear() == somedate1.getYear() && date.getMonth() <  somedate1.getMonth()) || 
-        //		           (date.getYear() == somedate1.getYear() && date.getMonth() == somedate1.getMonth() && date.getDate() < somedate1.getDate())
-        //		             ||
-        //		            date.getYear() >  somedate2.getYear() || 
-		//         		           (date.getYear() == somedate2.getYear() && date.getMonth() >  somedate2.getMonth()) || 
-        //		           (date.getYear() == somedate2.getYear() && date.getMonth() == somedate2.getMonth() && date.getDate() > somedate2.getDate())
-        //              ) {
-        //                   return [false, ""]
-        //              }
-        //              return [true, ""];
-        //      }});
-        	
-        
         	$("#table").hide()
         
 			let option = document.getElementsByName("movie_no").item(0).children;
+        	console.log(option);
 		 	let length = 0;
 		 	for(var x = 0; x < option.length; x++){
-		 		if(option.item(x).selected == true){
-		 			length = option.item(x).getAttribute(name);
-		 		}
+// 		 		if(option.item(x).selected == true){
+		 			length = option.item(x).getAttribute("name");
+		 			console.log(length);
+// 		 		}
 		 	}
         	
         	let i = 0;
 			let hour = 10;
-			let date = "2016-11-25T";
+// 			let date = "2016-11-25T";
 			let insert_time = document.getElementById("insert_time");
 			insert_time.addEventListener("click",function(){
 				$("#table").show();
@@ -399,7 +368,7 @@ tr td>img {
 				let no = document.createElement("td")
 				let time = document.createElement("td");
 				let input = document.createElement("input");
-				let btn = document.createElement("input");
+				let btn = document.createElement("div");
 				
 		
 				input.setAttribute("type", "text");
@@ -407,9 +376,9 @@ tr td>img {
 				input.setAttribute("name", "showtime");
 		
 				no.innerText = i + 1;
-				btn.value = "刪除";
-				btn.setAttribute("class", "delete");
-				btn.setAttribute("type", "button");
+				btn.innerText = "刪除";
+				btn.setAttribute("class", "delete btn btn-outline-dark");
+// 				btn.setAttribute("type", "button");
 				btn.addEventListener("click", function(){
 					this.parentElement.remove();
 				})
@@ -417,24 +386,34 @@ tr td>img {
 			 	for(var x = 0; x < option.length; x++){
 			 		if(option.item(x).selected == true){
 			 			length = parseInt(option.item(x).getAttribute("name"),10) + 30 +  5 - (parseInt(option.item(x).getAttribute("name"),10) % 5);
-// 			 			console.log(length); 
+			 			console.log(length);
+			 			break;
 			 		}
 			 	}
 				
 				time.appendChild(input);
 				tr.appendChild(no);
 				tr.appendChild(time);
-				tr.appendChild(btn);
+				if(i !== 0){
+					tr.appendChild(btn);
+				}else{
+					let td1 = document.createElement("td");
+					td1.innerText="";
+// 					td1.setAttribute("width", "137px;");
+					tr.appendChild(td1);
+				}
 				table.appendChild(tr);
 				if( i === 0){
 					input.value = hour + ":00:00";
 				}else{
 					let time = $("#table").find("input").eq(i-1).val();
-// 				 	let date = "2016-11-25T";
+					console.log(time);
+				 	let date = "2016-11-25T";
 				 	let date_time = date + time;
 				 	
 				 	let s = Date.parse(date_time) + length * 60 * 1000;
 				 	let new_time = new Date(s);
+				 	console.log(new_time);
 				 	let newTime = "";
 				 	let hours = "";
 				 	let minutes = "";
@@ -449,11 +428,10 @@ tr td>img {
 				 	}else{
 				 		minutes = new_time.getMinutes();
 				 	}
-
-				 	newTime = hours + ":" + minutes + ":00";
-					input.value = newTime;
+					 	newTime = hours + ":" + minutes + ":00";
+						input.value = newTime;
 				}
-				i++;
+					i++;
 				
 				$('.time').datetimepicker({
 				       theme: '',              //theme: 'dark',
@@ -529,8 +507,6 @@ tr td>img {
 								$dom.val(newTime);
 					    	}
 					    }
-// 						console.log(datetime);
-// 						console.log(prevdatetime);
 					   }
 			        });
 	});

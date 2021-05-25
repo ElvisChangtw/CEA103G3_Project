@@ -167,7 +167,7 @@ tr td>img {
                                         <tbody>
 											<tr>
 												<td width="110px;"><span style="font-weight:bolder;">電影名稱:</td>
-												<td width="620px;"><input type="TEXT" name="moviename" size="70"
+												<td width="620px;"><input type="TEXT" name="moviename" size="70" placeholder="請輸入電影名稱"
 													value="<%=(movieVO.getMoviename() == null) ? "" : movieVO.getMoviename()%>" /></td>
 												<td><font color=red>${errorMsgs.moviename}</font></td>
 											</tr>
@@ -189,13 +189,13 @@ tr td>img {
 											</tr>	
 											<tr>
 												<td><span style="font-weight:bolder;">導演:</span></td>
-												<td><input type="TEXT" name="director" size="70"
+												<td><input type="TEXT" name="director" size="70" placeholder="請輸入導演名字,若有多位導演請用逗號分隔"
 													value="<%=(movieVO.getDirector() == null) ? "" : movieVO.getDirector()%>" /></td>
 												<td><font color=red>${errorMsgs.director}</font></td>
 											</tr>
 											<tr>
 												<td><span style="font-weight:bolder;">演員:</span></td>
-												<td><textarea name="actor" rows="5" cols="73" maxlength="300"><%=(movieVO.getActor() == null) ? "" : movieVO.getActor()%></textarea></td>
+												<td><textarea name="actor" rows="5" cols="73" maxlength="300" placeholder="請輸入演員名字,若有多位演員請用逗號分隔"><%=(movieVO.getActor() == null) ? "" : movieVO.getActor()%></textarea></td>
 												<td><font color=red>${errorMsgs.actor}</font></td>
 											</tr>
 											<tr>
@@ -225,7 +225,7 @@ tr td>img {
 											</tr>
 											<tr>
 												<td><span style="font-weight:bolder;">電影長度:</span></td>
-												<td><input type="TEXT" name="length" size="70"
+												<td><input type="TEXT" name="length" size="70" placeholder="請輸入幾分鐘"
 													value="<%=(movieVO.getLength() == null) ? "" : movieVO.getLength()%>" /></td>
 												<td><font color=red>${errorMsgs.length}</font></td>
 											</tr>
@@ -258,7 +258,8 @@ tr td>img {
 											</tr>
 											<tr>
 												<td><span style="font-weight:bolder;">預告片:</span></td>
-												<td><input type="TEXT" name="trailor" size="70" value="<%=(movieVO.getTrailor() == null) ? " " : movieVO.getTrailor()%>" /></td>
+												<td><input type="TEXT" name="trailor" size="70" placeholder="請輸入Youtube網址,若尚無預告片保持空白即可" 
+												value="<%=(movieVO.getTrailor() == null) ? " " : movieVO.getTrailor()%>" /></td>
 												<td><font color=red>${errorMsgs.trailor}</font></td>
 											</tr>
 <!-- 											<tr> -->

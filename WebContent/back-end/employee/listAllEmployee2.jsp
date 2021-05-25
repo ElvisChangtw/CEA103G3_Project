@@ -11,9 +11,28 @@
     pageContext.setAttribute("list",list);
 %>
 
+
 <%
-	EmployeeVO employeeVO = (EmployeeVO) request.getAttribute("employeeVO");
+    EmployeeVO employeeVO = (EmployeeVO) session.getAttribute("employeeVO");
+	Set<AuthorityVO> authList = (Set<AuthorityVO>) session.getAttribute("authList");
 %>
+
+<%-- <% --%>
+<!-- // 	Integer empno = employeeVO.getEmpno(); -->
+<!-- // 	AuthorityService authSvc1 = new AuthorityService(); -->
+<!-- // 	List<AuthorityVO> list2 = authSvc1.getOneAuthorityByEmpNo(empno);  -->
+<!-- // 	for(int i = 0; i < list2.size(); i++){ -->
+<!-- // 		AuthorityVO authVO = list2.get(i); -->
+<!-- // 		if(authVO.getAuth_status().equals("N")){ -->
+<!-- // 			list.remove(authVO); -->
+<!-- // 			i--; -->
+<!-- // 		}else{ -->
+<!-- // 			System.out.println(authVO.getFunction_no()); -->
+<!-- // 		} -->
+<!-- // 	} -->
+<%-- %> --%>
+
+
 
 <jsp:useBean id="authoritytSvc" scope="page" class="com.authority.model.AuthorityService" />
 
@@ -70,52 +89,51 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-user-alt"></i></div>
                            	 基本資料
                         </a>
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapseLayouts1">
-                            <div class="sb-nav-link-icon"><i class="fas fa-user-cog"></i></div>
+                        <a id="employee_management" class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapseLayouts1">
                            	 員工管理系統
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapseLayouts1" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/employee/listAllEmployee2.jsp">員工管理</a>
+                                <a class="nav-link function" href="<%=request.getContextPath()%>/back-end/employee/listAllEmployee2.jsp">員工管理</a>
                             </nav>
                         </div>
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                        <a id="movie_management" class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                             <div class="sb-nav-link-icon"><i class="fas fa-video"></i></div>
                          	   影城基本資料系統
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="layout-static.html">場次管理</a>
-                                <a class="nav-link" href="<%=request.getContextPath()%>/back-home/table.jsp">電影資料管理</a>
-                                <a class="nav-link" href="layout-sidenav-light.html"> 廳院管理</a>
-                                <a class="nav-link" href="layout-sidenav-light.html">座位管理</a>
-                                <a class="nav-link" href="layout-sidenav-light.html">票種管理</a>
-                                <a class="nav-link" href="layout-sidenav-light.html">餐點管理</a>
+                                <a class="nav-link function" href="layout-static.html">場次管理</a>
+                                <a class="nav-link function" href="<%=request.getContextPath()%>/back-home/table.jsp">電影資料管理</a>
+                                <a class="nav-link function" href="layout-sidenav-light.html"> 廳院管理</a>
+                                <a class="nav-link function" href="layout-sidenav-light.html">座位管理</a>
+                                <a class="nav-link function" href="layout-sidenav-light.html">票種管理</a>
+                                <a class="nav-link function" href="layout-sidenav-light.html">餐點管理</a>
                             </nav>
                         </div>
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages2" aria-expanded="false" aria-controls="collapsePages2">
+                        <a id="member_management" class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages2" aria-expanded="false" aria-controls="collapsePages2">
                             <div class="sb-nav-link-icon"><i class="fas fa-user-clock"></i></div>
                             	會員管理系統
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapsePages2" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/mem/listAllMem2.jsp">會員資料管理</a>
-                                <a class="nav-link" href="layout-sidenav-light.html">會員審核</a>
-                                <a class="nav-link" href="layout-sidenav-light.html"> 專業評論審核</a>
+                                <a class="nav-link function" href="<%=request.getContextPath()%>/back-end/mem/listAllMem2.jsp">會員資料管理</a>
+                                <a class="nav-link function" href="layout-sidenav-light.html">會員審核</a>
+                                <a class="nav-link function" href="layout-sidenav-light.html"> 專業評論審核</a>
                             </nav>
                         </div>
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages3" aria-expanded="false" aria-controls="collapsePages3">
+                        <a id="ticket_management" class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages3" aria-expanded="false" aria-controls="collapsePages3">
                             <div class="sb-nav-link-icon"><i class="fas fa-ticket-alt"></i></div>
                         	    售票管理
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapsePages3" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="layout-static.html">現場劃位</a>
-                                <a class="nav-link" href="layout-sidenav-light.html">查詢線上訂單</a>
+                                <a class="nav-link function" href="layout-static.html">現場劃位</a>
+                                <a class="nav-link function" href="layout-sidenav-light.html">查詢線上訂單</a>
                             </nav>
                         </div>
            				 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages4" aria-expanded="false" aria-controls="collapsePages4">
@@ -125,15 +143,15 @@
                         </a>
                         <div class="collapse" id="collapsePages4" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/report_comment/listAllReportComment.jsp">評論檢舉</a>
-                                <a class="nav-link" href="layout-sidenav-light.html">XXX檢舉</a>
+                                <a class="nav-link function" href="<%=request.getContextPath()%>/back-end/report_comment/listAllReportComment.jsp">評論檢舉</a>
+                                <a class="nav-link function" href="layout-sidenav-light.html">XXX檢舉</a>
                             </nav>
                         </div>
-                        <a class="nav-link" href="tables1.html">
+                        <a class="nav-link function" href="tables1.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-bullhorn"></i></div>
                            	 管理最新消息
                         </a>
-                        <a class="nav-link" href="tables2.html">
+                        <a class="nav-link function" href="tables2.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-hands-helping"></i></div>
                        	     回應客服小幫手
                         </a>
@@ -309,40 +327,73 @@
 						<input type="radio" name="status" value="1" checked>在職中
 						<input type="radio" name="status" value="2" >留職停薪
 					</div>	
+					
 					<hr>
 					<div class="form-group">
 						<label>權限:</label><br>
-						<input type="checkbox" name="function_no" value="1"> 員工管理  
+						<input type="checkbox"> 員工管理  
+						<input type="hidden" name="function_no" value="1">
+						<input type="hidden" name="auth_status" value="N">
 						 &nbsp;&nbsp;
-						<input type="checkbox" name="function_no" value="2" > 員工權限管理
+						<input type="checkbox" > 員工權限管理
+						<input type="hidden" name="function_no" value="2" >
+						<input type="hidden" name="auth_status" value="N">
 						 &nbsp;&nbsp;
-						<input type="checkbox" name="function_no" value="3" > 場次管理
+						<input type="checkbox" > 場次管理
+						<input type="hidden" name="function_no" value="3" >
+						<input type="hidden" name="auth_status" value="N">
 						 &nbsp;&nbsp;
-						<input type="checkbox" name="function_no" value="4" > 電影資訊管理
+						<input type="checkbox" > 電影資訊管理
+						<input type="hidden" name="function_no" value="4" > 
+						<input type="hidden" name="auth_status" value="N">
 						<br>
-						<input type="checkbox" name="function_no" value="5" > 廳院管理
+						<input type="checkbox"> 廳院管理
+						<input type="hidden" name="function_no" value="5" > 
+						<input type="hidden" name="auth_status" value="N">
 						 &nbsp;&nbsp;
-						<input type="checkbox" name="function_no" value="6" > 座位管理
+						<input type="checkbox"> 座位管理
+						<input type="hidden" name="function_no" value="6" > 
+						<input type="hidden" name="auth_status" value="N">
 						 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="checkbox" name="function_no" value="7" > 票種管理
+						<input type="checkbox"> 票種管理
+						<input type="hidden" name="function_no" value="7" > 
+						<input type="hidden" name="auth_status" value="N">
 						 &nbsp;&nbsp;
-						<input type="checkbox" name="function_no" value="8" > 餐點管理
+						<input type="checkbox"> 餐點管理
+						<input type="hidden" name="function_no" value="8" >
+						<input type="hidden" name="auth_status" value="N">
 						<br>
-						<input type="checkbox" name="function_no" value="9" > 會員資料管理
+						<input type="checkbox"> 會員資料管理
+						<input type="hidden" name="function_no" value="9" > 
+						<input type="hidden" name="auth_status" value="N">
 						 &nbsp;&nbsp;
-						<input type="checkbox" name="function_no" value="10" > 會員審核
+						<input type="checkbox"> 會員審核
+						<input type="hidden" name="function_no" value="10" > 
+						<input type="hidden" name="auth_status" value="N">
 						 &nbsp;&nbsp;
-						<input type="checkbox" name="function_no" value="11" > 專業評論審核
+						<input type="checkbox"> 專業評論審核
+						<input type="hidden" name="function_no" value="11" >
+						<input type="hidden" name="auth_status" value="N">
 						 &nbsp;&nbsp;
-						<input type="checkbox" name="function_no" value="12" > 現場劃位
+						<input type="checkbox"> 現場劃位
+						<input type="hidden" name="function_no" value="12" > 
+						<input type="hidden" name="auth_status" value="N">
 						<br>
-						<input type="checkbox" name="function_no" value="13" > 查詢線上訂單
+						<input type="checkbox"> 查詢線上訂單
+						<input type="hidden" name="function_no" value="13" >
+						<input type="hidden" name="auth_status" value="N">
 						 &nbsp;&nbsp;
-						<input type="checkbox" name="function_no" value="14" > 檢舉管理
+						<input type="checkbox"> 檢舉管理
+						<input type="hidden" name="function_no" value="14" >
+						<input type="hidden" name="auth_status" value="N">
 						 &nbsp;&nbsp;
-						<input type="checkbox" name="function_no" value="15" > 最新消息管理
+						<input type="checkbox"> 最新消息管理
+						<input type="hidden" name="function_no" value="15" >
+						<input type="hidden" name="auth_status" value="N">
 						 &nbsp;&nbsp;
-						<input type="checkbox" name="function_no" value="16" > 客服小幫手
+						<input type="checkbox"> 客服小幫手
+						<input type="hidden" name="function_no" value="16" > 
+						<input type="hidden" name="auth_status" value="N">
 					</div>	
 					
 					
@@ -377,6 +428,48 @@
 <script src="js/main.js"></script>
     </body>
     
+<script>
+
+<c:forEach var="authList" varStatus="status" items="${authList}" >
+var index = ${authList.getFunction_no()} -1;
+var tree = document.getElementsByClassName("nav-link function")[index]
+	if(`${authList.getAuth_status()}`=='N'){
+		tree.style.display="none";
+	}
+	
+	if(${authList.function_no} == ${status.count}){
+		if(${authList.auth_status == "Y"}){
+			funno${status.count}= true;
+		}else { 
+			funno${status.count} = false;
+		} 
+	}
+	
+    
+</c:forEach>
+
+
+if(funno1 == false && funno2 == false){
+	$("#employee_management").hide();
+}
+
+if(funno2 == false && funno3 == false && funno4 == false && funno5 == false && funno6 == false && funno7 == false && funno8 == false){
+	$("#movie_management").hide();
+}
+
+if(funno9 == false && funno10 == false && funno11 == false){
+	$("#member_management").hide();
+}
+
+if(funno12 == false && funno13 == false){
+	$("#ticket_management").hide();
+}
+
+
+// var tree = document.getElementsByClassName("nav-link function")
+//  document.getElementById("demo").innerHTML = tree.length;
+
+</script>
     
 	<!-- =========================================以下為 datetimepicker 之相關設定========================================== -->
 
@@ -441,6 +534,14 @@
 	//minDate:               '-1970-01-01', // 去除今日(不含)之前
 	//maxDate:               '+1970-01-01'  // 去除今日(不含)之後
 	});
+        
+    $("input[type=checkbox]").click(function(){
+       	if($(this).prop("checked")==true){
+	       	$(this).next().next().val("Y");
+       	}else{
+       		$(this).next().next().val("N");
+       	}
+    })
         
 </script>    
     
