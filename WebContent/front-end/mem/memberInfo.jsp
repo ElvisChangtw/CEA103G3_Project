@@ -52,29 +52,29 @@ integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwr
 								<div class="user-infos">
 									<label for="mb_name"><b>姓名</b></label> <input class="input-disabled" 
 										type="text" name="mb_name" id="mb_name"
-										value="<%= (memVO==null)? "" : memVO.getMb_name()%>" maxlength="10" placeholder="未填寫" 
+										value="${memVO.mb_name}" maxlength="10" placeholder="未填寫" 
 										required disabled />
 								</div>
 								<div class="user-infos">
 									<label for="mb_bd"><b>生日</b></label> <input class="input-disabled"
 										type="text" name="mb_bd" id="mb_bd" maxlength="10"
-										value="<%= (memVO==null)? "" : memVO.getMb_bd()%>" placeholder="未填寫" required disabled />
+										value="${memVO.mb_bd}" placeholder="未填寫" required disabled />
 								</div>
 								<div class="user-infos">
 									<label for="mb_phone"><b>聯絡電話</b></label> <input
 										class="input-disabled" type="tel" inputmode="numeric"
 										name="mb_phone" id="mb_phone" maxlength="30"
-										value="<%= (memVO==null)? "" : memVO.getMb_phone()%>" placeholder="未填寫"  required disabled />
+										value="${memVO.mb_phone}" placeholder="未填寫"  required disabled />
 								</div>
 								<div class="user-infos">
 									<label for="mb_city"><b>居住縣市</b></label> <input class="input-disabled"
 										type="text" name="mb_city" id="mb_city" maxlength="30"
-										value="<%= (memVO==null)? "" : memVO.getMb_city()%>" placeholder="未填寫"  required disabled />
+										value="${memVO.mb_city}" placeholder="未填寫"  required disabled />
 								</div>
 								<div class="user-infos">
 									<label for="mb_address"><b>居住地址</b></label> <input
 										class="input-disabled" type="text" name="mb_address"
-										id="mb_address" value="<%= (memVO==null)? "" : memVO.getMb_address()%>" maxlength="50"
+										id="mb_address" value="${memVO.mb_address}" maxlength="50"
 										placeholder="未填寫" required disabled />
 								</div>
 								<input style="display: none" value="${memVO.member_no}"
@@ -91,15 +91,35 @@ integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwr
 						
 						<form method="post" class="col" id="account-info-form">
 								<div class="user-infos">
-									<label for="mb_status"><b>會員狀態</b></label> <input class="input-disabled"
-										type="text" name="mb_status"
-										id="mb_status" value="${memVO.status}" readonly />
+									<label for="mb_status"><b>會員狀態</b></label>
+									<c:choose>
+										<c:when test="${memVO.status=='0'}">
+											<input class="input-disabled" type="text" name="mb_status" id="mb_status" value="未審核" readonly />
+										</c:when>
+										<c:when test="${memVO.status=='1'}">
+											<input class="input-disabled" type="text" name="mb_status" id="mb_status" value="已通過審核" readonly />
+										</c:when>
+										<c:when test="${memVO.status=='2'}">
+											<input class="input-disabled" type="text" name="mb_status" id="mb_status" value="已停權" readonly />
+										</c:when>
+										<c:when test="${memVO.status=='3'}">
+											<input class="input-disabled" type="text" name="mb_status" id="mb_status" value="已停用" readonly />
+										</c:when>
+										<c:otherwise>
+											<input class="input-disabled" type="text" name="mb_status" id="mb_status" value="無效狀態" readonly />
+										</c:otherwise>
+									</c:choose>
 								</div>
 								<div class="user-infos">
-									<label for="mb_level"><b>會員身分</b></label> <input
-										class="input-disabled" type="text" name="mb_level"
-										id="mb_level" value="${memVO.mb_level}"
-										 readonly />
+									<label for="mb_level"><b>會員身分</b></label> 
+									<c:choose>
+										<c:when test="${memVO.mb_level=='1'}">
+											<input class="input-disabled" type="text" name="mb_level" id="mb_level" value="一般會員" readonly />
+										</c:when>
+										<c:when test="${memVO.mb_level=='2'}">
+											<input class="input-disabled" type="text" name="mb_level" id="mb_level" value="專職影評" readonly />
+										</c:when>
+									</c:choose>
 								</div>
 								<div class="user-infos">
 									<label for="mb_point"><b>消費積分</b></label> <input
