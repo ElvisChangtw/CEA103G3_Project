@@ -240,21 +240,6 @@ tr td>img {
 													<input type="button" value="新增時間" id="insert_time"
 											     	class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#AE67D8; font-weight:bold; color:white;">
 												</td>
-												<td>
-<!-- 													<table id="table"> -->
-<!-- 														<tr> -->
-<!-- 															<td>編號</td> -->
-<!-- 															<td>時間</td> -->
-<!-- 															<td></td> -->
-<!-- 														</tr> -->
-<!-- 													</table> -->
-												</td>
-												<td></td>
- 												
-											</tr>
-											
-											<tr>
-												<td></td>
 												<td></td>
 												<td>
 													<input type="hidden" name="action" value="insert2">
@@ -262,31 +247,22 @@ tr td>img {
 													class="btn btn-outline-danger" style="float:right; border:2px #B7B7B7 solid;border-radius:10px; background-color:#FF4268; font-weight:bold; color:white;">
 												</td>
 											</tr>
-                                            <tr>
-                                            </tr>
+											<tr>
+											</tr>
                                         </tbody>
                                     </table>
-                                    
-                                    
-                                    
-                                    
                                     <table class="table table-bordered" id="table" width="100%" cellspacing="0" style="text-align:left;">
                                         
                                         <tbody>
 											<tr>
-															<td>編號</td>
-															<td>時間</td>
-															<td></td>
-														</tr>
+												<td>編號</td>
+												<td>時間</td>
+												<td></td>
+											</tr>
                                         </tbody>
                                     </table>
-
-                                    
-                                    
                                     
 								</FORM>
-								
-								
                                 </div>
                             </div>
                     </div>
