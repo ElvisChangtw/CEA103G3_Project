@@ -171,7 +171,7 @@
 		  					<c:if test="${replyVO.member_no == memVO.member_no}">
 				  				<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/reply/reply.do" style="margin-bottom: 0px;">						     
 							    <input type="submit" value="­×§ï¦^ÂÐ" class="btn btn-outline-danger">
-							    <input type="hidden" name="reply_no"  value="${memVO.member_no}">
+							    <input type="hidden" name="reply_no"  value="${replyVO.reply_no}">
 							    <input type="hidden" name="requestURL"	value="<%=request.getServletPath()%>">
 							    <input type="hidden" name="action"	value="getOne_For_Update"></FORM>
 							</c:if>
