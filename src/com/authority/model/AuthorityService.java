@@ -40,7 +40,7 @@ public class AuthorityService {
 		dao.delete(empno,function_no);
 	}
 
-	public AuthorityVO getOneAuthorityByEmpNo(Integer empno) {
+	public List<AuthorityVO> getOneAuthorityByEmpNo(Integer empno) {
 		return dao.findByEmpNo(empno);
 	}
 	

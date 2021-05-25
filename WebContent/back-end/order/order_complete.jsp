@@ -64,7 +64,7 @@ body{
 	box-sizing: border-box;
 }
 table {
-	width: 600px;
+	width: 660px;
 	background-color: white;
 	margin-top: 20px;
 	/* 	margin-bottom: 1px; */
@@ -86,13 +86,14 @@ td {
 }
 
 #div1, #div6 {
-	width: 600px;
+	width: 660px;
 /* 	height: 150px; */
 /* 	background-color: rgba(0, 0, 0, 0.5); */
 	padding-top: 10px;
 	padding-bottom: 10px;
 }
 #div2,#div7{
+	width:660px;
 	background-color: rgba(0, 0, 0, 0.5);
 	padding-top: 10px;
 	padding-bottom: 10px;
@@ -113,24 +114,25 @@ FORM {
 	color: white;
 }
 
-img{
-  	width: 115px;
-  	height: 100px;
-  	margin: 0 auto;
-  }
+/* img{ */
+/*   	width: 115px; */
+/*   	height: 100px; */
+/*   	margin: 0 auto; */
+/*   } */
 
 </style>
-	<script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
+<!-- 	<script src="http://code.jquery.com/jquery-1.12.4.min.js"></script> -->
 	<script src="/CEA103G3_Project/js/qrcode.min.js"></script>
-<script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
+<!-- <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script> -->
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"> -->
 
 </head>
 <body bgcolor='white'>
+	<jsp:include page="/front_header.jsp"/>
 	<div id="main" class="container-fluid">
 	  <div class="row">
-		<div id="div1" class="col-6">
+		<div id="div1" class="col-md-6">
 		  <FORM METHOD="post"	ACTION="<%=request.getContextPath()%>/order/order.do" name="form1">
 			<div style="margin-bottom:5px; padding: 10px 0px;">
 				<c:choose>
@@ -151,7 +153,7 @@ img{
 						<img src="<%=request.getContextPath()%>/back-end/theater/images/3.jpg" style="width:100px; height: 120px;">
 					</c:when>
 				</c:choose>
-				<h2 style="display: inline-block; margin-top: -7px; margin-left: 65px; vertical-align:top; width:170px;">
+				<h2 style="display: inline-block; margin-top: -7px; margin-left: 20px; margin-top:10px; vertical-align:top; width:200px;">
 					<c:choose>
 						<c:when test="${theaterSvc.getOneTheater(showtimeSvc.getOneShowtime(orderVO.showtime_no)
 						.theater_no).theater_type == 0}">
@@ -182,15 +184,15 @@ img{
 					${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(orderVO.showtime_no)
 						.movie_no).moviename}
 				</h2>
-				<p style="display: inline-block; margin-top: 0px; margin-left: 66px; vertical-align:top; width: 190px;"  >
-					<i class="fas fa-clock" style="margin-right:5px; color:#008080;"></i> ${df.format(showtimeSvc.getOneShowtime(orderVO.showtime_no).showtime_time)}
+				<p style="display: inline-block; margin-top: 35px; margin-left: 3px; vertical-align:top; float:right; line-height:0;" >
+					<i class="fas fa-clock" style="margin-right:5px; color:#008080; font-size:14px;"></i> ${df.format(showtimeSvc.getOneShowtime(orderVO.showtime_no).showtime_time)}
 					<br>
 					<br>
-					<i class="fas fa-video" style="margin-right:5px; color:#008080;"></i> ${theaterSvc.getOneTheater(showtimeSvc.getOneShowtime(orderVO.showtime_no)
+					<i class="fas fa-video" style="margin-right:5px; color:#008080;  font-size:14px;"></i> ${theaterSvc.getOneTheater(showtimeSvc.getOneShowtime(orderVO.showtime_no)
 						.theater_no).theater_name}
 					<br>
 					<br>
-					<i class="fas fa-couch" style="margin-right:5px; color:#008080;"></i>${orderVO.seat_name}
+					<i class="fas fa-couch" style="margin-right:5px; color:#008080; font-size:14px;"></i>${orderVO.seat_name}
 				</p>
 			</div>
 			<div id="div2">
@@ -232,7 +234,7 @@ img{
 			color: white; border: white; width:100px; height:50px; margin-left: 83%;">
 		    </FORM>
 		  </div>
-		  <div class="col-3" style="margin-top:160px;">
+		  <div class="col-md-3" style="margin-top: 152px; margin-left: 50px;">
 		  				<div style="margin-bottom:10px;">¨ú²¼¤Gºû½X</div>
 							<html lang="en">
 							<head>
@@ -254,6 +256,6 @@ img{
 	</div>
 		
 	
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
+<!-- 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script> -->
 </body>
 </html>

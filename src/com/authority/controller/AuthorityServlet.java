@@ -61,7 +61,7 @@ public class AuthorityServlet extends HttpServlet {
 
 				/*************************** 2.開始查詢資料 *****************************************/
 				AuthorityService authoritySvc = new AuthorityService();
-				AuthorityVO authorityVO = authoritySvc.getOneAuthorityByEmpNo(empno);
+				List<AuthorityVO> authorityVO = authoritySvc.getOneAuthorityByEmpNo(empno);
 				if (authorityVO == null) {
 					errorMsgs.add("查無資料");
 				}

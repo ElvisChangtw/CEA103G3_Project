@@ -1003,7 +1003,7 @@ $(document).ready(function(){
 			Swal.fire({
 	            position: "center",
 	            icon: "success",
-	            title: "一星摳摳",
+	            title: "一星哭哭",
 	            showConfirmButton: false,
 	            timer: 3000,
 				width: 600,
@@ -1062,7 +1062,7 @@ $(document).ready(function(){
 			Swal.fire({
 	            position: "center",
 	            icon: "success",
-	            title: "二星舔舔",
+	            title: "二星呼呼",
 	            showConfirmButton: false,
 	            timer: 3000,
 				width: 600,
@@ -1122,7 +1122,7 @@ $(document).ready(function(){
 			Swal.fire({
 	            position: "center",
 	            icon: "success",
-	            title: "三星吸吸",
+	            title: "三星普普",
 	            showConfirmButton: false,
 	            timer: 3000,
 				width: 600,
@@ -1181,7 +1181,7 @@ $(document).ready(function(){
 			Swal.fire({
 	            position: "center",
 	            icon: "success",
-	            title: "四星含含",
+	            title: "四星推推",
 	            showConfirmButton: false,
 	            timer: 3000,
 				width: 600,
@@ -1240,7 +1240,7 @@ $(document).ready(function(){
 			Swal.fire({
 	            position: "center",
 	            icon: "success",
-	            title: "五星吹吹",
+	            title: "五星吹捧",
 	            showConfirmButton: false,
 	            timer: 3000,
 				width: 600,

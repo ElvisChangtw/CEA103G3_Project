@@ -368,7 +368,8 @@ public class EmployeeServlet extends HttpServlet {
 					errorMsgs.add("權限請勿空白");
 				}
 				
-				String auth_status = "Y";
+				String auth_status[] = req.getParameterValues("auth_status");
+				
 				Integer empno = employeeVO.getEmpno();
 				
 //				AuthorityVO authorityVO = new AuthorityVO();
@@ -391,9 +392,10 @@ public class EmployeeServlet extends HttpServlet {
 				
 				AuthorityService authoritySvc = new AuthorityService();
 				
-				for(String funo : function_no) {
-					Integer funno = new Integer(funo);
-					authoritySvc.addAuthority(empno, funno, auth_status);
+				for(int i = 0; i<function_no.length; i++) {
+					Integer funno = new Integer(function_no[i]);
+					String auth = auth_status[i];
+					authoritySvc.addAuthority(empno, funno, auth);
 				}
 				
 				if (!errorMsgs.isEmpty()) {
@@ -494,7 +496,7 @@ public class EmployeeServlet extends HttpServlet {
 				/*************************** 3.查詢完成,準備轉交(Send the Success view) *************/
 				HttpSession session = req.getSession();
 				session.setAttribute("employeeVO", employeeVO); // 資料庫取出的empVO物件,存入session
-				String url = "/後台畫面/index2.jsp";
+				String url = "/back-end/employee/listAllEmployee2.jsp";
 //				System.out.println(req.getContextPath());
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交 listOneEmp.jsp
 				successView.forward(req, res);

@@ -106,7 +106,7 @@ hr{
 	padding:unset;
 }
 
-.info-content .tab-panel #comment-info-form, #ticket-info-form, #group-info-form, #notify-info-form, #articleCollection-info-form{
+.info-content .tab-panel #movieRating-info-form, #movieCollection-info-form, #comment-info-form, #ticket-info-form, #group-info-form, #notify-info-form, #articleCollection-info-form{
 	width:100%;
 }
 .info-content .tab-panel .noCSS{
@@ -373,9 +373,7 @@ text-align:center;
 										</c:forEach>
 									</table>
 								</form>
-								<div class="col movcol_movieinfo">
 
-								</div>
 							</div>			
 						</div>	
 						</section>
@@ -427,9 +425,7 @@ text-align:center;
 										
 								</table>
 							</form>
-							<div class="col rating_movinfo">
 
-							</div>
 							</div>
 						</div>
 						</section>
@@ -481,7 +477,7 @@ $(document.body).on("click", ".delete-order",function () {
         	let order_no = $(thisOrder.find("input")).val();
 // 			console.log(order_no);
               $.ajax({
-                  url: "<%=request.getContextPath()%>/OrderServlet?action=delete_for_Ajax",
+                  url: "<%=request.getContextPath()%>/order/order.do?action=delete_for_Ajax",
                   data: { "order_no": order_no
                   },
                   type: "POST",
@@ -1128,7 +1124,7 @@ $(document.body).on("click", ".delete-comm",function () {
         	let comment_no = $(thisComm.find("input")[1]).val();
 // 			console.log(comment_no);
               $.ajax({
-                  url: "<%=request.getContextPath()%>/CommentServlet?action=delete_for_Ajax",
+                  url: "<%=request.getContextPath()%>/comment/comment.do?action=delete_for_Ajax",
                   data: { "comment_no": comment_no
                   },
                   type: "POST",
@@ -1145,7 +1141,7 @@ $(document.body).on("click", ".delete-comm",function () {
                   	} else{
                   		Swal.fire({
                             position: "center",
-                            icon: "fail",
+                            icon: "error",
                             title: "刪除失敗請洽客服",
                             showConfirmButton: false,
                             timer: 1000,
@@ -1208,45 +1204,7 @@ $(document.body).on("click", ".delete-movcol",function () {
       });
   });
   
-$(".hover_movCol").hover(function(){
-	let movie_no = $($(this).find('td')[0]).text(); //$(this).find('td')[0]是DOM物件不能用jquery的text()，因此要再加上$()轉乘jquery物件
-	console.log(movie_no);
-	$.ajax({
-		url: "<%=request.getContextPath()%>/MovieServlet?action=getOne_For_Display_Ajax",
-		data:{"movieno":movie_no},
-		type:"POST",
-		success:function(json){
-			let jsonobj = JSON.parse(json);
-			let allRating = jsonobj.allRating;
-			let allComment = jsonobj.allComment;
-// 			console.log(jsonobj);
-// 			console.log(allComment[0].content);
-			let fragment = document.createElement("div");
-				fragment.classList.add("movie_info");
-				let slice = `
-					<div class="hover_box">
-					  <div>
-					    <div>
-					      <img src="<%=request.getContextPath()%>/DBGifReader1?movieno=`+movie_no+`"style="margin:auto; display:block;"class="rating_mov_pic" alt="...">
-					    </div>
-					  </div>
-					</div>
-                    <table class="table-info hover_table" cellpadding="10" border='1'><tr><th style="width:60px;"> 評分 </th><td>` + allRating + `</td></tr>
-                    <tr><th> 影評 </th></tr>`;
-                    slice += allComment.map(comment => `<tr><th>`+comment.mb_name+`</th><td>` + comment.content + `</td></tr>`).join("");
-                    slice += `</table>`;
-				fragment.innerHTML = slice;
-                    
-            $(".movcol_movieinfo").append(fragment);
-            $(".movcol_movieinfo").css("background-color","aliceblue");
-            $(".movcol_movieinfo").css("border-radius","50px");
-		}
-	})
-},function(){
-	 $(this).closest('form').siblings().children().remove();
-	 $(".movcol_movieinfo").css("background-color","");
-     $(".movcol_movieinfo").css("border-radius","");
-})
+
 
 //---------------------------------------------------------------------------------------------------------
 //文章收藏刪除紐
@@ -1570,46 +1528,46 @@ function starbling(){
 }
 
 
-//移到星星出現電影資訊
+// //移到星星出現電影資訊
 
-$(".hover_rating").hover(function(){
-	let movie_no = $($(this).find('td')[0]).text(); //$(this).find('td')[0]是DOM物件不能用jquery的text()，因此要再加上$()轉乘jquery物件
-	$.ajax({
-		url: "<%=request.getContextPath()%>/MovieServlet?action=getOne_For_Display_Ajax",
-		data:{"movieno":movie_no},
-		type:"POST",
-		success:function(json){
-			let jsonobj = JSON.parse(json);
-			let allRating = jsonobj.allRating;
-			let allComment = jsonobj.allComment;
-			let fragment = document.createElement("div");
-				fragment.classList.add("movie_info");
-			let slice = `
-					<div class="hover_box">
-					  <div>
-					    <div>
-					      <img src="<%=request.getContextPath()%>/DBGifReader1?movieno=`+movie_no+`"style="margin:auto; display:block;"class="rating_mov_pic" alt="...">
-					    </div>
-					  </div>
-					</div>
-                    <table class="hover_table table-info" cellpadding="10" border='1'><tr><th style="width:60px;"> 評分 </th><td>` + allRating + `</td></tr>
-                    <tr><th> 影評 </th></tr>`;
-                    slice += allComment.map(comment => `<tr><th>`+comment.mb_name+`</th><td>` + comment.content + `</td></tr>`).join("");
-                    slice += `</table>`;
-                    fragment.innerHTML = slice;
-            $(".rating_movinfo").append(fragment);
-            $(".rating_movinfo").css("background-color","aliceblue");
-            $(".rating_movinfo").css("border-radius","50px");
+// $(".hover_rating").hover(function(){
+// 	let movie_no = $($(this).find('td')[0]).text(); //$(this).find('td')[0]是DOM物件不能用jquery的text()，因此要再加上$()轉乘jquery物件
+// 	$.ajax({
+<%-- 		url: "<%=request.getContextPath()%>/MovieServlet?action=getOne_For_Display_Ajax", --%>
+// 		data:{"movieno":movie_no},
+// 		type:"POST",
+// 		success:function(json){
+// 			let jsonobj = JSON.parse(json);
+// 			let allRating = jsonobj.allRating;
+// 			let allComment = jsonobj.allComment;
+// 			let fragment = document.createElement("div");
+// 				fragment.classList.add("movie_info");
+// 			let slice = `
+// 					<div class="hover_box">
+// 					  <div>
+// 					    <div>
+<%-- 					      <img src="<%=request.getContextPath()%>/DBGifReader1?movieno=`+movie_no+`"style="margin:auto; display:block;"class="rating_mov_pic" alt="..."> --%>
+// 					    </div>
+// 					  </div>
+// 					</div>
+//                     <table class="hover_table table-info" cellpadding="10" border='1'><tr><th style="width:60px;"> 評分 </th><td>` + allRating + `</td></tr>
+//                     <tr><th> 影評 </th></tr>`;
+//                     slice += allComment.map(comment => `<tr><th>`+comment.mb_name+`</th><td>` + comment.content + `</td></tr>`).join("");
+//                     slice += `</table>`;
+//                     fragment.innerHTML = slice;
+//             $(".rating_movinfo").append(fragment);
+//             $(".rating_movinfo").css("background-color","aliceblue");
+//             $(".rating_movinfo").css("border-radius","50px");
 			
-		}
-	})
-},function(){
+// 		}
+// 	})
+// },function(){
 
-	 $(this).closest('form').siblings().children().remove();
-	 $(".rating_movinfo").css("background-color","");
-     $(".rating_movinfo").css("border-radius","");
+// 	 $(this).closest('form').siblings().children().remove();
+// 	 $(".rating_movinfo").css("background-color","");
+//      $(".rating_movinfo").css("border-radius","");
 
-})
+// })
 
 // $(".hover_pointer").mouseleave() why 不能用mouseenter/mouseleave
 

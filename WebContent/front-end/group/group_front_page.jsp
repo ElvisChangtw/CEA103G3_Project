@@ -658,7 +658,6 @@ var MyPoint = "/NotifyWS/${memVO.member_no}";
 		
 	};
 
-
 	alertContainer.addEventListener('click', (e) => {
 	    if(e.target.nodeName == 'SPAN') {
 	        e.target.parentNode.remove();
