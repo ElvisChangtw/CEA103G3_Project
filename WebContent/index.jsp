@@ -771,7 +771,7 @@ left: 1095px;
                                     <div class="col-md wthree_agile-movies_list">
                                     
                                     
-                                    <c:forEach var="movieVO" items="${inTheatersMovie}">
+                                    <c:forEach var="movieVO" items="${inTheatersMovie}" begin="0" end="9">
                                         <div class="w3l-movie-gride-agile">
                                             <a href="<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}" class="hvr-sweep-to-bottom" style="width:100%;">
                                             <img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${movieVO.movieno}" title="${movieVO.moviename}" class="img-responsive" alt=" " style="width:100%; height:230px;">
@@ -890,7 +890,7 @@ left: 1095px;
                             <div class="tab_movies_agileinfo">
                                 <div class="w3_agile_featured_movies">
                                     <div class="col-md wthree_agile-movies_list">
-                                    <c:forEach var="movieVO" items="${comingSoonMovie}">
+                                    <c:forEach var="movieVO" items="${comingSoonMovie}" begin="0" end="9">
                                         <div class="w3l-movie-gride-agile">
                                             <a href="<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}" class="hvr-sweep-to-bottom" style="width:100%;">
                                             <img src="${pageContext.request.contextPath}/movie/DBGifReader1.do?movieno=${movieVO.movieno}" title="${movieVO.moviename}" class="img-responsive" alt=" " style="width:100%;px; height:230px;">
@@ -904,7 +904,8 @@ left: 1095px;
                                                 <div class="mid-2 agile_mid_2_home">
 													<p style="font-size:13px;">上映日期: <fmt:formatDate value="${movieVO.premiredate}" pattern="yyyy-MM-dd" /></p>
                                                 <div class="mid-2 agile_mid_2_home">
-													<p><font color=red>期待度 &nbsp;&thinsp;: ${movieVO.expectation * 100} %想看</font></p>
+													<p><font color=red>期待度 &nbsp;&thinsp;: &nbsp;&nbsp;&nbsp;&thinsp;
+													<fmt:formatNumber type="number" value="${movieVO.expectation*100}"/>%想看</font></p>
 												</div>
 													<div class="clearfix"></div>
                                                 </div>
@@ -933,7 +934,7 @@ left: 1095px;
 						            <div class="w3_agile_latest_movies">
 						                <div id="owl-demo" class="owl-carousel owl-theme">
 						                <% int i = 1;%>
-						                <c:forEach var="movieVO" items="${allTopRatingInTheatersMovie}">	
+						                <c:forEach var="movieVO" items="${allTopRatingInTheatersMovie}" begin="0" end="9">	
 						                    <div class="item">
 						                        <div class="w3l-movie-gride-agile w3l-movie-gride-slider ">
 						                            <a href="<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}" class="hvr-sweep-to-bottom" style="width:100%;">
@@ -951,7 +952,19 @@ left: 1095px;
 															<p><font color=red>${movieVO.rating} 分</font></p>
 														</div>
 															<c:choose>
-																<c:when test="${movieVO.rating <= 1.0}">
+																<c:when test="${movieVO.rating < 1.0}">
+																	<div class="block-stars">
+																		<ul class="w3l-ratings">	
+																			<li><i class="fa fa-star-o" aria-hidden="true"></i></li>
+																			<li><i class="fa fa-star-o" aria-hidden="true"></i></li>
+																			<li><i class="fa fa-star-o" aria-hidden="true"></i></li>
+																			<li><i class="fa fa-star-o" aria-hidden="true"></i></li>
+																			<li><i class="fa fa-star-o" aria-hidden="true"></i></li>
+																		</ul> 
+							 										</div>
+																	<div class="clearfix"></div>
+																</c:when>
+																<c:when test="${movieVO.rating < 2.0}">
 																	<div class="block-stars">
 																		<ul class="w3l-ratings">	
 																			<li><i class="fa fa-star" aria-hidden="true"></i></li>
@@ -963,9 +976,9 @@ left: 1095px;
 							 										</div>
 																	<div class="clearfix"></div>
 																</c:when>
-																<c:when test="${movieVO.rating <= 2.0}">
+																<c:when test="${movieVO.rating < 3.0}">
 																	<div class="block-stars">
-																		<ul class="w3l-ratings">	
+																		<ul class="w3l-ratings">
 																			<li><i class="fa fa-star" aria-hidden="true"></i></li>
 																			<li><i class="fa fa-star" aria-hidden="true"></i></li>
 																			<li><i class="fa fa-star-o" aria-hidden="true"></i></li>
@@ -975,38 +988,40 @@ left: 1095px;
 							 										</div>
 																	<div class="clearfix"></div>
 																</c:when>
-																<c:when test="${movieVO.rating <= 3.0}">
+																<c:when test="${movieVO.rating < 4.0}">
 																	<div class="block-stars">
 																		<ul class="w3l-ratings">
 																			<li><i class="fa fa-star" aria-hidden="true"></i></li>
 																			<li><i class="fa fa-star" aria-hidden="true"></i></li>
 																			<li><i class="fa fa-star" aria-hidden="true"></i></li>
 																			<li><i class="fa fa-star-o" aria-hidden="true"></i></li>
-																			<li><i class="fa fa-star-o" aria-hidden="true"></i></li>
-																		</ul> 
-							 										</div>
-																	<div class="clearfix"></div>
-																</c:when>
-																<c:when test="${movieVO.rating <= 4.0}">
-																	<div class="block-stars">
-																		<ul class="w3l-ratings">
-																			<li><i class="fa fa-star" aria-hidden="true"></i></li>
-																			<li><i class="fa fa-star" aria-hidden="true"></i></li>
-																			<li><i class="fa fa-star" aria-hidden="true"></i></li>
-																			<li><i class="fa fa-star" aria-hidden="true"></i></li>
 																			<li><i class="fa fa-star-o" aria-hidden="true"></i></li>
 																		</ul> 
 							 										</div>
 																<div class="clearfix"></div>
 																</c:when>
-																<c:when test="${movieVO.rating <= 5.0}">
+																<c:when test="${movieVO.rating < 5.0}">
 																	<div class="block-stars">
 																		<ul class="w3l-ratings">
-																		<% for (int s=1 ; s<=5; s++) { %>
 																			<li><i class="fa fa-star" aria-hidden="true"></i></li>
-																		<% } %>
+																			<li><i class="fa fa-star" aria-hidden="true"></i></li>
+																			<li><i class="fa fa-star" aria-hidden="true"></i></li>
+																			<li><i class="fa fa-star" aria-hidden="true"></i></li>
+																			<li><i class="fa fa-star-o" aria-hidden="true"></i></li>
 																		</ul> 
-							 										</div>
+																		</div>
+																	<div class="clearfix"></div>
+																</c:when>
+																<c:when test="${movieVO.rating == 5.0}">
+																	<div class="block-stars">
+																		<ul class="w3l-ratings">
+																			<li><i class="fa fa-star" aria-hidden="true"></i></li>
+																			<li><i class="fa fa-star" aria-hidden="true"></i></li>
+																			<li><i class="fa fa-star" aria-hidden="true"></i></li>
+																			<li><i class="fa fa-star" aria-hidden="true"></i></li>
+																			<li><i class="fa fa-star" aria-hidden="true"></i></li>
+																		</ul> 
+																		</div>
 																	<div class="clearfix"></div>
 																</c:when>
 																<c:otherwise>
@@ -1036,7 +1051,7 @@ left: 1095px;
 						            <div class="w3_agile_latest_movies">
 						                <div id="owl-demo2" class="owl-carousel owl-theme">
 						                <% int j = 1;%>
-						                <c:forEach var="movieVO" items="${allTopExpectationComingSoonMovie}">	
+						                <c:forEach var="movieVO" items="${allTopExpectationComingSoonMovie}" begin="0" end="9">	
 						                    <div class="item">
 						                        <div class="w3l-movie-gride-agile w3l-movie-gride-slider ">
 						                            <a href="<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=${movieVO.movieno}" class="hvr-sweep-to-bottom" style="width:100%;">
@@ -1051,7 +1066,8 @@ left: 1095px;
 						                                <div class="mid-2 agile_mid_2_home">
 															<p>上映日期: <fmt:formatDate value="${movieVO.premiredate}" pattern="yyyy-MM-dd" /></p>
 														<div class="mid-2 agile_mid_2_home">
-															<p><font color=red>期待度 &nbsp;&thinsp;: &nbsp;&nbsp;&thinsp; ${movieVO.expectation * 100} %想看</font></p>
+															<p><font color=red>期待度 &nbsp;&thinsp;: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&thinsp; 
+															<fmt:formatNumber type="number" value="${movieVO.expectation*100}"/> %想看</font></p>
 														</div>
 															<div class="clearfix"></div>
 														</div>
