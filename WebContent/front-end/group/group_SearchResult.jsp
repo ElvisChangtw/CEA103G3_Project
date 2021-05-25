@@ -61,136 +61,22 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <body>
     <!--/main-header-->
     <!--/banner-section-->
-    <div id="demo-1" class="banner-inner">
-        <div class="banner-inner-dott">
-            <!--/header-w3l-->
-            <div class="header-w3-agileits" id="home">
-                <div class="inner-header-agile part2">
-                    <nav class="navbar navbar-default">
-                        <div class="navbar-header">
-                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                                <span class="sr-only">Toggle navigation</span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                            </button>
-                            <h1><a href="index.html"><span>M</span>ovies<span>H</span>it</a></h1>
-                        </div>
-                        <!-- navbar-header -->
-                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                            <ul class="nav navbar-nav">
-                                <li><a href="<%=request.getContextPath()%>/front-end/group/select_page.jsp">首頁</a></li>
-                                <li class="dropdown active">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Genre <b class="caret"></b></a>
-                                    <ul class="dropdown-menu multi-column columns-3">
-                                        <li>
-                                            <div class="col-sm-4">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">Action</a></li>
-                                                    <li><a href="genre.html">Biography</a></li>
-                                                    <li><a href="genre.html">Crime</a></li>
-                                                    <li><a href="genre.html">Family</a></li>
-                                                    <li><a href="horror.html">Horror</a></li>
-                                                    <li><a href="genre.html">Romance</a></li>
-                                                    <li><a href="genre.html">Sports</a></li>
-                                                    <li><a href="genre.html">War</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">Adventure</a></li>
-                                                    <li><a href="comedy.html">Comedy</a></li>
-                                                    <li><a href="genre.html">Documentary</a></li>
-                                                    <li><a href="genre.html">Fantasy</a></li>
-                                                    <li><a href="genre.html">Thriller</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">Animation</a></li>
-                                                    <li><a href="genre.html">Costume</a></li>
-                                                    <li><a href="genre.html">Drama</a></li>
-                                                    <li><a href="genre.html">History</a></li>
-                                                    <li><a href="genre.html">Musical</a></li>
-                                                    <li><a href="genre.html">Psychological</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li><a href="series.html">tv - series</a></li>
-                                <li><a href="news.html">news</a></li>
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Country <b class="caret"></b></a>
-                                    <ul class="dropdown-menu multi-column columns-3">
-                                        <li>
-                                            <div class="col-sm-4">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">Asia</a></li>
-                                                    <li><a href="genre.html">France</a></li>
-                                                    <li><a href="genre.html">Taiwan</a></li>
-                                                    <li><a href="genre.html">United States</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">China</a></li>
-                                                    <li><a href="genre.html">HongCong</a></li>
-                                                    <li><a href="genre.html">Japan</a></li>
-                                                    <li><a href="genre.html">Thailand</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <ul class="multi-column-dropdown">
-                                                    <li><a href="genre.html">Euro</a></li>
-                                                    <li><a href="genre.html">India</a></li>
-                                                    <li><a href="genre.html">Korea</a></li>
-                                                    <li><a href="genre.html">United Kingdom</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li><a href="list.html">A - z list</a></li>
-                                <li><a href="<%=request.getContextPath()%>/front-end/group/group_front_page.jsp">揪團</a></li>
-                            </ul>
-                        </div>
-                        <div class="clearfix"> </div>
-                    </nav>
-                    <div class="w3ls_search">
-                        <div class="cd-main-header">
-                            <ul class="cd-header-buttons">
-                                <li><a class="cd-search-trigger" href="#cd-search"> <span></span></a></li>
-                            </ul> <!-- cd-header-buttons -->
-                        </div>
-                        <div id="cd-search" class="cd-search">
-                            <form action="#" method="post">
-                                <input name="Search" type="search" placeholder="Search...">
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--//header-w3l-->
-        </div>
-    </div>
+    <jsp:include page="/front_header.jsp"/>
     <!--/banner-section-->
     <!--//main-header-->
     <!--/banner-bottom-->
-    <div class="w3_agilits_banner_bootm">
-        <div class="w3_agilits_inner_bottom">
-            <div class="col-md-6 wthree_agile_login">
-                <ul>
-                    <li><i class="fa fa-phone" aria-hidden="true"></i> (+000) 009 455 4088</li>
-                    <li><a href="#" class="login" data-toggle="modal" data-target="#myModal4">Login</a></li>
-                    <li><a href="#" class="login reg" data-toggle="modal" data-target="#myModal5">Register</a></li>
-                </ul>
-            </div>
+<!--     <div class="w3_agilits_banner_bootm"> -->
+<!--         <div class="w3_agilits_inner_bottom"> -->
+<!--             <div class="col-md-6 wthree_agile_login"> -->
+<!--                 <ul> -->
+<!--                     <li><i class="fa fa-phone" aria-hidden="true"></i> (+000) 009 455 4088</li> -->
+<!--                     <li><a href="#" class="login" data-toggle="modal" data-target="#myModal4">Login</a></li> -->
+<!--                     <li><a href="#" class="login reg" data-toggle="modal" data-target="#myModal5">Register</a></li> -->
+<!--                 </ul> -->
+<!--             </div> -->
         
-        </div>
-    </div>
+<!--         </div> -->
+<!--     </div> -->
     
     <!-- 萬用查詢navbar -->
     
@@ -307,14 +193,14 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     </div>
     <!-- //Modal1 -->
     <!-- breadcrumb -->
-    <div class="w3_breadcrumb">
-        <div class="breadcrumb-inner">
-            <ul>
-                <li><a href="<%=request.getContextPath()%>/front-end/group/select_page.jsp">Home</a><i>//</i></li>
-                <li>Groups</li>
-            </ul>
-        </div>
-    </div>
+<!--     <div class="w3_breadcrumb"> -->
+<!--         <div class="breadcrumb-inner"> -->
+<!--             <ul> -->
+<%--                 <li><a href="<%=request.getContextPath()%>/front-end/group/select_page.jsp">Home</a><i>//</i></li> --%>
+<!--                 <li>Groups</li> -->
+<!--             </ul> -->
+<!--         </div> -->
+<!--     </div> -->
      <div class="list-btn">
       	<ul class="nav nav-tabs">
 		  <li role="presentation" class="active"><a href="<%=request.getContextPath()%>/front-end/group/group_front_page.jsp">所有揪團</a></li>
@@ -385,144 +271,9 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     <!--//content-inner-section-->
     <!--揪團列表外層div -->
     
-    
+    <jsp:include page="/front_footer_copy.jsp"/>
     <!--/footer-bottom-->
-    <div class="contact-w3ls" id="contact">
-        <div class="footer-w3lagile-inner">
-            <h2>Sign up for our <span>Newsletter</span></h2>
-            <p class="para">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vitae eros eget tellus
-                tristique bibendum. Donec rutrum sed sem quis venenatis.</p>
-            <div class="footer-contact">
-                <form action="#" method="post">
-                    <input type="email" name="Email" placeholder="Enter your email...." required=" ">
-                    <input type="submit" value="Subscribe">
-                </form>
-            </div>
-            <div class="footer-grids w3-agileits">
-                <div class="col-md-2 footer-grid">
-                    <h4>Release</h4>
-                    <ul>
-                        <li><a href="#" title="Release 2016">2016</a></li>
-                        <li><a href="#" title="Release 2015">2015</a></li>
-                        <li><a href="#" title="Release 2014">2014</a></li>
-                        <li><a href="#" title="Release 2013">2013</a></li>
-                        <li><a href="#" title="Release 2012">2012</a></li>
-                        <li><a href="#" title="Release 2011">2011</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-2 footer-grid">
-                    <h4>Movies</h4>
-                    <ul>
-                        <li><a href="genre.html">ADVENTURE</a></li>
-                        <li><a href="comedy.html">COMEDY</a></li>
-                        <li><a href="series.html">FANTASY</a></li>
-                        <li><a href="series.html">ACTION </a></li>
-                        <li><a href="genre.html">MOVIES </a></li>
-                        <li><a href="horror.html">HORROR </a></li>
-                    </ul>
-                </div>
-                <div class="col-md-2 footer-grid">
-                    <h4>Review Movies</h4>
-                    <ul class="w3-tag2">
-                        <li><a href="comedy.html">Comedy</a></li>
-                        <li><a href="horror.html">Horror</a></li>
-                        <li><a href="series.html">Historical</a></li>
-                        <li><a href="series.html">Romantic</a></li>
-                        <li><a href="series.html">Love</a></li>
-                        <li><a href="genre.html">Action</a></li>
-                        <li><a href="single.html">Reviews</a></li>
-                        <li><a href="comedy.html">Comedy</a></li>
-                        <li><a href="horror.html">Horror</a></li>
-                        <li><a href="series.html">Historical</a></li>
-                        <li><a href="series.html">Romantic</a></li>
-                        <li><a href="genre.html">Love</a></li>
-                        <li><a href="comedy.html">Comedy</a></li>
-                        <li><a href="horror.html">Horror</a></li>
-                        <li><a href="genre.html">Historical</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-2 footer-grid">
-                    <h4>Latest Movies</h4>
-                    <div class="footer-grid1">
-                        <div class="footer-grid1-left">
-                            <a href="single.html"><img src="<%=request.getContextPath()%>/images/1.jpg" alt=" " class="img-responsive"></a>
-                        </div>
-                        <div class="footer-grid1-right">
-                            <a href="single.html">eveniet ut molesti</a>
-                        </div>
-                        <div class="clearfix"> </div>
-                    </div>
-                    <div class="footer-grid1">
-                        <div class="footer-grid1-left">
-                            <a href="single.html"><img src="<%=request.getContextPath()%>/images/2.jpg" alt=" " class="img-responsive"></a>
-                        </div>
-                        <div class="footer-grid1-right">
-                            <a href="single.html">earum rerum tenet</a>
-                        </div>
-                        <div class="clearfix"> </div>
-                    </div>
-                    <div class="footer-grid1">
-                        <div class="footer-grid1-left">
-                            <a href="single.html"><img src="<%=request.getContextPath()%>/images/4.jpg" alt=" " class="img-responsive"></a>
-                        </div>
-                        <div class="footer-grid1-right">
-                            <a href="single.html">eveniet ut molesti</a>
-                        </div>
-                        <div class="clearfix"> </div>
-                    </div>
-                    <div class="footer-grid1">
-                        <div class="footer-grid1-left">
-                            <a href="single.html"><img src="<%=request.getContextPath()%>/images/3.jpg" alt=" " class="img-responsive"></a>
-                        </div>
-                        <div class="footer-grid1-right">
-                            <a href="single.html">earum rerum tenet</a>
-                        </div>
-                        <div class="clearfix"> </div>
-                    </div>
-                </div>
-                <div class="col-md-2 footer-grid">
-                    <h4 class="b-log"><a href="index.html"><span>M</span>ovies <span>P</span>ro</a></h4>
-                    <div class="footer-grid-instagram">
-                        <a href="single.html"><img src="<%=request.getContextPath()%>/images/m1.jpg" alt=" " class="img-responsive"></a>
-                    </div>
-                    <div class="footer-grid-instagram">
-                        <a href="single.html"><img src="<%=request.getContextPath()%>/images/m2.jpg" alt=" " class="img-responsive"></a>
-                    </div>
-                    <div class="footer-grid-instagram">
-                        <a href="single.html"><img src="<%=request.getContextPath()%>/images/m3.jpg" alt=" " class="img-responsive"></a>
-                    </div>
-                    <div class="footer-grid-instagram">
-                        <a href="single.html"><img src="<%=request.getContextPath()%>/images/m4.jpg" alt=" " class="img-responsive"></a>
-                    </div>
-                    <div class="footer-grid-instagram">
-                        <a href="single.html"><img src="<%=request.getContextPath()%>/images/m5.jpg" alt=" " class="img-responsive"></a>
-                    </div>
-                    <div class="footer-grid-instagram">
-                        <a href="single.html"><img src="<%=request.getContextPath()%>/images/m6.jpg" alt=" " class="img-responsive"></a>
-                    </div>
-                    <div class="clearfix"> </div>
-                </div>
-                <div class="clearfix"> </div>
-                <ul class="bottom-links-agile">
-                    <li><a href="icons.html" title="Font Icons">Icons</a></li>
-                    <li><a href="short-codes.html" title="Short Codes">Short Codes</a></li>
-                    <li><a href="contact.html" title="contact">Contact</a></li>
-                </ul>
-            </div>
-            <h3 class="text-center follow">Connect <span>Us</span></h3>
-            <ul class="social-icons1 agileinfo">
-                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                <li><a href="#"><i class="fa fa-youtube"></i></a></li>
-                <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-            </ul>
-        </div>
-    </div>
-    <div class="w3agile_footer_copy">
-        <p>2017 Movies Pro. All rights reserved | Design by <a href="http://w3layouts.com/">W3layouts</a></p>
-    </div>
-    <a href="#home" id="toTop" class="scroll" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
+   
 <%--     <script src="<%=request.getContextPath()%>/js/jquery-1.11.1.min.js"></script> --%>
     <!-- Dropdown-Menu-JavaScript -->
     <script>
