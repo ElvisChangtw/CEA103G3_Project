@@ -80,14 +80,15 @@
 		       		<div class="dropdown-menu">
 			            <a class="dropdown-item" href="<%=request.getContextPath()%>/mem/mem.do?action=listRelationships_ByMemberno_B&member_no=${memVO.member_no}">我的好友</a>
 			            <a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/relationship/friend_invite.jsp">好友邀請</a>
+			            <a class="dropdown-item" href="<%=request.getContextPath()%>/chat.do?action=ueser&userName=${memVO.mb_name}">開啟聊天室</a>		        	
 		        	</div>
 	      	 </div>
 		</div>	
 		
-		 <Form id="myForm" action="<%=request.getContextPath()%>/chat.do" method="POST">
-			<input type="hidden" name="userName"  value="${memVO.mb_name}">
-			<input type="submit" value="開啟聊天室">			
-		 </Form>
+<%-- 			 <Form id="myForm" action="<%=request.getContextPath()%>/chat.do" method="POST"> --%>
+<%-- 				<input type="hidden" name="userName"  value="${memVO.mb_name}"> --%>
+<!-- 				<input type="submit" value="開啟聊天室">			 -->
+<!-- 			 </Form> -->
  		
 		<jsp:useBean id="memSvc" scope="page" class="com.mem.model.MemService" />
 		<jsp:useBean id="relationshipSvc" scope="page" class="com.relationship.model.RelationshipService" />

@@ -19,46 +19,17 @@
 <link href="https://i2.bahamut.com.tw/css/basic.css?v=1618977484" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 <link href="<%=request.getContextPath()%>/css1/friendchat_frontpage.css" rel="friendchat_frontpage" />
-
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <style type="text/css">
 	   body {  
-     width: 888px;  
+     width: 900px;  
      margin: 0 auto;  
      padding: 10px 20px 20px 20px;  
 
  	        }  
-  table#table-1 {
-	background-color: #CCCCFF;
-    border: 2px solid black;
-    text-align: center;
-  }
-  table#table-1 h4 {
-    color: red;
-    display: block;
-    margin-bottom: 1px;
-  }
-  h4 {
-    color: blue;
-    display: inline;
-  }
+
 </style>
 
-<style>
-  table {
-	width: 100%;
-	background-color: white;
-	margin-top: 5px;
-	margin-bottom: 5px;
-	
-  }
-  table, th, td {
-/*     border: 1px solid #CCCCFF; */
-  }
-  th, td {
-    padding: 5px;
-    text-align: center;
-  }
-</style>
 <title>最大私人聊天室</title>
 </head>
 
@@ -69,16 +40,7 @@
 			<span class="badge badge-secondary">
 				MoviesHit好友聊天室
 			</span>
-			<div class="btn-group">
-		        <button type="button" class="btn btn-success">回前頁</button>
-		        <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-	            	<span class="sr-only">Toggle Dropdown</span>
-	       		</button>
-		       		<div class="dropdown-menu">
-			            <a class="dropdown-item" href="<%=request.getContextPath()%>/mem/mem.do?action=listRelationships_ByMemberno_B&member_no=${memVO.member_no}">我的好友</a>
-			            <a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/relationship/friend_invite.jsp">好友邀請</a>
-		        	</div>
-	      	 </div>
+				<button type="button" class="btn btn-success" onclick="location.href='<%=request.getContextPath()%>/front-end/relationship/select_page.jsp'">回前一頁</button>
 		</div>	
 
 	<h3 id="statusOutput" class="statusOutput">請選擇聊天對象</h3>
@@ -88,17 +50,10 @@
 	<div id="messagesArea" class="panel1 message-area" ></div>
 	<div class="panel input-area">
 		<input id="message" class="text-field" type="text" placeholder="Message" onkeydown="if (event.keyCode == 13) sendMessage();" /> 
-		<input type="submit" id="sendMessage" class="button" value="送出" onclick="sendMessage();" /> 
-		<input type="button" id="connect" class="button" value="上線" onclick="connect();" /> 
-		<input type="button" id="disconnect" class="button" value="下線" onclick="disconnect();" />
+		<input type="submit" id="sendMessage" class="btn btn-dark" value="送出" onclick="sendMessage();" /> 
+		<input type="button" id="connect" class="btn btn-dark" value="上線" onclick="connect();" /> 
+		<input type="button" id="disconnect" class="btn btn-dark" value="下線" onclick="disconnect();" />
 	</div>
-	
-	
-	
-	
-	
-	
-	
 	
 <!-- </body> -->
 
@@ -192,15 +147,37 @@
 		var friends = jsonObj.users;
 		var row = document.getElementById("row");
 		row.innerHTML = '';
+		let friendsName_back = [];
+		let friendsId_back = [];
+		<c:forEach var="relationshipVO" items="${relationSvc.getAllFriendno(memVO.member_no)}">				
+// 			console.log("${memSvc.getOneMem(relationshipVO.friend_no).mb_name}");
+			row.innerHTML +='<div class="row mem-block" id="${relationshipVO.friend_no}" class="column" name="friendName" ' 
+			+ 'value="${memSvc.getOneMem(relationshipVO.friend_no).mb_name}" > ' 
+			+ '<div style="margin: auto 0;"><img src="<%=request.getContextPath()%>/images/offline2.png" alt="" width="25px" height="25px" ></div>'
+			//會員圖+這
+			+ '<div><img class="rounded-circle" width="45px" height="40px" src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${relationshipVO.friend_no}"/></div>'
+			+ '<h2 class="">${memSvc.getOneMem(relationshipVO.friend_no).mb_name}</h2>' 
+			'</div>';
+			friendsId_back.push("${relationshipVO.friend_no}");
+			friendsName_back.push("${memSvc.getOneMem(relationshipVO.friend_no).mb_name}");
+		</c:forEach> 
+		
 		for (var i = 0; i < friends.length; i++) {
-			if (friends[i] === self) { continue; }
-				<c:forEach var="relationshipVO" items="${relationSvc.getAllFriendno(memVO.member_no)}">				
-				console.log("${memSvc.getOneMem(relationshipVO.friend_no).mb_name}");
-				if (friends[i]==="${memSvc.getOneMem(relationshipVO.friend_no).mb_name}"){
-
-					row.innerHTML +='<div class="row mem-block" id=' + i + ' class="column" name="friendName" value=' + friends[i] + ' ><h2>' + friends[i] + '</h2></div>';
-					}
-				</c:forEach>
+			for (var j = 0 ; j < friendsName_back.length ; j++){
+				if(friends[i] == friendsName_back[j]){
+					console.log(friends[i] + " = = = " + friendsName_back[j]);
+					console.log(friends[i] + " = = = " + friendsName_back[j]);
+					$("#" + friendsId_back[j]).empty();
+					var h2 = '<h2 >' +  friendsName_back[j] + '</h2>'
+					var image = '<div style="margin: auto 0;"><img  src="<%=request.getContextPath()%>/images/online2.png" alt="" width="25px" height="25px"></div>';
+					var memPic = '<div><img class="rounded-circle" width="45px" height="40px" src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no='+ friendsId_back[j] +'"/></div>';
+					
+					$("#" + friendsId_back[j]).append(image);
+					$("#" + friendsId_back[j]).append(memPic);
+					$("#" + friendsId_back[j]).append(h2);
+					
+				}
+			}
 		}
 		addListener();
 	}
