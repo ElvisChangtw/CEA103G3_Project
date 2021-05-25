@@ -261,23 +261,24 @@ public class MovieServlet extends HttpServlet {
 			try {
 				/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 **********************/
 				Integer movieno = new Integer(req.getParameter("movieno").trim());
-
 				String moviename = req.getParameter("moviename");
 				if (moviename == null || moviename.trim().length() == 0) {
 					errorMsgs.put("moviename", "電影名稱: 請勿空白");
 				}
-
+			
 				Part part = req.getPart("moviepicture1");
 				String filenameExtension = getServletContext().getMimeType(part.getSubmittedFileName());
 				InputStream in = part.getInputStream();
 				byte[] moviepicture1 = new byte[in.available()];
 				// 判斷是否有更新圖片
 				if (in.available() == 0) {
+
 					MovieService movieSvc = new MovieService();
 					MovieVO movieVO = movieSvc.getOneMovie(movieno);
 					moviepicture1 = movieVO.getMoviepicture1();
 					in.read(moviepicture1);
 					in.close();
+
 				} else {
 					if (filenameExtension.equals("image/apng") || filenameExtension.equals("image/avif")
 							|| filenameExtension.equals("image/gif") || filenameExtension.equals("image/jpeg")
@@ -290,9 +291,9 @@ public class MovieServlet extends HttpServlet {
 								"上傳圖片附檔名必須是.apng,.avif,.gif,.jpg,.jpeg,.jfif,.pjpeg,.pjp,.png,.svg,.webp");
 					}
 				}
-
+				
 				Part part2 = req.getPart("moviepicture2");
-				String filenameExtension2 = getServletContext().getMimeType(part.getSubmittedFileName());
+				String filenameExtension2 = getServletContext().getMimeType(part2.getSubmittedFileName());
 				InputStream in2 = part2.getInputStream();
 				byte[] moviepicture2 = new byte[in2.available()];
 				// 判斷是否有更新圖片
@@ -307,14 +308,13 @@ public class MovieServlet extends HttpServlet {
 							|| filenameExtension2.equals("image/gif") || filenameExtension2.equals("image/jpeg")
 							|| filenameExtension2.equals("image/png") || filenameExtension2.equals("image/svg+xml")
 							|| filenameExtension2.equals("image/webp")) {
-						in.read(moviepicture2);
-						in.close();
+						in2.read(moviepicture2);
+						in2.close();
 					} else {
 						errorMsgs.put("moviepicture2",
 								"上傳圖片附檔名必須是.apng,.avif,.gif,.jpg,.jpeg,.jfif,.pjpeg,.pjp,.png,.svg,.webp");
 					}
 				}
-
 				String director = req.getParameter("director").trim();
 				if (director == null || director.trim().length() == 0) {
 					errorMsgs.put("director", "導演名字請勿空白");
@@ -325,18 +325,6 @@ public class MovieServlet extends HttpServlet {
 					errorMsgs.put("actor", "演員名字請勿空白");
 				}
 
-//				String values[] = req.getParameterValues("category");
-//			    String category = "";
-//			    for (int i = 0; i < values.length; i++) {
-//			    	if (i == values.length - 1) {
-//			    		category += values[i];
-//			    	} else {
-//			    		category = category + values[i] + ",";
-//			    	}
-//			    }
-//			    if (category == null || category.trim().length() == 0) {
-//					errorMsgs.put("category","電影類型請勿空白");
-//				}
 				String category = "";
 				if (req.getParameterValues("category") == null || req.getParameterValues("category").length == 0) {
 					errorMsgs.put("category", "電影類型請勿空白");
@@ -392,14 +380,6 @@ public class MovieServlet extends HttpServlet {
 					}
 				}
 
-//				String trailor = req.getParameter("trailor").trim();
-//				String trailorReg = "^(https?\\:\\/\\/)?(www\\.)?(youtube\\.com|youtu\\.?be)\\/.+$";
-//				if (trailor != null || trailor.trim().length() != 0) {
-//					if (!trailor.trim().matches(trailorReg)) {
-//						errorMsgs.put("trailor", "請輸入正確網址");
-//					}
-//				}
-				
 				String trailor = req.getParameter("trailor").trim();
 				String embed = req.getParameter("embed").trim();
 				String trailorReg = "^(https?\\:\\/\\/)?(www\\.)?(youtube\\.com|youtu\\.?be)\\/.+$";
@@ -419,41 +399,7 @@ public class MovieServlet extends HttpServlet {
 						errorMsgs.put("trailor", "請輸入正確格式網址");
 					}
 				}
-				
-				
-				
-				
-				
-//				String trailorReg = "^(https?\\:\\/\\/)?(www\\.)?(youtube\\.com|youtu\\.?be)\\/.+$";
-//				if (req.getParameter("trailor") == null || req.getParameter("trailor").trim().length() == 0) {
-//				}else {
-//					trailor = req.getParameter("trailor").trim();
-//					if (!trailor.trim().matches(trailorReg)) {
-//						errorMsgs.put("trailor", "請輸入正確網址");
-//					}
-//				}
-				
 
-//				String embed = "";
-//				if ((req.getParameter("trailor") != null || req.getParameter("trailor").trim().length() != 0)
-//					&& (req.getParameter("embed") == null || req.getParameter("embed").trim().length() == 0)) {
-//					errorMsgs.put("embed", "有輸入預告片網址,記得附上短網址");
-//				}else {
-//					embed = req.getParameter("embed").trim();
-//				}
-//				String embed = "";
-//				if ((req.getParameter("trailor") != null || req.getParameter("trailor").trim().length() != 0)){
-//					errorMsgs.put("embed", "1");
-//				}else if((req.getParameter("embed") == null || req.getParameter("embed").trim().length() == 0)){
-//					errorMsgs.put("embed", "2");
-//				}else {
-//					embed = req.getParameter("embed").trim();
-//				}
-
-//				String embed = req.getParameter("embed").trim();
-//				if (trailor.trim().length() != 0 && embed.trim().length() == 0) {
-//					errorMsgs.put("embed", "有輸入預告片網址,記得附上短網址");
-//				}
 
 				String grade = req.getParameter("grade").trim();
 				if (grade == null || grade.trim().length() == 0) {
@@ -501,7 +447,6 @@ public class MovieServlet extends HttpServlet {
 				}
 
 				String url = requestURL;
-				System.out.println(url);
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 修改成功後,轉交listOneMovie.jsp
 //				RequestDispatcher successView = req.getRequestDispatcher("/back-end/movie/backEndlistAllMovie.jsp");
 				successView.forward(req, res);
@@ -509,8 +454,10 @@ public class MovieServlet extends HttpServlet {
 				/*************************** 其他可能的錯誤處理 *************************************/
 			} catch (Exception e) {
 				errorMsgs.put("Exception", e.getMessage());
+System.out.println("我錯了"+e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/back-end/movie/update_movie_input.jsp");
 				failureView.forward(req, res);
+				
 			}
 		}
 
@@ -550,7 +497,7 @@ public class MovieServlet extends HttpServlet {
 				}
 
 				Part part2 = req.getPart("moviepicture2");
-				String filenameExtension2 = getServletContext().getMimeType(part.getSubmittedFileName());
+				String filenameExtension2 = getServletContext().getMimeType(part2.getSubmittedFileName());
 				InputStream in2 = part2.getInputStream();
 				byte[] moviepicture2 = new byte[in2.available()];
 				if (!(in2.available() == 0)) {

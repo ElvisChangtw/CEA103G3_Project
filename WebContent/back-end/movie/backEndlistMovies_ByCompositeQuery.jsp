@@ -135,7 +135,7 @@
 						</ul>
 					</c:if>
                     <div class="container-fluid">
-                        <h1 class="mt-4" style="text-align:center;">後台　搜尋電影結果</h1>
+                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">後台　搜尋電影結果</h1>
                         <a href="<%=request.getContextPath()%>/back-end/movie/addMovie.jsp" class="btn btn-primary btn-lg" ><i class="material-icons">&#xE147;&ensp;</i><span>新增電影</span></a>
 <!--                         <ol class="breadcrumb mb-4"> -->
 <!--                             <li class="breadcrumb-item"> -->
@@ -330,15 +330,15 @@
 										</tr>
 									</c:forEach>
                                             <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
+<!--                                                 <td></td> -->
+<!--                                                 <td></td> -->
+<!--                                                 <td></td> -->
+<!--                                                 <td></td> -->
+<!--                                                 <td></td> -->
+<!--                                                 <td></td> -->
+<!--                                                 <td></td> -->
+<!--                                                 <td></td> -->
+<!--                                                 <td></td> -->
 <!--                                                 <td></td> -->
                                             </tr>
                                          
@@ -360,6 +360,6 @@
         <script src="<%=request.getContextPath()%>/back-home/js/scripts.js"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
-        <script src="<%=request.getContextPath()%>/css/demo/datatables-demo.js"></script>
+        <script src="<%=request.getContextPath()%>/back-home/dist/assets/demo/datatables-demo.js"></script>
     </body>
 </html>

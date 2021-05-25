@@ -8,6 +8,7 @@
 	ReportCommentVO reportCommentVO = (ReportCommentVO) request.getAttribute("reportCommentVO");
 %>
 <jsp:useBean id="memVO" scope="session" type="com.mem.model.MemVO" />
+<jsp:useBean id="commentSvc" scope="page" class="com.comment.model.CommentService" />
 <html>
 <head>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
@@ -51,13 +52,33 @@
      padding: 1px; 
    } 
 </style>
+<style>
+
+.zi_box_1 {
+border: 2px solid #FEA36D;/* 框線顏色 */
+border-radius: 4px;
+margin: 2em 0;
+padding: 20px;
+position: relative;
+}
+.zi_box_1::before {
+background-color: #fff;
+color: #FEA36D;
+content: "評論作者 /內容"; /*標題*/
+font-weight: bold;
+left: 1em;
+padding: 0 .5em;
+position: absolute;
+top: -1em;
+}
+</style>
 
 
 </head>
 <body>
 
-<h1 class="shadow p-3 mb-1  rounded" align="center" style="background-color:#7d4627;" >
-	<span class="badge badge-secondary" style="background-color:#7d4627;">
+<h1 class="shadow p-3 mb-1  rounded" align="center" style="background-color:#585252;" >
+	<span class="badge badge-secondary" style="background-color:#585252;">
 		新增檢舉評論
 	</span>
 </h1>
@@ -69,12 +90,26 @@
 <%-- <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/report_comment/reportcomment.do" name="form1" id="add-form" onclick="return false"> --%>
 <%-- <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/report_comment/reportcomment.do" name="form1" id="add-form"> --%>
 <table>
+	<tr>
+		<c:forEach var="commentVO" items="${commentSvc.all}">
+			<c:if test="${param.commentno == commentVO.commentno}">
+				<td >
+					<div class="zi_box_1" style="border-width: 3px; border-style:solid ; width: 555px; height:150px; border-color: #FEA36D; padding: 5px; text-align: left;">
+						<img src="${pageContext.request.contextPath}/mem/mem.do?action=view_memPic&member_no=${commentVO.memberno}" 
+							style="border-radius:50%; width:60px; height:60px;">
+						${commentVO.content}
+
+					</div>
+				</td>
+			</c:if>
+		</c:forEach>
+	</tr>
 
 	<tr>
-		<td><span class="badge badge-danger" style="font-size:20px; background-color:#729f98; margin:5px 5px 5px 5px">檢舉評論原因</span></td>
+		<td><span class="badge badge-danger" style="font-size:20px; background-color:#D66B75; margin:5px 5px 5px 5px">檢舉評論原因</span></td>
 	</tr>	
 	<tr>
-		<td><textarea id="content-1" name="content" rows="5" cols="73" maxlength="300">${reportCommentVO.content}</textarea></td>
+		<td><textarea id="content-1" name="content" rows="5" cols="73" maxlength="300" style="border-width: 3px; border-color: #D66B75; ">${reportCommentVO.content}</textarea></td>
 	</tr>	
 
 

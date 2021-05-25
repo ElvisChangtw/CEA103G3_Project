@@ -130,10 +130,7 @@ public class MovieService {
 	}
 	
 	public void updateMovieStatus() {
-		System.out.println("1");
 		dao.updateMovieStatus();
-		System.out.println("2");
-		
 	}
 	
 	

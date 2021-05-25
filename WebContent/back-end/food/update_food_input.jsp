@@ -5,124 +5,255 @@
 <%
 	FoodVO foodVO = (FoodVO) request.getAttribute("foodVO"); //TheaterServlet.java (Concroller) 存入req的theaeterVO物件 (包括幫忙取出的theaterVO, 也包括輸入資料錯誤時的theaterVO物件)
 %>
-
-
-<%= foodVO==null %>
-
 <jsp:useBean id="foodSvc" scope="page" class="com.food.model.FoodService" />
 
-<html>
-<head>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-<title>場次資料修改 - update_food_input.jsp</title>
-
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    	<title>後台　修改餐點</title>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <link href="<%=request.getContextPath()%>/back-home/css/styles.css" rel="stylesheet" />
+        <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
+<script> 
+ function readURL(input){
+   if(input.files && input.files[0]){
+     var imageTagID = input.getAttribute("targetID");
+     var reader = new FileReader();
+     reader.onload = function (e) {
+        var img = document.getElementById(imageTagID);
+        img.setAttribute("src", e.target.result)
+     }
+     reader.readAsDataURL(input.files[0]);
+   }
+ }
+</script> 
 <style>
-  table#table-1 {
-	background-color: #CCCCFF;
-    border: 2px solid black;
-    text-align: center;
-  }
-  table#table-1 h4 {
-    color: red;
-    display: block;
-    margin-bottom: 1px;
-  }
-  h4 {
-    color: blue;
-    display: inline;
-  }
-</style>
+tr td>img {
+	width: 180px;
+	height: 200px;
+}
+#th1{
+	font-size:20px;
+}
+#th2{
+	font-size:20px;
+}
 
-<style>
-	
-  table {
-	width: 450px;
-	background-color: white;
-	margin-top: 1px;
-	margin-bottom: 1px;
-  }
-  table, th, td {
-    border: 0px solid #CCCCFF;
-  }
-  th, td {
-    padding: 1px;
-  }
 </style>
 
 </head>
-<body bgcolor='white'>
+    <body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <a class="navbar-brand" href="index.html">MOVIESHIT後台系統</a>
+        <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
+        <!-- Navbar Search-->
+        <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+            <div class="input-group">
+            </div>
+        </form>
+        <!-- Navbar-->
+        <ul class="navbar-nav ml-auto ml-md-0">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle1" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+            </li>
+            <a class="nav-link" href="index.html">
+                登出
+            </a>
+        </ul>
+    </nav>
+    
+   
+    
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                <div class="sb-sidenav-menu">
+                    <div class="nav">
+                        <img src="<%=request.getContextPath()%>/back-home/img/logo2-1-5.png">
+                        <a class="nav-link collapsed" href="tables3.html">
+                            <div class="sb-nav-link-icon"><i class="fas fa-user-alt"></i></div>
+                            基本資料
+                        </a>
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapseLayouts1">
+                            <div class="sb-nav-link-icon"><i class="fas fa-user-cog"></i></div>
+                            員工管理系統
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseLayouts1" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="layout-static.html">員工管理</a>
+                                <a class="nav-link" href="layout-sidenav-light.html">員工權限管理</a>
+                            </nav>
+                        </div>
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                            <div class="sb-nav-link-icon"><i class="fas fa-video"></i></div>
+                            影城基本資料系統
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="layout-static.html">場次管理</a>
+                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/movie/backEndlistAllMovie.jsp">電影資料管理</a>
+                                <a class="nav-link" href="layout-sidenav-light.html"> 廳院管理</a>
+                                <a class="nav-link" href="layout-sidenav-light.html">座位管理</a>
+                                <a class="nav-link" href="layout-sidenav-light.html">票種管理</a>
+                                <a class="nav-link" href="layout-sidenav-light.html">餐點管理</a>
+                            </nav>
+                        </div>
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages2" aria-expanded="false" aria-controls="collapsePages2">
+                            <div class="sb-nav-link-icon"><i class="fas fa-user-clock"></i></div>
+                            會員管理系統
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapsePages2" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="layout-static.html">會員資料管理</a>
+                                <a class="nav-link" href="layout-sidenav-light.html">會員審核</a>
+                                <a class="nav-link" href="layout-sidenav-light.html"> 專業評論審核</a>
+                            </nav>
+                        </div>
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages3" aria-expanded="false" aria-controls="collapsePages3">
+                            <div class="sb-nav-link-icon"><i class="fas fa-ticket-alt"></i></div>
+                            售票管理
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapsePages3" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="layout-static.html">現場劃位</a>
+                                <a class="nav-link" href="layout-sidenav-light.html">查詢線上訂單</a>
+                            </nav>
+                        </div>
+                        <a class="nav-link collapsed" href="tables3.html">
+                            <div class="sb-nav-link-icon"><i class="fas fa-user-alt-slash"></i></div>
+                            檢舉管理
+                        </a>
+                        <a class="nav-link" href="tables1.html">
+                            <div class="sb-nav-link-icon"><i class="fas fa-bullhorn"></i></div>
+                            管理最新消息
+                        </a>
+                        <a class="nav-link" href="tables2.html">
+                            <div class="sb-nav-link-icon"><i class="fas fa-hands-helping"></i></div>
+                            回應客服小幫手
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+            
+            
+            
+            
+            
+            
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid">
+                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">後台　修改餐點</h1>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                   <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/food/food.do" name="form1" enctype="multipart/form-data">
+                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="text-align:left;">
+                                        <thead style="background-color:#9099AA; color:white;; white-space: nowrap;" >
+                                            <tr>
+                                            	<th id="th1">餐點編號</th>
+								  				<th id="th2" colspan="2">${foodVO.food_no}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+											<tr>
+												<td width="110px;"><span style="font-weight:bolder;">餐點圖片</td>
+												<td width="620px;">
+													<img id="preview_img" src="<%=request.getContextPath()%>/food/food.do?action=getPic&food_no=${foodVO.food_no}"><br>
+ 													<input type="file" name="food_pic" size="45" accept="image/*" onchange="readURL(this)" targetID="preview_img" 
+ 													value="<%=(foodVO.getFood_pic() == null) ? "" : foodVO.getFood_pic()%>" />
+												</td>
+												<td>
+												<%-- 錯誤表列 --%>
+													<c:if test="${not empty errorMsgs}">
+														<font style="color:red">請修正以下錯誤:</font>
+														<ul>
+															<c:forEach var="message" items="${errorMsgs}">
+																<li style="color:red">${message}</li>
+															</c:forEach>
+														</ul>
+													</c:if>
+												</td> 
+											</tr>
+											<tr>
+												<td><span style="font-weight:bolder;">餐點名稱</span></td>
+												<td>
+													<input name="food_name" type="text" size="19"
+													value="<%=(foodVO.getFood_name() == null) ? "" : foodVO.getFood_name()%>" />
+												<td></td> 
+											</tr>	
+											<tr>
+												<td><span style="font-weight:bolder;">餐點種類</span></td>
+												<td>
+													<select name="food_type" style="width:180px;">
+															<option value= "0" <%= ((foodVO.getFood_type() == null) ? "" : (foodVO.getFood_type().equals("0") ? "selected" : ""))%>>熟食類</option>
+															<option value= "1" <%= ((foodVO.getFood_type() == null) ? "" : (foodVO.getFood_type().equals("1") ? "selected" : ""))%>>飲料類</option>
+															<option value= "2" <%= ((foodVO.getFood_type() == null) ? "" : (foodVO.getFood_type().equals("2") ? "selected" : ""))%>>爆米花類</option>
+													</select>
+												</td>
+												<td></td> 
+											</tr>	
+											<tr>
+												<td><span style="font-weight:bolder;">餐點價格</span></td>
+												<td>
+													<input name="food_price"  type="number" max="2000" min="0" style="width:180px;"
+													value="<%=(foodVO.getFood_price() == null) ? "" : foodVO.getFood_price()%>" />
+												</td>
+												<td></td> 
+											</tr>
+											<tr>
+												<td><span style="font-weight:bolder;">餐點狀態</span></td>
+												<td>
+													<select name="food_status" style="width:180px;">
+														<option value="0" <%= ((foodVO.getFood_status() == null) ? "" : (foodVO.getFood_status().equals("0") ? "selected" : ""))%>>下架</option>
+														<option value="1" <%= ((foodVO.getFood_status() == null) ? "" : (foodVO.getFood_status().equals("1") ? "selected" : ""))%>>上架</option>
+													</select>
+												</td>
+												<td></td> 
+											</tr>
+											
+											
+											
+											<tr>
+												<td></td>
+												<td></td>
+												<td style="text-align: right;">
+													<input type="hidden" name="action" value="update">
+													<input type="hidden" name="food_no" value="${foodVO.food_no}">
+													<input type="submit" value="送出修改" id="send"
+													class="btn btn-outline-danger" style="float:right; border:2px #B7B7B7 solid;border-radius:10px; background-color:#FF4268; font-weight:bold; color:white;">
+												</td>
+											</tr>
+                                            <tr>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+								</FORM>
+                                </div>
+                            </div>
+                    </div>
+                </main>
 
-<table id="table-1">
-	<tr><td>
-		 <h3>場次資料修改 - update_food_input.jsp</h3>
-		 <h4><a href="<%=request.getContextPath()%>/back-end/food/select_page.jsp"><img src="<%=request.getContextPath()%>/back-end/theater/images/back1.gif" width="100" height="32" border="0">回首頁</a></h4>
-	</td></tr>
-</table>
+            </div>
+        
+        
+        </div>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="<%=request.getContextPath()%>/back-home/js/scripts.js"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+        <script src="<%=request.getContextPath()%>/back-home/dist/assets/demo/datatables-demo.js"></script>
+    </body>
+    
 
-<h3>資料修改:</h3>
-
-<%-- 錯誤表列 --%>
-<c:if test="${not empty errorMsgs}">
-	<font style="color:red">請修正以下錯誤:</font>
-	<ul>
-		<c:forEach var="message" items="${errorMsgs}">
-			<li style="color:red">${message}</li>
-		</c:forEach>
-	</ul>
-</c:if>
-
-<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/food/food.do" name="form1" enctype="multipart/form-data">
-<table>
-<!-- 	<tr> -->
-<!-- 		<td>餐點編號:<font color=red><b>*</b></font></td> -->
-<%-- 		<td>${foodVO.food_no}</td> --%>
-<!-- 	</tr> -->
-	<tr>
-		<td>餐點名稱</td>
-		<td>
-			<input name="food_name" type="text" value="${foodVO.food_name}">
-		</td>
-	</tr>
-	<tr>
-		<td>餐點種類 </td>
-		
-		<td>
-			<select name="food_type">
-					<option value= "0" ${(foodVO.food_type == "0") ? "selected" : "" }>熟食類</option>
-					<option value= "1" ${(foodVO.food_type == "1" ) ? "selected" : "" }>飲料類</option>
-					<option value= "3" ${(foodVO.food_type == "3" ) ? "selected" : "" }>爆米花類</option>
-			</select>
-		</td>
-	</tr>
-	<tr>
-		<td>餐點價格</td>
-		<td>
-			<input name="food_price"  type="number" max="2000" min="0" value="${foodVO.food_price}">
-		</td>
-	</tr>
-	<tr>
-		<td>餐點圖片</td>
-		<td>
-			<input name="food_pic" type="file">
-		</td>
-	</tr>
-	<tr>
-		<td>餐點狀態</td>
-		<td>
-			<select name="food_status">
-				<option value="0" ${foodVO.food_status == 0 ? "selected" : ""}>下架</option>
-				<option value="1" ${foodVO.food_status == 1 ? "selected" : ""}>上架</option>
-			</select>
-		</td>
-	</tr>
-
-</table>
-<br>
-
-
-<input type="hidden" name="action" value="update">
-<input type="hidden" name="food_no" value="${foodVO.food_no}">
-<input type="submit" id="submit" value="送出修改"></FORM>
-
-</body>
 </html>
