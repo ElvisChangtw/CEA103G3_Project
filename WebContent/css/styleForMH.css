@@ -112,4 +112,8 @@
         #go-to-forum:hover{
         	color: #75D9B5 !important;
         }
-       
+       div.row>div.col-sm-3>img{
+       		width:115px;
+       		height:100px;
+       		margin: 0 auto;
+       }

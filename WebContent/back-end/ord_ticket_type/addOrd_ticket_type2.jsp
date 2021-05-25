@@ -56,7 +56,7 @@ td {
 	margin-left:20px;
 }
 #div1, #div6 {
-	width: 600px;
+	width: 660px;
 /* 	height: 150px; */
 /* 	background-color: rgba(0, 0, 0, 0.5); */
 	padding-top: 10px;
@@ -104,11 +104,11 @@ FORM {
 	margin-bottom:0px;
 }
 
-img{
-  	width: 115px;
-  	height: 100px;
-  	margin: 0 auto;
-  }
+/* img{ */
+/*   	width: 115px; */
+/*   	height: 100px; */
+/*   	margin: 0 auto; */
+/*   } */
  .food{
  	text-align:center;
  	background-color:aqua;
@@ -117,9 +117,9 @@ img{
 
 
 </style>
-<script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
-<script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+<!-- <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script> -->
+<!-- <script src="http://code.jquery.com/jquery-1.12.4.min.js"></script> -->
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"> -->
 </head>
 <body bgcolor='white'>
 
@@ -132,31 +132,34 @@ img{
 			</c:forEach>
 		</ul>
 	</c:if>
-
+	
+<jsp:include page="/front_header.jsp"/>
 <FORM METHOD="post"	ACTION="<%=request.getContextPath()%>/order/order.do" name="form1">
+
 	<div id="main" class="container" >
+	
 	  <div class="row">
-		<div id="div1" style="display:inline-block" class="col-8">
-			<div style="margin-bottom:5px; padding: 10px 0;" class="col-12">
+		<div id="div1" style="display:inline-block" class="col-md-8">
+			<div style="margin-bottom:5px; padding: 10px 0; background-color:white;" class="col-md-12" >
 				<c:choose>
 					<c:when test="${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(param.showtime_no)
 					.movie_no).grade == 0}">
-						<img src="<%=request.getContextPath()%>/back-end/theater/images/0.jpg" style="width:100px; height: 70px;">
+						<img src="<%=request.getContextPath()%>/back-end/theater/images/0.jpg" style="width:120px; height: 84px;">
 					</c:when>
 					<c:when test="${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(param.showtime_no)
 					.movie_no).grade == 1}">
-						<img src="<%=request.getContextPath()%>/back-end/theater/images/1.jpg" style="width:100px; height: 70px;">
+						<img src="<%=request.getContextPath()%>/back-end/theater/images/1.jpg" style="width:120px; height: 84px;">
 					</c:when>
 					<c:when test="${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(param.showtime_no)
 					.movie_no).grade == 2}">
-						<img src="<%=request.getContextPath()%>/back-end/theater/images/2.jpg" style="width:100px; height: 70px;">
+						<img src="<%=request.getContextPath()%>/back-end/theater/images/2.jpg" style="width:120px; height: 84px;">
 					</c:when>
 					<c:when test="${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(param.showtime_no)
 					.movie_no).grade == 3}">
-						<img src="<%=request.getContextPath()%>/back-end/theater/images/3.jpg" style="width:100px; height: 70px;">
+						<img src="<%=request.getContextPath()%>/back-end/theater/images/3.jpg" style="width:120px; height: 84px;">
 					</c:when>
 				</c:choose>
-				<h2 style="display: inline-block; margin-top: -7px; margin-left: 65px; vertical-align:top; width:200px;">
+				<h2 style="display: inline-block; margin-top: -7px; margin-left: 20px; margin-top:10px; vertical-align:top; width:200px;">
 					<c:choose>
 						<c:when test="${theaterSvc.getOneTheater(showtimeSvc.getOneShowtime(param.showtime_no)
 						.theater_no).theater_type == 0}">
@@ -187,17 +190,18 @@ img{
 					${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(param.showtime_no)
 						.movie_no).moviename}
 				</h2>
-				<p style="display: inline-block; margin-top: 0px; margin-left: 64px; vertical-align:top; width: 161px;" >
-					<i class="fas fa-clock" style="margin-right:5px; color:#008080;"></i> ${df.format(showtimeSvc.getOneShowtime(param.showtime_no).showtime_time)}
+				<p style="display: inline-block; margin-top: 35px; margin-left: 3px; vertical-align:top; float:right; line-height:0;" >
+					<i class="fas fa-clock" style="margin-right:5px; color:#008080; font-size:14px;"></i> ${df.format(showtimeSvc.getOneShowtime(param.showtime_no).showtime_time)}
 					<br>
 					<br>
-					<i class="fas fa-video" style="margin-right:5px; color:#008080;"></i>${theaterSvc.getOneTheater(showtimeSvc.getOneShowtime(param.showtime_no)
+					<i class="fas fa-video" style="margin-right:5px; color:#008080;  font-size:14px;"></i>${theaterSvc.getOneTheater(showtimeSvc.getOneShowtime(param.showtime_no)
 						.theater_no).theater_name}
 				</p>
 			</div>
 			<div id="div2" >
 				<h2 id="h2">選擇電影票</h2>
-				<p id="p1">選擇您希望購買的電影票張數和類型.請注意系統將自動為您保留可訂的最佳座位, 每筆交易最多可購買10張電影票</p>
+				<p id="p1" style=" width: 400px; margin: auto;">
+				&nbsp選擇您希望購買的電影票張數和類型.請注意系統將自動為您保留可訂的最佳座位, 每筆交易最多可購買10張電影票</p>
 			</div>
 			<table>
 				<tr>
@@ -233,7 +237,7 @@ img{
 				<h2 id="h3">選擇餐飲</h2>
 				<p id="p2">請選擇販賣部商品並結帳</p>
 			</div>
-			<div class="col-12" style="padding:0px;">
+			<div class="col-md-12" style="padding:0px;">
 				<div class="row">
 					<c:forEach var="foodVO" items = "${foodSvc.all}">
 						<div class="food${foodVO.food_type} col-sm-3"style="padding:0px;display: inline-block; margin-top: 20px; text-align:center;">
@@ -260,10 +264,10 @@ img{
 			color: white; border: white; width:100px; height:50px; margin-left: 80%;">
 			
 		</div>
-		<div class="col-0.5"></div>
-		<div class="col-2" style="margin-top:150px; over"  >
+
+		<div class="col-md-2" style="margin-top:114px; over"  >
 			<div class="row" >
-				<div class="col-12" style="padding:0;border: 1px solid black;">
+				<div class="col-md-12" style="padding:0;border: 1px solid black;">
 					<div style="height:40px;background-color: #337ab7; border: 1px solid black;">
 						<div style="margin-top: 7px; margin-left:40px; color:white;">會員專區</div>
 					</div>
@@ -277,7 +281,7 @@ img{
 					</div>
 				</div>
 				
-				<div class="col-12" style="padding:0; border: 1px solid black; margin-top:20px;">
+				<div class="col-md-12" style="padding:0; border: 1px solid black; margin-top:20px;">
 					<div style="height:40px; background-color: #337ab7; padding:7px;">
 						<div style=" margin-left:40px; color:white;">購物清單</div>
 					</div>
@@ -416,6 +420,5 @@ img{
 
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
