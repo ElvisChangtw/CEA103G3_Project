@@ -9,7 +9,7 @@
 <html>
 <head>
 <meta charset="BIG5">
-<title>Insert title here</title>
+<title>Employee Login</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/styleForEmpLogin.css" />
 <!--引用 jQuery + Bootstrap -->
 <script src='//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js'></script>

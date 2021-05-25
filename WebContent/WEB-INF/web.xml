@@ -355,6 +355,21 @@
 		<servlet-name>NameServlet</servlet-name>
 		<url-pattern>/chat.do</url-pattern>
 	</servlet-mapping>
+	
+	
+	  <servlet>
+    <servlet-name>AccountActivate</servlet-name>
+    <servlet-class>com.mem.controller.AccountActivate</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AccountActivate</servlet-name>
+    <url-pattern>/mem/accountactivate.do</url-pattern>
+  </servlet-mapping>
+  
+	
+	
+	
+	
  	
  	
  	 <filter>

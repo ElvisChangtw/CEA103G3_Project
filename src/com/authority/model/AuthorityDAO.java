@@ -207,8 +207,9 @@ public class AuthorityDAO implements AuthorityDAO_interface{
 	
 	
 	@Override
-	public AuthorityVO findByEmpNo(Integer empno) {
+	public List<AuthorityVO> findByEmpNo(Integer empno) {
 		
+		List<AuthorityVO> list = new ArrayList<AuthorityVO>();
 		AuthorityVO authorityVO = null;
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -229,6 +230,7 @@ public class AuthorityDAO implements AuthorityDAO_interface{
 				authorityVO.setEmpno(rs.getInt("EMPNO"));
 				authorityVO.setFunction_no(rs.getInt("FUNCTION_NO"));
 				authorityVO.setAuth_status(rs.getString("AUTH_STATUS"));
+				list.add(authorityVO);
 				
 			}
 
@@ -260,7 +262,7 @@ public class AuthorityDAO implements AuthorityDAO_interface{
 				}
 			}
 		}
-		return authorityVO;
+		return list;
 	}
 	
 	
