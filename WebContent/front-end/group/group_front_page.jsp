@@ -279,7 +279,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			  <c:when test="${memVO.member_no != 999}">
 				  <li role="presentation"><a href="<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=0">我的揪團(尚未出團)</a></li>
 				  <li role="presentation"><a href="<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=1">我的揪團(已成行)</a></li>
-				  <li role="presentation"><a href="<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=2">我的歷史揪團</a></li>
+				  <li role="presentation"><a href="<%=request.getContextPath()%>/group/group.do?action=listMyGroups&member_no=${memVO.member_no}&group_status=3">我的歷史揪團</a></li>
 			  </c:when>
 			  <c:otherwise>
 			  	  <li><a href="#" onclick="loginFirst()">我的揪團(尚未出團)</a></li>

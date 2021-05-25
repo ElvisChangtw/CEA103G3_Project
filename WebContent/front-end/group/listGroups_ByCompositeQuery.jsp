@@ -94,7 +94,6 @@
 
 				<td>${groupVO.member_cnt}(${groupVO.required_cnt})</td>
 				<td>${mapping.dboGroup_GroupStatus(groupVO.group_status)}</td>
-
 				<td><fmt:formatDate value="${groupVO.deadline_dt}"
 						pattern="yyyy-MM-dd HH:mm:ss" /></td>
 

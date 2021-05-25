@@ -4,30 +4,19 @@
 <%@ page import="com.ord_food.model.*"%>
 <%@ page import="com.food.model.*"%>
 <%@ page import="com.ticket_type.model.*"%>
+<%@ page import="com.mem.model.*"%>
 <%@ page import="java.util.*"%>
 
 <%
-//	Ord_ticket_typeVO ord_ticket_typeVO = (Ord_ticket_typeVO) request.getAttribute("ord_ticket_typeVO");
-//	Ord_ticket_typeService ord_ticket_typeSvc = new Ord_ticket_typeService();
-//	List<Ord_ticket_typeVO> list = ord_ticket_typeSvc.getAll();
-//	pageContext.setAttribute("list", list);
-	
-// 	  Ord_foodVO ord_foodVO = (Ord_foodVO) request.getAttribute("ord_foodVO");
-// 	  Ord_foodService ord_foodSvc = new Ord_foodService();
-// 	  List<Ord_foodVO> list1 = ord_foodSvc.getAll();
-// 	  pageContext.setAttribute("list1", list1);
 	java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:00");; 
 	pageContext.setAttribute("df",df);
-
 %>
-
 
 <jsp:useBean id="ticket_typeSvc" scope="page" class="com.ticket_type.model.Ticket_typeService" />
 <jsp:useBean id="foodSvc" scope="page" class="com.food.model.FoodService" />
 <jsp:useBean id="showtimeSvc" scope="page" class="com.showtime.model.ShowtimeService" />
 <jsp:useBean id="movieSvc" scope="page" class="com.movie.model.MovieService" />
 <jsp:useBean id="theaterSvc" scope="page" class="com.theater.model.TheaterService" />
-
 
 <html>
 <head>
@@ -98,8 +87,9 @@ img{
 <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
 <script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-<body bgcolor='white'>
+<body bgcolor='white' onload="connect();" onunload="disconnect();">
 
 	<%-- 錯誤表列 --%>
 	<c:if test="${not empty errorMsgs}">
@@ -219,7 +209,7 @@ img{
 				<input id="payAtCounter"style="width:20px;" type="radio" name="payment_type" value="2">現場付款
 			</div>
 			<div id="creditCard">
-				<%@ include file="creditcard.jsp" %>
+			<%@ include file="creditcard.jsp" %>
 			</div>	
 			<input type="hidden" name="action" value="insertOrd">
 			<input type="hidden" name="order_type" value="1">
@@ -230,15 +220,16 @@ img{
 			color: white; border: white; width:100px; height:50px; margin-left: 83%;">
 		    </FORM>
 		  </div>
-			  <div class="col-2" style="margin-top:195px;"  >
+			  <div class="col-2" style="margin-top:110px;"  >
 				<div class="row" >
-					<div class="col-12" style="padding:0;border: 1px solid black;">
+					<div class="col-12" style="padding:0; margin-bottom: 20px;">
 						<div style="height:40px;background-color: #337ab7; border: 1px solid black;">
-							<div style="margin-top: 7px; margin-left:40px; color:white;">會員專區</div>
+							<div style="margin-top: 7px; margin-left:40px; color:white;">
+								時間剩餘<span id="timeOut">5:00</span> 
+							</div>
 						</div>
-						<div style="height:50px; margin-top:10px; font-size:10px; color:#777777; padding-left:10px;">
-							${sessionScope.member_no == null ? "尚未登入" : '嗨!TONY 您好'}
-						</div>
+					</div>
+					<div class="col-12" style="padding:0;border: 1px solid black;">
 					</div>
 				</div>
 			</div>
@@ -257,13 +248,72 @@ img{
 		})
 		$("#submit").click(function(){
 			if($("#payByCredit").prop("checked") == false && $("#payAtCounter").prop("checked") == false){
-				alert("請選擇付款方式");
+				swal.fire("請選擇付款方式");
 			}else{
 				$("#submit").attr("type","submit")
 			}
 		});
-		
+	</script>
 	
+<!-- 	websocket -->
+	<script>
+	var MyPoint = "/SeatWS/${param.showtime_no}";
+	var host = window.location.host;
+	var path = window.location.pathname;
+	var webCtx = path.substring(0, path.indexOf('/', 1));
+	var endPointURL = "ws://" + window.location.host + webCtx + MyPoint;
+	console.log(host);
+	console.log(path);
+	console.log(webCtx);
+	console.log(endPointURL);
+	var showtime_no = "${param.showtime_no}";
+	var webSocket;
+	
+	window.onload = connect();
+	function connect(){
+		console.log("我有印到");
+		webSocket = new WebSocket(endPointURL);
+		
+		webSocket.onopen = function(event) {
+			console.log("Connect Success!");
+			let seat_id = "${seat_id}"
+			console.log(seat_id);
+			var jsonObj = {
+					"type": "checkOrder",
+					"seat_id":seat_id
+			}
+			webSocket.send(JSON.stringify(jsonObj));
+		};
+	
+		webSocket.onmessage = function(event) {
+				
+		};
+		
+		webSocket.onclose = function(event) {
+			console.log("Disconnected!");
+		};
+	}
+	
+	function disconnect() {
+		webSocket.close();
+	}
+	
+	//計時器
+// 	let sec = 300;
+// 		setInterval(function() {
+// 			$("#timeOut").text(timeFormat(sec));
+// 			sec -= 1;
+// 		}, 1000)
+// 		setTimeout(
+// 			function() {
+// 				window.location.replace("${pageContext.request.contextPath}/back-end/showtime/select_page.jsp");
+// 			}, sec * 1000);
+// 		function timeFormat(second) {
+// 			let minute = parseInt(second / 60);
+// 			second %= 60;
+// 			(second < 10) ? second = '0' + second : second;
+// 			return minute + ":" + second;
+// 		}
 	
 	
 	
