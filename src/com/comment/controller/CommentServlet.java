@@ -470,5 +470,80 @@ public class CommentServlet extends HttpServlet {
 //				failureView.forward(req, res);
 //			}
 //		}
+		
+		
+		if("delete_for_Ajax".equals(action)) {
+			List<String> errorMsgs = new ArrayList<String>();
+			req.setAttribute("errorMsgs", errorMsgs);
+			PrintWriter out = res.getWriter();
+			try {
+				int comment_no = new Integer(req.getParameter("comment_no"));
+				CommentService commSvc = new CommentService();
+				commSvc.deleteComment(comment_no);
+				out.print("success");
+
+			}
+			catch(Exception e) {
+				out.print("fail");
+				errorMsgs.add("評論刪除失敗");
+				RequestDispatcher failureView = req
+						.getRequestDispatcher("/front-end/mem/memberSys.jsp");
+				failureView.forward(req, res);
+			}finally {
+				out.flush();
+				out.close();
+			}
+		}
+
+
+if ("getOne_For_Display_Ajax".equals(action)) { 
+
+			List<String> errorMsgs = new LinkedList<String>();
+			req.setAttribute("errorMsgs", errorMsgs);
+			PrintWriter out = res.getWriter();
+			try {
+				System.out.println("1");
+				
+				System.out.println("2");
+				String comment_content = req.getParameter("comment_content");
+				System.out.println("3");
+				int comment_no = new Integer(req.getParameter("comment_no"));
+				System.out.println(comment_no);
+				System.out.println(comment_content);
+
+				CommentService commentSvc = new CommentService();
+				CommentVO commVO = commentSvc.updateComment_bycommentno(comment_no, comment_content); 
+				if (commVO == null) {
+					errorMsgs.add("查無資料");
+				}
+				// Send the use back to the form, if there were errors
+				if (!errorMsgs.isEmpty()) {
+
+					RequestDispatcher failureView = req
+							.getRequestDispatcher("/front-end/mem/memberSys.jsp");
+					failureView.forward(req, res);
+					return;//程式中斷
+				}	
+				
+				try {
+					System.out.println("2");
+					out.print("success");
+					return;
+				}catch(Exception e) {
+					out.print("fail");
+					e.printStackTrace();
+				}finally {
+					out.flush();
+					out.close();
+				}
+
+				/***************************其他可能的錯誤處理*************************************/
+			} catch (Exception e) {
+				errorMsgs.add("無法取得資料:" + e.getMessage());
+				RequestDispatcher failureView = req
+						.getRequestDispatcher("/front-end/mem/memberSys.jsp");
+				failureView.forward(req, res);
+			}
+		}
 	}
 }

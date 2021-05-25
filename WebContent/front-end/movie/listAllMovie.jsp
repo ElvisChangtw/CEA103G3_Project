@@ -310,8 +310,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 											<td width="30px;" id="expectation_${movieVO.movieno}"> 
 													
 											</td>
-											<td width="80px;"><a class="w3_play_icon1" href="#small-dialog_${movieVO.movieno}">觀看</a></td>
-<%-- 												<td width="50px;"><a class="w3_play_icon1" href="${movieVO.trailor}">觀看</a></td> --%>
+<%-- 											<td width="80px;"><a class="w3_play_icon1" href="#small-dialog_${movieVO.movieno}">觀看</a></td> --%>
+												<td width="80px;"><a class="w3_play_icon1" href="${movieVO.trailor}">觀看</a></td>
 											
 <!-- 											<td width="100px;"> -->
 <%-- 												<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/movie/movie.do" style="margin-bottom: 0px;"> --%>

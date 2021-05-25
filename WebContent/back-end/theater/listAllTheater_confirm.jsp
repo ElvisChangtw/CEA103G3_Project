@@ -1,27 +1,19 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="Big5"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.*"%>
-<%@ page import="com.showtime.model.*"%>
+<%@ page import="com.theater.model.*"%>
 
 <%
-	ShowtimeService showtimeSvc = new ShowtimeService();
-    List<ShowtimeVO> list = showtimeSvc.getAll();
+    TheaterService theaterSvc = new TheaterService();
+    List<TheaterVO> list = theaterSvc.getAll();
     pageContext.setAttribute("list",list);
-%>
-
-<jsp:useBean id="theaterSvc" scope="page" class="com.theater.model.TheaterService" />
-<jsp:useBean id="movieSvc" scope="page" class="com.movie.model.MovieService" />
-
-<% 
-	java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:00");; 
-	pageContext.setAttribute("df",df);
 %>
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
     
-    	<title>後台　所有場次資料</title>
+    	<title>廳院管理</title>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -138,69 +130,71 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">後台　所有場次資料</h1>
-                        <a href="<%=request.getContextPath()%>/back-end/showtime/addShowtime.jsp" class="btn btn-primary btn-lg" ><i class="material-icons">&#xE147;&ensp;</i><span>新增場次</span></a>
+                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">廳院管理</h1>
+                        <a href="<%=request.getContextPath()%>/back-end/theater/addTheater.jsp" class="btn btn-primary btn-lg" ><i class="material-icons">&#xE147;&ensp;</i><span>新增廳院</span></a>
                             <div class="card-body">
                                 <div class="table-responsive">
                                 <%@ include file="pages/page1.file"%>
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="text-align:center;">
                                         <thead style="background-color:#9099AA; color:white;; white-space: nowrap;" >
                                             <tr>
-                                                <th>場次編號</th>
-												<th width="150px;">電影</th>
-												<th>廳院</th>
-												<th width="150px;">場次時間</th>
-												<th>場次座位</th>
-												<th>修改</th>
-												<th>選擇座位</th>
-												<th>訂票</th>
-												<th>刪除</th>
+                                                <th>廳院編號</th>
+												<th>廳院名稱</th>
+												<th>廳院種類</th>
+												<th>廳院配置</th>
+												<th></th>
+												<th></th>
+												
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        <c:forEach var="showtimeVO" items="${list}" begin="<%=pageIndex%>" end="<%=pageIndex+rowsPerPage-1%>">
-										  <tr  ${(showtimeVO.showtime_no == param.showtime_no) ? 'style="background-color:#C9B8DC;"':''}>
-											<td id="id">${showtimeVO.showtime_no}</td>
-										  	<td>${movieSvc.getOneMovie(showtimeVO.movie_no).moviename}</td>
-											<td>${theaterSvc.getOneTheater(showtimeVO.theater_no).theater_name}</td>
-											<td>${df.format(showtimeVO.showtime_time)}</td>
-											
+                                       	<c:forEach var="theaterVO" items="${list}" begin="<%=pageIndex%>" end="<%=pageIndex+rowsPerPage-1%>">
+										  <tr>
+											<td>${theaterVO.theater_no}</td>
+											<td>${theaterVO.theater_name}</td>
 											<td>
-											  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/showtime/showtime.do" style="margin-bottom: 0px;">
-											     <input type="submit" value="查看"
-											     class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#F5CA5E; font-weight:bold; color:white;">
-											     <input type="hidden" name="showtime_no"  value="${showtimeVO.showtime_no}">
+												<c:choose>
+													<c:when test="${theaterVO.theater_type == 0 }">
+													2D
+													</c:when>
+													<c:when test="${theaterVO.theater_type == 1 }">
+													3D
+													</c:when>
+													<c:when test="${theaterVO.theater_type == 2 }">
+													IMAX
+													</c:when>
+													<c:when test="${theaterVO.theater_type == 3 }">
+													2D_IMAX
+													</c:when>
+													<c:when test="${theaterVO.theater_type == 4 }">
+													3D_IMAX
+													</c:when>
+								<%-- 					<c:when test="${theaterVO.theater_type == 5 }"> --%>
+								<%-- 					</c:when> --%>
+												</c:choose>
+											</td>
+								<!-- 			<td>查看</td> -->
+											<td>
+											  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/theater/theater.do" style="margin-bottom: 0px;">
+											    <input type="submit" value="查看"
+												class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#F5CA5E; font-weight:bold; color:white;">
+											     <input type="hidden" name="theater_no"  value="${theaterVO.theater_no}">
 											     <input type="hidden" name="whichPage"	value="<%=whichPage%>">
-											     <input type="hidden" name="action"	value="getOne_For_Showtime"></FORM>
-											</td>
-											
-											<td>
-											  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/showtime/showtime.do" style="margin-bottom: 0px;">
-											     <input type="submit" value="修改"
-											     class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#73BDBE; font-weight:bold; color:white;">
-											     <input type="hidden" name="showtime_no"  value="${showtimeVO.showtime_no}">
-			    								 <input type="hidden" name="action"	value="getOne_For_Update"></FORM>
+											     <input type="hidden" name="action"	value="getOne_For_Theater"></FORM>
 											</td>
 											<td>
-											  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/showtime/showtime.do" style="margin-bottom: 0px;">
-											     <input type="submit" value="選擇座位"
-											     class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#766BB0; font-weight:bold; color:white;">
-											     <input type="hidden" name="showtime_no"  value="${showtimeVO.showtime_no}">
-			     								 <input type="hidden" name="action"	value="getOne_For_Update2"></FORM>
+											  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/theater/theater.do" style="margin-bottom: 0px;">
+											      <input type="submit" value="修改"
+												  class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#73BDBE; font-weight:bold; color:white;">
+											     <input type="hidden" name="theater_no"  value="${theaterVO.theater_no}">
+											     <input type="hidden" name="action"	value="getOne_For_Update"></FORM>
 											</td>
 											<td>
-											  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/order/order.do" style="margin-bottom: 0px;">
-											     <input type="submit" value="訂票"
-											     class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#AE67D8; font-weight:bold; color:white;">
-											     <input type="hidden" name="showtime_no"  value="${showtimeVO.showtime_no}">
-			    								 <input type="hidden" name="action"	value="sendToFT"></FORM>
-											</td>
-											<td>
-											  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/showtime/showtime.do" style="margin-bottom: 0px;">
+											  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/theater/theater.do" style="margin-bottom: 0px;">
 											     <input type="submit" value="刪除"
 											     class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#FC9C9D; font-weight:bold; color:white;">
-											     <input type="hidden" name="showtime_no"  value="${showtimeVO.showtime_no}">
-			    								 <input type="hidden" name="action" value="delete"></FORM>
+											     <input type="hidden" name="theater_no"  value="${theaterVO.theater_no}">
+											     <input type="hidden" name="action" value="delete"></FORM>
 											</td>
 										</tr>
 									</c:forEach>
@@ -214,63 +208,18 @@
                                 </div>
                             </div>
                     </div>
-                     <%if (request.getAttribute("showtimeVO")!=null){%>
-						<jsp:include page="listOneShowtime.jsp" />
-					<%} %>
                 </main>
             </div>
         
-        
         </div>
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+        <script   src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<!--         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script> -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="<%=request.getContextPath()%>/back-home/js/scripts.js"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
         <script src="<%=request.getContextPath()%>/back-home/dist/assets/demo/datatables-demo.js"></script>
 <script>
-	$("input[type=button]").click(function(){
-		console.log("123")
-		console.log("${foodVO.food_no}")
-		let food_no = $(this).attr('id');
-		console.log(food_no);
-		$.ajax({
-			url:"<%=request.getContextPath()%>/food/food.do?action=updateStatus",
-			data:{
-				food_no:food_no
-			},
-			type:"POST",
-			
-// 			$("#status").html("");
-// 			$("#status").append("OK");
-			success:function(json){
-				let jsonobj = JSON.parse(json);
-				let newStatus = jsonobj.newStatus;
-				let s;
-				let t;
-				if(newStatus == "1"){
-					s = "上架";
-					t = "下架";
-					$("#"+ food_no).css("background-color","#416DB6")
-					$("#"+ food_no).parent().prev().prev().css("color","#FF4364");
-					$("#"+ food_no).parent().prev().prev().css("font-weight","bold");
-				}else{
-					s = "下架";
-					t = "上架";
-					$("#"+ food_no).css("background-color","#FF4364")
-					$("#"+ food_no).parent().prev().prev().css("color","#416DB6");
-					$("#"+ food_no).parent().prev().prev().css("font-weight","bold");
-				}
-				$("#"+ food_no).parent().prev().prev().text(s);
-				
-				
-				$("#"+ food_no).val(t);
-
-			}
-		 });
-	});
-		
-		
 </script>    
 </body>
     

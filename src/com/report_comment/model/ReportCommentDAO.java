@@ -33,7 +33,7 @@ public class ReportCommentDAO implements ReportCommentDAO_interface{
 	private static final String GET_ONE_STMT = 
 			"select * from REPORT_COMMENT where REPORT_NO = ?";	
 	private static final String GET_ALL_STMT = 
-			"select * from REPORT_COMMENT";
+			"select * from REPORT_COMMENT order by REPORT_NO desc";
 	private static final String GET_ALL_OrderByReport_STMT = 
 			"select * from REPORT_COMMENT";
 	

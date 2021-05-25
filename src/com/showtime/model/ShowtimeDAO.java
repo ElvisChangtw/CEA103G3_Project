@@ -476,21 +476,16 @@ public class ShowtimeDAO implements ShowtimeDAO_interface {
 	@Override
 	public List<Object[]> getAllByDate() {
 		List<Object[]> list = null;
+		System.out.println("1");
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		System.out.println("2");
 		try {
 			session.beginTransaction();
+			System.out.println("3");
 			@SuppressWarnings("unchecked")
-			NativeQuery<Object[]> query2 = session.createNativeQuery("select distinct s.movie_no, m.movie_name, m.off_dt from showtime s" 
-						+ "	join movie m where m.movie_no = s.movie_no and s.showtime_time >= now() order by movie_no;");
+			NativeQuery<Object[]> query2 = session.createNativeQuery("select distinct s.movie_no, m.movie_name, m.off_dt from showtime s join movie m where m.movie_no = s.movie_no and s.showtime_time >= now() order by movie_no");
 			list = query2.getResultList();
-//			System.out.println(list2.size());
-//	 		for (Object[] aArray : list2) {
-//	 			for (Object aColumn : aArray) {
-//	 				System.out.println(aArray.length);
-//	 				System.out.print(aColumn + " ");
-//	 			}
-//	 			System.out.println();
-//	 		}
+			System.out.println("4");
 			for(int i = 0; i < list.size(); i++) {
 				for(int j = 0; j < list.get(i).length; j++) {
 					System.out.println(list.get(i)[j]);

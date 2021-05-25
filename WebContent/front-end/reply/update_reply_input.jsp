@@ -1,9 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="Big5"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="com.reply.model.*"%>
+<%@ page import="com.mem.model.*"%>
 
 <%
 	ReplyVO replyVO = (ReplyVO) request.getAttribute("replyVO"); //ReplyServlet.java (Concroller) 存入req的empVO物件 (包括幫忙取出的empVO, 也包括輸入資料錯誤時的empVO物件)
+	MemVO memVO = (MemVO) session.getAttribute("memVO");
 %>
 <%-- <%= replyVO==null %> --%>
 <html>
@@ -88,6 +90,7 @@
 <!-- 	</tr> -->
 
 		<jsp:useBean id="articleSvc" scope="page" class="com.article.model.ArticleService" />
+		
 <!-- 	<tr> -->
 <!-- 		<td>文章內容:<font color=red><b>*</b></font></td> -->
 <!-- 		<td><select size="1" name="article_no"> -->
@@ -99,9 +102,8 @@
 		<tr>
 			<td><h4>文章內容:<font color=red>*</font></h4></td>
 			<td><textarea cols="58" name="content" rows="10" disabled>${articleSvc.getOneArticle(replyVO.article_no).content}</textarea></td>
-		</tr>
-
-<!-- 	<tr> -->
+		</tr>															
+<!-- 	<tr> -->														
 <%-- 		<c:forEach var="articleVO" items="${articleSvc.ll}"> --%>
 <!-- 			<td><h4>文章內容:</h4></td> -->
 <%-- 			<td><textarea type="hidden" name="content" cols="60"  rows="15"><%=articleVO.getContent()%></textarea></td> --%>
@@ -114,10 +116,9 @@
 <!-- 	</tr> -->
 	
 	<tr>
-		<td><h4>回復內容:</h4></td>
+		<td><h4>回覆內容:</h4></td>
 		<td><input type="TEXT" name="content" size="55"	value="<%=replyVO.getContent()%>" /></td>
-	</tr>
-				
+														
 <!-- 	<tr> -->
 <!-- 		<td>新增文章時間:</td> -->
 <!-- 			<td><input name="crt_dt" id="f_date1" type="text" ></td> -->
@@ -143,6 +144,7 @@
 <input type="hidden" name="action" value="update">
 <input type="hidden" name="reply_no" value="<%=replyVO.getReply_no()%>">
 <input type="hidden" name="articleno" value="<%=replyVO.getArticle_no()%>">
+<input type="hidden" name="member_no" value="${memVO.member_no}">
 <input type="hidden" name="requestURL" value="<%=request.getParameter("requestURL")%>"> <!--接收原送出修改的來源網頁路徑後,再送給Controller準備轉交之用-->
 <input type="hidden" name="whichPage"  value="<%=request.getParameter("whichPage")%>">  <!--只用於:istAllEmp.jsp-->
 <center><input type="submit" value="送出修改" class="btn btn-outline-danger"></center></FORM>

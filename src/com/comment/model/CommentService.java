@@ -61,5 +61,15 @@ public class CommentService {
 	public List<CommentVO> getComments(Integer memberno) {
 		return dao.findByMemberNo(memberno);
 	}
+	
+	public CommentVO updateComment_bycommentno(Integer commentno,String content) {
+		CommentVO commentVO = new CommentVO();
+		
+		commentVO.setCommentno(commentno);
+		commentVO.setContent(content);
 
+		dao.update_bycommentno(commentVO);
+
+		return commentVO;
+	}
 }

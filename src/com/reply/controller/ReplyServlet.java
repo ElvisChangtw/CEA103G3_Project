@@ -102,7 +102,6 @@ public class ReplyServlet extends HttpServlet {
 			try {
 				/***************************1.接收請求參數****************************************/
 				Integer reply_no = new Integer(req.getParameter("reply_no"));
-				
 				/***************************2.開始查詢資料****************************************/
 				ReplyService replySvc = new ReplyService();
 				ReplyVO replyVO = replySvc.getOneReply(reply_no);
@@ -137,8 +136,8 @@ Integer reply_no = new Integer(req.getParameter("reply_no").trim());
 Integer article_no = new Integer(req.getParameter("articleno").trim());
 
 
-Integer member_no = 1;
-//Integer member_no = new Integer(req.getParameter("member_no").trim());
+//Integer member_no = 1;
+Integer member_no = new Integer(req.getParameter("member_no").trim());
 //				Integer memberno = null;
 //				try {
 //memberno = new Integer(req.getParameter("memberno").trim());
@@ -199,8 +198,8 @@ Integer status =0;
 				replyVO.setContent(content);
 				replyVO.setCrt_dt(crt_dt);
 				replyVO.setModify_dt(modify_dt);
-				replyVO.setStatus(status);
-
+				replyVO.setStatus(status);			
+				
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					req.setAttribute("replyVO", replyVO); // 含有輸入格式錯誤的empVO物件,也存入req
@@ -259,13 +258,13 @@ article_no = new Integer(req.getParameter("article_no").trim());
 					article_no = 0;
 					errorMsgs.add("回復編號請填數字.");
 				}
-				Integer member_no = 1;
-//				try {
-//member_no = new Integer(req.getParameter("member_no").trim());
-//			} catch (NumberFormatException e) {
-//				member_no = 0;
-//				errorMsgs.add("會員編號請填數字.");
-//			}
+				Integer member_no = null;
+				try {
+member_no = new Integer(req.getParameter("member_no").trim());
+			} catch (NumberFormatException e) {
+				member_no = 0;
+				errorMsgs.add("會員編號請填數字.");
+			}
 				
 String content = req.getParameter("content").trim();
 				if (content == null || content.trim().length() == 0) {

@@ -251,11 +251,11 @@ tr td>img {
 													value="<%=(movieVO == null) ? "" : movieVO.getTrailor()%>" /></td>
 												<td><font color=red>${errorMsgs.trailor}</font></td>
 											</tr>
-											<tr>
-												<td><span style="font-weight:bolder;">短預告片:</span></td>
-												<td><input type="TEXT" name="embed" size="70"
-													value="<%=(movieVO == null) ? "" : movieVO.getEmbed()%>" /></td>
-											</tr>
+<!-- 											<tr> -->
+<!-- 												<td><span style="font-weight:bolder;">短預告片:</span></td> -->
+<!-- 												<td><input type="TEXT" name="embed" size="70" -->
+<%-- 													value="<%=(movieVO == null) ? "" : movieVO.getEmbed()%>" /></td> --%>
+<!-- 											</tr> -->
 											<tr>
 												<td><span style="font-weight:bolder;">電影分級:</td>
 												<td><select name="grade" size="1" style="width:555px;"> 

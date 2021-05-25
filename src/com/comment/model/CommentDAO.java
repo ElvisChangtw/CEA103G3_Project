@@ -43,6 +43,8 @@ public class CommentDAO implements CommentDAO_interface{
 //	"select * from COMMENT where MEMBER_NO = ?";
 	private static final String GET_MOVIE_COMMENT_BY_MEM = 
 			"select * from COMMENT where MEMBER_NO = ?";
+	private static final String UPDATE_BY_COMMENTNO_STMT = 
+			"update COMMENT set CONTENT=? where COMMENT_NO = ?";
 	
 	
 	
@@ -651,4 +653,42 @@ public class CommentDAO implements CommentDAO_interface{
 		}
 		return list;
 	}
+	
+	@Override
+	public void update_bycommentno(CommentVO commentVO) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(UPDATE_BY_COMMENTNO_STMT);
+			
+			pstmt.setString(1, commentVO.getContent());
+			pstmt.setInt(2, commentVO.getCommentno());
+
+			pstmt.executeUpdate();
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+	}	
 }
