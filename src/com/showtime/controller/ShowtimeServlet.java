@@ -30,7 +30,9 @@ import com.theater.model.TheaterVO;
 
 public class ShowtimeServlet extends HttpServlet {
        
-    public ShowtimeServlet() {
+	private static final long serialVersionUID = 1L;
+
+	public ShowtimeServlet() {
         super();
     }
 
@@ -472,6 +474,7 @@ public class ShowtimeServlet extends HttpServlet {
 		
 		//ajax
 		if("getMovieFromHibernate".equals(action)) {
+			System.out.println("我有進來!!!");
 			PrintWriter out = res.getWriter();
 			
 			ShowtimeService showtimeSvc = new ShowtimeService();
@@ -483,6 +486,8 @@ public class ShowtimeServlet extends HttpServlet {
 			for(Object[] object : list) {
 				list_movie_no.add((Integer)object[0]);
 				list_movie_name.add((String)object[1]);
+				System.out.println(object[0]);
+				System.out.println(object[1]);
 			}
 			
 			JSONArray movie_no = new JSONArray(list_movie_no);

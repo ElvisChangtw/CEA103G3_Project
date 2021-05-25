@@ -7,11 +7,6 @@ import java.io.PrintWriter;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
 import java.util.Base64.Decoder;
 import java.util.Base64.Encoder;
 
@@ -24,6 +19,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.mem.model.MemDAO;
 import com.mem.model.MemService;
 import com.mem.model.MemVO;
@@ -54,10 +52,9 @@ public class MemServlet extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-
+		String action = req.getParameter("action");
 		req.setCharacterEncoding("UTF-8");
 		res.setContentType("text/html; charset=Big5");
-		String action = req.getParameter("action");
 		InputStream in = null;
 		if ("insert".equals(action)) { // 來自addEmp.jsp的請求
 
@@ -759,6 +756,48 @@ public class MemServlet extends HttpServlet {
 						.getRequestDispatcher("/front-end/mem/addMem.jsp");
 				failureView.forward(req, res);
 			}
+		}
+		
+//		MemVO memVOI = new Gson().fromJson(req.getReader(), MemVO.class);
+//		if(memVOI != null && "update_for_Ajax".equals(memVOI.getAction())) {
+		if("update_for_Ajax".contentEquals(action)) {
+			List<String> errorMsgs = new ArrayList<String>();
+			req.setAttribute("errorMsgs", errorMsgs);
+			PrintWriter out = res.getWriter();
+
+			try {
+				String mb_status = req.getParameter("mb_status");
+//				String mb_status = memVOI.getStatus();
+
+				String mb_level = req.getParameter("mb_level");
+//				String mb_level = memVOI.getMb_level();
+
+				int member_no = new Integer(req.getParameter("member_no"));
+//				int member_no = memVOI.getMember_no();
+
+				MemService memSvc = new MemService();
+				MemVO memVO=memSvc.getOneMem(member_no);
+				MemService memSvc1 = new MemService();
+				memSvc1.updateMem(member_no, memVO.getMb_name(), memVO.getMb_email(), memVO.getMb_pwd(), 
+						memVO.getMb_bd(), memVO.getMb_pic(), memVO.getMb_phone(),
+						memVO.getMb_city(), memVO.getMb_address(), mb_status, memVO.getMb_point(),
+						mb_level, memVO.getCrt_dt());
+				
+				out.print("success");
+
+			}
+			catch(Exception e) {
+				out.print("fail");
+				errorMsgs.add("修改會員狀態、身分失敗");
+				RequestDispatcher failureView = req
+						.getRequestDispatcher("/back-end/mem/listAllMem.jsp");
+				failureView.forward(req, res);
+			}finally {
+				out.flush();
+				out.close();
+			}
+			
+			
 		}
 	}
 }

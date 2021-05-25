@@ -175,6 +175,7 @@ text-align:center;
   position: fixed !important;
   right: 10px !important;
   bottom: 10px !important;
+  z-index:100;
 }
 
 .alert {
@@ -243,17 +244,13 @@ text-align:center;
 						aria-controls="movieRating" /> <label for="tab7">已評分電影</label>
 					<div class="tab-panels">
 						<section id="ticket" class="tab-panel">
-						<button type="button" class="addFriend" value="addFriend">加好友 <input type="hidden" class="friendNO"  value="4"></button>
-	<button type="button" class="addFriend" value="addFriend">加好友 <input type="hidden" class="friendNO"  value="1"></button>
-	<button type="button" class="addFriend" value="addFriend">加好友 <input type="hidden" class="friendNO"  value="3"></button>
-    <br>
 						<div class="container-fluid">
 								<div class="row">
 							<form method="post" id="ticket-info-form">
 								<h1 class="table-order">已預訂</h1>
 								<table class="table table-hover table-order">								
 									 <tr class="table-order" style="display:none;"><th>購票日期</th><th>電影名稱</th><th>狀態</th><th>付款方式</th><th>金額</th><th>退票</th><th>詳細資訊</th></tr>
-									 <center id="orderticket_switch"><div>您目前沒有預訂任何電影票，快按<a href=/xxxxx>這裡</a>來訂票!</div></center>
+									 <center id="orderticket_switch"><div>您目前沒有預訂任何電影票，快按<a href=<%=request.getContextPath()%>/index.jsp>這裡</a>來訂票!</div></center>
 								</table>
 								<br>
 								<hr class="table-order"/>
@@ -276,7 +273,7 @@ text-align:center;
 								<h1 class="table-group-master">目前主辦的團</h1>
 								<table class="table table-hover table-group-master">								
 									 <tr class="table-group-master" style="display:none;"><th>揪團名稱</th><th>電影名稱</th><th>開演時間</th><th>揪團狀態</th><th>預計參加人數</th><th>目前參加人數</th><th>詳細資訊</th><th>修改揪團</th></tr>
-									 <center id="group_master_switch"><div>您目前沒有發起任何揪團，快按<a href=/xxxxx>這裡</a>來發起揪團!</div></center>
+									 <center id="group_master_switch"><div>您目前沒有發起任何揪團，快按<a href=<%=request.getContextPath()%>/front-end/group/group_front_page.jsp>這裡</a>來發起揪團!</div></center>
 								</table>
 								<br>
 								<hr class="table-group-master"/>
@@ -284,7 +281,7 @@ text-align:center;
 								<h1 class="table-group-member">目前參加的團</h1>
 								<table class="table table-hover table-group-member">								
 									 <tr class="table-group-member" style="display:none;"><th>揪團名稱</th><th>團主</th><th>電影名稱</th><th>開演時間</th><th>揪團狀態</th><th>付款狀態</th><th>預計參加人數</th><th>目前參加人數</th><th>詳細資訊</th><th>退出揪團</th></tr>
-									 <center id="group_member_switch"><div>您目前沒有任何揪團，快按<a href=/xxxxx>這裡</a>來參加揪團!</div></center>
+									 <center id="group_member_switch"><div>您目前沒有任何揪團，快按<a href=<%=request.getContextPath()%>/front-end/group/group_front_page.jsp>這裡</a>來參加揪團!</div></center>
 								</table>
 								<br>
 								<hr class="table-group-member"/>
@@ -368,7 +365,7 @@ text-align:center;
 										<c:forEach var="movcolVO" items="${movcolSvc.getAllMovieCollection(memVO.member_no)}">
 											<tr class="hover_movCol hover_pointer"><td style="display:none">${movcolVO.movie_no}</td><td>${movieSvc.getOneMovie(movcolVO.movie_no).moviename}</td>
 											<td>${movcolVO.crt_dt}</td>
-											<td><a href="xxxx">電影頁面</a></td>
+											<td><a href="<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=${movcolVO.movie_no}">電影頁面</a></td>
 												<td><i class="fas fa-minus-circle delete-movcol"></i>
 													<input name="movie_no" style="display: none" value="${movcolVO.movie_no}">
  												</td>
@@ -391,7 +388,7 @@ text-align:center;
 										<c:forEach var="artcolVO" items="${artcolSvc.getAllArticleCollection(memVO.member_no)}">
 											<tr class="hover_artCol hover_pointer"><td style="display:none">${artcolVO.article_no}</td><td>${articleSvc.getOneArticle(artcolVO.article_no).articleheadline}</td>
 											<td>${artcolVO.crt_dt}</td>
-											<td><a href="xxxx">文章頁面</a></td>
+											<td><a href="<%=request.getContextPath()%>/front-end/article/listOneArticle2.jsp?articleno=${artcolVO.article_no}">文章頁面</a></td>
 												<td><i class="fas fa-minus-circle delete-artcol"></i>
 													<input name="article_no" style="display: none" value="${artcolVO.article_no}">
  												</td>
@@ -471,8 +468,8 @@ $(document.body).on("click", ".delete-order",function () {
 //   	console.log(thisOrder); //tr
 
       Swal.fire({
-          title: "確認刪除嗎?",
-          text: "刪除後將無法返回資料",
+          title: "確認退票嗎?",
+          text: "確定後將無法回復",
           icon: "warning",
           showCancelButton: true,
           confirmButtonColor: "#3085d6",
@@ -754,7 +751,7 @@ member_segment= `<tr><td>` + "${groupSvc.getOneGroup(groupMemVO.group_no).group_
 				`</td><td>` + "${showtimeSvc.getOneShowtime(groupSvc.getOneGroup(groupMemVO.group_no).showtime_no).showtime_time}" + 
 				`</td><td>` + "${groupSvc.getOneGroup(groupMemVO.group_no).group_status}" + 
 				`</td><td>`+ "${groupMemSvc.getOneGroup_Member(groupSvc.getOneGroup(groupMemVO.group_no).group_no,groupSvc.getOneGroup(groupMemVO.group_no).member_no).status}" +
-				`</td><td><button type="button" class="btn btn-primary" id="show_memberBox_${groupSvc.getOneGroup(groupMemVO.group_no).group_no}" >詳細資訊</button></td></tr>`
+				`</td><td><button type="button" class="btn btn-primary" id="show_memberBox_${groupSvc.getOneGroup(groupMemVO.group_no).group_no}" >查看</button></td></tr>`
 group_history.after(member_segment);
 	
 }
@@ -996,10 +993,27 @@ $(document).ready(function(){
 		contain.style.left="33%";
 		let row = document.createElement("div");
 		row.classList.add("row");
-		row.innerHTML=`<div style="">您尚未是專職評論，可點擊<a href=/xxxxx>這裡</a>申請成為專職評論</div>`;
+		row.innerHTML=`<div style="">您尚未是專職影評，可點擊<a class="apply_commenter">這裡</a>申請成為專職評論</div>`;
 		contain.append(row);
 		$("#comment").append(contain);
+		
+		$(".apply_commenter").click(function(){
+			Swal.fire({
+	            position: "center",
+	            icon: "success",
+	            title: "已將申請送出，管理者會依您在本網站的活躍程度來評斷您是否可成為專職影評，請靜候通知，謝謝!",
+	            showConfirmButton: false,
+	            timer: 3000,
+	        });
+			
+			row.innerHTML=`<div style="">已申請專職影評請靜候回復，謝謝</div>`;
+			
+		})
+	
+	
 	}
+	
+	
 });
 
 //評論秀出修改box
@@ -1123,7 +1137,7 @@ $(document.body).on("click", ".delete-comm",function () {
                   		Swal.fire({
                               position: "center",
                               icon: "success",
-                              title: "已移除評分",
+                              title: "已移除評論",
                               showConfirmButton: false,
                               timer: 1000,
                           });
@@ -1174,7 +1188,7 @@ $(document.body).on("click", ".delete-movcol",function () {
                   		Swal.fire({
                               position: "center",
                               icon: "success",
-                              title: "已移除評分",
+                              title: "已移除收藏",
                               showConfirmButton: false,
                               timer: 1000,
                           });
@@ -1264,7 +1278,7 @@ $(document.body).on("click", ".delete-artcol",function () {
                   		Swal.fire({
                               position: "center",
                               icon: "success",
-                              title: "已移除評分",
+                              title: "已移除收藏",
                               showConfirmButton: false,
                               timer: 1000,
                           });

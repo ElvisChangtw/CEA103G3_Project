@@ -3,6 +3,7 @@
  <head>
  	<meta charset="UTF-8">
  	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 	<script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
  	<style>
 		 body {
     margin: 0;
@@ -492,7 +493,7 @@ input {
     </div>
  </body>
  <script>
-window.onload = function () {
+ $(document).ready(function () {
 
 const name = document.getElementById('name');
 const cardnumber = document.getElementById('cardnumber');
@@ -771,13 +772,7 @@ expirationdate.addEventListener('focus', function () {
 securitycode.addEventListener('focus', function () {
     document.querySelector('.creditcard').classList.add('flipped');
 });
-};
-
-
-
-
-
-
+});
 
  </script>
  </html>

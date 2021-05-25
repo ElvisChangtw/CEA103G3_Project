@@ -31,7 +31,7 @@ import WebSocketSeat.model.SeatState;
 public class SeatWS {
 	//session是websocket的連線
 	private static Map<Integer, ArrayList<Session>> sessionsMap = new ConcurrentHashMap<>();
-	private static Map<Integer, ArrayList<String>> seatMap = new ConcurrentHashMap<>();
+	private static Map<Session, ArrayList<String>> seatMap = new ConcurrentHashMap<>();
 	
 	Gson gson = new Gson();
 
@@ -46,51 +46,75 @@ public class SeatWS {
 			sessionsMap.get(showtime_no).add(userSession);
 		}
 		
-		if(seatMap.get(showtime_no) != null) {
-			ArrayList<String> seat_list = seatMap.get(showtime_no);
+		ArrayList<String> seat_list = new ArrayList<String>();
+		
+		for(Session session : sessionsMap.get(showtime_no)) {
+			if(seatMap.get(session)!=null && seatMap.get(session).size() > 0) {
+				for(String seat_id : seatMap.get(session)) {
+					seat_list.add(seat_id);
+				}
+			}
+		}
+		if(seat_list.size() > 0) {
 			SeatState stateMessage = new SeatState("open", seat_list);
 			String stateMessageJson = gson.toJson(stateMessage);
 			userSession.getAsyncRemote().sendText(stateMessageJson);
 		}
-		
-//		for(Session session : sessionsMap.get(showtime_no)) {
-//			System.out.println(session.getId());
-//		}
-//		try {
-//			jsonObj.put("seat_list", seat_list);
-//			String json_obj = gson.toJson(jsonObj);
-//		} catch (JSONException e) {
-//			e.printStackTrace();
-//		}
 	}
-
+		
 	@OnMessage
 	public void onMessage(Session userSession, String message, @PathParam("showtime_no") Integer showtime_no) {
-		
-		ArrayList<Session> list = sessionsMap.get(showtime_no);
-		for(Session session : list) {
-			if(session != userSession && userSession != null && userSession.isOpen()) {
-				session.getAsyncRemote().sendText(message);
-			}
-		}
+		System.out.println("onMessage");
 		System.out.println(message);
+		
+		
 		
 		try {
 			JSONObject jsonObj = new JSONObject(message);
+			System.out.println(jsonObj);
+			if(jsonObj.has("type")) {
+				if(((String)jsonObj.get("type")).equals("checkOrder")) {
+					for(Session session : sessionsMap.get(showtime_no)) {
+						if(session != userSession && userSession != null && userSession.isOpen()) {
+							session.getAsyncRemote().sendText(message);
+						}
+					}
+					// [123, 123, 123, 123, 123]
+					String seat = (String) jsonObj.get("seat_id");
+					int first = seat.indexOf("[") + 1;
+					int last = seat.indexOf("]");
+					String seat1 = seat.substring(first, last);
+					System.out.println("seat1 = " + seat1);
+					String seat2[] = seat1.split(",");
+					ArrayList<String> list_seat = new ArrayList<String>();
+					for(int i = 0; i < seat2.length; i++) {
+						list_seat.add(seat2[i].trim());
+						System.out.println(seat2[i]);
+					}
+					seatMap.put(userSession, list_seat);
+					return;
+				}
+			}
 			String seat_id = (String) jsonObj.get("seat_id");
 			String seat_value = (String) jsonObj.get("seat_value");
 			System.out.println(seat_id);
 			System.out.println(seat_value);
-			if(seatMap.get(showtime_no) == null) {
+			if(seatMap.get(userSession) == null) {
 				ArrayList<String> list_seat = new ArrayList<String>();
 				list_seat.add(seat_id);
-				seatMap.put(showtime_no, list_seat);
+				seatMap.put(userSession, list_seat);
 			}else if("2".equals(seat_value)){
-				seatMap.get(showtime_no).add(seat_id);
+				seatMap.get(userSession).add(seat_id);
 			}else if("0".equals(seat_value)) {
-				seatMap.get(showtime_no).remove(seat_id);
+				seatMap.get(userSession).remove(seat_id);
 			}
 			
+			ArrayList<Session> list = sessionsMap.get(showtime_no);
+			for(Session session : list) {
+				if(session != userSession && userSession != null && userSession.isOpen()) {
+					session.getAsyncRemote().sendText(message);
+				}
+			}
 			
 			
 		} catch (JSONException e) {
@@ -105,23 +129,24 @@ public class SeatWS {
 
 	@OnClose
 	public void onClose(@PathParam("showtime_no") Integer showtime_no, Session userSession, CloseReason reason) {
+		ArrayList<String> list_seat = seatMap.get(userSession);
+		System.out.println("list_seat = " + list_seat);
+		System.out.println("sessionsMap.get(showtime_no) =  "+ sessionsMap.get(showtime_no).size());
+		
+		sessionsMap.get(showtime_no).remove(userSession);
+		
 		for(Session session : sessionsMap.get(showtime_no)) {
-			if (session.equals(userSession)) {
-				sessionsMap.get(showtime_no).remove(userSession);
-				break;
+			if(list_seat != null) {
+				System.out.println("list_seat.size() = " + list_seat.size());
+				if(list_seat.size() > 0) {
+					SeatState stateMessage = new SeatState("close", list_seat);
+					System.out.println("list_seat1 = " + list_seat);
+					String stateMessageJson = gson.toJson(stateMessage);
+					session.getAsyncRemote().sendText(stateMessageJson);
+				}
 			}
 		}
-		
-//		try {
-//			JSONObject jsonObj = new JSONObject(message);
-//			System.out.println("message");
-//			
-//			
-//		} catch (JSONException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
+		System.out.println(userSession.getId() + "斷開連線");
 		
 	}
 }

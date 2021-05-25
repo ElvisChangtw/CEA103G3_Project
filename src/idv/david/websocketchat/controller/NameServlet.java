@@ -10,10 +10,18 @@ import javax.servlet.http.HttpServletResponse;
 
 public class NameServlet extends HttpServlet {
 	
+	public void doGet(HttpServletRequest req, HttpServletResponse res)
+			throws ServletException, IOException {
+		doPost(req, res);
+	}	
 	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		req.setCharacterEncoding("UTF-8");
 		
+		String action = req.getParameter("action");
+		
+		if ("ueser".equals(action)) {
+			
 		String userName = req.getParameter("userName");
 		
 //		Integer member_no = new Integer(req.getParameter("member_no"));
@@ -22,10 +30,10 @@ public class NameServlet extends HttpServlet {
 //		RelationshipVO relationshipVO = (RelationshipVO) relationshipSvc.getAllFriendno(member_no);
 //		
 	
-//		list=VO.friend   把這個會員的有哪些好友用VO存到list
-//		friend_memberNO  在VO取memberno的好友出來做比對  
+//		list=VO.friend   ��������鈭末��VO摮list
+//		friend_memberNO  �VO��emberno��末��靘����  
 //		friendMap= (foreach(session)Map=friend_memberNO) 
-//		會員的好友用以存的list跟原本的sessionsMap做比對，正確的話再存成friendMap顯示
+//		����末��隞亙��ist頝���essionsMap�����迤蝣箇�店����riendMap憿舐內
 		
 //		for(RelationshipVO relationshipVO  : List1) {
 //			if(sessionsMap == relationshipVO) {
@@ -42,5 +50,6 @@ public class NameServlet extends HttpServlet {
 		
 		RequestDispatcher dispatcher = req.getRequestDispatcher("/chat.jsp");
 		dispatcher.forward(req, res);
+		}
 	}
 }

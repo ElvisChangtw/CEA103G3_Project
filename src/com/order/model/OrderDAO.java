@@ -321,6 +321,7 @@ public class OrderDAO implements OrderDAO_interface {
 			ResultSet rs = pstmt.getGeneratedKeys();
 			if(rs.next()) {
 				next_order_no = rs.getString(1);
+				orderVO.setOrder_no(new Integer(next_order_no));
 				System.out.println("自增主鍵值= " + next_order_no +"(剛新增成功的訂單編號)");
 			} else {
 				System.out.println("未取得自增主鍵值");

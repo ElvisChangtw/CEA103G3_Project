@@ -96,32 +96,28 @@
 			<td><img src="${pageContext.request.contextPath}/mem/mem.do?action=view_memPic&member_no=${memVO.member_no}"></td>
 			<td>${memVO.mb_phone}</td>
 			<td>${memVO.mb_city}${memVO.mb_address}</td> 
-<%-- 			<td>${memVO.status}</td> --%>
-			<c:choose>
-				<c:when test="${memVO.status=='0'}">
-				<td>審核中</td>
-				</c:when>
-				<c:when test="${memVO.status=='1'}">
-				<td>已通過審核</td>
-				</c:when>
-				<c:when test="${memVO.status=='2'}">
-				<td>已停權</td>
-				</c:when>
-				<c:when test="${memVO.status=='3'}">
-				<td>已停用</td>
-				</c:when>
-				<c:otherwise>
-				<td>無效狀態</td>
-				</c:otherwise>
-			</c:choose>
-			<td>${(memVO.mb_level=="1")? "一般會員":"專職影評"}</td>
+			<td>
+			<select class="status" disabled>
+				<option value="0" ${(memVO.status=="0")? 'selected':''}>審核中</option>
+				<option value="1" ${(memVO.status=="1")? 'selected':''}>通過審核</option>
+				<option value="2" ${(memVO.status=="2")? 'selected':''}>已停權</option>
+				<option value="3" ${(memVO.status=="3")? 'selected':''}>已停用</option>
+
+			</select>
+			</td>
+			<td>
+			<select class="level" disabled>
+				<option value="1" ${(memVO.mb_level=="1")? 'selected':''}>一般會員</option>
+				<option value="2" ${(memVO.mb_level=="2")? 'selected':''}>專職影評</option>
+			</select>
+			</td>
 			<td>${memVO.crt_dt}</td>
 			
 			<td>
-			  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/mem/mem.do" style="margin-bottom: 0px;">
-			     <button type="submit" class="btn-primary">修改</button>
-			     <input type="hidden" name="member_no"  value="${memVO.member_no}">
-			     <input type="hidden" name="action"	value="getOne_For_Update"></FORM>
+				 <input type="hidden" class="memNO" value="${memVO.member_no}">
+			     <button type="button" class="btn-primary update">修改</button>
+			     <button type="button" class="btn-info check" style="display:none;">確認</button>
+			     <button type="button" class="btn-warning cancel" style="display:none;">取消</button>	     
 			</td>
 		</tr>
 	</c:forEach>
@@ -130,14 +126,103 @@
 <%@ include file="page2.file" %> 
  <div class="alert-container">
  </div>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/imask/3.4.0/imask.min.js"></script>
 <script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
 </body>
+<script>
+$(document).ready(function(){
 
+	$(".update").click(function(){
+		$(this).css("display","none");
+		$(this).next().css("display","");
+		$(this).next().next().css("display","");
+		$(this).parent().prevAll().eq(2).children().prop("disabled",false);
+		$(this).parent().prevAll().eq(1).children().prop("disabled",false);
+
+	})
+	
+	$(".cancel").click(function(){
+		$(this).css("display","none");
+		$(this).prevAll().eq(0).css("display","none");
+		$(this).prevAll().eq(1).css("display","");
+		$(this).parent().prevAll().eq(2).children().prop("disabled",true);
+		$(this).parent().prevAll().eq(1).children().prop("disabled",true);
+
+	})
+	
+	
+	
+	$(".check").click(function(){
+			var mb_status = $(this).parent().prevAll().eq(2).children().val();
+			var mb_level = $(this).parent().prevAll().eq(1).children().val();
+			var member_no = $(this).prevAll().eq(1).val();
+			var check = $(this);
+
+			$.ajax({
+	             url: "<%=request.getContextPath()%>/MemServlet?",
+// 	             data: JSON.stringify({
+// 	            	 action: 'update_for_Ajax',
+// 	            	 status: mb_status,
+// 	            	 mb_level,
+// 	            	 member_no
+// 	             }),
+				 data: { "action": 'update_for_Ajax',
+					 	 "mb_status": mb_status,
+					     "mb_level": mb_level,
+					     "member_no": member_no,
+                  },
+	             type: "POST",
+// 	             contentType: 'application/json',
+// 	             processData: false,
+	             success: function (msg){
+	            	  if(msg=="success"){
+	            		 Swal.fire({
+	                         position: "center",
+	                         icon: "success",
+	                         title: "修改成功",
+	                         showConfirmButton: false,
+	                         timer: 1000,
+	                     });
+	            		 check.prev().css("display","");
+	            		 check.css("display","none");
+	            		 check.next().css("display","none");
+	            		 check.parent().prevAll().eq(2).children().prop("disabled",true);
+	            		 check.parent().prevAll().eq(1).children().prop("disabled",true);
+	            		 
+	            	 }else{
+	            		 Swal.fire({
+	                         position: "center",
+	                         icon: "error",
+	                         title: "修改失敗請洽管理員",
+	                         showConfirmButton: false,
+	                         timer: 1000,
+	                     });
+	            		 check.prev().css("display","");
+	            		 check.css("display","none");
+	            		 check.next().css("display","none");
+	            		 check.parent().prevAll().eq(2).children().prop("disabled",true);
+	            		 check.parent().prevAll().eq(1).children().prop("disabled",true);
+	            		 
+	            	 }
+	            	 
+	            	 
+	             }
+			
+			
+			})
+			
+			
+		})
+	
+	
+})
+</script>
 
 <script>
 	var MyPoint = "/NotifyWS/${memVO.member_no}";

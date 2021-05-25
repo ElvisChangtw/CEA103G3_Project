@@ -3,6 +3,7 @@ package com.mem.model;
 import java.sql.Date;
 
 public class MemVO implements java.io.Serializable{
+	private String action;
 	private Integer member_no;
 	private String mb_name;
 	private String mb_email;
@@ -115,6 +116,12 @@ public class MemVO implements java.io.Serializable{
 	}
 	public void setMb_address(String mb_address) {
 		this.mb_address = mb_address;
+	}
+	public String getAction() {
+		return action;
+	}
+	public void setAction(String action) {
+		this.action = action;
 	}
 	
 	

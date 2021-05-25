@@ -30,7 +30,7 @@
 
 <style>
    body {  
-     width:500px;  
+     width: 500px;  
      margin: 0 auto;  
      padding: 10px 20px 20px 20px;  
 
@@ -83,6 +83,7 @@
 		       		<div class="dropdown-menu">
 			            <a class="dropdown-item" href="<%=request.getContextPath()%>/mem/mem.do?action=listRelationships_ByMemberno_B&member_no=${memVO.member_no}">我的好友</a>
 			            <a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/relationship/friend_invite.jsp">好友邀請</a>
+		        		<a class="dropdown-item" href="<%=request.getContextPath()%>/chat.do?action=ueser&userName=${memVO.mb_name}">開啟聊天室</a>
 		        	</div>
 	      	 </div>
 		</div>	

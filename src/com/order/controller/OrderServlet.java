@@ -2,6 +2,7 @@ package com.order.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -13,6 +14,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.ord_food.model.Ord_foodService;
 import com.ord_food.model.Ord_foodVO;
@@ -297,7 +302,7 @@ public class OrderServlet extends HttpServlet {
  				
  				/***************************3.修改完成,準備轉交(Send the Success view)*************/
  				req.setAttribute("orderVO", orderVO); // 資料庫update成功後,正確的的ticket_typeVO物件,存入req
- 				String url = "/back-end/order/listOneOrder.jsp";
+ 				String url = "/back-end/order/listAllOrder.jsp";
  				RequestDispatcher successView = req.getRequestDispatcher(url); // 修改成功後,轉交listOneEmp.jsp
  				successView.forward(req, res);
 
@@ -309,7 +314,24 @@ public class OrderServlet extends HttpServlet {
  				failureView.forward(req, res);
  			}
  		}
-
+ 		
+// 		ajax
+		if("update_status".equals(action)) {
+			Integer order_no = new Integer(req.getParameter("order_no"));
+			OrderService ordSvc = new OrderService();
+			OrderVO orderVO = ordSvc.getOneOrder(order_no);
+			Integer member_no = orderVO.getMember_no();
+			Integer showtime_no = orderVO.getShowtime_no();
+			Timestamp crt_dt = orderVO.getCrt_dt();
+			String order_status = "3";
+			String order_type = orderVO.getOrder_type();
+			String payment_type = orderVO.getOrder_type();
+			Integer total_price = orderVO.getTotal_price();
+			String seat_name = orderVO.getSeat_name();
+			
+			 ordSvc.updateOrder(order_no, member_no, showtime_no, crt_dt, order_status, order_type, payment_type, total_price, seat_name);
+		}
+ 		
          if ("insert".equals(action)) { // 來自addEmp.jsp的請求  
  			List<String> errorMsgs = new LinkedList<String>();
  			// Store this set in the request scope, in case we need to
@@ -602,13 +624,13 @@ public class OrderServlet extends HttpServlet {
 					Integer ticket_type_no = new Integer(ticket_typeno[i]);
 					Integer ticket_count = new Integer(ticketcount[i]);
 					Integer price1 = new Integer(ticketprice[i]) * ticket_count;
-					
+					System.out.println(ticket_count);
 					Ord_ticket_typeVO ord_ticket_typeVO = new Ord_ticket_typeVO();
 					ord_ticket_typeVO.setTicket_type_no(ticket_type_no);
 					ord_ticket_typeVO.setTicket_count(ticket_count);
 					ord_ticket_typeVO.setPrice(price1);
 					if(ticket_count != 0) {
-					ordTicket_list.add(ord_ticket_typeVO);
+						ordTicket_list.add(ord_ticket_typeVO);
 					}
 				}
 				
@@ -630,11 +652,19 @@ public class OrderServlet extends HttpServlet {
 					seat_no = seat_no + s[i];
 				}
 				
+				//websocket 把選中的座位給checkOrder
+				String seat[] = req.getParameterValues("seat_id");
+				ArrayList<String> seat_id = new ArrayList<String>();
+				for(int i = 0; i < seat.length; i++) {
+					seat_id.add(seat[i]);
+				}
+				
 				req.setAttribute("total_price", total_price);
 				req.setAttribute("ordFood_list", ordFood_list);
 				req.setAttribute("ordTicket_list", ordTicket_list);
   				req.setAttribute("seat_name", seat_name);
   				req.setAttribute("seat_no", seat_no);
+  				req.setAttribute("seat_id", seat_id);
  				
  				/***************************3.新增完成,準備轉交(Send the Success view)***********/
  				String url = "/back-end/order/checkOrder.jsp";
@@ -745,8 +775,10 @@ public class OrderServlet extends HttpServlet {
   				orderVO = orderSvc.addOrder2(member_no, showtime_no, crt_dt	, order_status, 
   						order_type, payment_type, total_price, seat_name, ordFood_list, 
   						ordTicket_list, seat_no);
+  				System.out.println("order_no = " +  orderVO.getOrder_no());
   				/***************************3.新增完成,準備轉交(Send the Success view)***********/
-  				String url = "/back-end/order/listAllOrder.jsp";
+  				req.setAttribute("orderVO", orderVO);
+  				String url = "/back-end/order/order_complete.jsp";
   				RequestDispatcher successView = req.getRequestDispatcher(url); // 新增成功後轉交listAllTicket_type.jsp
   				successView.forward(req, res);	
   				

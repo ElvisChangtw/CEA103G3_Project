@@ -83,6 +83,7 @@
 		       		<div class="dropdown-menu">
 			            <a class="dropdown-item" href="<%=request.getContextPath()%>/mem/mem.do?action=listRelationships_ByMemberno_B&member_no=${memVO.member_no}">我的好友</a>
 			            <a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/relationship/friend_invite.jsp">好友邀請</a>
+		        		 <a class="dropdown-item" href="<%=request.getContextPath()%>/chat.do?action=ueser&userName=${memVO.mb_name}">開啟聊天室</a>
 		        	</div>
 	      	 </div>
 		</div>		
@@ -129,9 +130,11 @@
      	<tbody>	
      		<tr>
      			<td>
+     				<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${mem1VO.member_no}"
+						alt="尚無圖片" class="rounded-circle" width="60px" height="60px" title="" style="border: groove;"/>
      				【<font color=orange>${mem1VO.mb_name}</font>】
      			</td>    			
-     			<td>
+     			<td style="vertical-align:inherit;">
 					<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/relationship/relationship.do" name="form3">
 						<input type="hidden" name="member_no" value="${memVO.member_no}">
 						<input type="hidden" name="friend_no" value="${mem1VO.member_no}">
