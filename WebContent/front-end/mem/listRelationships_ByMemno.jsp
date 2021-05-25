@@ -19,7 +19,7 @@
 
 <style>
    body {  
-     width: 500px;  
+     width: 565px;  
      margin: 0 auto;  
      padding: 10px 20px 20px 20px;  
  	        }  

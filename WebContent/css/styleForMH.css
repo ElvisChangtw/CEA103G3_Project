@@ -112,4 +112,16 @@
         #go-to-forum:hover{
         	color: #75D9B5 !important;
         }
-       
+       div.row>div.col-sm-3>img{
+       		width:115px;
+       		height:100px;
+       		margin: 0 auto;
+       }
+       section.tab-panel>div table.table>tbody>tr>th, 
+       section.tab-panel>div table.table>tbody>tr>td{
+       	color:black;
+       }
+       table.table.table-hover
+       {
+       	height:auto;
+       }

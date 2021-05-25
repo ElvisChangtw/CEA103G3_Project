@@ -50,7 +50,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 <title>文章資料 - listOneArticle2.jsp</title>
 
@@ -230,16 +230,17 @@
 	let isLiked = <%=((likeSvc.getOneLike(articleno, myNumber)==null)? false:true)%>
 	
 	$(document).ready(function(){
+		
 		console.log("isLiked = " + isLiked);
 		//第一次判斷
 		if(isLiked){
 			console.log("應該要亮");
-			$("#thumb").css("color","#FF7575");
+			$("#thumb").css("color","#FF7575");		
 		} else{
 			console.log("應該要暗");
 			$("#thumb").css("color","black");
 		}
-// 		 $("#thumb").val("1");
+		// 		 $("#thumb").val("1");
 	});
 	
 	 $("#thumb").click(function(e){
@@ -249,12 +250,45 @@
 			$("#hao").text("文章點讚數:" + (--likeCnt2));
 			$("#hao1").text("按讚");
 			$("#thumb").css("color","black");
+			Swal.fire({
+	            position: "center",
+	            icon: "success",
+	            title: "已收回讚",
+	            showConfirmButton: false,
+	            timer: 3000,
+				width: 600,
+				padding: '3em',
+//  			background: '#fff url(/images/trees.png)',
+				backdrop: `
+				rgba(0,0,0,0.4)
+	<%-- 		url("<%=request.getContextPath()%>/images/1.jpg") --%>
+				left center
+				no-repeat
+				`
+			});
 			isLiked = !isLiked;
 		} else{
 			likeCnt = ${articleVO.likecount};
 			$("#hao").text("文章點讚數:" + (++likeCnt2));
 			$("#hao1").text("回收讚");
 			$("#thumb").css("color","#FF7575");
+			
+			Swal.fire({
+	            position: "center",
+	            icon: "success",
+	            title: "已按讚",
+	            showConfirmButton: false,
+	            timer: 3000,
+				width: 600,
+				padding: '3em',
+// 				background: '#fff url(/images/trees.png)',
+				backdrop: `
+				rgba(0,0,0,0.4)
+	<%-- 		url("<%=request.getContextPath()%>/images/1.jpg") --%>
+				left center
+				no-repeat
+				`
+			});
 			isLiked = !isLiked;
 	   }   
 	   
@@ -295,12 +329,44 @@
 			if(isCollection){
 				$("#hao2").text("我要收藏");
 				$("#thumb1").css("color","black");
+				Swal.fire({
+		            position: "center",
+		            icon: "success",
+// 		            imageUrl: "https://pic.pimg.tw/softwarecenter/1397971601-1574704654.png",
+		            title: "已取消收藏",
+		            showConfirmButton: false,
+		            timer: 3000,
+					width: 600,
+					padding: '3em',
+//	  				background: '#fff url(/images/trees.png)',
+					backdrop: `
+					rgba(0,0,0,0.4)
+<%-- 					url("<%=request.getContextPath()%>/images/1.jpg") --%>
+					left center
+					no-repeat
+					`
+				});
 				
 				isCollection = !isCollection;
 			} else{
 				$("#hao2").text("取消收藏");
 				$("#thumb1").css("color","blue");
-				
+				Swal.fire({
+		            position: "center",
+		            icon: "success",
+		            title: "已收藏",
+		            showConfirmButton: false,
+		            timer: 3000,
+					width: 600,
+					padding: '3em',
+//	  			background: '#fff url(/images/trees.png)',
+					backdrop: `
+					rgba(0,0,0,0.4)
+		<%-- 		url("<%=request.getContextPath()%>/images/1.jpg") --%>
+					left center
+					no-repeat
+					`
+				});
 				isCollection = !isCollection;
 		   }   
 		   

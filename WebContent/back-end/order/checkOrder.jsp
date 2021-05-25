@@ -18,6 +18,7 @@
 <jsp:useBean id="movieSvc" scope="page" class="com.movie.model.MovieService" />
 <jsp:useBean id="theaterSvc" scope="page" class="com.theater.model.TheaterService" />
 
+<jsp:include page="/front_header.jsp"/>
 <html>
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -28,7 +29,7 @@ body{
 	box-sizing: border-box;
 }
 table {
-	width: 600px;
+	width: 660px;
 	background-color: white;
 	margin-top: 20px;
 	/* 	margin-bottom: 1px; */
@@ -49,14 +50,19 @@ td {
 	color: black;
 }
 
+div.front_header, div.container-fluid, div.row{
+	width:100%; 
+}
+
 #div1, #div6 {
-	width: 600px;
+	width: 660px;
 /* 	height: 150px; */
 /* 	background-color: rgba(0, 0, 0, 0.5); */
 	padding-top: 10px;
 	padding-bottom: 10px;
 }
 #div2,#div7{
+	width:660px;
 	background-color: rgba(0, 0, 0, 0.5);
 	padding-top: 10px;
 	padding-bottom: 10px;
@@ -77,33 +83,23 @@ FORM {
 	color: white;
 }
 
-img{
-  	width: 115px;
-  	height: 100px;
-  	margin: 0 auto;
-  }
+/* img{ */
+/*   	width: 115px; */
+/*   	height: 100px; */
+/*   	margin: 0 auto; */
+/*   } */
 
 </style>
-<script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
-<script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+<!-- <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script> -->
+<!-- <script src="http://code.jquery.com/jquery-1.12.4.min.js"></script> -->
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"> -->
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body bgcolor='white' onload="connect();" onunload="disconnect();">
 
-	<%-- 錯誤表列 --%>
-	<c:if test="${not empty errorMsgs}">
-		<font style="color: red">請修正以下錯誤:</font>
-		<ul>
-			<c:forEach var="message" items="${errorMsgs}">
-				<li style="color: red">${message}</li>
-			</c:forEach>
-		</ul>
-	</c:if>
-
 	<div id="main" class="container-fluid">
 	  <div class="row">
-		<div id="div1" class="col-6">
+		<div id="div1" class="col-md-6">
 		  <FORM METHOD="post"	ACTION="<%=request.getContextPath()%>/order/order.do" name="form1">
 			<div style="margin-bottom:5px; padding: 10px 0px;">
 				<c:choose>
@@ -124,7 +120,7 @@ img{
 						<img src="<%=request.getContextPath()%>/back-end/theater/images/3.jpg" style="width:100px; height: 120px;">
 					</c:when>
 				</c:choose>
-				<h2 style="display: inline-block; margin-top: -7px; margin-left: 65px; vertical-align:top; width:170px;">
+				<h2 style="display: inline-block; margin-top: -7px; margin-left: 20px; margin-top:10px; vertical-align:top; width:200px;">
 					<c:choose>
 						<c:when test="${theaterSvc.getOneTheater(showtimeSvc.getOneShowtime(param.showtime_no)
 						.theater_no).theater_type == 0}">
@@ -155,15 +151,15 @@ img{
 					${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(param.showtime_no)
 						.movie_no).moviename}
 				</h2>
-				<p style="display: inline-block; margin-top: 0px; margin-left: 66px; vertical-align:top; width: 190px;"  >
-					<i class="fas fa-clock" style="margin-right:5px; color:#008080;"></i> ${df.format(showtimeSvc.getOneShowtime(param.showtime_no).showtime_time)}
+				<p style="display: inline-block; margin-top: 35px; margin-left: 3px; vertical-align:top; float:right; line-height:0;" >
+					<i class="fas fa-clock" style="margin-right:5px; color:#008080; font-size:14px;"></i> ${df.format(showtimeSvc.getOneShowtime(param.showtime_no).showtime_time)}
 					<br>
 					<br>
-					<i class="fas fa-video" style="margin-right:5px; color:#008080;"></i> ${theaterSvc.getOneTheater(showtimeSvc.getOneShowtime(param.showtime_no)
+					<i class="fas fa-video" style="margin-right:5px; color:#008080; font-size:14px;"></i> ${theaterSvc.getOneTheater(showtimeSvc.getOneShowtime(param.showtime_no)
 						.theater_no).theater_name}
 					<br>
 					<br>
-					<i class="fas fa-couch" style="margin-right:5px; color:#008080;"></i>${seat_name}
+					<i class="fas fa-couch" style="margin-right:5px; color:#008080; font-size:14px;"></i>${seat_name}
 				</p>
 			</div>
 			<div id="div2">
@@ -220,16 +216,27 @@ img{
 			color: white; border: white; width:100px; height:50px; margin-left: 83%;">
 		    </FORM>
 		  </div>
-			  <div class="col-2" style="margin-top:110px;"  >
+			  <div class="col-md-2" style="margin-top:155px; margin-left:45px;"  >
 				<div class="row" >
-					<div class="col-12" style="padding:0; margin-bottom: 20px;">
+					<div class="col-md-12" style="padding:0; margin-bottom: 20px;">
 						<div style="height:40px;background-color: #337ab7; border: 1px solid black;">
 							<div style="margin-top: 7px; margin-left:40px; color:white;">
 								時間剩餘<span id="timeOut">5:00</span> 
 							</div>
 						</div>
 					</div>
-					<div class="col-12" style="padding:0;border: 1px solid black;">
+					<div class="col-md-12" style="padding:0;border: 1px solid black;">
+					<div style="height:40px;background-color: #337ab7; border: 1px solid black;">
+						<div style="margin-top: 7px; margin-left:40px; color:white;">會員專區</div>
+					</div>
+					<div style="height:50px; margin-top:10px; font-size:10px; color:#777777; padding-left:10px;">
+						<c:if test="${sessionScope.memVO==null}">
+							尚未登入
+						</c:if>
+						<c:if test="${sessionScope.memVO!=null}">
+							嗨 ${sessionScope.memVO.mb_name} 您好
+						</c:if>
+					</div>
 					</div>
 				</div>
 			</div>
@@ -319,6 +326,6 @@ img{
 	
 	
 	</script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
+<!-- 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script> -->
 </body>
 </html>

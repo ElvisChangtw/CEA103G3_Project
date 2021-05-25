@@ -41,6 +41,10 @@
 				MoviesHit好友聊天室
 			</span>
 				<button type="button" class="btn btn-success" onclick="location.href='<%=request.getContextPath()%>/front-end/relationship/select_page.jsp'">回前一頁</button>
+			
+			<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${memVO.member_no}"
+			alt="尚無圖片" class="rounded-circle" width="60px" height="60px" title="" style="float: right;"/>
+<%--      	【<font color=orange>${memVO.mb_name}</font>】 --%>		      		
 		</div>	
 
 	<h3 id="statusOutput" class="statusOutput">請選擇聊天對象</h3>
@@ -50,9 +54,9 @@
 	<div id="messagesArea" class="panel1 message-area" ></div>
 	<div class="panel input-area">
 		<input id="message" class="text-field" type="text" placeholder="Message" onkeydown="if (event.keyCode == 13) sendMessage();" /> 
-		<input type="submit" id="sendMessage" class="btn btn-dark" value="送出" onclick="sendMessage();" /> 
-		<input type="button" id="connect" class="btn btn-dark" value="上線" onclick="connect();" /> 
-		<input type="button" id="disconnect" class="btn btn-dark" value="下線" onclick="disconnect();" />
+		<input type="submit" id="sendMessage" class="btn btn-light" value="送出" onclick="sendMessage();" /> 
+		<input type="button" id="connect" class="btn btn-light" value="上線" onclick="connect();" /> 
+		<input type="button" id="disconnect" class="btn btn-light" value="下線" onclick="disconnect();" />
 	</div>
 	
 <!-- </body> -->
