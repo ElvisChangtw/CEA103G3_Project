@@ -104,11 +104,11 @@ FORM {
 	margin-bottom:0px;
 }
 
-/* img{ */
-/*   	width: 115px; */
-/*   	height: 100px; */
-/*   	margin: 0 auto; */
-/*   } */
+ .img{ 
+   	width: 115px; 
+   	height: 100px; 
+   	margin: 0 auto; 
+   } 
  .food{
  	text-align:center;
  	background-color:aqua;
@@ -241,7 +241,7 @@ FORM {
 				<div class="row">
 					<c:forEach var="foodVO" items = "${foodSvc.all}">
 						<div class="food${foodVO.food_type} col-sm-3"style="padding:0px;display: inline-block; margin-top: 20px; text-align:center;">
-							<img src="<%=request.getContextPath()%>/food/food.do?action=getPic&food_no=${foodVO.food_no}" >
+							<img class="img" src="<%=request.getContextPath()%>/food/food.do?action=getPic&food_no=${foodVO.food_no}" >
 							<p>${foodVO.food_name}</p>
 							<p>$ ${foodVO.food_price}</p>
 							<select name="food_count">
