@@ -115,7 +115,6 @@ FORM {
 		input[type=checkbox]:checked+span {
 			/* 			color: yellow; */
 			background-color: #ADD8E6;
-
 		}
 
 		input[type=checkbox]+span:first-child {
@@ -129,7 +128,7 @@ FORM {
 		input#submit{
 			margin-left: 330px;
 		}
-		button{
+		.button{
 			width: 25px;
 			height: 25px;
 		}
@@ -148,7 +147,6 @@ FORM {
 			font-size: 20px;
 			font-family:monospace;
 			line-height: 30px;
-			
 		}
 		#d3, #d4, #d5{
 			width:25px;
@@ -178,6 +176,7 @@ FORM {
 <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
 <script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body bgcolor='white' onload="connect();" onunload="disconnect();">
 
@@ -271,14 +270,26 @@ FORM {
 			
 		</div>
 		<div class="col-0.5"></div>
-		<div class="col-2" style="margin-top:150px;"  >
+		<div class="col-2" style="margin-top:85px;"  >
 			<div class="row" >
+				<div class="col-12" style="padding:0; margin-bottom: 20px;">
+					<div style="height:40px;background-color: #337ab7; border: 1px solid black;">
+						<div style="margin-top: 7px; margin-left:40px; color:white;">
+							時間剩餘<span id="timeOut">1:00</span> 
+						</div>
+					</div>
+				</div>
 				<div class="col-12" style="padding:0;border: 1px solid black;">
 					<div style="height:40px;background-color: #337ab7; border: 1px solid black;">
 						<div style="margin-top: 7px; margin-left:40px; color:white;">會員專區</div>
 					</div>
 					<div style="height:50px; margin-top:10px; font-size:10px; color:#777777; padding-left:10px;">
-						${sessionScope.member_no == null ? "尚未登入" : '嗨!TONY 您好'}
+						<c:if test="${sessionScope.memVO==null}">
+							尚未登入
+						</c:if>
+						<c:if test="${sessionScope.memVO!=null}">
+							嗨 ${sessionScope.memVO.mb_name} 您好
+						</c:if>
 					</div>
 				</div>
 				
@@ -403,7 +414,7 @@ FORM {
 				label.style.cursor= "not-allowed";
 				seat_name.style.backgroundColor = "coral";
 				seat.addEventListener("click", function(){
-					alert("提醒您，此座位不能點選");
+					swal.fire('提醒您，此座位不能點選');
 					seat.checked = false;
 				},false);
 				
@@ -448,7 +459,7 @@ FORM {
 			}
 		}
 		if(count != countSeat){
-			alert("您還有" + (count-countSeat + "個座位未選擇")); 
+			swal.fire("您還有" + (count-countSeat + "個座位未選擇")); 
 			countSeat = 0;
 			return false;
 		}
@@ -468,7 +479,12 @@ FORM {
 				seatName.setAttribute("type", "hidden");
 				seatName.setAttribute("name", "seat_name");
 				seatName.setAttribute("value", seat.className.slice(-3));
+				let seat_id = document.createElement("input");
+				seat_id.setAttribute("type", "hidden");
+				seat_id.setAttribute("name", "seat_id");
+				seat_id.setAttribute("value", seat.id);
 				document.getElementById("d1").appendChild(seatName);
+				document.getElementById("d1").appendChild(seat_id);
 			}
 			
 			if(seat.disabled == true){
@@ -506,11 +522,51 @@ FORM {
 		webSocket.onmessage = function(event) {
 			var jsonObj = JSON.parse(event.data);
 			console.log(jsonObj);
+			console.log(jsonObj.type);
+			console.log(typeof jsonObj.type);
 			if("open" === jsonObj.type){
 				let seat_list = jsonObj.seat_list;
 				for(let i = 0; i < seat_list.length; i++){
 					let id = seat_list[i];
 					let seat = document.getElementById(id);
+					seat.value = 2;
+					seat.disabled = true;
+					seat.parentNode.style.cursor= "not-allowed";
+					seat.nextElementSibling.style.backgroundColor = "coral";
+					seat.parentNode.addEventListener("click", disabled,false);
+				}
+				return;
+			}
+			if("close" === jsonObj.type){
+				let seat_list = jsonObj.seat_list;
+				for(let i = 0; i < seat_list.length; i++){
+					let id = seat_list[i];
+					let seat = document.getElementById(id);
+					seat.value = 0;
+					seat.disabled = false;
+					seat.parentNode.removeEventListener("click", disabled ,false);
+					seat.nextElementSibling.style.backgroundColor = "";
+					seat.parentNode.style.cursor= "pointer";
+				}
+				return;
+			}
+			if("checkOrder" === jsonObj.type){
+				console.log(jsonObj.seat_id);
+				let string = jsonObj.seat_id;
+				let first = string.indexOf("[") + 1;
+				let last = string.lastIndexOf("]");
+				console.log(first);
+				console.log(last);
+				
+				
+				let seat_list = string.substring(first,last).split(",");
+				console.log(seat_list);
+				console.log(typeof seat_list);
+				for(let i = 0; i < seat_list.length; i++){
+					let id = seat_list[i].trim();
+					console.log(id);
+					let seat = document.getElementById(id);
+					console.log(seat);
 					seat.value = 2;
 					seat.disabled = true;
 					seat.parentNode.style.cursor= "not-allowed";
@@ -544,21 +600,37 @@ FORM {
 			console.log("Disconnected!");
 		};
 	}
+// 	window.onbeforeunload = function(e){
+// // 		console.log("111");
+// // 		webSocket.send("onbeforeunload");
+// // 		console.log("222");
+// // 		disconnect();
+// 	};
+
+	
+// 	function release(){
+// 		alert("準備結束連線");
+// 		for(let i = 0; i < 399; i++){
+// 			let seat = document.getELementById(i);
+// 			if(seat.checked == true && seat.disalbed == false){
+// 				let list = [];
+// 				list.push(seat.id);
+// 			}
+// 		}
+		
+// 		var jsonObj = {
+// 				"type" : "close",
+// 				"seat_id" : list
+// 		};
+// 		console.log("關閉連線")
+// 		webSocket.send("123");
+// 		alert("準備結束連線");
+// 		disconnect();
+		
+// 	}
 		
 	function disconnect() {
 		webSocket.close();
-		for(let i = 0; i < 399; i++){
-			let seat = document.getELementById(i);
-			if(seat.checked == true && seat.disalbed == false){
-				let list = [];
-				list.push(seat.id);
-			}
-		}
-		
-		var jsonObj = {
-				"seat_id" : list,
-		};
-		webSocket.send(JSON.stringify(jsonObj));
 	}
 	
 	function disabled(seat){
@@ -566,9 +638,22 @@ FORM {
 		seat.checked = false;
 	}
 	
-
-
-
+	//計時器
+// 	let sec = 59;
+// 		setInterval(function() {
+// 			$("#timeOut").text(timeFormat(sec));
+// 			sec -= 1;
+// 		}, 1000)
+// 		setTimeout(
+// 			function() {
+// 				window.location.replace("${pageContext.request.contextPath}/back-end/showtime/select_page.jsp");
+// 			}, sec * 1000);
+// 		function timeFormat(second) {
+// 			let minute = parseInt(second / 60);
+// 			second %= 60;
+// 			(second < 10) ? second = '0' + second : second;
+// 			return minute + ":" + second;
+// 		}
 
 </script>
 

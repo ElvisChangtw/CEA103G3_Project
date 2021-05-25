@@ -32,7 +32,7 @@ body{
 	box-sizing: border-box;
 }
 table {
-	width: 600px;
+	width: 100%;
 	background-color: white;
 	margin-top: 20px;
 	/* 	margin-bottom: 1px; */
@@ -109,6 +109,11 @@ img{
   	height: 100px;
   	margin: 0 auto;
   }
+ .food{
+ 	text-align:center;
+ 	background-color:aqua;
+ 	border: 1px solid red;
+ }
 
 
 </style>
@@ -132,7 +137,7 @@ img{
 	<div id="main" class="container" >
 	  <div class="row">
 		<div id="div1" style="display:inline-block" class="col-8">
-			<div style="margin-bottom:5px; padding: 10px 0;">
+			<div style="margin-bottom:5px; padding: 10px 0;" class="col-12">
 				<c:choose>
 					<c:when test="${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(param.showtime_no)
 					.movie_no).grade == 0}">
@@ -228,23 +233,27 @@ img{
 				<h2 id="h3">選擇餐飲</h2>
 				<p id="p2">請選擇販賣部商品並結帳</p>
 			</div>
-				<c:forEach var="foodVO" items = "${foodSvc.all}">
-					<div style="display: inline-block; margin-top: 20px; text-align:center;">
-						<img src="<%=request.getContextPath()%>/food/food.do?action=getPic&food_no=${foodVO.food_no}" >
-						<p>${foodVO.food_name}</p>
-						<p>$ ${foodVO.food_price}</p>
-						<select name="food_count">
-							<option value="0">0</option>
-							<option value="1">1</option>
-							<option value="2">2</option>
-							<option value="3">3</option>
-							<option value="4">4</option>
-							<option value="5">5</option>
-						</select>
-						<input type="hidden" name="food_no"  value="${foodVO.food_no}">
-						<input type="hidden" name="food_price"  value="${foodVO.food_price}">
-					</div>
-				</c:forEach>
+			<div class="col-12" style="padding:0px;">
+				<div class="row">
+					<c:forEach var="foodVO" items = "${foodSvc.all}">
+						<div class="food${foodVO.food_type} col-sm-3"style="padding:0px;display: inline-block; margin-top: 20px; text-align:center;">
+							<img src="<%=request.getContextPath()%>/food/food.do?action=getPic&food_no=${foodVO.food_no}" >
+							<p>${foodVO.food_name}</p>
+							<p>$ ${foodVO.food_price}</p>
+							<select name="food_count">
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+							</select>
+							<input type="hidden" name="food_no"  value="${foodVO.food_no}">
+							<input type="hidden" name="food_price"  value="${foodVO.food_price}">
+						</div>
+					</c:forEach>
+				</div>
+			</div>
 			<input type="hidden" name="action" value="sendToST">
 			<input type="hidden" name="showtime_no" value="${param.showtime_no}">
 			<input type="button"  id="btn" value="繼續   →"  style="margin-top: 20px; background-color: #337ab7; 
@@ -259,7 +268,12 @@ img{
 						<div style="margin-top: 7px; margin-left:40px; color:white;">會員專區</div>
 					</div>
 					<div style="height:50px; margin-top:10px; font-size:10px; color:#777777; padding-left:10px;">
-						${sessionScope.member_no == null ? "尚未登入" : '嗨!TONY 您好'}
+						<c:if test="${sessionScope.memVO==null}">
+							尚未登入
+						</c:if>
+						<c:if test="${sessionScope.memVO!=null}">
+							嗨 ${sessionScope.memVO.mb_name} 您好
+						</c:if>
 					</div>
 				</div>
 				

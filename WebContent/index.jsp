@@ -550,37 +550,30 @@ left: 1095px;
                 	<div class="form-header">
                        <h1>訂票</h1>
                     </div>
-                    <form>
+                    <form METHOD="post" ACTION="<%=request.getContextPath()%>/order/order.do" name="form1">
                     	<div class="form-group">
                         	<span class="form-label">電影</span>
-                        	<select class="form-control">
-                        	<c:forEach var="movieVO" items="${inTheatersMovie}"> 
-								<option value="${movieVO.movieno}">${movieVO.moviename} 
-							</c:forEach> 
-<!--                                <option>正義聯盟</option> -->
-<!--                                <option>即刻救援</option> -->
-<!--                                <option>星際大戰 天行者的崛起</option> -->
-<!--                                <option>讓子彈飛</option> -->
-<!--                                <option>哥吉拉大戰金剛</option> -->
+                        	<select class="form-control" id="movie" name="movie_no">
+								<option value="">請選擇電影</option>
                             </select>
                             <span class="select-arrow"></span>
                         </div>
                         <div class="form-group">
-                           <span class="form-label">場次</span>
-                           <select class="form-control">
-                               <option>場次一</option>
-                               <option>場次二</option>
-                               <option>場次三</option>
-                               <option>場次四</option>
-                               <option>場次五</option>
+                           <span class="form-label">日期</span>
+                           <select class="form-control" id="date" name="movie_date">
+								<option value="">請選擇日期</option>
                            </select>
                            <span class="select-arrow"></span>
                         </div>
                         <div class="form-group">
-                           <span class="form-label">放映時間</span>
-                           <input class="form-control" type="datetime-local" required>
+                            <span class="form-label">場次</span>
+                           <select class="form-control" id="showtime" name="showtime_no">
+								<option value="">請選擇場次</option>
+                           </select>
+                           <span class="select-arrow"></span>
                         </div>
                         <div class="form-btn">
+                        	<input type="hidden" name="action" value="sendToFT">
                            <button class="submit-btn">Book Now</button>
                         </div>
                     </form>
@@ -1590,6 +1583,57 @@ activate: function(event) { // Callback function if tab is switched
             });
         });
     </script>
+    
+    <script>
+	    $.ajax({
+			url: "<%=request.getContextPath()%>/showtime/showtime.do",
+			type: "POST",
+			data:{
+				action: "getMovieFromHibernate",
+			},
+			success: function(json){
+					let jsonobj = JSON.parse(json);
+					for(let i = 0; i < jsonobj['movie_no'].length; i++){
+						let opt = $("<option>").val(jsonobj["movie_no"][i]).text(jsonobj["movie_name"][i]);
+		   				$("#movie").append(opt);
+					}
+				}
+		});
+		
+	  	$("#movie").change(function(){
+	    	$.ajax({
+	    		url: "<%=request.getContextPath()%>/showtime/showtime.do?action=getDateFromHibernate&movie_no=" + $("#movie>option:selected:eq(0)").val(),
+	    		type: "POST",
+	    		success: function(json){
+						let jsonobj = JSON.parse(json);
+						$("#date").html("<option>請選擇日期</option>");
+						for(let i = 0; i < jsonobj['showtime_date'].length; i++){
+							let opt = $("<option>").val(jsonobj['showtime_date'][i]).text(jsonobj['showtime_date'][i]);
+	         				$("#date").append(opt);
+						}
+	    			}
+	    	});
+		});
+	    	
+	    	$("#date").change(function(){
+	        	$.ajax({
+	        		url: "<%=request.getContextPath()%>/showtime/showtime.do?action=getTimeFromHibernate",
+	        		type: "POST",
+	        		data: {	movie_no: $("#movie>option:selected:eq(0)").val(), 
+	        			   	showtime_date: $("#date>option:selected:eq(0)").val(),
+	        		},
+	        		success: function(json){
+							let jsonobj = JSON.parse(json);
+							$("#showtime").html("<option>請選擇場次</option>");
+							for(let i = 0; i < jsonobj['showtime_no'].length; i++){
+								let opt = $("<option>").val(jsonobj['showtime_no'][i]).text(jsonobj['showtime_time'][i]);
+		         				$("#showtime").append(opt);
+							}
+	        			}
+	        	});
+		});
+    </script>
+    
     <script type="text/javascript">
         $(document).ready(function() {
             /*
