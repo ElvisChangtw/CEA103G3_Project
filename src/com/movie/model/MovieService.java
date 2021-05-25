@@ -131,10 +131,8 @@ public class MovieService {
 	
 	public void updateMovieStatus() {
 		dao.updateMovieStatus();
+		System.out.println("已更新電影狀態");
 	}
-	
-	
-	
 	
 	public List<MovieVO> getAllForGroup(){
 		return dao.getAllForGroup();

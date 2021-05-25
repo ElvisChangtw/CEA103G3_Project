@@ -404,14 +404,18 @@ public class MovieServlet extends HttpServlet {
 				String trailorReg = "^(https?\\:\\/\\/)?(www\\.)?(youtube\\.com|youtu\\.?be)\\/.+$";
 				String embed = null;
 				if(trailor.length() ==0) {
-					trailor = "https://www.youtube.com/";
+					trailor = "https://www.youtube.com/watch?v=";
 					embed = "26Q8duJW11s";
 				}else {
 					if (trailor.trim().matches(trailorReg)) {
-						String[] strs= trailor.split("=");
-						int len=strs.length;
-						for(int i=0;i<len;i++  ){
-							embed = strs[1].toString();
+						if(trailor.equals("https://www.youtube.com/watch?v=")) {
+							embed = "26Q8duJW11s";
+						}else {
+							String[] strs= trailor.split("=");
+							int len=strs.length;
+							for(int i=0;i<len;i++  ){
+								embed = strs[1].toString();
+							}
 						}
 					}else {
 						errorMsgs.put("trailor", "請輸入正確格式網址");
@@ -621,14 +625,18 @@ System.out.println("我錯了"+e.getMessage());
 				String trailorReg = "^(https?\\:\\/\\/)?(www\\.)?(youtube\\.com|youtu\\.?be)\\/.+$";
 				String embed = null;
 				if(trailor.length() ==0) {
-					trailor = "https://www.youtube.com/";
+					trailor = "https://www.youtube.com/watch?v=";
 					embed = "26Q8duJW11s";
 				}else {
 					if (trailor.trim().matches(trailorReg)) {
-						String[] strs= trailor.split("=");
-						int len=strs.length;
-						for(int i=0;i<len;i++  ){
-							embed = strs[1].toString();
+						if(trailor.equals("https://www.youtube.com/watch?v=")) {
+							embed = "26Q8duJW11s";
+						}else {
+							String[] strs= trailor.split("=");
+							int len=strs.length;
+							for(int i=0;i<len;i++  ){
+								embed = strs[1].toString();
+							}
 						}
 					}else {
 						errorMsgs.put("trailor", "請輸入正確格式網址");
@@ -678,6 +686,7 @@ System.out.println("我錯了"+e.getMessage());
 				/*************************** 其他可能的錯誤處理 **********************************/
 			} catch (Exception e) {
 				errorMsgs.put("Exception", e.getMessage());
+System.out.println("出錯了"+e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/back-end/movie/addMovie.jsp");
 				failureView.forward(req, res);
 			}
