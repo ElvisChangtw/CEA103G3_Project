@@ -85,8 +85,8 @@
 		<th>場次時間</th>
 		<th>場次座位</th>
 	</tr>
-	<%@ include file="page1.file" %> 
-	<c:forEach var="showtimeVO" items="${list}" begin="<%=pageIndex%>" end="<%=pageIndex+rowsPerPage-1%>">
+<%-- 	<%@ include file="page1.file" %>  --%>
+<%-- 	<c:forEach var="showtimeVO" items="${list}" begin="<%=pageIndex%>" end="<%=pageIndex+rowsPerPage-1%>"> --%>
 		
 		<tr>
 			<td>${showtimeVO.showtime_no}</td>
@@ -117,7 +117,7 @@
 			  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/showtime/showtime.do" style="margin-bottom: 0px;">
 			     <input type="submit" value="查看">
 			     <input type="hidden" name="showtime_no"  value="${showtimeVO.showtime_no}">
-			     <input type="hidden" name="whichPage"	value="<%=whichPage%>">
+<%-- 			     <input type="hidden" name="whichPage"	value="<%=whichPage%>"> --%>
 			     <input type="hidden" name="action"	value="getOne_For_Showtime"></FORM>
 <%-- 				${showtimeVO.seat_no} --%>
 			</td>
@@ -134,12 +134,12 @@
 			     <input type="hidden" name="action" value="delete"></FORM>
 			</td>
 		</tr>
-	</c:forEach>
+<%-- 	</c:forEach> --%>
 </table>
-<%@ include file="page2.file" %>
+<%-- <%@ include file="page2.file" %> --%>
 
-<%if (request.getAttribute("showtimeVO")!=null){%>
-<jsp:include page="listOneShowtime.jsp" />
-<%} %>
+<%-- <%if (request.getAttribute("showtimeVO")!=null){%> --%>
+<%-- <jsp:include page="listOneShowtime.jsp" /> --%>
+<%-- <%} %> --%>
 </body>
 </html>
