@@ -223,7 +223,7 @@ public class EmployeeServlet extends HttpServlet {
 
 				/*************************** 3.修改完成,準備轉交(Send the Success view) *************/
 				req.setAttribute("employeeVO", employeeVO); // 資料庫update成功後,正確的的employeeVO物件,存入req
-				String url = "/back-end/employee/listOneEmployee.jsp";
+				String url = "/back-end/employee/listAllEmployee2.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 修改成功後,轉交listOneEmployee.jsp
 				successView.forward(req, res);
 
@@ -372,14 +372,6 @@ public class EmployeeServlet extends HttpServlet {
 				
 				Integer empno = employeeVO.getEmpno();
 				
-//				AuthorityVO authorityVO = new AuthorityVO();
-//				authorityVO.setEmpno(empno);
-//				authorityVO.setFunction_no(function_no);
-//				authorityVO.setAuth_status(auth_status);
-				
-//				System.out.println(empno);
-//				System.out.println(function_no);
-//				System.out.println(auth_status);
 
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
@@ -524,7 +516,7 @@ public class EmployeeServlet extends HttpServlet {
 
 				/*************************** 3.查詢完成,準備轉交(Send the Success view) ************/
 				req.setAttribute("listAuths_ByEmpno", set);    // 資料庫取出的set物件,存入request
-				String url = "/back-end/employee/listAllEmployee.jsp";
+				String url = "/back-end/employee/listAllEmployee2.jsp";
 
 				RequestDispatcher successView = req.getRequestDispatcher(url);
 				successView.forward(req, res);
