@@ -2,6 +2,7 @@
     pageEncoding="BIG5"%>
 <%@ page import="com.movieRating.model.*"%>    
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <jsp:useBean id="ratingSvc" scope="page" class="com.movieRating.model.MovieRatingService" />
 <jsp:useBean id="movieSvc" scope="page" class="com.movie.model.MovieService" />
 <jsp:useBean id="articleSvc" scope="page" class="com.article.model.ArticleService" />
@@ -18,6 +19,7 @@
 <jsp:useBean id="groupMemSvc" scope="page" class="com.group_member.model.Group_MemberService" />
 <jsp:useBean id="memSvc" scope="page" class="com.mem.model.MemService" />
 <jsp:useBean id="relationSvc" scope="page" class="com.relationship.model.RelationshipService" />
+<jsp:useBean id="mapping" scope="page" class="com.mappingtool.StatusMapping" />
 <%@ page import="com.mem.model.*"%>
 <%@ page import="com.articleCollection.model.*"%>
 <%@ page import="com.order.model.*"%>
@@ -26,7 +28,7 @@
 
 <%@ page import="org.json.JSONArray"%>
 <%@ page import="org.json.JSONObject"%>
-
+<%@ page import="com.mappingtool.*"%>
 
 <%
 	MemVO memVO = (MemVO)session.getAttribute("memVO");
@@ -96,8 +98,6 @@ hr{
 
 .detail_box{
 	height:auto; 
-	border-style:solid; 
-	border-radius:40px; 
 	padding:unset;
 }
 
@@ -131,6 +131,8 @@ hr{
 }
 .all-star{
 	font-size:30px;
+	margin-right:auto !important;
+	margin-left:auto !important;
 }
 .hover_pointer{
 	cursor:pointer;
@@ -244,8 +246,8 @@ text-align:center;
 								<div class="row">
 							<form method="post" id="ticket-info-form">
 								<h1 class="table-order">已預訂</h1>
-								<table class="table table-hover table-order">								
-									 <tr class="table-order" style="display:none;"><th>購票日期</th><th>電影名稱</th><th>狀態</th><th>付款方式</th><th>金額</th><th>退票</th><th>詳細資訊</th></tr>
+								<table class="table table-hover table-order table-bordered">								
+									 <tr class="table-order table-success" style="display:none;"><th>購票日期</th><th>電影名稱</th><th>狀態</th><th>付款方式</th><th>金額</th><th>退票</th><th>詳細資訊</th></tr>
 									 <center id="orderticket_switch"><div>您目前沒有預訂任何電影票，快按<a href=<%=request.getContextPath()%>/index.jsp>這裡</a>來訂票!</div></center>
 								</table>
 								<br>
@@ -267,7 +269,7 @@ text-align:center;
 							<form method="post" id="group-info-form">
 							
 								<h1 class="table-group-master">目前主辦的團</h1>
-								<table class="table table-hover table-group-master">								
+								<table class="table table-hover table-group-master table-bordered">								
 									 <tr class="table-group-master" style="display:none;"><th>揪團名稱</th><th>電影名稱</th><th>開演時間</th><th>揪團狀態</th><th>預計參加人數</th><th>目前參加人數</th><th>詳細資訊</th><th>修改揪團</th></tr>
 									 <center id="group_master_switch"><div>您目前沒有發起任何揪團，快按<a href=<%=request.getContextPath()%>/front-end/group/group_front_page.jsp>這裡</a>來發起揪團!</div></center>
 								</table>
@@ -275,7 +277,7 @@ text-align:center;
 								<hr class="table-group-master"/>
 								
 								<h1 class="table-group-member">目前參加的團</h1>
-								<table class="table table-hover table-group-member">								
+								<table class="table table-hover table-group-member table-bordered">								
 									 <tr class="table-group-member" style="display:none;"><th>揪團名稱</th><th>團主</th><th>電影名稱</th><th>開演時間</th><th>揪團狀態</th><th>付款狀態</th><th>預計參加人數</th><th>目前參加人數</th><th>詳細資訊</th><th>退出揪團</th></tr>
 									 <center id="group_member_switch"><div>您目前沒有任何揪團，快按<a href=<%=request.getContextPath()%>/front-end/group/group_front_page.jsp>這裡</a>來參加揪團!</div></center>
 								</table>
@@ -283,7 +285,7 @@ text-align:center;
 								<hr class="table-group-member"/>
 								
 								<h1 class="table-group-history">揪團歷史紀錄</h1>
-								<table class="table table-hover table-group-history">								
+								<table class="table table-hover table-group-history table-bordered">								
 									 <tr class="table-group-history" style="display:none;"><th>揪團名稱</th><th>團主</th><th>電影名稱</th><th>開演時間</th><th>揪團狀態</th><th>參與狀態</th><th>詳細資訊</th></tr>
 									 <center id="group_history"><div>您目前沒有任何揪團歷史紀錄</div></center>
 								</table>
@@ -318,10 +320,10 @@ text-align:center;
 							<div id="show_comment" class="container-fluid" style="display:none">
 								<div class="row">
 									<form method="post" id="comment-info-form">
-									 	<table class="table table-hover">
+									 	<table class="table table-hover table-bordered">
 									 	<tr><th>發表日期</th><th>電影名稱</th><th>詳細資訊</th><th>移除評論</th></tr>
 										 	<c:forEach var="commVO" items="${commSvc.getComments(memVO.member_no)}">
-												<tr class="hover_comm hover_pointer"><td style="display:none">${commVO.movieno}</td><td>${commVO.creatdate}</td>
+												<tr class="hover_comm hover_pointer"><td style="display:none">${commVO.movieno}</td><td><fmt:formatDate value="${commVO.creatdate}" pattern="yyyy-MM-dd HH:mm" /></td>
 											<td>${movieSvc.getOneMovie(commVO.movieno).moviename}</td>
 											<td><button type="button" class="btn btn-primary" id="show_commBox_${commVO.commentno}">查看</button></td>
 												<td><i class="fas fa-minus-circle delete-comm"></i>
@@ -356,11 +358,11 @@ text-align:center;
 						<div class="container-fluid">
 							<div class="row">
 								<form method="post" class="col" id="movieCollection-info-form">
-								<table class="table table-hover">
+								<table class="table table-hover table-bordered">
 										<tr><th>電影名稱</th><th>收藏時間</th><th>電影資訊</th><th>移除收藏</th></tr>
 										<c:forEach var="movcolVO" items="${movcolSvc.getAllMovieCollection(memVO.member_no)}">
 											<tr class="hover_movCol hover_pointer"><td style="display:none">${movcolVO.movie_no}</td><td>${movieSvc.getOneMovie(movcolVO.movie_no).moviename}</td>
-											<td>${movcolVO.crt_dt}</td>
+											<td><fmt:formatDate value="${movcolVO.crt_dt}" pattern="yyyy-MM-dd HH:mm" /></td>
 											<td><a href="<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=${movcolVO.movie_no}">電影頁面</a></td>
 												<td><i class="fas fa-minus-circle delete-movcol"></i>
 													<input name="movie_no" style="display: none" value="${movcolVO.movie_no}">
@@ -377,11 +379,11 @@ text-align:center;
 						<div class="container-fluid">
 							<div class="row">
 								<form method="post" class="col" id="articleCollection-info-form">
-									<table class="table table-hover">
+									<table class="table table-hover table-bordered">
 										<tr><th>文章名稱</th><th>收藏時間</th><th>文章資訊</th><th>移除收藏</th></tr>
 										<c:forEach var="artcolVO" items="${artcolSvc.getAllArticleCollection(memVO.member_no)}">
 											<tr class="hover_artCol hover_pointer"><td style="display:none">${artcolVO.article_no}</td><td>${articleSvc.getOneArticle(artcolVO.article_no).articleheadline}</td>
-											<td>${artcolVO.crt_dt}</td>
+											<td><fmt:formatDate value="${artcolVO.crt_dt}" pattern="yyyy-MM-dd HH:mm" /></td>
 											<td><a href="<%=request.getContextPath()%>/front-end/article/listOneArticle2.jsp?articleno=${artcolVO.article_no}">文章頁面</a></td>
 												<td><i class="fas fa-minus-circle delete-artcol"></i>
 													<input name="article_no" style="display: none" value="${artcolVO.article_no}">
@@ -401,7 +403,7 @@ text-align:center;
 						<div class="container-fluid">
 							<div class="row">
 							<form class="col" method="post" id="movieRating-info-form">
-								<table id="ratingTable" class="table table-hover">
+								<table id="ratingTable" class="table table-hover table-bordered">
 									<tr><th>電影名稱</th><th>評分</th><th>移除收藏</th></tr>
 										<c:forEach var="ratingVO" items="${ratingSvc.getAllRating(memVO.member_no)}">
 										<tr class="hover_rating hover_pointer" id="show_movinfo_${ratingVO.movie_no}"><td style="display:none">${ratingVO.movie_no}</td>
@@ -429,22 +431,23 @@ text-align:center;
 				</div>
 			</div>
 		</div>
+		<jsp:include page="/front_footer_copy.jsp"/>
 	</div>
 
  <div class="alert-container">
   </div>
-<jsp:include page="/front_footer_copy.jsp"/>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/imask/3.4.0/imask.min.js"></script>
 <script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7a
-bK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<!-- bK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity=
 "sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha
-384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-
+<!-- 384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
 
 
 <script>
@@ -453,7 +456,6 @@ bK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></scrip
 
 
 
-		
 //訂單刪除紐
 $(document.body).on("click", ".delete-order",function () { 
   	let thisOrder = $(this).parent().parent();
@@ -510,16 +512,16 @@ var now = Math.round(new Date()/1000);
 var undue = $("tr.table-order");
 var due = $("tr.table-history");
 var fragment;
-if(now>showTime||"${orderVO.order_status}"=="2"){
+if(now>showTime||"${orderVO.order_status}"=="1"){
 // 	if(switcher=="close"){
 // 		undue.after(`<center><div>您目前沒有預訂任何電影票，快按<a href=/xxxxx>這裡</a>來訂票!</div></center>`)
 // 		switcher="open";
 // 	}
 	$("#orderhistory_switch").css("display","none");
 	due.css("display","");
-	fragment = `<tr><td>` + "${orderVO.crt_dt}" + 
-			   `</td><td>` + "${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(orderVO.showtime_no).movie_no).moviename}" + 
-			   `</td><td>` +  "${orderVO.order_status}" + `</td><td>` + "${orderVO.payment_type}" + 
+	fragment = `<tr><td><fmt:formatDate value="${orderVO.crt_dt}" pattern="yyyy-MM-dd HH:mm" /> 
+			    </td><td>` + "${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(orderVO.showtime_no).movie_no).moviename}" + 
+			   `</td><td>` +  "${mapping.dboOrderStatus(orderVO.order_status)}" + `</td><td>` + "${mapping.dboOrderType(orderVO.payment_type)}" + 
 			   `</td><td>`+ "${orderVO.total_price}" +
 			   `</td><td><button type="button" class="btn btn-primary" id="show_orderBox_${orderVO.order_no}" >查看</button></td></tr>`
 	due.after(fragment);
@@ -527,8 +529,8 @@ if(now>showTime||"${orderVO.order_status}"=="2"){
 }else{
 	$("#orderticket_switch").css("display","none");
 	undue.css("display","");
-	fragment = `<tr><td>` + "${orderVO.crt_dt}" + 
-			   `</td><td>` + "${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(orderVO.showtime_no).movie_no).moviename}" + 
+	fragment = `<tr><td><fmt:formatDate value="${orderVO.crt_dt}" pattern="yyyy-MM-dd HH:mm" />
+			    </td><td>` + "${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(orderVO.showtime_no).movie_no).moviename}" + 
 			   `</td><td>` +  "${orderVO.order_status}" + `</td><td>` + "${orderVO.payment_type}" + 
 			   `</td><td>`+ "${orderVO.total_price}" +
 			   `</td><td><i class="fas fa-minus-circle delete-order"></i><input name="order_no" style="display: none" value=`+"${orderVO.order_no}"+
@@ -539,6 +541,7 @@ if(now>showTime||"${orderVO.order_status}"=="2"){
 
 $("#show_orderBox_${orderVO.order_no}").click(function(){
 	undue.before(fragment_${orderVO.order_no});
+	$('#qrcode').qrcode({width: 200,height: 200,text: "www.google.com"});
 	$(".cancelShow").click(function(){
 		$("#order_box_${orderVO.order_no}").css("opacity", "0");
 		$("#order_box_${orderVO.order_no}").css("z-index", "-1");
@@ -556,13 +559,14 @@ var total_cost="${orderVO.total_price}";
 var fragment_${orderVO.order_no}=
 	`<div class="order_box" id="order_box_${orderVO.order_no}" style="opacity:1; z-index:99;">
 	<div class="order_box_for_position">
-		<table class="table table-secondary table-hover" style="text-align:center;">
+		<table class="table table-hover table-bordered table-success border border-primary" style="text-align:center;">
 		<button type="button" class="btn-close cancelShow" style="position:absolute; right:420px;"></button>
 			<h1>訂單明細</h1>
+			<tr><th>QR-Code: </th><td><div id="qrcode"></div></td></tr>
 			<tr><th>電影名稱 : </th><td>`+ movie_name +`</td></tr>
-			<tr><th>播映時間 : </th><td>`+ show_time +`</td></tr>
+			<tr><th>播映時間 : </th><td><fmt:formatDate value="${showtimeSvc.getOneShowtime(orderVO.showtime_no).showtime_time}" pattern="yyyy-MM-dd HH:mm" /></td></tr>
 			<tr><th>票種 : </th><td>
-				<table>
+				<table class="innerTable table-striped table-bordered">
 				<c:forEach var="ordTicketTypeVO" items="${ordTicketTypeSvc.getAllTicketByOrderno(orderVO.order_no)}">
 					<tr>
 						<th>`+"${ticketTypeSvc.getOneTicket_type(ordTicketTypeVO.ticket_type_no).ticket_desc}"+`</th>
@@ -573,7 +577,7 @@ var fragment_${orderVO.order_no}=
 				</table></td></tr>
 			<tr><th>座位 : </th><td>`+seat+`</td></tr>
 			<tr><th>餐點 : </th><td>
-			<table>
+			<table class="innerTable table-striped table-bordered">
 			<c:forEach var="ordFoodTypeVO" items="${ordFoodTypeSvc.getAllFoodByOrderno(orderVO.order_no)}">
 				<tr>
 					<th>`+"${foodSvc.getOneFood(ordFoodTypeVO.food_no).food_name}"+`</th>
@@ -604,8 +608,8 @@ if(showTime>now&&("${groupVO.group_status}"=="0"||"${groupVO.group_status}"=="1"
 		master.css("display","");
 		master_segment= `<tr><td>` + "${groupVO.group_title}" + 
 						`</td><td>` + "${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(groupVO.showtime_no).movie_no).moviename}" + 
-						`</td><td>` +  "${showtimeSvc.getOneShowtime(groupVO.showtime_no).showtime_time}" + 
-						`</td><td>` + "${groupVO.group_status}" + 
+						`</td><td><fmt:formatDate value="${showtimeSvc.getOneShowtime(groupVO.showtime_no).showtime_time}" pattern="yyyy-MM-dd HH:mm" />
+						 </td><td>` + "${mapping.dboGroup_GroupStatus(groupVO.group_status)}" + 
 						`</td><td>`+ "${groupVO.required_cnt}" +
 						`</td><td>`+ "${groupVO.member_cnt}" +
 						`</td><td><button type="button" class="btn btn-primary" id="show_masterBox_${groupVO.group_no}" >查看</button>
@@ -624,9 +628,9 @@ if(showTime>now&&("${groupVO.group_status}"=="0"||"${groupVO.group_status}"=="1"
 		master_segment= `<tr><td>` + "${groupVO.group_title}" + 
 						`</td><td>` + "${memSvc.getOneMem(groupVO.member_no).mb_name}" + 
 						`</td><td>` + "${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(groupVO.showtime_no).movie_no).moviename}" + 
-						`</td><td>` + "${showtimeSvc.getOneShowtime(groupVO.showtime_no).showtime_time}" + 
-						`</td><td>` + "${groupVO.group_status}" + 
-						`</td><td>`+ "${groupMemSvc.getOneGroup_Member(groupVO.group_no,groupVO.member_no).status}" +
+						`</td><td><fmt:formatDate value="${showtimeSvc.getOneShowtime(groupVO.showtime_no).showtime_time}" pattern="yyyy-MM-dd HH:mm" />
+						 </td><td>` + "${mapping.dboGroup_GroupStatus(groupVO.group_status)}" + 
+						`</td><td>`+ "${mapping.dboGroup_Member_Status(groupMemSvc.getOneGroup_Member(groupVO.group_no,groupVO.member_no).status)}" +
 						`</td><td><button type="button" class="btn btn-primary" id="show_masterBox_${groupVO.group_no}" >查看</button></td></tr>`
 		group_history.after(master_segment);
 }
@@ -672,16 +676,16 @@ $("#show_masterBox_${groupVO.group_no}").click(function(){
 var master_segment_${groupVO.group_no}=
 	`<div class="master_box" id="master_box_${groupVO.group_no}" style="opacity:1; z-index:99;">
 	<div class="master_box_for_position detail_box">
-		<table class="table table-secondary table-hover" style="text-align:center;">
+		<table class="table table-hover table-bordered" style="text-align:center;">
 		<button type="button" class="btn-close leaveUpdate" style="position:absolute; right:450px; top:250px;"></button>
 			<h1>揪團明細</h1>
-			<tr><th style="border-top-left-radius: 40px;">揪團名稱 : </th><td style="border-top-right-radius: 40px;">`+ "${groupVO.group_title}" +`</td></tr>
+			<tr><th>揪團名稱 : </th><td>`+ "${groupVO.group_title}" +`</td></tr>
 			<tr><th>電影名稱 : </th><td>`+ "${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(groupVO.showtime_no).movie_no).moviename}" +`</td></tr>
-			<tr><th>播映時間 : </th><td>`+ "${showtimeSvc.getOneShowtime(groupVO.showtime_no).showtime_time}" +`</td></tr>
+			<tr><th>播映時間 : </th><td><fmt:formatDate value="${showtimeSvc.getOneShowtime(groupVO.showtime_no).showtime_time}" pattern="yyyy-MM-dd HH:mm" /></td></tr>
 			<tr><th>參加團員 : </th><td>
-			<table style="margin-left:250px;">
+			<table class="innerTable">
 				<c:forEach var="groupMemVO" items="${groupSvc.getMembersByGroupno(groupVO.group_no)}">
-					<tr><td>`+"${memSvc.getOneMem(groupMemVO.member_no).mb_name}"+`</td><td>(`+"${groupMemVO.pay_status}"+`)</td>
+					<tr><td>`+"${memSvc.getOneMem(groupMemVO.member_no).mb_name}"+`</td><td>(`+"${mapping.dboGroup_Member_Pay_Status(groupMemVO.pay_status)}"+`)</td>
 						<c:if test="${groupMemVO.pay_status == '0'}">
 		            		<td><button type="button" class="btn-primary reminder" value="reminder">提醒<input type="hidden" class="memberNO"  value="${groupMemVO.member_no}"></button></td>
 		        		</c:if>
@@ -690,9 +694,9 @@ var master_segment_${groupVO.group_no}=
 			</table>
 				</td></tr>
 			<tr><th>揪團說明 : </th><td>`+"${groupVO.desc}"+`</td></tr>
-			<tr><th>創立揪團時間 : </th><td>`+"${groupVO.crt_dt}"+`</td></tr>
-			<tr><th>揪團截止時間 : </th><td>`+"${groupVO.deadline_dt}"+`</td></tr>
-			<tr><th style="border-bottom-left-radius: 40px;">最後修改時間 : </th><td style="border-bottom-right-radius: 40px;">`+"${groupVO.modify_dt}"+`</td></tr>
+			<tr><th>創立揪團時間 : </th><td><fmt:formatDate value="${groupVO.crt_dt}" pattern="yyyy-MM-dd HH:mm" /></td></tr>
+			<tr><th>揪團截止時間 : </th><td><fmt:formatDate value="${groupVO.deadline_dt}" pattern="yyyy-MM-dd HH:mm" /></td></tr>
+			<tr><th>最後修改時間 : </th><td><fmt:formatDate value="${groupVO.modify_dt}" pattern="yyyy-MM-dd HH:mm" /></td></tr>
 		</table>
 	</div>
 </div>`;
@@ -721,9 +725,9 @@ member.css("display","");
 member_segment= `<tr><td>` + "${groupSvc.getOneGroup(groupMemVO.group_no).group_title}" + 
 			    `</td><td>` + "${memSvc.getOneMem(groupSvc.getOneGroup(groupMemVO.group_no).member_no).mb_name}" + 
 				`</td><td>` + "${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(groupSvc.getOneGroup(groupMemVO.group_no).showtime_no).movie_no).moviename}" + 
-				`</td><td>` +  "${showtimeSvc.getOneShowtime(groupSvc.getOneGroup(groupMemVO.group_no).showtime_no).showtime_time}" + 
-				`</td><td>` + "${groupSvc.getOneGroup(groupMemVO.group_no).group_status}" + 
-				`</td><td>` + "${groupMemVO.pay_status}" + 
+				`</td><td><fmt:formatDate value="${showtimeSvc.getOneShowtime(groupSvc.getOneGroup(groupMemVO.group_no).showtime_no).showtime_time}" pattern="yyyy-MM-dd HH:mm" /> 
+				 </td><td>` + "${mapping.dboGroup_GroupStatus(groupSvc.getOneGroup(groupMemVO.group_no).group_status)}" + 
+				`</td><td>` + "${mapping.dboGroup_Member_Pay_Status(groupMemVO.pay_status)}" + 
 				`</td><td>`+ "${groupSvc.getOneGroup(groupMemVO.group_no).required_cnt}" +
 				`</td><td>`+ "${groupSvc.getOneGroup(groupMemVO.group_no).member_cnt}" +
 				`</td><td><button type="button" class="btn btn-primary" id="show_memberBox_${groupSvc.getOneGroup(groupMemVO.group_no).group_no}" >查看</button>
@@ -740,9 +744,9 @@ group_history.css("display","");
 member_segment= `<tr><td>` + "${groupSvc.getOneGroup(groupMemVO.group_no).group_title}" + 
 				`</td><td>` + "${memSvc.getOneMem(groupSvc.getOneGroup(groupMemVO.group_no).member_no).mb_name}" + 
 				`</td><td>` + "${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(groupSvc.getOneGroup(groupMemVO.group_no).showtime_no).movie_no).moviename}" + 
-				`</td><td>` + "${showtimeSvc.getOneShowtime(groupSvc.getOneGroup(groupMemVO.group_no).showtime_no).showtime_time}" + 
-				`</td><td>` + "${groupSvc.getOneGroup(groupMemVO.group_no).group_status}" + 
-				`</td><td>`+ "${groupMemSvc.getOneGroup_Member(groupSvc.getOneGroup(groupMemVO.group_no).group_no,groupSvc.getOneGroup(groupMemVO.group_no).member_no).status}" +
+				`</td><td><fmt:formatDate value="${showtimeSvc.getOneShowtime(groupSvc.getOneGroup(groupMemVO.group_no).showtime_no).showtime_time}" pattern="yyyy-MM-dd HH:mm" /> 
+				 </td><td>` + "${mapping.dboGroup_GroupStatus(groupSvc.getOneGroup(groupMemVO.group_no).group_status)}" + 
+				`</td><td>`+ "${mapping.dboGroup_Member_Status(groupMemSvc.getOneGroup_Member(groupSvc.getOneGroup(groupMemVO.group_no).group_no,groupSvc.getOneGroup(groupMemVO.group_no).member_no).status)}" +
 				`</td><td><button type="button" class="btn btn-primary" id="show_memberBox_${groupSvc.getOneGroup(groupMemVO.group_no).group_no}" >查看</button></td></tr>`
 group_history.after(member_segment);
 	
@@ -762,24 +766,24 @@ group_history.after(member_segment);
 				var member_segment_${groupSvc.getOneGroup(groupMemVO.group_no).group_no}=
 					`<div class="member_box" id="member_box_${groupSvc.getOneGroup(groupMemVO.group_no).group_no}" style="opacity:1; z-index:99;">
 					<div class="member_box_for_position detail_box">
-						<table class="table table-secondary table-hover" style="text-align:center;">
+						<table class="table table-bordered table-hover" style="text-align:center;">
 						<button type="button" class="btn-close leaveUpdate" style="position:absolute; right:420px;"></button>
 							<h1>揪團明細</h1>
-							<tr><th style="border-top-left-radius: 40px;">揪團名稱 : </th><td style="border-top-right-radius: 40px;">`+ "${groupSvc.getOneGroup(groupMemVO.group_no).group_title}" +`</td></tr>
+							<tr><th>揪團名稱 : </th><td>`+ "${groupSvc.getOneGroup(groupMemVO.group_no).group_title}" +`</td></tr>
 							<tr><th>電影名稱 : </th><td>`+ "${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(groupSvc.getOneGroup(groupMemVO.group_no).showtime_no).movie_no).moviename}" +`</td></tr>
-							<tr><th>播映時間 : </th><td>`+ "${showtimeSvc.getOneShowtime(groupSvc.getOneGroup(groupMemVO.group_no).showtime_no).showtime_time}" +`</td></tr>
+							<tr><th>播映時間 : </th><td><fmt:formatDate value="${showtimeSvc.getOneShowtime(groupSvc.getOneGroup(groupMemVO.group_no).showtime_no).showtime_time}" pattern="yyyy-MM-dd HH:mm" /> </td></tr>
 							<tr><th>團主 : </th><td>`+ "${memSvc.getOneMem(groupSvc.getOneGroup(groupMemVO.group_no).member_no).mb_name}"+`</td></tr>
 							<tr><th>參加團員 : </th><td>
-								<table style="margin-left:250px;">
+								<table class="innerTable">
 									<c:forEach var="groupMembersVO" items="${groupSvc.getMembersByGroupno(groupMemVO.group_no)}">
 										<tr><td>`+"${memSvc.getOneMem(groupMembersVO.member_no).mb_name}"+`</td></tr>
 									</c:forEach>
 								</table>
-							</td></tr>
+							</td></tr> 
 							<tr><th>揪團說明 : </th><td>`+"${groupSvc.getOneGroup(groupMemVO.group_no).desc}"+`</td></tr>
-							<tr><th>創立揪團時間 : </th><td>`+"${groupSvc.getOneGroup(groupMemVO.group_no).crt_dt}"+`</td></tr>
-							<tr><th>揪團截止時間 : </th><td>`+"${groupSvc.getOneGroup(groupMemVO.group_no).deadline_dt}"+`</td></tr>
-							<tr><th style="border-bottom-left-radius: 40px;">最後修改時間 : </th><td style="border-bottom-right-radius: 40px;">`+"${groupSvc.getOneGroup(groupMemVO.group_no).modify_dt}"+`</td></tr>
+							<tr><th>創立揪團時間 : </th><td><fmt:formatDate value="${groupSvc.getOneGroup(groupMemVO.group_no).crt_dt}" pattern="yyyy-MM-dd HH:mm" /> </td></tr>
+							<tr><th>揪團截止時間 : </th><td><fmt:formatDate value="${groupSvc.getOneGroup(groupMemVO.group_no).deadline_dt}" pattern="yyyy-MM-dd HH:mm" /> </td></tr>
+							<tr><th>最後修改時間 : </th><td><fmt:formatDate value="${groupSvc.getOneGroup(groupMemVO.group_no).modify_dt}" pattern="yyyy-MM-dd HH:mm" /></td></tr>
 						</table>
 					</div>
 				</div>`;
@@ -1052,7 +1056,7 @@ function showButton(target){
 		 textarea=$("#comment_content_${commVO.commentno}").val();
 		 console.log(textarea);
 		 $.ajax({
-			 url:"<%=request.getContextPath()%>/CommentServlet?action=getOne_For_Display_Ajax",
+			 url:"<%=request.getContextPath()%>/comment/comment.do?action=getOne_For_Display_Ajax",
 			 data:{
 				 "comment_no":comment_no,
 				 "comment_content":textarea	
@@ -1838,6 +1842,7 @@ function starbling(){
 
 
 </script>
+
 
 
 </html>

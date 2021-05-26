@@ -84,4 +84,26 @@ public class StatusMapping {
         	resultString = "未知的封鎖狀態";
 	return resultString;
 	}
+	public String dboOrderStatus(String orderStatus){
+		String resultString;
+		if("0".equals(orderStatus))
+			resultString = "未付款";
+		else if ("1".equals(orderStatus))
+			resultString = "已取消";
+		else if ("2".equals(orderStatus))
+			resultString = "未取票";
+		else 
+			resultString = "已取票";
+		return resultString;
+	}
+	public String dboOrderType(String orderType){
+		String resultString;
+		if("0".equals(orderType))
+			resultString = "信用卡";
+		else if ("1".equals(orderType))
+			resultString = "現金";
+		else
+			resultString = "現場付款";
+		return resultString;
+	}
 }
