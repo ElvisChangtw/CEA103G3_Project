@@ -514,7 +514,7 @@ public class ShowtimeServlet extends HttpServlet {
 			Integer movie_no = new Integer(req.getParameter("movie_no"));
 			
 			String sql = "select distinct date(showtime_time) from showtime"
-					+ " where movie_no = " + movie_no + " order by date(showtime_time)";
+					+ " where movie_no = " + movie_no + " and showtime_time > now() order by date(showtime_time)";
 			ShowtimeService showtimeSvc = new ShowtimeService();
 			List<Object[]> list = showtimeSvc.getByHibernate(sql);
 			
@@ -539,7 +539,7 @@ public class ShowtimeServlet extends HttpServlet {
 			Integer movie_no = new Integer(req.getParameter("movie_no"));
 			String showtime_date =req.getParameter("showtime_date");
 			String sql = "select showtime_no, time(showtime_time) from showtime where movie_no = " + movie_no 
-					+ " and date(showtime_time) =" + "'" + showtime_date + "'" + " order by time(showtime_time)";
+					+ " and date(showtime_time) =" + "'" + showtime_date + "'" + " and showtime_time > now() order by time(showtime_time)";
 			
 			ShowtimeService showtimeSvc = new ShowtimeService();
 			List<Object[]> list = showtimeSvc.getByHibernate(sql);
