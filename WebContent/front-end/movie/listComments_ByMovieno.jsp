@@ -36,7 +36,7 @@
 MemVO memVO = (MemVO) session.getAttribute("memVO");
 if (memVO == null){
 	memVO = new MemVO();
-	memVO.setMember_no(999);
+	memVO.setMember_no(99);
 	pageContext.setAttribute("needLogin", memVO);
 }
 	pageContext.setAttribute("memVO", memVO);
@@ -145,15 +145,15 @@ font-size: 20px;
 			var content = $(this).find('#content-${commentVO.commentno}');
 			var str = content.text();
 			var see =  $(this).find('#seeAbout-${commentVO.commentno}');
-			if(str.length > 15){
-				content.text(str.substr(0,15)+'......');
+			if(str.length > 35){
+				content.text(str.substr(0,35)+'......');
 			} 
 			else{
 				see.hide();
 			}
 			see.on('click',function(){
 				if(onoff){
-					content.text(str.substr(0,15)+'......');
+					content.text(str.substr(0,35)+'......');
 					see.text('繼續閱讀');
 				}else{
 					content.text(str);
@@ -195,7 +195,7 @@ font-size: 20px;
 					<ul>
 						<li>最後發佈時間:<fmt:formatDate value="${commentVO.modifydate}"
 								pattern="yyyy-MM-dd HH:mm:ss" /></li>
-						<c:if test="${needLogin.member_no != 999}">
+						<c:if test="${needLogin.member_no != 99}">
 							<c:if test="${commentVO.memberno != memVO.member_no}">
 								<li><a href="<%=request.getContextPath()%>/front-end/report_comment/addReportComment.jsp?commentno=${commentVO.commentno}&memberno=${memVO.member_no}&requestURL=<%=request.getServletPath()%>&movieno=${commentVO.movieno}">
 								<i class="fa fa-hand-o-left" aria-hidden="true"></i> </i>檢舉</a></li>

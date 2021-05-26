@@ -3,6 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page import="java.util.*"%>
 <%@ page import="com.comment.model.*"%>
+<%@ page import="com.mem.model.*"%>
 
 <%-- 萬用複合查詢-可由客戶端select_page.jsp隨意增減任何想查詢的欄位 --%>
 <%-- 此頁只作為複合查詢時之結果練習，可視需要再增加分頁、送出修改、刪除之功能--%>
@@ -10,6 +11,11 @@
 <jsp:useBean id="listComments_ByCompositeQuery" scope="request" type="java.util.List<CommentVO>" /> <!-- 於EL此行可省略 -->
 <jsp:useBean id="movieSvc" scope="page" class="com.movie.model.MovieService" />
 <jsp:useBean id="memSvc" scope="page" class="com.mem.model.MemService" />
+
+<%
+	MemVO memVO = (MemVO) request.getAttribute("memVO");
+
+%>
 
 <html>
 <head>
@@ -28,7 +34,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!-- //pop-up -->
 <link href="<%=request.getContextPath()%>/css/easy-responsive-tabs.css" rel='stylesheet' type='text/css'/>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/zoomslider.css" />
-<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/table-style-back.css" />
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/table-style.css" />
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/basictable.css" />
 <!-- list-css -->
 <link rel="stylesheet" href="<%=request.getContextPath()%>/css/list.css" type="text/css" media="all" />
@@ -58,7 +64,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			</c:forEach>
 		</ul>
 	</c:if>
-
+<jsp:include page="/front_header.jsp"/>
 <!--/content-inner-section-->
 		<div class="w3_content_agilleinfo_inner">
 				<div class="agile_featured_movies">
@@ -76,7 +82,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								  <tr class="123">
 <!-- 								  	<th align="center">影評作者</th> -->
 
-								  	<th><img src="${pageContext.request.contextPath}/mem/mem.do?action=view_memPic&member_no=${param.MEMBER_NO}" 
+								  	<th><img src="${pageContext.request.contextPath}/mem/mem.do?action=view_memPic&member_no=${memVO.member_no}" 
 											style="border-radius:50%; width:80px; height:80px; align:center;">
 										<c:forEach var="memVO" items="${memSvc.all}">	
 											<c:if test="${param.MEMBER_NO==memVO.member_no}">
@@ -168,7 +174,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	</div>
 </div>
 <!--//content-inner-section-->
-
+<jsp:include page="/front_footer.jsp"/>
 
 
 

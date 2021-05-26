@@ -420,6 +420,10 @@ public class CommentServlet extends HttpServlet {
 				List<CommentVO> list  = commentSvc.getAll(map);
 				
 				/***************************3.查詢完成,準備轉交(Send the Success view)************/
+				Integer memberno = new Integer(req.getParameter("MEMBER_NO").trim());
+				MemVO memVO = new MemService().getOneMem(memberno);
+				req.setAttribute("memVO", memVO);
+				
 				req.setAttribute("listComments_ByCompositeQuery", list); // 資料庫取出的list物件,存入request
 				RequestDispatcher successView = req.getRequestDispatcher("/front-end/comment/listComments_ByCompositeQuery.jsp"); // 成功轉交listEmps_ByCompositeQuery.jsp
 				successView.forward(req, res);
