@@ -643,7 +643,7 @@ public class MemServlet extends HttpServlet {
 				if ("listRelationships_ByMemberno_A".equals(action))
 					url = "/front-end/relationship/select_page.jsp";        // 成功轉交 dept/listEmps_ByDeptno.jsp
 				else if ("listRelationships_ByMemberno_B".equals(action))
-					url = "/front-end/relationship/select_page.jsp";              // 成功轉交 dept/listAllDept.jsp
+					url = "/front-end/mem/listRelationships_ByMemno.jsp";              // 成功轉交 dept/listAllDept.jsp
 
 				RequestDispatcher successView = req.getRequestDispatcher(url);
 				successView.forward(req, res);

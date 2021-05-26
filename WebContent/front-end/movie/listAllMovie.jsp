@@ -27,7 +27,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>List All Movie</title>
+<title>MoviesHit</title>
 <!-- for-mobile-apps -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -534,21 +534,6 @@ fit: true
 				});
 			});
 </script>
- <script type="text/javascript">
-						$(document).ready(function() {
-							/*
-							var defaults = {
-					  			containerID: 'toTop', // fading element id
-								containerHoverID: 'toTopHover', // fading element hover id
-								scrollSpeed: 1200,
-								easingType: 'linear' 
-					 		};
-							*/
-							
-							$().UItoTop({ easingType: 'easeOutQuart' });
-							
-						});
-					</script>
 <!--end-smooth-scrolling-->
 	
 <script src="<%=request.getContextPath()%>/js/bootstrap.js"></script>

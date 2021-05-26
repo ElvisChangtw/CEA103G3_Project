@@ -193,7 +193,6 @@ public class ExpectationServlet extends HttpServlet {
 //		}
 
         if ("insertOrUpdate".equals(action)) { // 來自addEmp.jsp的請求  
-			
 			List<String> errorMsgs = new LinkedList<String>();
 			// Store this set in the request scope, in case we need to
 			// send the ErrorPage view.
@@ -201,7 +200,6 @@ public class ExpectationServlet extends HttpServlet {
 			PrintWriter out = res.getWriter();
 			
 			String requestURL = req.getParameter("requestURL");
-
 			try {
 				/***********************1.接收請求參數 - 輸入格式的錯誤處理*************************/
 

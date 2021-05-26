@@ -49,7 +49,7 @@ if (memVO == null){
 <!DOCTYPE html>
 <html>
 <head>
-<title>listComments_ByMovieno.jsp</title>
+<title>MoviesHit</title>
 <!-- for-mobile-apps -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=big5" />
@@ -233,7 +233,7 @@ font-size: 20px;
 						</c:if>
 					</div>
 					<div class="col-md-9 form-info">
-					<textarea name="content" rows="5" cols="45" maxlength="300" placeholder="Message"><%=(commentVO == null) ? "" : commentVO.getContent()%></textarea>
+					<textarea name="content" id="textarea" rows="5" cols="45" maxlength="500" placeholder="Message" style='overflow-y: hidden;height:135px' onpropertychange="this.style.height = this.scrollHeight + 'px';" oninput="this.style.height = this.scrollHeight + 'px';"><%=(commentVO == null) ? "" : commentVO.getContent()%></textarea>
 						<input type="hidden" name="action" value="insert"> 
 						<input type="hidden" name="requestURL" value="<%=request.getServletPath()%>">
 						<center><input type="submit" value="SEND"></center>
@@ -245,7 +245,10 @@ font-size: 20px;
 		</c:if>
  	</div> <!--include col-md-8 latest-news-agile-left-content的結尾標籤 -->
 
-
+<script>
+var textarea=document.getElementById('textarea');
+textarea.style.height = textarea.scrollHeight + 'px';
+</script>
 
 	
 	<!--//content-inner-section -->
