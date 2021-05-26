@@ -55,6 +55,19 @@
      	
      	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/back-home/css/back_frontpage.css" />
     
+    
+    	<style>
+/*     	h2 {  */
+/* 		    position: absolute;  */
+/* 		    top: 0px;  */
+/* 		    left: 10;   */
+/* 		    width: 100%;  */
+/* 			}  */
+		span.logo {
+    		color: #02a388;
+   			font-size: 1em;
+   			}	
+    	</style>
     </head>
     <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -68,7 +81,7 @@
         <!-- Navbar-->
         <ul class="navbar-nav ml-auto ml-md-0">
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle1" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i>${employeeVO.empname}</a>
+                <a class="nav-link dropdown-toggle1" id="userDropdown" href="<%=request.getContextPath()%>/back-end/employee/empLogin.jsp" role="button"><i class="fas fa-user fa-fw"></i>${employeeVO.empname}</a>
             </li>
             <a class="nav-link" href="<%=request.getContextPath()%>/back-end/employee/empLogout.jsp">
                	 登出
@@ -81,12 +94,16 @@
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                        <img src="<%=request.getContextPath()%>/back-home/img/logo2-1-5.png">
-                        <a class="nav-link collapsed" href="tables3.html">
-                            <div class="sb-nav-link-icon"><i class="fas fa-user-alt"></i></div>
-                           	 基本資料
-                        </a>
-                        <a id="employee_management" class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapseLayouts1">
+                        <img src="<%=request.getContextPath()%>/back-home/img/logo2-1-6.png">
+	                         <h1 style="text-align: center;color: white;font-weight: bold ;font-size:35px">
+	                         	<span class="logo">M</span>ovies<span class="logo">H</span>it
+	                         </h1>
+<!--                         <a class="nav-link collapsed" href="tables3.html"> -->
+<!--                             <div class="sb-nav-link-icon"><i class="fas fa-user-alt"></i></div> -->
+<!--                            	 基本資料 -->
+<!--                         </a> -->
+                        <a id="movie_management" class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapseLayouts1">
+                            <div class="sb-nav-link-icon"><i class="fas fa-user-cog"></i></div>
                            	 員工管理系統
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
@@ -102,12 +119,11 @@
                         </a>
                         <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link function" href="layout-static.html">場次管理</a>
-                                <a class="nav-link function" href="<%=request.getContextPath()%>/back-home/table.jsp">電影資料管理</a>
-                                <a class="nav-link function" href="layout-sidenav-light.html"> 廳院管理</a>
-                                <a class="nav-link function" href="layout-sidenav-light.html">座位管理</a>
-                                <a class="nav-link function" href="layout-sidenav-light.html">票種管理</a>
-                                <a class="nav-link function" href="layout-sidenav-light.html">餐點管理</a>
+                                <a class="nav-link function" href="<%=request.getContextPath()%>/back-end/movie/backEndlistAllMovie.jsp">電影資料管理</a>
+                                <a class="nav-link function" href="<%=request.getContextPath()%>/back-end/showtime/listAllShowtime.jsp">場次管理</a>
+                                <a class="nav-link function" href="<%=request.getContextPath()%>/back-end/theater/listAllTheater.jsp"> 廳院管理</a>
+                                <a class="nav-link function" href="<%=request.getContextPath()%>/back-end/ticket_type/listAllTicket_type.jsp">票種管理</a>
+                                <a class="nav-link function" href="<%=request.getContextPath()%>/back-end/food/listAllFood.jsp">餐點管理</a>
                             </nav>
                         </div>
                         <a id="member_management" class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages2" aria-expanded="false" aria-controls="collapsePages2">
@@ -118,11 +134,9 @@
                         <div class="collapse" id="collapsePages2" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link function" href="<%=request.getContextPath()%>/back-end/mem/listAllMem2.jsp">會員資料管理</a>
-                                <a class="nav-link function" href="layout-sidenav-light.html">會員審核</a>
-                                <a class="nav-link function" href="layout-sidenav-light.html"> 專業評論審核</a>
                             </nav>
                         </div>
-                        <a id="ticket_management" class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages3" aria-expanded="false" aria-controls="collapsePages3">
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages3" aria-expanded="false" aria-controls="collapsePages3">
                             <div class="sb-nav-link-icon"><i class="fas fa-ticket-alt"></i></div>
                         	    售票管理
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
@@ -130,7 +144,7 @@
                         <div class="collapse" id="collapsePages3" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link function" href="layout-static.html">現場劃位</a>
-                                <a class="nav-link function" href="layout-sidenav-light.html">查詢線上訂單</a>
+                                <a class="nav-link function" href="<%=request.getContextPath()%>/back-end/order/listAllOrder.jsp">訂單管理</a>
                             </nav>
                         </div>
            				 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages4" aria-expanded="false" aria-controls="collapsePages4">
@@ -141,7 +155,6 @@
                         <div class="collapse" id="collapsePages4" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link function" href="<%=request.getContextPath()%>/back-end/report_comment/listAllReportComment.jsp">評論檢舉</a>
-                                <a class="nav-link function" href="layout-sidenav-light.html">XXX檢舉</a>
                             </nav>
                         </div>
                         <a class="nav-link function" href="tables1.html">
@@ -150,7 +163,7 @@
                         </a>
                         <a class="nav-link function" href="tables2.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-hands-helping"></i></div>
-                       	     回應客服小幫手
+                       	     	回應客服小幫手
                         </a>
                     </div>
                 </div>
@@ -248,18 +261,16 @@
 			      				</FORM>
 			</td>
 						    </tr>
-						    <tr>
-						    	<td colspan="6" id="collapse${status.count}" class="collapse acc">
-						    		<%if (request.getAttribute("listAuths_ByEmpno")!=null){%>
-    								   <jsp:include page="listAuths_ByEmpno.jsp" />
-									<%} %>
-			   					</td>
-						    </tr>
    							</c:forEach>
 						  </tbody>
 						</table>
 						  <%@ include file="page2.file" %>
 					</div>
+						<td colspan="6" id="collapse${status.count}" class="collapse acc">
+						   <%if (request.getAttribute("listAuths_ByEmpno")!=null){%>
+    						 <jsp:include page="listAuths_ByEmpno.jsp" />
+							<%} %>
+			   			</td>
 				</div>
 			</div>
 	</section>
@@ -277,8 +288,7 @@
 								
 					<div class="form-group">
 						<label>員工姓名:</label>
-						<input type="text" class="form-control" name="empname" size="45"
-					value="<%=(employeeVO == null) ? "洪七公" : employeeVO.getEmpname()%>" required>
+						<input type="text" class="form-control" name="empname" size="45" value="石破天" required>
 					</div>
 					
 					<div class="form-group">
@@ -292,19 +302,19 @@
 					<div class="form-group">
 						<label>電話:</label>
 						<input class="form-control" type="TEXT" name="tel" size="45"
-					value="<%=(employeeVO == null) ? "0905066825" : employeeVO.getTel()%>" required>
+					value= "0900123321" required>
 					</div>
 					
 					<div class="form-group">
 						<label>電子郵件:</label>
 						<input type="text" name="email" size="45"
-					value="<%=(employeeVO == null) ? "edlevisken@gmail.com" : employeeVO.getEmail()%>" class="form-control" required>
+					value="edlevisken@gmail.com" class="form-control" required>
 					</div>	
 					
 					<div class="form-group">
 						<label>職稱:</label>
 						<input type="text" name="title" size="45"
-					value="<%=(employeeVO == null) ? "後台管理員" : employeeVO.getTitle()%>" class="form-control" required>
+					value= "後台管理員" : employeeVO.getTitle()%>" class="form-control" required>
 					</div>	
 					
 					<div class="form-group">
@@ -445,22 +455,33 @@ var tree = document.getElementsByClassName("nav-link function")[index]
 </c:forEach>
 
 
-if(funno1 == false && funno2 == false){
+if(funno1 == false){
 	$("#employee_management").hide();
 }
 
-if(funno2 == false && funno3 == false && funno4 == false && funno5 == false && funno6 == false && funno7 == false && funno8 == false){
+if(funno2 == false && funno3 == false && funno4 == false && funno5 == false && funno6 == false){
 	$("#movie_management").hide();
 }
 
-if(funno9 == false && funno10 == false && funno11 == false){
+if(funno7 == false){
 	$("#member_management").hide();
 }
 
-if(funno12 == false && funno13 == false){
+if(funno8 == false && funno9 == false){
 	$("#ticket_management").hide();
 }
 
+if(funno10 == false){
+	$("#comment_management").hide();
+}
+
+if(funno11 == false){
+	$("#news_management").hide();
+}
+
+if(funno12 == false){
+	$("#customer_service").hide();
+}
 
 // var tree = document.getElementsByClassName("nav-link function")
 //  document.getElementById("demo").innerHTML = tree.length;
