@@ -49,10 +49,13 @@
    } 
    table, th, td { 
 /*       border: 1px solid #CCCCFF;  */
+		font-size:25px;
    } 
    th, td { 
      padding: 5px; 
-     text-align: center; 
+     text-align: center;
+/*      color:yellow;  */
+	
    } 
 </style>
 
@@ -75,7 +78,7 @@
 	<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${memVO.member_no}"
 				alt="尚無圖片" class="rounded-circle" width="60px" height="60px" title=""/>
 <%--      		【<font color=orange>${memVO.mb_name}</font>】 --%>
-	<h1 class="shadow p-3 mb-1 bg-white rounded" style="background-color:#C7C1EA; display:inline-block;">
+	<h1 class="shadow p-3 mb-1 bg-white rounded" style="background-color:#02a388; display:inline-block;color: white;">
 			${memVO.mb_name} 的好友專區
 	</h1>
 
@@ -92,8 +95,8 @@
      </FORM>
     </div>
 	<div class="col col-md-4 btn-group" style="font-size:40px">
-	  <button type="button" class="btn btn-success" style="border-radius: 5px 0 0 5px;">好友管理</button>
-	  <button type="button" class="btn btn-success dropdown-toggle" style="border-radius: 0 5px 5px 0;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	  <button type="button" class="btn btn-success" style="border-radius: 5px 0 0 5px;right:128px;">好友管理</button>
+	  <button type="button" class="btn btn-success dropdown-toggle" style="border-radius: 0 5px 5px 0;right:128px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 	    <span class="caret"></span>&nbsp</button>
 	  	<ul class="dropdown-menu">
 		    <li><a class="dropdown-item" href="<%=request.getContextPath()%>/mem/mem.do?action=listRelationships_ByMemberno_B&member_no=${memVO.member_no}">我的好友</a></li>
@@ -106,11 +109,11 @@
 
 
 
-<table class="table table-bordered table-dark">
-	 <thead>
+<table class="table" style="background: cadetblue;">
+	 <thead style="background-color:#9e9e9e ;">
 		<tr>
-			<th>我的好友名稱</th>
-			<th>好友狀態</th>
+			<th style="text-align: center ;color: black;">我的好友名稱</th>
+			<th style="text-align: center;color: black;">好友狀態</th>
 		</tr>
 	</thead>
 
@@ -122,7 +125,7 @@
 						alt="尚無圖片" width="96px;" height="108px" title="" style="border: groove;"/>						
 					<c:forEach var="memVO" items="${memSvc.all}">
 	                 	<c:if test="${relationshipVO.friend_no==memVO.member_no}">
-	                   		【<font color=orange>${memVO.mb_name}</font>】
+	                   		<font color=orange>${memVO.mb_name}</font>
 	                   	 </c:if>
 	                </c:forEach>
 				</td>								
@@ -141,7 +144,7 @@
 					<c:choose>
 						<c:when test="${relationshipSvc.getOneRelationship(relationshipVO.member_no, relationshipVO.friend_no).status == 0}">
 						  	<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/relationship/relationship.do" style="margin-bottom: 0px;">
-							    <input type="submit" value="收回好友邀請" class="btn btn-warning">
+							    <input type="submit" value="收回好友邀請" class="btn btn-danger">
 							    <input type="hidden" name="member_no"   value="${relationshipVO.member_no}">
 							    <input type="hidden" name="friend_no"   value="${relationshipVO.friend_no}">			    
 							    <input type="hidden" name="requestURL" value="<%=request.getServletPath()%>"><!--送出本網頁的路徑給Controller-->
