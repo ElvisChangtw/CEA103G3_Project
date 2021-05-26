@@ -222,7 +222,7 @@
 		<th data-field="member_status" data-sortable="true">會員狀態</th>
 		<th data-field="member_level" data-sortable="true">會員身分</th>
 		<th data-field="member_rgDate" data-sortable="true">會員註冊日</th>
-		<th data-field="member_edit" data-sortable="false"></th>
+		<th data-field="member_edit" data-sortable="false">資料更新</th>
 	</tr>
 </thead>	
 <tbody>
@@ -290,89 +290,83 @@
 <script>
 $(document).ready(function(){
 
-	$(".update").click(function(){
+	$(document).on('click', '.update', function(){
 		$(this).css("display","none");
 		$(this).next().css("display","");
 		$(this).next().next().css("display","");
 		$(this).parent().prevAll().eq(2).children().prop("disabled",false);
 		$(this).parent().prevAll().eq(1).children().prop("disabled",false);
-
 	})
 	
-	$(".cancel").click(function(){
+	$(document).on('click', '.cancel', function(){
 		$(this).css("display","none");
 		$(this).prevAll().eq(0).css("display","none");
 		$(this).prevAll().eq(1).css("display","");
 		$(this).parent().prevAll().eq(2).children().prop("disabled",true);
 		$(this).parent().prevAll().eq(1).children().prop("disabled",true);
-
 	})
-	
-	
-	
-	$(".check").click(function(){
-			var mb_status = $(this).parent().prevAll().eq(2).children().val();
-			var mb_level = $(this).parent().prevAll().eq(1).children().val();
-			var member_no = $(this).prevAll().eq(1).val();
-			var check = $(this);
 
-			$.ajax({
-	             url: "<%=request.getContextPath()%>/MemServlet?",
-// 	             data: JSON.stringify({
-// 	            	 action: 'update_for_Ajax',
-// 	            	 status: mb_status,
-// 	            	 mb_level,
-// 	            	 member_no
-// 	             }),
-				 data: { "action": 'update_for_Ajax',
-					 	 "mb_status": mb_status,
-					     "mb_level": mb_level,
-					     "member_no": member_no,
-                  },
-	             type: "POST",
-// 	             contentType: 'application/json',
-// 	             processData: false,
-	             success: function (msg){
-	            	  if(msg=="success"){
-	            		 Swal.fire({
-	                         position: "center",
-	                         icon: "success",
-	                         title: "修改成功",
-	                         showConfirmButton: false,
-	                         timer: 1000,
-	                     });
-	            		 check.prev().css("display","");
-	            		 check.css("display","none");
-	            		 check.next().css("display","none");
-	            		 check.parent().prevAll().eq(2).children().prop("disabled",true);
-	            		 check.parent().prevAll().eq(1).children().prop("disabled",true);
-	            		 
-	            	 }else{
-	            		 Swal.fire({
-	                         position: "center",
-	                         icon: "error",
-	                         title: "修改失敗請洽管理員",
-	                         showConfirmButton: false,
-	                         timer: 1000,
-	                     });
-	            		 check.prev().css("display","");
-	            		 check.css("display","none");
-	            		 check.next().css("display","none");
-	            		 check.parent().prevAll().eq(2).children().prop("disabled",true);
-	            		 check.parent().prevAll().eq(1).children().prop("disabled",true);
-	            		 
-	            	 }
-	            	 
-	            	 
-	             }
-			
-			
-			})
-			
-			
+	$(document).on('click', '.check', function(){
+		var mb_status = $(this).parent().prevAll().eq(2).children().val();
+		var mb_level = $(this).parent().prevAll().eq(1).children().val();
+		var member_no = $(this).prevAll().eq(1).val();
+		var check = $(this);
+
+		$.ajax({
+             url: "<%=request.getContextPath()%>/MemServlet?",
+//	             data: JSON.stringify({
+//	            	 action: 'update_for_Ajax',
+//	            	 status: mb_status,
+//	            	 mb_level,
+//	            	 member_no
+//	             }),
+			 data: { "action": 'update_for_Ajax',
+				 	 "mb_status": mb_status,
+				     "mb_level": mb_level,
+				     "member_no": member_no,
+              },
+             type: "POST",
+//	             contentType: 'application/json',
+//	             processData: false,
+             success: function (msg){
+            	  if(msg=="success"){
+            		 Swal.fire({
+                         position: "center",
+                         icon: "success",
+                         title: "修改成功",
+                         showConfirmButton: false,
+                         timer: 1000,
+                     });
+            		 check.prev().css("display","");
+            		 check.css("display","none");
+            		 check.next().css("display","none");
+            		 check.parent().prevAll().eq(2).children().prop("disabled",true);
+            		 check.parent().prevAll().eq(1).children().prop("disabled",true);
+            		 
+            	 }else{
+            		 Swal.fire({
+                         position: "center",
+                         icon: "error",
+                         title: "修改失敗請洽管理員",
+                         showConfirmButton: false,
+                         timer: 1000,
+                     });
+            		 check.prev().css("display","");
+            		 check.css("display","none");
+            		 check.next().css("display","none");
+            		 check.parent().prevAll().eq(2).children().prop("disabled",true);
+            		 check.parent().prevAll().eq(1).children().prop("disabled",true);
+            		 
+            	 }
+            	 
+            	 
+             }
+		
+		
 		})
-	
-	
+		
+	})
+
 })
 </script>
 

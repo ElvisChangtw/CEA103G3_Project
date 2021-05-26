@@ -2,24 +2,20 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="Big5"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="com.showtime.model.*"%>
-<%@ page import="com.employee.model.*"%>
 
 <%
   ShowtimeVO showtimeVO = (ShowtimeVO) request.getAttribute("showtimeVO");
   java.util.Date date = new java.util.Date();
   pageContext.setAttribute("date", date);
 %>
-<%
-    EmployeeVO employeeVO = (EmployeeVO) session.getAttribute("employeeVO");
-%>
 <jsp:useBean id="theaterSvc" scope="page" class="com.theater.model.TheaterService" />
 <jsp:useBean id="movieSvc" scope="page" class="com.movie.model.MovieService" />
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-    	<title>MoviesHit</title>
-        <meta charset="big5" />
+    	<title>後台　新增場次</title>
+        <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
@@ -27,7 +23,7 @@
         <link href="<%=request.getContextPath()%>/back-home/css/styles.css" rel="stylesheet" />
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
-    
+
 
 <style>
 tr td>img {
@@ -57,19 +53,17 @@ tr td>img {
   .delete{
 /* 		background-color: black; */
  		color: white;
-/* 		width: 90px; */
-/* 		height: 40px; */
-/*  	line-height: 20px;  */
-/* 		text-align: center; */
-/*  		cursor: pointer;  */
-   		margin: 7px 6px;
-		position: relative;
- 		left: 20%; 
+		font-size: 8px;
+		width: 90px;
+		height: 40px;
+		line-height: 20px;
+		text-align: center;
+		cursor: pointer;
+		float: right;
 		border: 2px #B7B7B7 solid;
 		border-radius: 10px;
-		background-color: #ED583A;
+		background-color: #FF4268;
 		font-weight: bold;
-		text-align:center;
 		}
   #table{
   text-align:center;
@@ -80,22 +74,23 @@ tr td>img {
 </head>
     <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-    	<a class="navbar-brand" href="index2.jsp">MOVIESHIT後台系統</a>
-    	<button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
-    	<!-- Navbar Search-->
-    	<form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
-        	<div class="input-group">
-        	</div>
-    	</form>
-    	<!-- Navbar-->
-      	<ul class="navbar-nav ml-auto ml-md-0">
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle1" id="userDropdown" href="<%=request.getContextPath()%>/back-end/employee/empLogin.jsp" role="button"><i class="fas fa-user fa-fw"></i>${employeeVO.empname}</a>
-        </li>
-        <a class="nav-link" href="<%=request.getContextPath()%>/back-end/employee/empLogout.jsp">
-           	 登出
-        </a>
-	</nav>
+        <a class="navbar-brand" href="index.html">MOVIESHIT後台系統</a>
+        <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
+        <!-- Navbar Search-->
+        <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+            <div class="input-group">
+            </div>
+        </form>
+        <!-- Navbar-->
+        <ul class="navbar-nav ml-auto ml-md-0">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle1" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+            </li>
+            <a class="nav-link" href="index.html">
+                登出
+            </a>
+        </ul>
+    </nav>
     
     
     
@@ -105,76 +100,71 @@ tr td>img {
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                        <img src="<%=request.getContextPath()%>/back-home/img/logo2-1-6.png">
-	                         <h1 style="text-align: center;color: white;font-weight: bold ;font-size:35px">
-	                         	<span style="color: #02a388; font-size: 1em;">M</span>ovies<span style="color: #02a388; font-size: 1em;">H</span>it
-	                         </h1>
-<!--                         <a class="nav-link collapsed" href="tables3.html"> -->
-<!--                             <div class="sb-nav-link-icon"><i class="fas fa-user-alt"></i></div> -->
-<!--                            	 基本資料 -->
-<!--                         </a> -->
+                        <img src="<%=request.getContextPath()%>/back-home/img/logo2-1-5.png">
+                        <a class="nav-link collapsed" href="tables3.html">
+                            <div class="sb-nav-link-icon"><i class="fas fa-user-alt"></i></div>
+                            基本資料
+                        </a>
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapseLayouts1">
                             <div class="sb-nav-link-icon"><i class="fas fa-user-cog"></i></div>
-                           	 員工管理系統
+                            員工管理系統
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapseLayouts1" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/employee/listAllEmployee2.jsp">員工管理</a>
+                                <a class="nav-link" href="layout-static.html">員工管理</a>
+                                <a class="nav-link" href="layout-sidenav-light.html">員工權限管理</a>
                             </nav>
                         </div>
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                             <div class="sb-nav-link-icon"><i class="fas fa-video"></i></div>
-                         	   影城基本資料系統
+                            影城基本資料系統
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="layout-static.html">場次管理</a>
                                 <a class="nav-link" href="<%=request.getContextPath()%>/back-end/movie/backEndlistAllMovie.jsp">電影資料管理</a>
-                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/showtime/listAllShowtime.jsp">場次管理</a>
-                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/theater/listAllTheater.jsp"> 廳院管理</a>
-                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/ticket_type/listAllTicket_type.jsp">票種管理</a>
-                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/food/listAllFood.jsp">餐點管理</a>
+                                <a class="nav-link" href="layout-sidenav-light.html"> 廳院管理</a>
+                                <a class="nav-link" href="layout-sidenav-light.html">座位管理</a>
+                                <a class="nav-link" href="layout-sidenav-light.html">票種管理</a>
+                                <a class="nav-link" href="layout-sidenav-light.html">餐點管理</a>
                             </nav>
                         </div>
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages2" aria-expanded="false" aria-controls="collapsePages2">
                             <div class="sb-nav-link-icon"><i class="fas fa-user-clock"></i></div>
-                            	會員管理系統
+                            會員管理系統
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapsePages2" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/mem/listAllMem2.jsp">會員資料管理</a>
+                                <a class="nav-link" href="layout-static.html">會員資料管理</a>
+                                <a class="nav-link" href="layout-sidenav-light.html">會員審核</a>
+                                <a class="nav-link" href="layout-sidenav-light.html"> 專業評論審核</a>
                             </nav>
                         </div>
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages3" aria-expanded="false" aria-controls="collapsePages3">
                             <div class="sb-nav-link-icon"><i class="fas fa-ticket-alt"></i></div>
-                        	    售票管理
+                            售票管理
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapsePages3" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="layout-static.html">現場劃位</a>
-                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/order/listAllOrder.jsp">訂單管理</a>
+                                <a class="nav-link" href="layout-sidenav-light.html">查詢線上訂單</a>
                             </nav>
                         </div>
-           				 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages4" aria-expanded="false" aria-controls="collapsePages4">
+                        <a class="nav-link collapsed" href="tables3.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-user-alt-slash"></i></div>
-                          	  檢舉管理
-                          	<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            檢舉管理
                         </a>
-                        <div class="collapse" id="collapsePages4" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/report_comment/listAllReportComment.jsp">評論檢舉</a>
-                            </nav>
-                        </div>
                         <a class="nav-link" href="tables1.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-bullhorn"></i></div>
-                           	 管理最新消息
+                            管理最新消息
                         </a>
                         <a class="nav-link" href="tables2.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-hands-helping"></i></div>
-                       	     	回應客服小幫手
+                            回應客服小幫手
                         </a>
                     </div>
                 </div>
@@ -236,25 +226,34 @@ tr td>img {
 												<td></td> 
 											</tr>
 											<tr>
-												<td><span style="font-weight:bolder;">上映日期</span></td>
+												<td><span style="font-weight:bolder;">日期</span></td>
 												<td>
 													<input name="showtime_date" class="f_date1" type="text">
 												</td>
 												<td></td> 
 											</tr>
 											<tr>
-												<td><span style="font-weight:bolder;">下映日期</span></td>
+												<td><span style="font-weight:bolder;"></span></td>
 												<td>
 													<input name="showtime_date" class="f_date1" type="text">
 												</td>
 												<td></td>
 											</tr>
 											<tr>
+<!-- 												<td><span style="font-weight:bolder;">新增時間</span></td> -->
 												<td>
 													<input type="button" value="新增時間" id="insert_time"
 											     	class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#AE67D8; font-weight:bold; color:white;">
 												</td>
-												<td></td>
+												<td>
+<!-- 													<table id="table"> -->
+<!-- 														<tr> -->
+<!-- 															<td>編號</td> -->
+<!-- 															<td>時間</td> -->
+<!-- 															<td></td> -->
+<!-- 														</tr> -->
+<!-- 													</table> -->
+												</td>
 												<td></td>
  												
 											</tr>
@@ -277,19 +276,23 @@ tr td>img {
                                     
                                     
                                     <table class="table table-bordered" id="table" width="100%" cellspacing="0" style="text-align:left;">
+                                        
                                         <tbody>
 											<tr>
-												<td style="width:129px; background-color:#524066; font-size:22px; color:white">
-													<span style="font-weight:bolder; ">場次編號</span>
-												</td>
-												<td style="width:820px; background-color:#524066; text-align:center; font-size:30px; color:white">
-													<span style="font-weight:bolder; ">時間</span>
-												</td>
-												<td style="width:129px; background-color:#524066;"></td>
-											</tr>
+															<td style="width:110px;">編號</td>
+															<td style="width:8000px;">時間</td>
+															<td></td>
+														</tr>
+
                                         </tbody>
                                     </table>
+
+                                    
+                                    
+                                    
 								</FORM>
+								
+								
                                 </div>
                             </div>
                     </div>
@@ -385,7 +388,7 @@ tr td>img {
 		
 				no.innerText = i + 1;
 				btn.innerText = "刪除";
-				btn.setAttribute("class", "delete btn btn-outline-dark");
+				btn.setAttribute("class", "delete");
 // 				btn.setAttribute("type", "button");
 				btn.addEventListener("click", function(){
 					this.parentElement.remove();
@@ -402,15 +405,9 @@ tr td>img {
 				time.appendChild(input);
 				tr.appendChild(no);
 				tr.appendChild(time);
-				if(i !== 0){
-					tr.appendChild(btn);
-				}else{
-					let td1 = document.createElement("td");
-					td1.innerText="";
-// 					td1.setAttribute("width", "137px;");
-					tr.appendChild(td1);
-				}
+				tr.appendChild(btn);
 				table.appendChild(tr);
+				console.log(i);
 				if( i === 0){
 					input.value = hour + ":00:00";
 				}else{

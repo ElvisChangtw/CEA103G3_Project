@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="com.authority.model.*"%>
 <%@ page import="com.function.model.*"%>
+<%@ page import="com.employee.model.*"%>
 
 <%-- <% --%>
 <!-- // 	FunctionService functionSvc1 = new FunctionService(); -->
@@ -12,6 +13,7 @@
 <%-- <jsp:useBean id="listAuths_ByEmpno" scope="request" type="java.util.Set<AuthorityVO>" /> <!-- 於EL此行可省略 --> --%>
 <jsp:useBean id="authoritytSvc" scope="page" class="com.authority.model.AuthorityService" />
 <jsp:useBean id="functionSvc" scope="page" class="com.function.model.FunctionService" />
+<jsp:useBean id="employeeSvc" scope="page" class="com.employee.model.EmployeeService" />
 
 
 <html>
@@ -53,6 +55,7 @@
 </head>
 <body bgcolor='white'>
 
+
 <%-- 錯誤表列 --%>
 <c:if test="${not empty errorMsgs}">
 	<font style="color:red">請修正以下錯誤:</font>
@@ -64,6 +67,12 @@
 </c:if>
 
 <table>
+<tr>
+<th>員工：<font color="blue">${employeeSvc.getOneEmp(empno).empname} </font> 權限列表</th>
+</tr>
+</table>
+
+ <table>
 	<tr>
 		<th>功能編號 </th>
 		<th>功能名稱</th>
@@ -73,10 +82,17 @@
 	</tr>
 	
 	<c:forEach var="authorityVO" items="${listAuths_ByEmpno}" >
-		<tr><!--將修改的那一筆加入對比色-->
+		<tr>
 			<td>${authorityVO.function_no}</td>
 			<td>${functionSvc.getOneFunction(authorityVO.function_no).function_desc}</td>
-			<td>${authorityVO.auth_status}</td>
+			<td>
+			<c:if test="${authorityVO.auth_status eq 'Y'}">
+			<font color="red"><b>${authorityVO.auth_status}</b></font>
+			</c:if>
+			<c:if test="${authorityVO.auth_status eq 'N'}">
+			<font color="black">${authorityVO.auth_status}</font>
+			</c:if>
+			</td>
 <%-- 			<td><c:forEach var="deptVO" items="${deptSvc.all}"> --%>
 <%--                     <c:if test="${authorityVO.deptno==deptVO.deptno}"> --%>
 <%-- 	                    ${deptVO.deptno}【<font color=orange>${deptVO.dname}</font> - ${deptVO.loc}】 --%>

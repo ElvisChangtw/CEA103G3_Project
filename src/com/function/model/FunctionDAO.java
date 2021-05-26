@@ -18,11 +18,11 @@ public class FunctionDAO implements FunctionDAO_interface{
 		}
 	}
 
-	private static final String INSERT_STMT = "insert into MoviesHit.FUNCTION (FUNCTION_DESC, STATUS) values (?, ?)";
-	private static final String UPDATE_STMT = "update MoviesHit.FUNCTION set FUNCTION_DESC=?, STATUS=? where FUNCTION_NO = ?";
-	private static final String DELETE_STMT = "delete from MoviesHit.FUNCTION where FUNCTION_NO = ?";
-	private static final String GET_ONE_STMT = "select * from MoviesHit.FUNCTION where FUNCTION_NO = ?";
-	private static final String GET_ALL_STMT = "select * from MoviesHit.FUNCTION order by FUNCTION_NO";
+	private static final String INSERT_STMT = "insert into `FUNCTION` (FUNCTION_DESC, STATUS) values (?, ?)";
+	private static final String UPDATE_STMT = "update `FUNCTION` set FUNCTION_DESC=?, STATUS=? where FUNCTION_NO = ?";
+	private static final String DELETE_STMT = "delete from `FUNCTION` where FUNCTION_NO = ?";
+	private static final String GET_ONE_STMT = "select * from `FUNCTION` where FUNCTION_NO = ?";
+	private static final String GET_ALL_STMT = "select * from `FUNCTION` order by FUNCTION_NO";
 	
 	@Override
 	public void insert(FunctionVO functionVO) {
