@@ -4229,7 +4229,7 @@
         }
 
         .bg-dark {
-            background-color: rgb(2, 163, 136) !important;
+            background-color: black !important;
         }
         /* head顏色 */
 
@@ -8271,7 +8271,7 @@
         }
 
         .sb-sidenav-dark {
-            background-color: #BEBEBE;
+            background-color: #777b7d;
             /* 員工管理系統背景 */
         }
         .sb-sidenav-dark .sb-sidenav-menu .sb-sidenav-menu-heading {
@@ -8282,7 +8282,7 @@
             /*         員工管理系統的字顏色 */
         }
         .sb-sidenav-dark .sb-sidenav-menu .nav-link .sb-nav-link-icon {
-            color: #003E3E;
+            color: black;
             /* 小圖示顏色 */
         }
         .sb-sidenav-dark .sb-sidenav-menu .nav-link .sb-sidenav-collapse-arrow {
