@@ -248,18 +248,16 @@
 			      				</FORM>
 			</td>
 						    </tr>
-						    <tr>
-						    	<td colspan="6" id="collapse${status.count}" class="collapse acc">
-						    		<%if (request.getAttribute("listAuths_ByEmpno")!=null){%>
-    								   <jsp:include page="listAuths_ByEmpno.jsp" />
-									<%} %>
-			   					</td>
-						    </tr>
    							</c:forEach>
 						  </tbody>
 						</table>
 						  <%@ include file="page2.file" %>
 					</div>
+						<td colspan="6" id="collapse${status.count}" class="collapse acc">
+						   <%if (request.getAttribute("listAuths_ByEmpno")!=null){%>
+    						 <jsp:include page="listAuths_ByEmpno.jsp" />
+							<%} %>
+			   			</td>
 				</div>
 			</div>
 	</section>
