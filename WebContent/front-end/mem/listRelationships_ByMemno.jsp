@@ -19,7 +19,7 @@
 
 <style>
    body {  
-     width: 565px;  
+/*      width: 565px;   */
      margin: 0 auto;  
      padding: 10px 20px 20px 20px;  
  	        }  
@@ -58,6 +58,8 @@
 
 </head>
 <body bgcolor='white'>
+<jsp:include page="/front_header.jsp"/>
+<div class="container"  style="min-height: 465px;" >
 
 <%-- 錯誤表列 --%>
 <c:if test="${not empty errorMsgs}">
@@ -68,6 +70,40 @@
 		</c:forEach>
 	</ul>
 </c:if>
+
+<div class="row"  style="margin:5px 0;">
+	<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${memVO.member_no}"
+				alt="尚無圖片" class="rounded-circle" width="60px" height="60px" title=""/>
+<%--      		【<font color=orange>${memVO.mb_name}</font>】 --%>
+	<h1 class="shadow p-3 mb-1 bg-white rounded" style="background-color:#C7C1EA; display:inline-block;">
+			${memVO.mb_name} 的好友專區
+	</h1>
+
+</div>
+<div class="row">
+
+	<div class="col col-md-8">
+	 <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/mem/mem.do" name="form1">   
+       <b><font color=blue>搜尋會員加好友:</font></b> 
+       		<input type="text" name="mb_name" value="" placeholder="請輸入會員名稱">		        
+        <input type="submit" value="送出" class="btn btn-primary">
+        <input type="hidden" name="action" value="listMems_ByCompositeQuery">
+     	<br>
+     </FORM>
+    </div>
+	<div class="col col-md-4 btn-group" style="font-size:40px">
+	  <button type="button" class="btn btn-success" style="border-radius: 5px 0 0 5px;">好友管理</button>
+	  <button type="button" class="btn btn-success dropdown-toggle" style="border-radius: 0 5px 5px 0;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	    <span class="caret"></span>&nbsp</button>
+	  	<ul class="dropdown-menu">
+		    <li><a class="dropdown-item" href="<%=request.getContextPath()%>/mem/mem.do?action=listRelationships_ByMemberno_B&member_no=${memVO.member_no}">我的好友</a></li>
+			<li><a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/relationship/friend_invite.jsp">好友邀請</a></li>
+			<li><a class="dropdown-item" href="<%=request.getContextPath()%>/chat.do?action=ueser&userName=${memVO.mb_name}">開啟聊天室</a></li>
+		</ul>
+	</div>
+
+	</div>
+
 
 
 <table class="table table-bordered table-dark">
@@ -127,6 +163,11 @@
 		</tbody>
 	</c:forEach>
 </table>
+</div>
+     <div class="w3agile_footer_copy">
+        <p>2021 MoviesHit. All rights reserved</p>
+    </div>
+    <a href="#home" id="toTop" class="scroll" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
 
 </body>
 </html>

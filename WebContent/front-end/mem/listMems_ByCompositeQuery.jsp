@@ -6,8 +6,8 @@
 <%@ page import="com.mem.model.*"%>
 
 <% 
-	MemVO memVO = (MemVO) session.getAttribute("memVO");
- 	pageContext.setAttribute("memVO", memVO);
+// 	MemVO memVO = (MemVO) session.getAttribute("memVO");
+//  	pageContext.setAttribute("memVO", memVO);
 // 	MemVO memVO1 = (MemVO) request.getAttribute("memVO");
 	
 %>
@@ -23,14 +23,14 @@
 <html>
 <head><title>複合查詢 - listMems_ByCompositeQuery.jsp</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/front/notification.css" />
-<link href="https://i2.bahamut.com.tw/css/basic.css?v=1618977484" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+<!-- <link href="https://i2.bahamut.com.tw/css/basic.css?v=1618977484" rel="stylesheet"> -->
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous"> -->
+<!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script> -->
 
 <style>
    body {  
-     width: 565px;  
+/*      width: 565px;   */
      margin: 0 auto;  
      padding: 10px 20px 20px 20px;  
 
@@ -71,52 +71,55 @@
 
 </head>
 <body bgcolor='white' onload="connect();" onunload="disconnection();">
-		<div class="shadow p-3 mb-1 bg-white rounded" style="font-size:40px">
-			<span class="badge badge-secondary">
-				MoviesHit好友專區
-			</span>
-			<div class="btn-group">
-		        <button type="button" class="btn btn-success">好友管理</button>
-		        <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-	            	<span class="sr-only">Toggle Dropdown</span>
-	       		</button>
-		       		<div class="dropdown-menu">
-			            <a class="dropdown-item" href="<%=request.getContextPath()%>/mem/mem.do?action=listRelationships_ByMemberno_B&member_no=${memVO.member_no}">我的好友</a>
-			            <a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/relationship/friend_invite.jsp">好友邀請</a>
-		        		<a class="dropdown-item" href="<%=request.getContextPath()%>/chat.do?action=ueser&userName=${memVO.mb_name}">開啟聊天室</a>
-		        	</div>
-		         </div>	
-		       	<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${memVO.member_no}"
-				alt="尚無圖片" class="rounded-circle" width="60px" height="60px" title="" />
-<%--      		【<font color=orange>${memVO.mb_name}</font>】 --%>		      	
-		</div>	
-<!-- ☆萬用複合查詢  - 可由客戶端 listAllArticle.jsp 隨意增減任何想查詢的欄位<br> -->
-<!-- ☆此頁作為複合查詢時之結果練習，<font color=red>已增加分頁、送出修改、刪除之功能</font></h4> -->
-<!-- <table id="table-1"> -->
-<!-- 	<tr><td> -->
-<!-- 		 <h3>所有員工資料 - listAllArticle.jsp</h3> -->
-<%-- 		 <h4><a href="<%=request.getContextPath()%>/front-end/article/listAllArticle.jsp"><img src="<%=request.getContextPath()%>/front-end/article/images/back1.gif" width="100" height="32" border="0">回首頁</a></h4> --%>
-<!-- 	</td></tr> -->
-<!-- </table> -->
+		<jsp:include page="/front_header.jsp"/>
+		<div class="container"  style="min-height: 465px;" >
+<div class="row"  style="margin:5px 0;">
+	<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${memVO.member_no}"
+				alt="尚無圖片" class="rounded-circle" width="60px" height="60px" title=""/>
+<%--      		【<font color=orange>${memVO.mb_name}</font>】 --%>
+	<h1 class="shadow p-3 mb-1 bg-white rounded" style="background-color:#C7C1EA; display:inline-block;">
+			${memVO.mb_name} 的好友專區
+	</h1>
 
-<!-- <h1 class="shadow p-3 mb-1 bg-white rounded"> -->
-<!-- 	<span class="badge badge-secondary"> -->
-<!-- 		MoviesHit討論區 -->
-<!-- 	</span> -->
-<%-- 	<button type="button" class="btn btn-info" onclick="location.href='<%=request.getContextPath()%>/front-end/article/addArticle.jsp'">新增文章</button> --%>
-<!-- </h1> -->
+</div>
+<div class="row">
 
+		<div class="col col-md-8">
 	 <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/mem/mem.do" name="form1">   
        <b><font color=blue>搜尋會員加好友:</font></b> 
-<!--         <b>輸入會員編號:</b> -->
-<!-- 			<input type="text" name="member_no" value="">      -->
-        <b></b>
        		<input type="text" name="mb_name" value="" placeholder="請輸入會員名稱">		        
         <input type="submit" value="送出" class="btn btn-primary">
         <input type="hidden" name="action" value="listMems_ByCompositeQuery">
-        <br>
-<%--         <%="目前登入會員=" + memVO.getMember_no() + " " +memVO.getMb_name()%> --%>
-     </FORM>	
+     	<br>
+     </FORM>
+    </div>
+	<div class="col col-md-4 btn-group" style="font-size:40px">
+	  <button type="button" class="btn btn-success" style="border-radius: 5px 0 0 5px;">好友管理</button>
+	  <button type="button" class="btn btn-success dropdown-toggle" style="border-radius: 0 5px 5px 0;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	    <span class="caret"></span>&nbsp</button>
+	  	<ul class="dropdown-menu">
+		    <li><a class="dropdown-item" href="<%=request.getContextPath()%>/mem/mem.do?action=listRelationships_ByMemberno_B&member_no=${memVO.member_no}">我的好友</a></li>
+			<li><a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/relationship/friend_invite.jsp">好友邀請</a></li>
+			<li><a class="dropdown-item" href="<%=request.getContextPath()%>/chat.do?action=ueser&userName=${memVO.mb_name}">開啟聊天室</a></li>
+		</ul>
+	</div>
+
+	
+<!--     <li> -->
+
+<%--      <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/mem/mem.do" > --%>
+<!--        <b><font color=orange>選擇會員姓名查該會員的好友(0403):</font></b> -->
+<!--        <select size="1" name="member_no"> -->
+<%--          <c:forEach var="memVO" items="${memSvc.all}" >  --%>
+<%--           	<option value="${memVO.member_no}">${memVO.mb_name} --%>
+<%--          </c:forEach>    --%>
+<!--        </select> -->
+<!-- 	       <input type="submit" value="送出"> -->
+<!-- 	       <input type="hidden" name="action" value="listRelationships_ByMemberno_A"> -->
+<!--      </FORM> -->
+<!--   </li> -->
+
+   </div>
 	
 <table class="table table-hover">
 	 <thead style="background-color:#F0F0F0">
@@ -198,7 +201,7 @@
  <div class="alert-container">
   </div>
 <%-- <%@ include file="pages/page2_ByCompositeQuery.file" %> --%>
-
+</div>
 <!-- <br>本網頁的路徑:<br><b> -->
 <%--    <font color=blue>request.getServletPath():</font> <%=request.getServletPath()%><br> --%>
 <%--    <font color=blue>request.getRequestURI(): </font> <%=request.getRequestURI()%> </b> --%>
@@ -341,6 +344,10 @@
 	})
 
 </script>
+     <div class="w3agile_footer_copy">
+        <p>2021 MoviesHit. All rights reserved</p>
+    </div>
+    <a href="#home" id="toTop" class="scroll" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
 
 </body>
 
