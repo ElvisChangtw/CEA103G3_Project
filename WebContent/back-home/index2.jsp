@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="Big5"%>
 <!DOCTYPE html>
 <html lang="en">
-
+	
 <head>
     <meta charset="big5" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -113,7 +113,20 @@
                 </div>
             </nav>
         </div>
-    </div>
+    
+ <!--       ======這邊貼自己的檔案內容====== -->
+        <div id="layoutSidenav_content">
+                    <div class="container-fluid">
+                        <h1>歡迎MoviesHit員工:XXX登入!</h1>
+                        ====${memVO.mb_name}===
+                        <h1>請點選左側進行功能操作!</h1>
+                        <img src="https://wowlavie-aws.hmgcdn.com/file/article_all/%E5%A4%A9%E8%83%BD%E5%8A%87%E7%85%A74.jpg">
+                        
+            </div>   
+        </div>
+
+    <!-- ======到這邊===== -->
+    
     
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
@@ -124,6 +137,7 @@
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
     <script src="assets/demo/datatables-demo.js"></script>
+
 </body>
 
 </html>
