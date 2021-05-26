@@ -258,6 +258,15 @@ left: 1095px;
 .sec:hover{
   background-color: #BFBFBF;
 }
+#mic{
+	width: 40px;
+    height: 40px;
+    position: absolute;
+    top: 15px;
+    right: 12px;
+}
+ 
+
     </style>
 
 <style>
@@ -480,6 +489,8 @@ left: 1095px;
 							<form method="post" action="<%=request.getContextPath()%>/movie/movie.do" name="form1">
 								<input id="search-context"  type="text" name="MOVIE_NAME" value="" placeholder="請輸入電影名稱" onkeydown="if (event.keyCode == 13) sendMessage();">
 								<input type="hidden" name="action" value="listMovies_ByCompositeQuery">
+								<img id="mic"src="<%=request.getContextPath()%>/images/mic.png">
+								
 							</form>
 							<div id="search-results"class="container" >
 							</div>
@@ -1649,6 +1660,7 @@ activate: function(event) { // Callback function if tab is switched
     
     <!--end-smooth-scrolling-->
     <script src="<%=request.getContextPath()%>/js/bootstrap.js"></script>
+
 </body>
 <script>
 
@@ -2032,7 +2044,7 @@ function drawPieChart2() {
 </script>
 
 <script>
-
+		//search~
     	$("#search-context").on('input propertychange', function(){
     		$("#search-results").html('<hr class="hrhr">');
     		if(!$(this).val() == ""){
@@ -2528,6 +2540,105 @@ var count=0;
 		}
 		
 	}
+	
+	$("#mic").on("click", function(){
+		var sound = new Audio(); 
+	    sound.src = '<%=request.getContextPath()%>/img/kiss.mp3';
+// 	    sound.currentTime = 3;
+		var show = document.getElementById('show');
+        var recognition = new webkitSpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = "cmn-Hant-TW";
+        recognition.onstart = function() {
+            console.log('開始辨識...');
+        };
+        recognition.onend = function() {
+            console.log('停止辨識!');
+            
+        };
+        recognition.onresult = function(event) {
+            var i = event.resultIndex;
+            var j = event.results[i].length - 1;
+//             show.innerHTML = event.results[i][j].transcript;
+			if(event.results[i][j].transcript.indexOf("清除")> -1 ||
+					event.results[i][j].transcript.indexOf("清楚")> -1	){
+				console.log(event.results[i][j].transcript);
+// 				event.results[i][j].transcript="";
+				$("#search-context").val("");
+				$("#search-results").val("");
+			} else if(event.results[i][j].transcript.indexOf("停止") > -1 ||
+					event.results[i][j].transcript =="屏"
+			) {
+// 				event.results[i][j].transcript="";
+				$("#search-context").val("");
+				$("#search-results").val("");
+				
+				recognition.stop();
+				Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "停止辨識",
+                    showConfirmButton: false,
+                    timer: 1300,
+                });
+			} else if(event.results[i][j].transcript == "親一下" ||
+					event.results[i][j].transcript.indexOf("一下") > -1 ||
+					event.results[i][j].transcript.indexOf("記下") > -1 ||
+					event.results[i][j].transcript=="靜宜"
+			){
+// 				event.results[i][j].transcript == "";
+// 			    sound.currentTime = 3;
+			    sound.play(); 
+// 			    sound.currentTime = 3;
+			    $("#search-context").val("");
+			    $("#search-results").val("");
+			}
+			else{
+				$("#search-context").val(event.results[i][j].transcript);
+				console.log(event.results[i][j].transcript);
+			
+			
+			
+			$("#search-results").html('<hr class="hrhr">');
+    		if(!($("#search-context").val() == "")){
+    			var result;
+    			console.log("送出搜尋 = " + $("#search-context").val());
+    			let json_result_list = getResults($("#search-context").val());
+        		console.log("收回結果");
+    			console.log(json_result_list);
+        		if(json_result_list != undefined ){
+	        		for ( movieVO of json_result_list){
+	        			console.log(movieVO.moviename);
+	        			console.log(movieVO.actor);
+	        			console.log(movieVO.premiredate);
+	        			console.log(movieVO.movieno);
+	        			let link = '<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=' + movieVO.movieno  + '' ;
+	        			var dt = new Date(movieVO.premiredate);
+	        			var yr = 1900 + dt.getYear();
+	        			result = 
+		    				'<div class="rslt row" onclick="location.href=\'' + link+ '\'" > ' +
+		    				'	<div class="col-md-3"> ' +
+		    		   		'			<img src="<%=request.getContextPath()%>/movie/DBGifReader2.do?movieno=' + movieVO.movieno + '" title=" " width="260px" height="120px"> ' +
+		    		  		'		</div> ' +
+		    		  		'		<div class="col-md-9">' +
+		    				'		<p class="mov-name">'+ movieVO.moviename +  '</p>' +
+		    				'		<p class="non-mov-name">'+ movieVO.actor +  '</p> ' +
+		    				'		<p class="non-mov-name">'+ yr +  '</p> ' +
+		    	  			'	</div>' +
+		    				'</div>' +
+		    				'<hr class="hrhr">';
+		        		$("#search-results").html(
+		        				$("#search-results").html() + result
+		        		);
+	        		}
+        		}
+    		}
+			}
+        };
+        recognition.start();
+	});
+
 </script>
 	    
 
