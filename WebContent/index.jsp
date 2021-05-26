@@ -1461,7 +1461,6 @@ left: 1095px;
     <div class="w3agile_footer_copy">
         <p>2021 Movies Hit. All rights reserved | Design by <a>CEA103G3</a></p>
     </div>
-    <a href="#home" id="toTop" class="scroll" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
     <script src="<%=request.getContextPath()%>/js/jquery-1.11.1.min.js"></script>
     <!-- Dropdown-Menu-JavaScript -->
     <script>
@@ -1648,21 +1647,6 @@ activate: function(event) { // Callback function if tab is switched
 		});
     </script>
     
-    <script type="text/javascript">
-        $(document).ready(function() {
-            /*
-                            var defaults = {
-                                containerID: 'toTop', // fading element id
-                                containerHoverID: 'toTopHover', // fading element hover id
-                                scrollSpeed: 1200,
-                                easingType: 'linear' 
-                            };
-                            */
-
-            $().UItoTop({ easingType: 'easeOutQuart' });
-
-        });
-    </script>
     <!--end-smooth-scrolling-->
     <script src="<%=request.getContextPath()%>/js/bootstrap.js"></script>
 </body>

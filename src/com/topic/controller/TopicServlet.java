@@ -257,12 +257,13 @@ String topic = req.getParameter("topic").trim();
 
 				/*************************** 3.查詢完成,準備轉交(Send the Success view) ************/
 				req.setAttribute("listArticles_ByTopicno", set);    // 資料庫取出的list物件,存入request
+				req.setAttribute("topicno", topicno);    // 資料庫取出的list物件,存入request
 
 				String url = null;
 				if ("listArticles_ByTopicno_A".equals(action))
 					url = "/front-end/topic/listArticles_ByTopicno.jsp";        // 成功轉交 topic/listArticles_ByTopicno.jsp
 				else if ("listArticles_ByTopicno_B".equals(action))
-					url = "/front-end/topic/listAllTopic.jsp";              // 成功轉交 topic/listAllTopic.jsp
+					url = "/front-end/topic/listArticles_ByTopicno.jsp";              // 成功轉交 topic/listAllTopic.jsp
 
 				RequestDispatcher successView = req.getRequestDispatcher(url);
 				successView.forward(req, res);
