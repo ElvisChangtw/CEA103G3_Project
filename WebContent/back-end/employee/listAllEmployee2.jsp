@@ -68,16 +68,13 @@
         <!-- Navbar-->
         <ul class="navbar-nav ml-auto ml-md-0">
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle1" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                <a class="nav-link dropdown-toggle1" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i>${employeeVO.empname}</a>
             </li>
-            <a class="nav-link" href="index.html">
+            <a class="nav-link" href="<%=request.getContextPath()%>/back-end/employee/empLogout.jsp">
                	 登出
             </a>
         </ul>
     </nav>
-    
-    
-    
     
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
@@ -200,7 +197,6 @@
 						    <tr>
 						      <th class="th1">員工編號</th>
 							  <th>員工姓名</th>
-<!-- 							  <th>員工密碼</th> -->
 							  <th>性別</th>
 							  <th>電話</th>
 							  <th>電子郵件</th>

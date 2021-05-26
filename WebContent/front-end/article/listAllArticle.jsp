@@ -91,6 +91,7 @@
 	<span class="badge badge-secondary">
 		MoviesHit討論區
 	</span>
+	<button type="button" class="btn btn-success" onclick="location.href='<%=request.getContextPath()%>/index.jsp'">回首頁</button>
 	<button type="button" class="btn btn-info" onclick="location.href='addArticle.jsp'">新增文章</button>
 </h1>
 

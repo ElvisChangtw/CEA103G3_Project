@@ -553,21 +553,21 @@ left: 1095px;
                     <form METHOD="post" ACTION="<%=request.getContextPath()%>/order/order.do" name="form1">
                     	<div class="form-group">
                         	<span class="form-label">電影</span>
-                        	<select class="form-control" id="movie" name="movie_no">
+                        	<select class="form-control" id="movie" name="movie_no" required>
 								<option value="">請選擇電影</option>
                             </select>
                             <span class="select-arrow"></span>
                         </div>
                         <div class="form-group">
                            <span class="form-label">日期</span>
-                           <select class="form-control" id="date" name="movie_date">
+                           <select class="form-control" id="date" name="movie_date" required>
 								<option value="">請選擇日期</option>
                            </select>
                            <span class="select-arrow"></span>
                         </div>
                         <div class="form-group">
                             <span class="form-label">場次</span>
-                           <select class="form-control" id="showtime" name="showtime_no">
+                           <select class="form-control" id="showtime" name="showtime_no" required>
 								<option value="">請選擇場次</option>
                            </select>
                            <span class="select-arrow"></span>
@@ -1622,7 +1622,6 @@ activate: function(event) { // Callback function if tab is switched
 	    		type: "POST",
 	    		success: function(json){
 						let jsonobj = JSON.parse(json);
-						$("#date").html("<option>請選擇日期</option>");
 						for(let i = 0; i < jsonobj['showtime_date'].length; i++){
 							let opt = $("<option>").val(jsonobj['showtime_date'][i]).text(jsonobj['showtime_date'][i]);
 	         				$("#date").append(opt);
@@ -1640,7 +1639,6 @@ activate: function(event) { // Callback function if tab is switched
 	        		},
 	        		success: function(json){
 							let jsonobj = JSON.parse(json);
-							$("#showtime").html("<option>請選擇場次</option>");
 							for(let i = 0; i < jsonobj['showtime_no'].length; i++){
 								let opt = $("<option>").val(jsonobj['showtime_no'][i]).text(jsonobj['showtime_time'][i]);
 		         				$("#showtime").append(opt);
