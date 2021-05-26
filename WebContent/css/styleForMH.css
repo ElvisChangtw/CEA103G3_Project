@@ -117,3 +117,11 @@
        		height:100px;
        		margin: 0 auto;
        }
+       section.tab-panel>div table.table>tbody>tr>th, 
+       section.tab-panel>div table.table>tbody>tr>td{
+       	color:black;
+       }
+       table.table.table-hover
+       {
+       	height:auto;
+       }

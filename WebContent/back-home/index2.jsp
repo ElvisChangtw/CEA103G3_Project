@@ -1,7 +1,14 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="Big5"%>
+<%@ page import="com.employee.model.*"%>
+
+
 <!DOCTYPE html>
 <html lang="en">
-	
+
+<%
+    EmployeeVO employeeVO = (EmployeeVO) session.getAttribute("employeeVO");
+%>
+
 <head>
     <meta charset="big5" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -26,9 +33,9 @@
         <!-- Navbar-->
         <ul class="navbar-nav ml-auto ml-md-0">
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle1" id="userDropdown" href="index2.jsp" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                <a class="nav-link dropdown-toggle1" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i>${employeeVO.empname}</a>
             </li>
-            <a class="nav-link" href="index2.jsp">
+            <a class="nav-link" href="<%=request.getContextPath()%>/back-end/employee/empLogout.jsp">
              	   登出
             </a>
         </ul>
@@ -113,20 +120,7 @@
                 </div>
             </nav>
         </div>
-    
- <!--       ======這邊貼自己的檔案內容====== -->
-        <div id="layoutSidenav_content">
-                    <div class="container-fluid">
-                        <h1>歡迎MoviesHit員工:XXX登入!</h1>
-                        ====${memVO.mb_name}===
-                        <h1>請點選左側進行功能操作!</h1>
-                        <img src="https://wowlavie-aws.hmgcdn.com/file/article_all/%E5%A4%A9%E8%83%BD%E5%8A%87%E7%85%A74.jpg">
-                        
-            </div>   
-        </div>
-
-    <!-- ======到這邊===== -->
-    
+    </div>
     
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
@@ -137,7 +131,6 @@
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
     <script src="assets/demo/datatables-demo.js"></script>
-
 </body>
 
 </html>
