@@ -313,25 +313,25 @@ left: 1095px;
                 </nav>
                 <div class="w3ls_search">
 						<div class="cd-main-header">
-									<div class = "notification">
-									  <a href = "#">
-									  <div class = "notBtn" href = "#">
-									    <div id="number" class = "number"></div>
-									    <i class="fas fa-bell"></i>
-									      <div class = "box">
-									        <div class = "display">
-									          <div class = "nothing"> 
-									            <i class="fas fa-child stick"></i> 
-									            <div class = "cent"></div>
-									          </div>
-									          <div class = "cont"><!-- Fold this div and try deleting evrything inbetween -->
-					
-									         </div>
-									        </div>
-									     </div>
-									  </div>
-									    </a>
-									</div>
+								<div class = "notification">
+								  <a href = "#">
+								  <div class = "notBtn" href = "#">
+								    <div id="number" class = "number"></div>
+								    <i class="fas fa-bell"></i>
+								      <div class = "box">
+								        <div class = "display">
+								          <div class = "nothing"> 
+								            <i class="fas fa-child stick"></i> 
+								            <div class = "cent"></div>
+								          </div>
+								          <div class = "cont"><!-- Fold this div and try deleting evrything inbetween -->
+				
+								         </div>
+								        </div>
+								     </div>
+								  </div>
+								    </a>
+								</div>
 							<ul class="cd-header-buttons">
 								<c:choose>
 									<c:when test="${memVO.member_no == 99}">
@@ -461,7 +461,7 @@ left: 1095px;
 	}
 </script>
 <script>
-var count=0;
+var count_header=0;
 
 	    $(document).ready(function(){
 	    	var notify_head = $(".cont");
@@ -579,13 +579,13 @@ var count=0;
 					       </div>`;
 					       	}
 							 
-							 count++;
+							 count_header++;
 
 					 }
 				 }
 		   		 notify_head.append(slice1); 
 				 notify_head.append(slice); 
-		   		 number.innerText=count;
+		   		 number.innerText=count_header;
 		   		 if(number.innerText == 0){
 		   			 number.style.display="none";
 		   		 }
@@ -625,6 +625,6 @@ var count=0;
 			Swal.fire('½Ð¥ýµn¤J').then((result)=>{
 				window.location.href = "<%=request.getContextPath()%>/front-end/mem/MemLogin.jsp";
 			});
-		}
+		}	
 	    </script>
 </html>

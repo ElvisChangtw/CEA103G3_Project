@@ -18,7 +18,7 @@
 
 <style>
    body {  
-     width: 500px;  
+     width: 565px;  
      margin: 0 auto;  
      padding: 10px 20px 20px 20px;  
 
@@ -83,6 +83,9 @@
 			            <a class="dropdown-item" href="<%=request.getContextPath()%>/chat.do?action=ueser&userName=${memVO.mb_name}">開啟聊天室</a>		        	
 		        	</div>
 	      	 </div>
+	      	 <img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${memVO.member_no}"
+				alt="尚無圖片" class="rounded-circle" width="60px" height="60px" title=""/>
+<%--      		【<font color=orange>${memVO.mb_name}</font>】 --%>
 		</div>	
 		
 <%-- 			 <Form id="myForm" action="<%=request.getContextPath()%>/chat.do" method="POST"> --%>
@@ -116,7 +119,7 @@
         <input type="submit" value="送出" class="btn btn-primary">
         <input type="hidden" name="action" value="listMems_ByCompositeQuery">
      	<br>
-     	<%="目前登入會員=" + memVO.getMember_no() + " " +memVO.getMb_name()%>     
+<%--      	<%="目前登入會員=" + memVO.getMember_no() + " " +memVO.getMb_name()%>      --%>
      </FORM>
      
 <%if (request.getAttribute("listRelationships_ByMemno")!=null){%>

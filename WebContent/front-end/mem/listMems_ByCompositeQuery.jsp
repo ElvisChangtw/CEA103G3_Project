@@ -30,7 +30,7 @@
 
 <style>
    body {  
-     width: 500px;  
+     width: 565px;  
      margin: 0 auto;  
      padding: 10px 20px 20px 20px;  
 
@@ -85,7 +85,10 @@
 			            <a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/relationship/friend_invite.jsp">好友邀請</a>
 		        		<a class="dropdown-item" href="<%=request.getContextPath()%>/chat.do?action=ueser&userName=${memVO.mb_name}">開啟聊天室</a>
 		        	</div>
-	      	 </div>
+		         </div>	
+		       	<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${memVO.member_no}"
+				alt="尚無圖片" class="rounded-circle" width="60px" height="60px" title="" />
+<%--      		【<font color=orange>${memVO.mb_name}</font>】 --%>		      	
 		</div>	
 <!-- ☆萬用複合查詢  - 可由客戶端 listAllArticle.jsp 隨意增減任何想查詢的欄位<br> -->
 <!-- ☆此頁作為複合查詢時之結果練習，<font color=red>已增加分頁、送出修改、刪除之功能</font></h4> -->
@@ -112,7 +115,7 @@
         <input type="submit" value="送出" class="btn btn-primary">
         <input type="hidden" name="action" value="listMems_ByCompositeQuery">
         <br>
-        <%="目前登入會員=" + memVO.getMember_no() + " " +memVO.getMb_name()%>
+<%--         <%="目前登入會員=" + memVO.getMember_no() + " " +memVO.getMb_name()%> --%>
      </FORM>	
 	
 <table class="table table-hover">
@@ -129,7 +132,7 @@
 		<c:if test="${mem1VO.member_no != sessionScope.memVO.member_no}">		
 				<tbody>	
 					<tr>
-						<td>
+						<td style="float: left">
 							<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${mem1VO.member_no}"
 								alt="尚無圖片" width="96px;" height="108px" title="" style="border: groove;"/>
 							【<font color=orange>${mem1VO.mb_name}</font>】
