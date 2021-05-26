@@ -295,7 +295,10 @@
 	    }
 	})
 </script>
-<jsp:include page="/front_footer_copy.jsp"/>
+     <div class="w3agile_footer_copy">
+        <p>2021 MoviesHit. All rights reserved</p>
+    </div>
+    <a href="#home" id="toTop" class="scroll" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
 
 </body>
 
