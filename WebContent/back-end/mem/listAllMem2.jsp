@@ -26,7 +26,7 @@
 <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css">
         
         <link href="<%=request.getContextPath()%>/back-home/css/styles.css" rel="stylesheet" />
-        <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+<!--         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" /> -->
         
 	
         
@@ -74,6 +74,10 @@
 	  .table th, .table td{
 	  	vertical-align: 0px;
 	  }
+	  
+	  th{
+	 background-color: #4aa42a;
+	  }
 
 </style>
 <style>
@@ -81,12 +85,18 @@
 		    position: absolute; 
 		    top: 0px; 
 		    left: 10;  
-		    width: 100%; 
 			} 
 		span {
     		color: #02a388;
    			font-size: 1em;
    			}	
+   		.bootstrap-table .fixed-table-container .fixed-table-body {	
+   			overflow-x: unset; 
+			overflow-y: unset;
+   		}
+   		.bootstrap-table bootstrap4{
+   			padding:50px !important;
+   		}
 		
 </style>
 
@@ -199,7 +209,7 @@
 <!--       ======這邊貼自己的檔案內容====== -->
             <div id="layoutSidenav_content">
             <%@ include file="page1.file" %> 
-                  <table class="table table-secondary table-hover" data-toggle="table">
+                  <table class="table table-hover" data-toggle="table">
 <thead>
 	<tr>
 		<th data-field="member_no" data-sortable="true">會員編號</th>
@@ -260,12 +270,12 @@
 <!-- 							======到這邊===== -->
 
 
-<!--         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script> -->
-<!--         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script> -->
-<%--         <script src="<%=request.getContextPath()%>/back-home/js/scripts.js"></script> --%>
-<!--         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script> -->
-<!--         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script> -->
-<%--         <script src="<%=request.getContextPath()%>/css/demo/datatables-demo.js"></script> --%>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="<%=request.getContextPath()%>/back-home/js/scripts.js"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+        <script src="<%=request.getContextPath()%>/css/demo/datatables-demo.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/imask/3.4.0/imask.min.js"></script>
 <script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>

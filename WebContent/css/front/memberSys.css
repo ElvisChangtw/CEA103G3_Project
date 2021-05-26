@@ -26,7 +26,7 @@ button:focus {
     display: flex;
     flex-direction: column;
     padding: 80px 20px 20px 20px;
-    height: 90vh;
+    height: 100%;
     min-width: 850px;
     margin: 0 auto;
 }
@@ -199,3 +199,27 @@ button:focus {
         min-width: fit-content;
     }
 }
+
+.order_box .order_box_for_position .table tr th, .master_box .master_box_for_position .table tr th,  .member_box .member_box_for_position .table tr th{
+	 background-color: #4aa42a;
+	 color: white !important;
+     font-size: 15px !important; 
+     text-align: center !important;
+     vertical-align: middle !important;
+}
+
+.order_box h1, .master_box h1, .member_box h1{
+	color:#4aa42a;
+}
+
+.innerTable{
+	 margin-inline:auto;
+}
+ .table td, .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+ 	color:black !important;
+ 	font-size:1em !important;
+ }
+ 
+ hr{
+	border:unset;
+ }

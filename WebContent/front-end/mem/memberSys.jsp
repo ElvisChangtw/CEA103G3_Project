@@ -18,11 +18,13 @@
 <jsp:useBean id="groupMemSvc" scope="page" class="com.group_member.model.Group_MemberService" />
 <jsp:useBean id="memSvc" scope="page" class="com.mem.model.MemService" />
 <jsp:useBean id="relationSvc" scope="page" class="com.relationship.model.RelationshipService" />
+<jsp:useBean id="mapping" scope="page" class="com.mappingtool.StatusMapping" />
 <%@ page import="com.mem.model.*"%>
 <%@ page import="com.articleCollection.model.*"%>
 <%@ page import="com.order.model.*"%>
 <%@ page import="com.group.model.*"%>
 <%@ page import="java.util.*"%>
+<%@ page import="com.mappingtool.*"%>
 
 <%@ page import="org.json.JSONArray"%>
 <%@ page import="org.json.JSONObject"%>
@@ -448,7 +450,7 @@ bK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></scrip
 "sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha
 384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
 
 
 <script>
@@ -543,6 +545,7 @@ if(now>showTime||"${orderVO.order_status}"=="2"){
 
 $("#show_orderBox_${orderVO.order_no}").click(function(){
 	undue.before(fragment_${orderVO.order_no});
+	$('#qrcode').qrcode({width: 200,height: 200,text: "www.google.com"});
 	$(".cancelShow").click(function(){
 		$("#order_box_${orderVO.order_no}").css("opacity", "0");
 		$("#order_box_${orderVO.order_no}").css("z-index", "-1");
@@ -563,6 +566,7 @@ var fragment_${orderVO.order_no}=
 		<table class="table table-secondary table-hover" style="text-align:center;">
 		<button type="button" class="btn-close cancelShow" style="position:absolute; right:420px;"></button>
 			<h1>訂單明細</h1>
+			<tr><th>QR-Code: </th><td><div id="qrcode"></div></td></tr>
 			<tr><th>電影名稱 : </th><td>`+ movie_name +`</td></tr>
 			<tr><th>播映時間 : </th><td>`+ show_time +`</td></tr>
 			<tr><th>票種 : </th><td>
@@ -609,7 +613,7 @@ if(showTime>now&&("${groupVO.group_status}"=="0"||"${groupVO.group_status}"=="1"
 		master_segment= `<tr><td>` + "${groupVO.group_title}" + 
 						`</td><td>` + "${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(groupVO.showtime_no).movie_no).moviename}" + 
 						`</td><td>` +  "${showtimeSvc.getOneShowtime(groupVO.showtime_no).showtime_time}" + 
-						`</td><td>` + "${groupVO.group_status}" + 
+						`</td><td>` + "${mapping.dboGroup_GroupStatus(groupVO.group_status)}" + 
 						`</td><td>`+ "${groupVO.required_cnt}" +
 						`</td><td>`+ "${groupVO.member_cnt}" +
 						`</td><td><button type="button" class="btn btn-primary" id="show_masterBox_${groupVO.group_no}" >查看</button>
@@ -685,7 +689,7 @@ var master_segment_${groupVO.group_no}=
 			<tr><th>參加團員 : </th><td>
 			<table style="margin-left:250px;">
 				<c:forEach var="groupMemVO" items="${groupSvc.getMembersByGroupno(groupVO.group_no)}">
-					<tr><td>`+"${memSvc.getOneMem(groupMemVO.member_no).mb_name}"+`</td><td>(`+"${groupMemVO.pay_status}"+`)</td>
+					<tr><td>`+"${memSvc.getOneMem(groupMemVO.member_no).mb_name}"+`</td><td>(`+"${mapping.dboGroup_Member_Pay_Status(groupMemVO.pay_status)}"+`)</td>
 						<c:if test="${groupMemVO.pay_status == '0'}">
 		            		<td><button type="button" class="btn-primary reminder" value="reminder">提醒<input type="hidden" class="memberNO"  value="${groupMemVO.member_no}"></button></td>
 		        		</c:if>
@@ -726,8 +730,8 @@ member_segment= `<tr><td>` + "${groupSvc.getOneGroup(groupMemVO.group_no).group_
 			    `</td><td>` + "${memSvc.getOneMem(groupSvc.getOneGroup(groupMemVO.group_no).member_no).mb_name}" + 
 				`</td><td>` + "${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(groupSvc.getOneGroup(groupMemVO.group_no).showtime_no).movie_no).moviename}" + 
 				`</td><td>` +  "${showtimeSvc.getOneShowtime(groupSvc.getOneGroup(groupMemVO.group_no).showtime_no).showtime_time}" + 
-				`</td><td>` + "${groupSvc.getOneGroup(groupMemVO.group_no).group_status}" + 
-				`</td><td>` + "${groupMemVO.pay_status}" + 
+				`</td><td>` + "${mapping.dboGroup_GroupStatus(groupSvc.getOneGroup(groupMemVO.group_no).group_status)}" + 
+				`</td><td>` + "${mapping.dboGroup_Member_Pay_Status(groupMemVO.pay_status)}" + 
 				`</td><td>`+ "${groupSvc.getOneGroup(groupMemVO.group_no).required_cnt}" +
 				`</td><td>`+ "${groupSvc.getOneGroup(groupMemVO.group_no).member_cnt}" +
 				`</td><td><button type="button" class="btn btn-primary" id="show_memberBox_${groupSvc.getOneGroup(groupMemVO.group_no).group_no}" >查看</button>
@@ -745,8 +749,8 @@ member_segment= `<tr><td>` + "${groupSvc.getOneGroup(groupMemVO.group_no).group_
 				`</td><td>` + "${memSvc.getOneMem(groupSvc.getOneGroup(groupMemVO.group_no).member_no).mb_name}" + 
 				`</td><td>` + "${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(groupSvc.getOneGroup(groupMemVO.group_no).showtime_no).movie_no).moviename}" + 
 				`</td><td>` + "${showtimeSvc.getOneShowtime(groupSvc.getOneGroup(groupMemVO.group_no).showtime_no).showtime_time}" + 
-				`</td><td>` + "${groupSvc.getOneGroup(groupMemVO.group_no).group_status}" + 
-				`</td><td>`+ "${groupMemSvc.getOneGroup_Member(groupSvc.getOneGroup(groupMemVO.group_no).group_no,groupSvc.getOneGroup(groupMemVO.group_no).member_no).status}" +
+				`</td><td>` + "${mapping.dboGroup_GroupStatus(groupSvc.getOneGroup(groupMemVO.group_no).group_status)}" + 
+				`</td><td>`+ "${mapping.dboGroup_Member_Status(groupMemSvc.getOneGroup_Member(groupSvc.getOneGroup(groupMemVO.group_no).group_no,groupSvc.getOneGroup(groupMemVO.group_no).member_no).status)}" +
 				`</td><td><button type="button" class="btn btn-primary" id="show_memberBox_${groupSvc.getOneGroup(groupMemVO.group_no).group_no}" >查看</button></td></tr>`
 group_history.after(member_segment);
 	
@@ -1056,7 +1060,7 @@ function showButton(target){
 		 textarea=$("#comment_content_${commVO.commentno}").val();
 		 console.log(textarea);
 		 $.ajax({
-			 url:"<%=request.getContextPath()%>/CommentServlet?action=getOne_For_Display_Ajax",
+			 url:"<%=request.getContextPath()%>/comment/comment.do?action=getOne_For_Display_Ajax",
 			 data:{
 				 "comment_no":comment_no,
 				 "comment_content":textarea	
