@@ -2,13 +2,13 @@
 
   <%if (rowsPerPage<rowNumber) {%>
     <%if(pageIndex>=rowsPerPage){%>
-         <li><a class="frist" href="<%=request.getContextPath()%>/comment/comment.do?whichPage=1&action=listComments_ByCompositeQuery">第一頁</a></li>
-         <li><a class="frist" href="<%=request.getContextPath()%>/comment/comment.do?whichPage=<%=whichPage-1%>&action=listComments_ByCompositeQuery">上一頁</a></li>
+         <li><a class="frist" href="<%=request.getContextPath()%>/comment/comment.do?whichPage=1&MEMBER_NO=${param.MEMBER_NO}&action=listComments_ByCompositeQuery">第一頁</a></li>
+         <li><a class="frist" href="<%=request.getContextPath()%>/comment/comment.do?whichPage=<%=whichPage-1%>&MEMBER_NO=${param.MEMBER_NO}&action=listComments_ByCompositeQuery">上一頁</a></li>
     <%}%>
   
     <%if(pageIndex<pageIndexArray[pageNumber-1]){%>
-        <li><a class="last" href="<%=request.getContextPath()%>/comment/comment.do?whichPage=<%=whichPage+1%>&action=listComments_ByCompositeQuery">下一頁</a></li>
-        <li><a class="last" href="<%=request.getContextPath()%>/comment/comment.do?whichPage=<%=pageNumber%>&action=listComments_ByCompositeQuery">最後一頁</a></li>
+        <li><a class="last" href="<%=request.getContextPath()%>/comment/comment.do?whichPage=<%=whichPage+1%>&MEMBER_NO=${param.MEMBER_NO}&action=listComments_ByCompositeQuery">下一頁</a></li>
+        <li><a class="last" href="<%=request.getContextPath()%>/comment/comment.do?whichPage=<%=pageNumber%>&MEMBER_NO=${param.MEMBER_NO}&action=listComments_ByCompositeQuery">最後一頁</a></li>
     <%}%>
   <%}%>  
  
@@ -23,5 +23,6 @@
        </select>
        <input type="submit" value="確定" >
        <input type="hidden" name="action" value="listComments_ByCompositeQuery">  
+       <input type="hidden" name="MEMBER_NO" value="${param.MEMBER_NO}">
     </FORM>
   <%}%>

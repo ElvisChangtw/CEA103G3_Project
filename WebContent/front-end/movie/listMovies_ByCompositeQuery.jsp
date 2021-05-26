@@ -138,8 +138,8 @@ height:50px;
 			<!-- //breadcrumb -->
 
 			<!--/content-inner-section-->
-				<div class="w3_content_agilleinfo_inner">
-					<div class="agile_featured_movies">
+<!-- 				<div class="w3_content_agilleinfo_inner"> -->
+<!-- 					<div class="agile_featured_movies"> -->
 	<%-- 錯誤表列 --%>
 	<c:if test="${not empty errorMsgs}">
 		<font style="color: red">請修正以下錯誤:</font>
@@ -370,8 +370,6 @@ height:50px;
 <!--//movies-->
 				</div>
 			</div>
-		</div>
-		</div>
 		</div>
 <!--//content-inner-section-->
 		
