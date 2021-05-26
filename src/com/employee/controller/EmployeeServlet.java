@@ -113,7 +113,7 @@ public class EmployeeServlet extends HttpServlet {
 				/*************************** 其他可能的錯誤處理 **********************************/
 			} catch (Exception e) {
 				errorMsgs.add("無法取得要修改的資料:" + e.getMessage());
-				RequestDispatcher failureView = req.getRequestDispatcher("/back-end/employee/listAllEmployee.jsp");
+				RequestDispatcher failureView = req.getRequestDispatcher("/back-end/employee/listAllEmployee2.jsp");
 				failureView.forward(req, res);
 			}
 		}
@@ -334,7 +334,7 @@ public class EmployeeServlet extends HttpServlet {
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					req.setAttribute("employeeVO", employeeVO); // 含有輸入格式錯誤的employeeVO物件,也存入req。儲存打過的資料，若輸入錯誤不用重新輸入
-					RequestDispatcher failureView = req.getRequestDispatcher("/back-end/employee/listAllEmployee.jsp");
+					RequestDispatcher failureView = req.getRequestDispatcher("/back-end/employee/listAllEmployee2.jsp");
 					failureView.forward(req, res);
 					return;
 				}
@@ -354,7 +354,7 @@ public class EmployeeServlet extends HttpServlet {
 				
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
-					RequestDispatcher failureView = req.getRequestDispatcher("/back-end/employee/listAllEmployee.jsp");
+					RequestDispatcher failureView = req.getRequestDispatcher("/back-end/employee/listAllEmployee2.jsp");
 					failureView.forward(req, res);
 					return;// 程式中斷
 				}
@@ -376,7 +376,7 @@ public class EmployeeServlet extends HttpServlet {
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 //					req.setAttribute("authorityVO", authorityVO); // 含有輸入格式錯誤的authorityVO物件,也存入req。儲存打過的資料，若輸入錯誤不用重新輸入
-					RequestDispatcher failureView = req.getRequestDispatcher("/back-end/employee/listAllEmployee.jsp");
+					RequestDispatcher failureView = req.getRequestDispatcher("/back-end/employee/listAllEmployee2.jsp");
 					failureView.forward(req, res);
 					return;
 				}
@@ -391,26 +391,26 @@ public class EmployeeServlet extends HttpServlet {
 				}
 				
 				if (!errorMsgs.isEmpty()) {
-					RequestDispatcher failureView = req.getRequestDispatcher("/back-end/employee/listAllEmployee.jsp");
+					RequestDispatcher failureView = req.getRequestDispatcher("/back-end/employee/listAllEmployee2.jsp");
 					failureView.forward(req, res);
 					return;// 程式中斷
 				}
 
 				/*************************** 3.新增完成,準備轉交(Send the Success view) ***********/
-				String url = "/back-end/employee/listAllEmployee.jsp";
+				String url = "/back-end/employee/listAllEmployee2.jsp";
 //				String url = req.getParameter("requestURL");
-				RequestDispatcher successView = req.getRequestDispatcher(url); // 新增成功後轉交listAllEmployee.jsp
+				RequestDispatcher successView = req.getRequestDispatcher(url); // 新增成功後轉交listAllEmployee2.jsp
 				successView.forward(req, res);
 				
 				/*************************** 其他可能的錯誤處理 **********************************/
 			} catch (Exception e) {
 				errorMsgs.add(e.getMessage());
-				RequestDispatcher failureView = req.getRequestDispatcher("/back-end/employee/listAllEmployee.jsp");
+				RequestDispatcher failureView = req.getRequestDispatcher("/back-end/employee/listAllEmployee2.jsp");
 				failureView.forward(req, res);
 			}
 		}
 
-		if ("delete".equals(action)) { // 來自listAllEmployee.jsp
+		if ("delete".equals(action)) { // 來自listAllEmployee2.jsp
 
 			List<String> errorMsgs = new LinkedList<String>();
 			// Store this set in the request scope, in case we need to
@@ -426,14 +426,14 @@ public class EmployeeServlet extends HttpServlet {
 				employeeSvc.deleteEmp(empno);
 
 				/*************************** 3.刪除完成,準備轉交(Send the Success view) ***********/
-				String url = "/back-end/employee/listAllEmployee.jsp";
+				String url = "/back-end/employee/listAllEmployee2.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url);// 刪除成功後,轉交回送出刪除的來源網頁
 				successView.forward(req, res);
 
 				/*************************** 其他可能的錯誤處理 **********************************/
 			} catch (Exception e) {
 				errorMsgs.add("刪除資料失敗:" + e.getMessage());
-				RequestDispatcher failureView = req.getRequestDispatcher("/back-end/employee/listAllEmployee.jsp");
+				RequestDispatcher failureView = req.getRequestDispatcher("/back-end/employee/listAllEmployee2.jsp");
 				failureView.forward(req, res);
 			}
 		}
@@ -515,6 +515,9 @@ public class EmployeeServlet extends HttpServlet {
 				Set<AuthorityVO> set = employeeSvc.getAuthsByEmpno(empno);
 
 				/*************************** 3.查詢完成,準備轉交(Send the Success view) ************/
+//				HttpSession session = req.getSession();
+//				session.setAttribute("employeeVO", empno)
+				req.setAttribute("empno", empno);    // 資料庫取出的set物件,存入request
 				req.setAttribute("listAuths_ByEmpno", set);    // 資料庫取出的set物件,存入request
 				String url = "/back-end/employee/listAllEmployee2.jsp";
 

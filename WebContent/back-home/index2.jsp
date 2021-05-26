@@ -60,15 +60,14 @@
             </div>
         </form>
         <!-- Navbar-->
-        <ul class="navbar-nav ml-auto ml-md-0">
+          <ul class="navbar-nav ml-auto ml-md-0">
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle1" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i>${employeeVO.empname}</a>
+                <a class="nav-link dropdown-toggle1" id="userDropdown" href="<%=request.getContextPath()%>/back-end/employee/empLogin.jsp" role="button"><i class="fas fa-user fa-fw"></i>${employeeVO.empname}</a>
             </li>
             <a class="nav-link" href="<%=request.getContextPath()%>/back-end/employee/empLogout.jsp">
-             	   µn¥X
+               	 µn¥X
             </a>
-        </ul>
-    </nav>
+    	</nav>
     
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">

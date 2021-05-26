@@ -326,6 +326,12 @@ FORM {
 	
 	
 	</script>
+     <div class="w3agile_footer_copy" style="width:100%;">
+        <p>2021 MoviesHit. All rights reserved</p>
+    </div>
+    <a href="#home" id="toTop" class="scroll" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
+    
+    </div>
 <!-- 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script> -->
 </body>
 </html>

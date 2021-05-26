@@ -90,6 +90,17 @@ table#forum.table>tbody>tr>td{
 table#forum.table>tbody>tr:hover
 {
 	background-color:#FFFFDD !important;
+ 	transform: translateY(-5px); 
+     box-shadow: 0 5px 5px rgba(0, 0, 0, 0.15); 
+/* 	transition: box-shadow .25s; */
+/*     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19); */
+}
+table#forum.table>tbody>tr
+{
+ 	box-shadow: 0 0 3px rgba(0, 0, 0, 0.2); 
+     transition: 0.2s; 
+/*  	transition: box-shadow .25s; */
+/*     box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.16), 0 1px 5px 0 rgba(0, 0, 0, 0.12); */
 }
 table#forum.table>tbody>tr>td>a
 {
@@ -106,10 +117,14 @@ table#forum.table>tbody>tr>td>a.JQellipsis
 	color:#6c6760;
 	font-size:small;
 }
-
+#forum > tbody + tbody{
+	border-top: 1px dotted #ddd;
+}
+.forum-nav>ul.nav.nav-pills>li>a.toggle{
+	font-weight:700;
+}
 
 </style>
-
 </head>
 <body bgcolor='white'>
 <jsp:include page="/front_header.jsp"/>
