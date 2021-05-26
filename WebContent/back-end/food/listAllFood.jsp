@@ -161,7 +161,7 @@
                                        	<c:forEach var="foodVO" items="${list}" begin="<%=pageIndex%>" end="<%=pageIndex+rowsPerPage-1%>">
 										  <tr  ${(foodVO.food_no == param.food_no) ? 'style="background-color:#C9B8DC;"':''}>
 											<td id="id">${foodVO.food_no}</td>
-										  	<td><img src="<%=request.getContextPath()%>/food/food.do?action=getPic&food_no=${foodVO.food_no}" style="width: 150px; height: 170px;"></td>
+										  	<td><img src="<%=request.getContextPath()%>/food/food.do?action=getPic&food_no=${foodVO.food_no}" style="width: 80px; height: 100px;"></td>
 											<td>${foodVO.food_name}</td>
 											<td>
 												<c:choose>

@@ -120,7 +120,7 @@ top: -1em;
 <input type="hidden" name="commentno" value="<%=request.getParameter("commentno")%>">
 <input type="hidden" name="memberno" value="<%=request.getParameter("memberno")%>">
 <input type="hidden" name="requestURL" value="<%=request.getParameter("requestURL")%>"> <!--接收原送出修改的來源網頁路徑後,再送給Controller準備轉交之用-->
-<center><input type="submit" value="送出新增" class="btn btn-outline-danger" id="add-btn"></center>
+<center><input type="submit" value="送出檢舉" class="btn btn-outline-danger" id="add-btn"></center>
 <!-- </FORM> -->
 </body>
 

@@ -237,7 +237,7 @@ tr td>img {
 												<td style="text-align: right;">
 													<input type="hidden" name="action" value="update">
 													<input type="hidden" name="food_no" value="${foodVO.food_no}">
-													<input type="submit" value="°e¥X­×§ï" id="send"
+													<input type="submit" value="­×§ï" id="send"
 													class="btn btn-outline-danger" style="float:right; border:2px #B7B7B7 solid;border-radius:10px; background-color:#FF4268; font-weight:bold; color:white;">
 												</td>
 											</tr>

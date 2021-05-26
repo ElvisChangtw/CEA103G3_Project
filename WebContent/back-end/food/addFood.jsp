@@ -231,7 +231,7 @@ tr td>img {
 												<td></td>
 												<td>
 													<input type="hidden" name="action" value="insert">
-													<input type="submit" value="送出新增" id="send"
+													<input type="submit" value="新增" id="send"
 													class="btn btn-outline-danger" style="float:right; border:2px #B7B7B7 solid;border-radius:10px; background-color:#FF4268; font-weight:bold; color:white;">
 												</td>
 											</tr>

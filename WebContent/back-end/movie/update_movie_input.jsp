@@ -302,7 +302,7 @@ tr td>img {
 													<input type="hidden" name="movieno" value="<%=movieVO.getMovieno()%>">
 													<input type="hidden" name="requestURL" value="<%=request.getParameter("requestURL")%>"> <!--接收原送出修改的來源網頁路徑後,再送給Controller準備轉交之用-->
 													<input type="hidden" name="whichPage"  value="<%=request.getParameter("whichPage")%>">
-													<input type="submit" value="送出修改" id="send" 
+													<input type="submit" value="修改" id="send" 
 													class="btn btn-outline-danger" style="float:right; border:2px #B7B7B7 solid;border-radius:10px; background-color:#FF4268; font-weight:bold; color:white;">
 											</tr>
                                             <tr>
