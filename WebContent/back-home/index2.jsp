@@ -16,7 +16,7 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>MOVIESHIT</title>
-    <link href="css/styles.css" rel="stylesheet" />
+    <link href="<%=request.getContextPath()%>/back-home/css/styles.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
 
@@ -74,7 +74,7 @@
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                        <img src="img/logo2-1-6.png">
+                        <img src="<%=request.getContextPath()%>/back-home/img/logo2-1-6.png">
 	                         <h1 style="text-align: center;color: white;font-weight: bold ;font-size:35px">
 	                         	<span>M</span>ovies<span>H</span>it
 	                         </h1>
