@@ -31,7 +31,7 @@
     </head>
     <body class="sb-nav-fixed">
    	<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-    	<a class="navbar-brand" href="index2.jsp">MOVIESHIT後台系統</a>
+    	<a class="navbar-brand" href="<%=request.getContextPath()%>/back-home/index2.jsp">MOVIESHIT後台系統</a>
     	<button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
     	<!-- Navbar Search-->
     	<form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
@@ -149,7 +149,7 @@
 					</ul>
 				</c:if>
                     <div class="container-fluid">
-                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">後台　所有檢舉評論資料</h1>
+                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">所有檢舉評論資料</h1>
                             <div class="card-body">
                                 <div class="table-responsive">
                                 <%@ include file="pages/page1.file"%>
@@ -165,7 +165,7 @@
 												<th align="center">處理時間</th>
 												<th align="center">處理狀態</th>
 												<th align="center">備註</th>
-												<th align="center">修改</th>
+												<th align="center">審核</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -209,8 +209,8 @@
 											
 											<td width="50px;">
 												<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/report_comment/reportcomment.do" style="margin-bottom: 0px;">
-													<input type="submit" value="修改"
-													 class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#73BDBE; font-weight:bold; color:white;"> 
+													<input type="submit" value="審核"
+													 class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#FC9C9D; font-weight:bold; color:white;"> 
 													<input type="hidden" name="reportno" value="${reportCommentVO.reportno}"> 
 													<input type="hidden" name="requestURL" value="<%=request.getServletPath()%>">
 													<!--送出本網頁的路徑給Controller-->
@@ -222,16 +222,6 @@
 										</tr>
 									</c:forEach>
                                             <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-<!--                                                 <td></td> -->
                                             </tr>
                                          
                                            
