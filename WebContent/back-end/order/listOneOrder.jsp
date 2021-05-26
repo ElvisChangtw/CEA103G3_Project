@@ -170,7 +170,7 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">後台　單一訂單資料</h1>
+                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">單一訂單資料</h1>
 <%--                         <a href="<%=request.getContextPath()%>/back-end/order/addOrder.jsp" class="btn btn-primary btn-lg" ><i class="material-icons">&#xE147;&ensp;</i><span>新增訂單</span></a> --%>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -234,7 +234,7 @@
                     
                     
                    <div class="container-fluid">
-                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">後台　訂單票種資料</h1>
+                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">訂單票種資料</h1>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="text-align:center;">
@@ -270,7 +270,7 @@
                     
                     
                    <div class="container-fluid">
-                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">後台　訂單餐點資料</h1>
+                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">訂單餐點資料</h1>
 <%--                         <a href="<%=request.getContextPath()%>/back-end/order/addOrder.jsp" class="btn btn-primary btn-lg" ><i class="material-icons">&#xE147;&ensp;</i><span>新增訂單</span></a> --%>
                             <div class="card-body">
                                 <div class="table-responsive">

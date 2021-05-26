@@ -162,7 +162,7 @@ tr td>img {
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">後台　修改電影</h1>
+                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">修改電影</h1>
                             <div class="card-body">
                                 <div class="table-responsive">
                                    <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/movie/movie.do" name="form1" enctype="multipart/form-data">

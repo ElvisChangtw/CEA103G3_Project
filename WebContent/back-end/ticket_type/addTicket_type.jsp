@@ -140,7 +140,7 @@ tr td>img {
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">後台　新增票種</h1>
+                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">新增票種</h1>
                             <div class="card-body">
                                 <div class="table-responsive">
                                    <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/ticket_type/ticket_type.do" name="form1">
