@@ -32,7 +32,7 @@
 MemVO memVO = (MemVO) session.getAttribute("memVO");
 if (memVO == null){
 	memVO = new MemVO();
-	memVO.setMember_no(999);
+	memVO.setMember_no(99);
 }
 pageContext.setAttribute("memVO", memVO);
 %>
@@ -663,7 +663,7 @@ function thumbsDownDrawPieChart(newExpectation, countExpectation) {
 	
 $(document).ready(function(){
 	$("#t1").click(function(){
-		if(${memVO.member_no}==999){
+		if(${memVO.member_no}==99){
 			Swal.fire({
 				  position: 'center',
 				  icon: 'error',
@@ -725,7 +725,7 @@ $(document).ready(function(){
 	})
 	
 	$("#t2").click(function(){
-		if(${memVO.member_no}==999){
+		if(${memVO.member_no}==99){
 			Swal.fire({
 				  position: 'center',
 				  icon: 'error',
@@ -962,7 +962,7 @@ function drawRating(newRating,countRating) {
 
 $(document).ready(function(){
 	$("#s1").click(function(){
-		if(${memVO.member_no}==999){
+		if(${memVO.member_no}==99){
 			Swal.fire({
 				  position: 'center',
 				  icon: 'error',
@@ -1021,7 +1021,7 @@ $(document).ready(function(){
 	})
 	
 	$("#s2").click(function(){
-		if(${memVO.member_no}==999){
+		if(${memVO.member_no}==99){
 			Swal.fire({
 				  position: 'center',
 				  icon: 'error',
@@ -1080,7 +1080,7 @@ $(document).ready(function(){
 	})
 	
 	$("#s3").click(function(){
-		if(${memVO.member_no}==999){
+		if(${memVO.member_no}==99){
 			Swal.fire({
 				  position: 'center',
 				  icon: 'error',
@@ -1140,7 +1140,7 @@ $(document).ready(function(){
 	})
 	
 	$("#s4").click(function(){
-		if(${memVO.member_no}==999){
+		if(${memVO.member_no}==99){
 			Swal.fire({
 				  position: 'center',
 				  icon: 'error',
@@ -1199,7 +1199,7 @@ $(document).ready(function(){
 	})
 	
 	$("#s5").click(function(){
-		if(${memVO.member_no}==999){
+		if(${memVO.member_no}==99){
 			Swal.fire({
 				  position: 'center',
 				  icon: 'error',

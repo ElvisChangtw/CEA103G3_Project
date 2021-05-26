@@ -125,3 +125,6 @@
        {
        	height:auto;
        }
+       #forum>thead>tr>th, #forum>tbody>tr>td{
+       	color:black;
+       }
