@@ -419,6 +419,6 @@ FORM {
 	}
 
 </script>
-
+<jsp:include page="/front_footer_copy.jsp"/>
 </body>
 </html>

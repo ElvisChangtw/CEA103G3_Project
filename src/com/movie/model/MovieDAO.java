@@ -38,7 +38,7 @@ public class MovieDAO implements MovieDAO_interface{
 	private static final String GET_ALL_STMT = 
 			"select MOVIE_NO, MOVIE_NAME, DIRECTOR, ACTOR, CATEGORY, LENGTH, STATUS, PREMIERE_DT, OFF_DT, TRAILOR, EMBED, GRADE, RATING, EXPECTATION from MOVIE order by MOVIE_NO desc";
 	private static final String GET_Comments_ByMovieno_STMT = 
-			"select MOVIE_NO, MOVIE_NAME, DIRECTOR, ACTOR, CATEGORY, LENGTH, STATUS, PREMIERE_DT, OFF_DT, TRAILOR, EMBED, GRADE, RATING, EXPECTATION from COMMENT where MOVIE_NO = ? order by COMMENT_NO";
+			"select * from COMMENT where MOVIE_NO = ? order by COMMENT_NO";
 	private static final String GET_TOP_TEN_STMT = 
 			"select MOVIE_NO, MOVIE_NAME, DIRECTOR, ACTOR, CATEGORY, LENGTH, STATUS, PREMIERE_DT, OFF_DT, TRAILOR, EMBED, GRADE, RATING, EXPECTATION from MOVIE order by RATING desc limit 12";
 	private static final String GET_TOP_FIVE_STMT = 

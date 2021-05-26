@@ -255,7 +255,7 @@ FORM {
 	  	</div>
 	</div>
 		
-	
+<jsp:include page="/front_footer_copy.jsp"/>
 <!-- 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script> -->
 </body>
 </html>

@@ -54,6 +54,15 @@
     <url-pattern>/rating/rating.do</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <servlet-name>ExpectationServlet</servlet-name>
+    <servlet-class>com.expectation.controller.ExpectationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ExpectationServlet</servlet-name>
+    <url-pattern>/expectation/expectation.do</url-pattern>
+  </servlet-mapping>
+  
 <!-- 其他人   -->
   <servlet>
     <servlet-name>SimpleCaptchaEndpoint</servlet-name>
@@ -95,6 +104,8 @@
     <servlet-name>MovieRatingServlet</servlet-name>
     <url-pattern>/movieRating/movieRating.do</url-pattern>
   </servlet-mapping>
+  
+
   
 <!-- 電影顯示圖片 -->
   <servlet>

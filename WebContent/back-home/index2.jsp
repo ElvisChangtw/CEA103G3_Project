@@ -19,6 +19,35 @@
     <link href="css/styles.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
+
+	<style>
+		#layoutSidenav_content{
+			background-image: url('<%=request.getContextPath()%>/img/back-home-img.jpg');
+			background-size: 100% 100%;
+  			background-size: cover;
+    		opacity: 0.85;  
+  			
+		}
+/* 		.image {  */
+/* 		    position: relative;  */
+/* 		    width: 100%; /* for IE 6 */  */
+/* 			}  */
+	
+		h2 { 
+		    position: absolute; 
+		    top: 0px; 
+		    left: 10;  
+		    width: 100%; 
+			} 
+		span {
+    		color: #02a388;
+   			font-size: 1em;
+   			}	
+		
+</style>
+	
+
+
 </head>
 
 <body class="sb-nav-fixed">
@@ -45,7 +74,10 @@
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                        <img src="img/logo2-1-5.png">
+                        <img src="img/logo2-1-6.png">
+	                         <h1 style="text-align: center;color: white;font-weight: bold ;font-size:35px">
+	                         	<span>M</span>ovies<span>H</span>it
+	                         </h1>
 <!--                         <a class="nav-link collapsed" href="tables3.html"> -->
 <!--                             <div class="sb-nav-link-icon"><i class="fas fa-user-alt"></i></div> -->
 <!--                            	 基本資料 -->
@@ -82,8 +114,6 @@
                         <div class="collapse" id="collapsePages2" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="<%=request.getContextPath()%>/back-end/mem/listAllMem2.jsp">會員資料管理</a>
-                                <a class="nav-link" href="layout-sidenav-light.html">會員審核</a>
-                                <a class="nav-link" href="layout-sidenav-light.html"> 專業評論審核</a>
                             </nav>
                         </div>
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages3" aria-expanded="false" aria-controls="collapsePages3">
@@ -93,8 +123,8 @@
                         </a>
                         <div class="collapse" id="collapsePages3" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-<!--                                 <a class="nav-link" href="layout-static.html">現場劃位</a> -->
-<%--                                 <a class="nav-link" href="<%=request.getContextPath()%>/back-end/order/listAllOrder.jsp">訂單管理</a> --%>
+                                <a class="nav-link" href="layout-static.html">現場劃位</a>
+                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/order/listAllOrder.jsp">訂單管理</a>
                             </nav>
                         </div>
            				 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages4" aria-expanded="false" aria-controls="collapsePages4">
@@ -119,8 +149,21 @@
                 </div>
             </nav>
         </div>
-    </div>
     
+    	 
+<!--       ======這邊貼自己的檔案內容====== -->
+        <div id="layoutSidenav_content">
+             <div class="container-fluid">
+<!--     			 <img style="width: inherit" -->
+<%--     			  src="<%=request.getContextPath()%>/img/back-home-img.jpg" alt="" />  --%>
+     			<h2><font color =white>歡迎MoviesHit員工:</font><font color=yellow style="font-weight: bold">${employeeVO.empname}</font><font color=white>登入!</font></h2>		
+     			<h2><font color =white>請點選左側功能進行操作!</font></h2>               
+
+			</div> 
+        </div>
+	</div>
+<!-- ======到這邊===== -->
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="js/scripts.js"></script>

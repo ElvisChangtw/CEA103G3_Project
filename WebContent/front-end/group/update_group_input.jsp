@@ -516,8 +516,6 @@ $(document).ready(function(){
 
 });
 
-
-
 //電影變動時、場次跟著變動
 $("#movie_selection").change(getOption);
 $("#add-btn").click(function(){
@@ -542,7 +540,13 @@ $("#showtime_selection").change(
 
 //設定除連動之showtime_no外之初始值
 function getInitValue(){
-	$('#movie_selection').val(<%= (groupVO==null)? "88" : showtimeSvc.getOneShowtime(groupVO.getShowtime_no()).getMovie_no()%>);
+<%-- 	$('#movie_selection').val(<%= (groupVO==null)? "88" : showtimeSvc.getOneShowtime(groupVO.getShowtime_no()).getMovie_no()%>); --%>
+if(<%= (groupVO==null) %>){
+	$('#movie_selection')[0].selectedIndex = 0;
+} else{
+	$('#movie_selection').val(<%= (groupVO==null)? "90" : showtimeSvc.getOneShowtime(groupVO.getShowtime_no()).getMovie_no()%>);
+}
+
 	$('#required_no').val(<%= (groupVO==null)? 1 : groupVO.getRequired_cnt()%>);
 	$('#group_title').val("<%= (groupVO==null)? "" : groupVO.getGroup_title()%>");
 	$("#desc").val("<%= (groupVO==null)? "" : groupVO.getDesc()%>");
@@ -561,8 +565,8 @@ function getOption() {
 			let jsonobj = JSON.parse(json);
 			var lstShowtime = jsonobj.showtimeByMovie_no;
 			for(let i = 0 ; i < lstShowtime.length; i++){
-// 				console.log("showtime_no = " + lstShowtime[i].showtime_no);		  
-				//append showtime to <select>
+				console.log("showtime_no = " + lstShowtime[i].showtime_no);		  
+// 				append showtime to <select>
 				var option = $('<option/>');
 				option.attr('value', lstShowtime[i].showtime_no);
 // 				option.text("場次" + lstShowtime[i].showtime_no + ": "+ timeFormat(lstShowtime[i].showtime_time));
