@@ -161,7 +161,7 @@ tr td>img {
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">後台　修改餐點</h1>
+                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">修改餐點</h1>
                             <div class="card-body">
                                 <div class="table-responsive">
                                    <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/food/food.do" name="form1" enctype="multipart/form-data">
@@ -237,7 +237,7 @@ tr td>img {
 												<td style="text-align: right;">
 													<input type="hidden" name="action" value="update">
 													<input type="hidden" name="food_no" value="${foodVO.food_no}">
-													<input type="submit" value="送出修改" id="send"
+													<input type="submit" value="修改" id="send"
 													class="btn btn-outline-danger" style="float:right; border:2px #B7B7B7 solid;border-radius:10px; background-color:#FF4268; font-weight:bold; color:white;">
 												</td>
 											</tr>

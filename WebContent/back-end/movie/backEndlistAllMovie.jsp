@@ -140,7 +140,7 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">後台　所有電影資料</h1>
+                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">所有電影資料</h1>
                         <a href="<%=request.getContextPath()%>/back-end/movie/addMovie.jsp" class="btn btn-primary btn-lg" ><i class="material-icons">&#xE147;&ensp;</i><span>新增電影</span></a>
 <!--                         <ol class="breadcrumb mb-4"> -->
 <!--                             <li class="breadcrumb-item"> -->

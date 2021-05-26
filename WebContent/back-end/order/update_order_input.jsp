@@ -149,7 +149,7 @@ tr td>img {
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">後台　修改訂單</h1>
+                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">修改訂單</h1>
                             <div class="card-body">
                                 <div class="table-responsive">
                                   <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/order/order.do" name="form1">

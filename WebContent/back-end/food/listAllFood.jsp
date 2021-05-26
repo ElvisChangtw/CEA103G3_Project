@@ -139,7 +139,7 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">後台　所有餐點資料</h1>
+                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">所有餐點資料</h1>
                         <a href="<%=request.getContextPath()%>/back-end/food/addFood.jsp" class="btn btn-primary btn-lg" ><i class="material-icons">&#xE147;&ensp;</i><span>新增餐點</span></a>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -161,7 +161,7 @@
                                        	<c:forEach var="foodVO" items="${list}" begin="<%=pageIndex%>" end="<%=pageIndex+rowsPerPage-1%>">
 										  <tr  ${(foodVO.food_no == param.food_no) ? 'style="background-color:#C9B8DC;"':''}>
 											<td id="id">${foodVO.food_no}</td>
-										  	<td><img src="<%=request.getContextPath()%>/food/food.do?action=getPic&food_no=${foodVO.food_no}" style="width: 150px; height: 170px;"></td>
+										  	<td><img src="<%=request.getContextPath()%>/food/food.do?action=getPic&food_no=${foodVO.food_no}" style="width: 80px; height: 100px;"></td>
 											<td>${foodVO.food_name}</td>
 											<td>
 												<c:choose>
