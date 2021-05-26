@@ -73,38 +73,18 @@
 
 <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/comment/comment.do" name="form1">
 <table>
-<!-- 	<tr> -->
-<!-- 		<td>評論編號:<font color=red><b>*</b></font></td> -->
-<%-- 		<td>${commentVO.commentno}</td> --%>
-<!-- 	</tr> -->
-
-<!-- 	<tr> -->
-<!-- 		<td>會員編號:<font color=red><b>*</b></font></td> -->
-<%-- 		<td>${commentVO.memberno}</td> --%>
-<!-- 	</tr> -->
-	
-<%-- 	<jsp:useBean id="movieSvc" scope="page" class="com.movie.model.MovieService" /> --%>
-<!-- 	<tr> -->
-<!-- 		<td>電影:</td> -->
-<!-- 		<td><select size="1" name="movieno"> -->
-<%-- 			<c:forEach var="movieVO" items="${movieSvc.all}"> --%>
-<%-- 				<option value="${movieVO.movieno}" ${(commentVO.movieno==movieVO.movieno)? 'selected':'' } >${movieVO.moviename} --%>
-<%-- 			</c:forEach> --%>
-<!-- 		</select></td> -->
-<!-- 	</tr> -->
 
 	<tr>
 		<td><span class="badge badge-danger" style="font-size:20px; background-color:#729f98; margin:5px 5px 5px 5px">評論內容</span></td>
 	</tr>	
 	<tr>
-		<td><textarea name="content" rows="5" cols="73" maxlength="300">${commentVO.content}</textarea></td>
+		<td><textarea name="content" id="textarea" rows="5" cols="73" maxlength="500" style='overflow-y: hidden;height:20px' onpropertychange="this.style.height = this.scrollHeight + 'px';" oninput="this.style.height = this.scrollHeight + 'px';">${commentVO.content}</textarea></td>
 	</tr>	
 	<tr>
 		<td><span class="badge badge-warning" style="font-size:15px; margin:5px 5px 5px 5px">建立時間</span> <fmt:formatDate value="${commentVO.creatdate}" pattern="yyyy-MM-dd  HH:mm:ss" /></td>
 	</tr>
 	<tr>
 		<td><span class="badge badge-warning" style="font-size:15px; margin:5px 5px 5px 5px">修改時間</span> <fmt:formatDate value="${commentVO.modifydate}" pattern="yyyy-MM-dd  HH:mm:ss" /></td>
-	
 	</tr>
 </table>
 <br>
@@ -114,6 +94,14 @@
 <input type="hidden" name="requestURL" value="<%=request.getParameter("requestURL")%>"> <!--接收原送出修改的來源網頁路徑後,再送給Controller準備轉交之用-->
 <input type="hidden" name="whichPage"  value="<%=request.getParameter("whichPage")%>">  <!--只用於:istAllComment.jsp-->
 <center><input type="submit" value="送出修改" class="btn btn-outline-danger"></center></FORM>
+<script>
+var textarea=document.getElementById('textarea');
+textarea.style.height = textarea.scrollHeight + 'px';
+</script>
+
+
+
+
 </body>
 
 <!-- <br>送出修改的來源網頁路徑:<br><b> -->

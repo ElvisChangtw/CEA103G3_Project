@@ -4,7 +4,7 @@
 <%@ page import="com.mem.model.*"%>
 
 <% 
-// 	MemVO memVO = (MemVO) session.getAttribute("memVO");
+	MemVO memVO = (MemVO) session.getAttribute("memVO");
 %>
 	
 <html>
@@ -15,7 +15,6 @@
 <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous"> -->
 <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script> -->
-
 
 <style>
    body {  
@@ -55,15 +54,14 @@
     padding: 5px;
     text-align: center;
   }
-  
-
 </style>
 
 </head>
 <body bgcolor='white' onload="connect();" onunload="disconnection();">
 <jsp:include page="/front_header.jsp"/>
 <%-- 錯誤表列 --%>
-<div class="container"  style="min-height: 465px;">
+<div class="container"  style="min-height: 465px;" >
+
 <c:if test="${not empty errorMsgs}">
 	<font style="color:red">請修正以下錯誤:</font>
 	<ul>
@@ -72,7 +70,7 @@
 		</c:forEach>
 	</ul>
 </c:if>
-		<div class="row"  style="margin:5px 0;">
+<div class="row"  style="margin:5px 0;">
 	<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${memVO.member_no}"
 				alt="尚無圖片" class="rounded-circle" width="60px" height="60px" title=""/>
 <%--      		【<font color=orange>${memVO.mb_name}</font>】 --%>
@@ -93,15 +91,17 @@
      </FORM>
     </div>
 		<div class="col col-md-4 btn-group" style="font-size:40px">
-	  <button type="button" class="btn btn-success" style="border-radius: 5px 0 0 5px;">好友管理</button>
-	  <button type="button" class="btn btn-success dropdown-toggle" style="border-radius: 0 5px 5px 0;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-	    <span class="caret"></span>&nbsp</button>
-	  	<ul class="dropdown-menu">
+		  <button type="button" class="btn btn-success" style="border-radius: 5px 0 0 5px;">好友管理</button>
+		  <button type="button" class="btn btn-success dropdown-toggle" style="border-radius: 0 5px 5px 0;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		    <span class="caret"></span>&nbsp
+		  </button>
+		  <ul class="dropdown-menu">
 		    <li><a class="dropdown-item" href="<%=request.getContextPath()%>/mem/mem.do?action=listRelationships_ByMemberno_B&member_no=${memVO.member_no}">我的好友</a></li>
 			<li><a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/relationship/friend_invite.jsp">好友邀請</a></li>
 			<li><a class="dropdown-item" href="<%=request.getContextPath()%>/chat.do?action=ueser&userName=${memVO.mb_name}">開啟聊天室</a></li>
-		</ul>
-	</div>
+		
+		  </ul>
+		</div>
 
 		<jsp:useBean id="memSvc" scope="page" class="com.mem.model.MemService" />
 		<jsp:useBean id="relationshipSvc" scope="page" class="com.relationship.model.RelationshipService" />
@@ -121,43 +121,15 @@
 <!--   </li> -->
 
    </div>
-     <table class="table table-hover">
-	 <thead style="background-color:#F0F0F0">
-		<tr>
-			<th>會員名稱</th>
-			<th>好友的邀請</th>
-		</tr>
-	</thead>
-			<c:forEach var="mem1VO" items="${memSvc.all}">
-			<c:if test="${relationshipSvc.getOneRelationship(mem1VO.member_no, memVO.member_no).status == 0}">
-     	<tbody>	
-     		<tr>
-     			<td>
-     				<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${mem1VO.member_no}"
-						alt="尚無圖片" class="rounded-circle" width="60px" height="60px" title="" style="border: groove;"/>
-     				【<font color=orange>${mem1VO.mb_name}</font>】
-     			</td>    			
-     			<td style="vertical-align:inherit;">
-					<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/relationship/relationship.do" name="form3">
-						<input type="hidden" name="member_no" value="${memVO.member_no}">
-						<input type="hidden" name="friend_no" value="${mem1VO.member_no}">
-						<input type="hidden" name="action" value="accept">			
-						<button type="submit" value="1" class="btn btn-success addfriend_check_btn">接受好友邀請</button>
-					</FORM>
-     			</td>   		
-     		</tr>
-     	</tbody>
-     	</c:if>
-     	</c:forEach>
-	</table>
-	
 <%if (request.getAttribute("listRelationships_ByMemno")!=null){%>
       <jsp:include page="/front-end/mem/listRelationships_ByMemno.jsp" />
 <%} %>
 
- <div class="alert-container">
+
+ <div class="alert-container" >
   </div>
-  </div>
+  
+ </div>
 <script>
 	var MyPoint = "/NotifyWS/${memVO.member_no}";
 	var host = window.location.host;
@@ -175,28 +147,6 @@
 	var webSocket;
 	var type;
 
-
-	$(".addfriend_check_btn").click(function(){
-		friendNO = $(this).prev().prev().val();
-		sendWebSocket($(this));
-	})
-	
-	function sendWebSocket(item){
-		let timespan = new Date();
-		let timeStr = timespan.getFullYear() + "-" + (timespan.getMonth()+1).toString().padStart(2, "0") + "-" 
-					+ timespan.getDate() + " " + timespan.getHours().toString().padStart(2, "0") + ":" + timespan.getMinutes().toString().padStart(2, "0");
-		if(item.val()==1){
-			var jsonObj = {
-				"type" : "response",
-				"sender" : self,
-				"receiver" : friendNO,
-				"message":"",
-				"time":timeStr
-			};
-		}
-		
-		webSocket.send(JSON.stringify(jsonObj));
-	}
 	
 
 	function connect() {

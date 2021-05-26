@@ -74,6 +74,10 @@
 	  .table th, .table td{
 	  	vertical-align: 0px;
 	  }
+	  
+	  th{
+	 background-color: #4aa42a;
+	  }
 
 </style>
 <style>
@@ -81,12 +85,18 @@
 		    position: absolute; 
 		    top: 0px; 
 		    left: 10;  
-		    width: 100%; 
 			} 
 		span {
     		color: #02a388;
    			font-size: 1em;
    			}	
+   		.bootstrap-table .fixed-table-container .fixed-table-body {	
+   			overflow-x: unset; 
+			overflow-y: unset;
+   		}
+   		.bootstrap-table bootstrap4{
+   			padding:50px !important;
+   		}
 		
 </style>
 
@@ -199,7 +209,7 @@
 <!--       ======這邊貼自己的檔案內容====== -->
             <div id="layoutSidenav_content">
             <%@ include file="page1.file" %> 
-                  <table class="table table-secondary table-hover" data-toggle="table">
+                  <table class="table table-hover" data-toggle="table">
 <thead>
 	<tr>
 		<th data-field="member_no" data-sortable="true">會員編號</th>

@@ -42,7 +42,7 @@ pageContext.setAttribute("memVO", memVO);
 <!DOCTYPE html>
 <html>
 <head>
-<title>List One Movie</title>
+<title>MoviesHit</title>
 <!-- for-mobile-apps -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=big5" />
@@ -522,21 +522,6 @@ fit: true
 				});
 			});
 </script>
- <script type="text/javascript">
-						$(document).ready(function() {
-							/*
-							var defaults = {
-					  			containerID: 'toTop', // fading element id
-								containerHoverID: 'toTopHover', // fading element hover id
-								scrollSpeed: 1200,
-								easingType: 'linear' 
-					 		};
-							*/
-							
-							$().UItoTop({ easingType: 'easeOutQuart' });
-							
-						});
-					</script>
 <!--end-smooth-scrolling-->
 <script src="<%=request.getContextPath()%>/js/bootstrap.js"></script>
 
@@ -663,7 +648,8 @@ function thumbsDownDrawPieChart(newExpectation, countExpectation) {
 	
 $(document).ready(function(){
 	$("#t1").click(function(){
-		if(${memVO.member_no}==99){
+		if(${memVO.member_no ==99 }){
+
 			Swal.fire({
 				  position: 'center',
 				  icon: 'error',
@@ -676,6 +662,7 @@ $(document).ready(function(){
 				document.location.href="<%=request.getContextPath()%>/front-end/mem/MemLogin.jsp";
 			}, 1500);
 		}else{
+
 			$(".thumbs").css("color","gray");
 			$("#t1").css("color","#4194CA");	
 			$("#t2").css("color","gray");
@@ -684,13 +671,13 @@ $(document).ready(function(){
 			let movieno = "${movieVO.movieno}";
 			let memberno = "${memVO.member_no}";
 			let expectation = "1.0";
-			
 			$.ajax({
-				url:"<%=request.getContextPath()%>/expectation/expectation.do?action=insertOrUpdate",
+				url:"<%=request.getContextPath()%>/expectation/expectation.do",
 				data:{
 					"memberno":memberno,	
 					"movieno":movieno,
-					"expectation":expectation		   
+					"expectation":expectation,
+					"action": "insertOrUpdate"
 				},
 				type:"POST",
 				success:function(json){
