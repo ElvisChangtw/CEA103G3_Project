@@ -1,6 +1,13 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="Big5"%>
+<%@ page import="com.employee.model.*"%>
+
+
 <!DOCTYPE html>
 <html lang="en">
+
+<%
+    EmployeeVO employeeVO = (EmployeeVO) session.getAttribute("employeeVO");
+%>
 
 <head>
     <meta charset="big5" />
@@ -26,9 +33,9 @@
         <!-- Navbar-->
         <ul class="navbar-nav ml-auto ml-md-0">
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle1" id="userDropdown" href="index2.jsp" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                <a class="nav-link dropdown-toggle1" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i>${employeeVO.empname}</a>
             </li>
-            <a class="nav-link" href="index2.jsp">
+            <a class="nav-link" href="<%=request.getContextPath()%>/back-end/employee/empLogout.jsp">
              	   登出
             </a>
         </ul>
