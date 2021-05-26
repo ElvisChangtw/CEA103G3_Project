@@ -60,6 +60,7 @@ border-radius: 4px;
 margin: 2em 0;
 padding: 20px;
 position: relative;
+
 }
 .zi_box_1::before {
 background-color: #fff;
@@ -94,22 +95,22 @@ top: -1em;
 		<c:forEach var="commentVO" items="${commentSvc.all}">
 			<c:if test="${param.commentno == commentVO.commentno}">
 				<td >
-					<div class="zi_box_1" style="border-width: 3px; border-style:solid ; width: 555px; height:150px; border-color: #FEA36D; padding: 5px; text-align: left;">
+					<div class="zi_box_1" style="border-width: 3px; border-style:solid ; width: 555px; border-color: #FEA36D; padding: 5px; text-align: left;">
 						<img src="${pageContext.request.contextPath}/mem/mem.do?action=view_memPic&member_no=${commentVO.memberno}" 
-							style="border-radius:50%; width:60px; height:60px;">
+							style="border-radius:50%; width:60px; height:60px; float: left; margin-right: 20px;">
 						${commentVO.content}
-
 					</div>
 				</td>
 			</c:if>
 		</c:forEach>
 	</tr>
 
+
 	<tr>
 		<td><span class="badge badge-danger" style="font-size:20px; background-color:#D66B75; margin:5px 5px 5px 5px">檢舉評論原因</span></td>
 	</tr>	
 	<tr>
-		<td><textarea id="content-1" name="content" rows="5" cols="73" maxlength="300" style="border-width: 3px; border-color: #D66B75; ">${reportCommentVO.content}</textarea></td>
+		<td><textarea id="content-1" name="content" rows="5" cols="73" maxlength="300" style="border-width: 3px; border-color: #D66B75; resize:none;">${reportCommentVO.content}</textarea></td>
 	</tr>	
 
 

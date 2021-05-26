@@ -365,11 +365,12 @@ public class CommentServlet extends HttpServlet {
 //					List<CommentVO> list  = commentSvc.getAll(map);
 //					req.setAttribute("listComments_ByCompositeQuery",list); //  複合查詢, 資料庫取出的list物件,存入request
 //				}
+
 				if(requestURL.equals("/front-end/movie/listOneMovie.jsp")){
 					req.setAttribute("listComments_ByMovieno",movieSvc.getCommentsByMovieno(commentVO.getMovieno())); // 資料庫取出的list物件,存入request
 					MovieVO movieVO = movieSvc.getOneMovie(commentVO.getMovieno());
 					req.setAttribute("movieVO", movieVO);
-					
+			
 					RatingService ratingSvc = new RatingService();
 					RatingVO ratingCount = ratingSvc.getThisMovieToatalRating(commentVO.getMovieno());
 					req.setAttribute("ratingCount", ratingCount);
@@ -378,7 +379,6 @@ public class CommentServlet extends HttpServlet {
 					ExpectationVO expectationCount = expectationSvc.getThisMovieToatalExpectation(commentVO.getMovieno());
 					req.setAttribute("expectationCount", expectationCount);
 				}
-				
 
 				String url = requestURL;
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 刪除成功後,轉交回送出刪除的來源網頁
