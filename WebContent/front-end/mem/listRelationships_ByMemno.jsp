@@ -57,6 +57,10 @@
 /*      color:yellow;  */
 	
    } 
+   table.table {
+   		height: 0px !important;
+   }
+   
 </style>
 
 </head>

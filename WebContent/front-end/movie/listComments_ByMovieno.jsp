@@ -171,7 +171,8 @@ font-size: 20px;
 									ACTION="<%=request.getContextPath()%>/comment/comment.do"
 									style="margin-bottom: 0px;">
 									<li><i class="fa fa-book fa-lg" aria-hidden="true" style="color:#4194CA"></i> 
-									<input type="submit" value="修改"> 
+									<input type="submit" value="修改"
+									class="btn btn-outline-danger btn-sm" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#4194CA; font-weight:bold; color:white;"> 
 									<input type="hidden" name="commentno" value="${commentVO.commentno}"> 
 									<input type="hidden" name="requestURL" value="<%=request.getServletPath()%>">
 									<!--送出本網頁的路徑給Controller-->
@@ -183,7 +184,8 @@ font-size: 20px;
 							<li><FORM METHOD="post"
 									ACTION="<%=request.getContextPath()%>/comment/comment.do">
 									<li><i class="fa fa-times fa-lg" aria-hidden="true" style="color:#D47070"></i> 
-									<input type="submit" value="刪除"> 
+									<input type="submit" value="刪除"
+									class="btn btn-outline-danger btn-sm" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#D47070; font-weight:bold; color:white;"> 
 									<input type="hidden" name="commentno" value="${commentVO.commentno}"> 
 									<input type="hidden" name="requestURL" value="<%=request.getServletPath()%>">
 									<!--送出本網頁的路徑給Controller--> 
