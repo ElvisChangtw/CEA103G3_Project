@@ -378,11 +378,6 @@
   </servlet-mapping>
   
 	
-	
-	
-	
- 	
- 	
  	 <filter>
     <filter-name>loginFilter</filter-name>
     <filter-class>com.filter.LoginFilter</filter-class>
@@ -398,7 +393,7 @@
     <url-pattern>/front-end/report_group/addReport_Group.jsp</url-pattern>
     <url-pattern>/front-end/mem/memberSys.jsp</url-pattern>
     <url-pattern>/front-end/mem/memberInfo.jsp</url-pattern>
-    
+    <url-pattern>/front-end/article/listOneArticle2.jsp</url-pattern>
     <dispatcher>REQUEST</dispatcher>
     <dispatcher>FORWARD</dispatcher>
     <dispatcher>INCLUDE</dispatcher>

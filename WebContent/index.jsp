@@ -431,7 +431,7 @@ left: 1095px;
 	                                        	<li><a href="#" onclick="loginFirst()" >好友管理</a></li>
 	                                        </c:when>
 	                                        <c:otherwise>
-	                                        	<li><a href="<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">會員中心</a></li>
+	                                        	<li><a href="<%=request.getContextPath()%>/front-end/mem/memberSys2.jsp">會員中心</a></li>
 	                                        	<li><a href="<%=request.getContextPath()%>/front-end/mem/memberInfo.jsp">會員資訊</a></li>
 	                                        	<li><a href="<%=request.getContextPath()%>/front-end/relationship/select_page.jsp">好友管理</a></li>
 	                                        </c:otherwise>
@@ -439,7 +439,6 @@ left: 1095px;
                                     </ul>
                                 </li>
                             </ul>
-                            
                         </div>
                         
                         <div class="clearfix"> </div>
@@ -2568,15 +2567,16 @@ var count=0;
 					event.results[i][j].transcript.indexOf("清楚")> -1 ||
 					event.results[i][j].transcript == "新竹"		
 			){
-				console.log(event.results[i][j].transcript);
-// 				event.results[i][j].transcript="";
-				$("#search-context").html("");
-				$("#search-results").html("");
+					console.log(event.results[i][j].transcript);
+//	 				event.results[i][j].transcript="";
+					$("#search-context").val("");
+					$("#search-results").html("");
+				
 			} else if(event.results[i][j].transcript.indexOf("停止") > -1 ||
 					event.results[i][j].transcript =="屏"
 			) {
 // 				event.results[i][j].transcript="";
-				$("#search-context").html("");
+				$("#search-context").val("");
 				$("#search-results").html("");
 				
 				recognition.stop();
@@ -2596,7 +2596,7 @@ var count=0;
 // 			    sound.currentTime = 3;
 			    sound.play(); 
 // 			    sound.currentTime = 3;
-			    $("#search-context").html("");
+			    $("#search-context").val("");
 			    $("#search-results").html("");
 			}
 			else{
