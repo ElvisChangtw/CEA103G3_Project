@@ -96,7 +96,7 @@ top: -1em;
 
 <%-- <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/report_comment/reportcomment.do" name="form1" id="add-form" onclick="return false"> --%>
 <%-- <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/report_comment/reportcomment.do" name="form1" id="add-form"> --%>
-<table>
+<table id="back">
 	<tr>
 		<c:forEach var="commentVO" items="${commentSvc.all}">
 			<c:if test="${param.commentno == commentVO.commentno}">
@@ -351,6 +351,10 @@ $("#mic").on("click", function(){
 		}else if(event.results[i][j].transcript.indexOf("安安")> -1 
 		){
 			$("#memberpic").attr("src", "<%=request.getContextPath()%>/images/小吳.jpg");
+			
+		}else if(event.results[i][j].transcript.indexOf("你好")> -1 
+		){
+			$("#mic").attr("src","<%=request.getContextPath()%>/images/test1.gif");
 		}
 		else{
 			$("#content-1").val(event.results[i][j].transcript);
