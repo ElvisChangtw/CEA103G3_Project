@@ -343,7 +343,7 @@ left: 1095px;
 												id="${groupVO.group_no}-${memVO.member_no}" alt="尚無圖片" width="60px;" height="60px" 
 												style="border-radius:50%;" class="clickable" />
 											<a id="welcome"> ${memVO.mb_name } &nbsp</a>
-											<a id="logout-btn" href="#"> 登出 </a>
+											<a id="logout-btn" href="<%=request.getContextPath()%>/front-end/mem/MemLogout.jsp"> 登出 </a>
 										</li>
 									</c:otherwise>
 								</c:choose>
