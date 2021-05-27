@@ -235,7 +235,7 @@ tr td>img {
 											<tr>
 												<td><span style="font-weight:bolder;">電影狀態:</span></td>
 												<td><select name="status" size="1" style="width:555px;"> 
-													<option value="9" <%= ((movieVO == null) ? "" : (movieVO.getStatus().equals("9") ? "selected" : ""))%>></option>
+													<option value="9" <%= ((movieVO == null) ? "" : (movieVO.getStatus().equals("9") ? "selected" : ""))%>>請選擇</option>
 													<option value="0" <%= ((movieVO == null) ? "" : (movieVO.getStatus().equals("0") ? "selected" : ""))%>>上映中</option>
 													<option value="1" <%= ((movieVO == null) ? "" : (movieVO.getStatus().equals("1") ? "selected" : ""))%>>未上映</option>
 													<option value="2" <%= ((movieVO == null) ? "" : (movieVO.getStatus().equals("2") ? "selected" : ""))%>>已下檔</option>
@@ -268,7 +268,7 @@ tr td>img {
 											<tr>
 												<td><span style="font-weight:bolder;">電影分級:</td>
 												<td><select name="grade" size="1" style="width:555px;"> 
-													<option value="9"<%= ((movieVO == null) ? "" : (movieVO.getGrade().equals("9") ? "selected" : ""))%>></option>
+													<option value="9"<%= ((movieVO == null) ? "" : (movieVO.getGrade().equals("9") ? "selected" : ""))%>>請選擇</option>
 													<option value="0"<%= ((movieVO == null) ? "" : (movieVO.getGrade().equals("0") ? "selected" : ""))%>>普遍級</option>
 													<option value="1"<%= ((movieVO == null) ? "" : (movieVO.getGrade().equals("1") ? "selected" : ""))%>>保護級</option>
 													<option value="2"<%= ((movieVO == null) ? "" : (movieVO.getGrade().equals("2") ? "selected" : ""))%>>輔導級</option>

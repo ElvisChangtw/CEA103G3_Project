@@ -242,7 +242,7 @@ tr td>img {
 												<td><span style="font-weight:bolder;">電影狀態:</span></td>
 												<td><select name="status" size="1" style="width:555px;">
 														<option value="9"
-															<%=(movieVO.getStatus().equals("9") ? "selected" : "")%>></option>
+															<%=(movieVO.getStatus().equals("9") ? "selected" : "")%>>請選擇</option>
 														<option value="0"
 															<%=(movieVO.getStatus().equals("0") ? "selected" : "")%>>上映中</option>
 														<option value="1"
@@ -280,7 +280,7 @@ tr td>img {
 												<td><span style="font-weight:bolder;">電影分級:</span></td>
 												<td><select name="grade" size="1" style="width:555px;">
 														<option value="9"
-															<%=(movieVO.getGrade().equals("9") ? "selected" : "")%>></option>
+															<%=(movieVO.getGrade().equals("9") ? "selected" : "")%>>請選擇</option>
 														<option value="0"
 															<%=(movieVO.getGrade().equals("0") ? "selected" : "")%>>普遍級</option>
 														<option value="1"
