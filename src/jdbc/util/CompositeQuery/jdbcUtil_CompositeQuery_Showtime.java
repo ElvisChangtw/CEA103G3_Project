@@ -17,7 +17,6 @@ public class jdbcUtil_CompositeQuery_Showtime {
 			aCondition = columnName + "=" + value;
 		else if("showtime_time".equals(columnName))
 			aCondition = "date(" + columnName + ")  = " + "'" + value + "'"; 
-
 		return aCondition + " ";
 	}
 
