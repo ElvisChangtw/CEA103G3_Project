@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.mem.model.MemVO;
 import com.ord_food.model.Ord_foodService;
 import com.ord_food.model.Ord_foodVO;
 import com.ord_ticket_type.model.Ord_ticket_typeService;
@@ -695,23 +696,11 @@ public class OrderServlet extends HttpServlet {
 				String foodno[] = (String[]) session.getAttribute("foodno");
 				String foodcount[] = (String[]) session.getAttribute("foodcount");
 				String foodprice[] = (String[]) session.getAttribute("foodprice");
+  				
+				MemVO memVO = (MemVO)session.getAttribute("memVO");;
 				
-//  				String str = req.getParameter("member_no");
-//  				
-//  				if (str== null || (str.trim()).length() == 0) {
-//  					errorMsgs.add("請輸入餐點編號");
-//  				}
-  				
-  				Integer member_no = 5;
-//  				try {
-//  					member_no = new Integer(str);
-//  				} catch (Exception e) {
-//  					errorMsgs.add("會員編號格式不正確");
-//  				}
-  				String str1 = req.getParameter("showtime_no").trim();
-  				
-  				Integer showtime_no = new Integer(str1);
-  				
+  				Integer member_no = memVO.getMember_no();
+  				Integer showtime_no = new Integer(req.getParameter("showtime_no").trim());
   				Timestamp crt_dt = new java.sql.Timestamp(System.currentTimeMillis());
   				String order_type = req.getParameter("order_type").trim();
   				String payment_type = req.getParameter("payment_type").trim();
@@ -775,7 +764,12 @@ public class OrderServlet extends HttpServlet {
   				orderVO = orderSvc.addOrder2(member_no, showtime_no, crt_dt	, order_status, 
   						order_type, payment_type, total_price, seat_name, ordFood_list, 
   						ordTicket_list, seat_no);
-  				System.out.println("order_no = " +  orderVO.getOrder_no());
+  				session.removeAttribute("ticket_typeno");
+  				session.removeAttribute("ticketcount");
+  				session.removeAttribute("ticketprice");
+  				session.removeAttribute("foodno");
+  				session.removeAttribute("foodcount");
+  				session.removeAttribute("foodprice");
   				/***************************3.新增完成,準備轉交(Send the Success view)***********/
   				req.setAttribute("orderVO", orderVO);
   				String url = "/back-end/order/order_complete.jsp";
@@ -786,7 +780,7 @@ public class OrderServlet extends HttpServlet {
   			} catch (Exception e) {
   				errorMsgs.add(e.getMessage());
   				RequestDispatcher failureView = req
-  						.getRequestDispatcher("/back-end/order/addOrder.jsp");
+  						.getRequestDispatcher("/index.jsp");
   				failureView.forward(req, res);
   			}
  		 }

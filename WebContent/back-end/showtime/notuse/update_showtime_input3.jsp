@@ -168,37 +168,6 @@
 
 <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/showtime/showtime.do" name="form1">
 <table>
-<!-- 	<tr> -->
-<!-- 		<td>場次編號:<font color=red><b>*</b></font></td> -->
-<%-- 		<td>${showtimeVO.showtime_no}</td> --%>
-<!-- 	</tr> -->
-<!-- 	<tr> -->
-<!-- 		<td>電影</td> -->
-<!-- 		<td> -->
-<!-- 			<select name="movie_no"> -->
-<%-- 					<c:forEach var="movieVO" items="${movieSvc.all}" > --%>
-<%-- 						<option value= "${movieVO.movieno}" ${(showtimeVO.movie_no == movieVO.movieno) ? "selected" : ""}>${movieVO.moviename}</option> --%>
-<%-- 					</c:forEach> --%>
-<!-- 				</select> -->
-<!-- 		</td> -->
-<!-- 	</tr> -->
-<!-- 	<tr> -->
-<!-- 		<td>廳院</td> -->
-		
-<!-- 		<td> -->
-<!-- 			<select name="theater_no"> -->
-<%-- 				<c:forEach var="theaterVO" items="${theaterSvc.all}" > --%>
-<%-- 					<option value= "${theaterVO.theater_no}" ${(showtimeVO.theater_no == theaterVO.theater_no)? "selectd" : "" }>${theaterVO.theater_name}</option> --%>
-<%-- 				</c:forEach> --%>
-<!-- 			</select> -->
-<!-- 		</td> -->
-<!-- 	</tr> -->
-<!-- 		<tr> -->
-<!-- 		<td>場次時間</td> -->
-<!-- 		<td> -->
-<!-- 			<input name="showtime_time" id="f_date1" type="text"> -->
-<!-- 		</td> -->
-<!-- 	</tr> -->
 
 </table>
 <br>

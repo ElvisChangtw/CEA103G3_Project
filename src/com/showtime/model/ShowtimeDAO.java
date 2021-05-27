@@ -511,10 +511,11 @@ public class ShowtimeDAO implements ShowtimeDAO_interface {
 			NativeQuery<Object[]> query2 = session.createNativeQuery(sql);
 			list = query2.getResultList();
 			System.out.println(list.size());
-			System.out.println(list.get(0));
-			for(int i = 0; i < list.size(); i++) {
-					System.out.println(list.get(i));
-			}
+			
+//			for(int i = 0; i < list.size(); i++) {
+//				System.out.println(list.get(0));
+//				System.out.println(list.get(i));
+//			}
 			session.getTransaction().commit();
 		} catch (RuntimeException ex) {
 			session.getTransaction().rollback();

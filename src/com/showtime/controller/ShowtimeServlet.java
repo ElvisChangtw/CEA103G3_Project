@@ -143,36 +143,35 @@ public class ShowtimeServlet extends HttpServlet {
 			}
 		}
 		
-		if ("getOne_For_Update2".equals(action)) { // 來自listAllTheater.jsp的請求
-
-			List<String> errorMsgs = new LinkedList<String>();
-			// Store this set in the request scope, in case we need to
-			// send the ErrorPage view.
-			req.setAttribute("errorMsgs", errorMsgs);
-			
-			try {
-				/***************************1.接收請求參數****************************************/
-				Integer showtime_no = new Integer(req.getParameter("showtime_no"));
-				
-				/***************************2.開始查詢資料****************************************/
-				ShowtimeService showtimeSvc = new ShowtimeService();
-				ShowtimeVO showtimeVO = showtimeSvc.getOneShowtime(showtime_no);
-								
-				/***************************3.查詢完成,準備轉交(Send the Success view)************/
-				req.setAttribute("showtimeVO", showtimeVO);         // 資料庫取出的theaterVO物件,存入req
-				String url = "/back-end/showtime/update_showtime_input3.jsp";
-				RequestDispatcher successView = req.getRequestDispatcher(url);// 成功轉交 update_theater_input.jsp
-				successView.forward(req, res);
-
-				/***************************其他可能的錯誤處理**********************************/
-			} catch (Exception e) {
-				errorMsgs.add("無法取得要修改的資料:" + e.getMessage());
-				RequestDispatcher failureView = req
-						.getRequestDispatcher("/back-end/showtime/listAllShowtime.jsp");
-				failureView.forward(req, res);
-			}
-		}
-		
+//		if ("getOne_For_Update2".equals(action)) { // 來自listAllTheater.jsp的請求
+//
+//			List<String> errorMsgs = new LinkedList<String>();
+//			// Store this set in the request scope, in case we need to
+//			// send the ErrorPage view.
+//			req.setAttribute("errorMsgs", errorMsgs);
+//			
+//			try {
+//				/***************************1.接收請求參數****************************************/
+//				Integer showtime_no = new Integer(req.getParameter("showtime_no"));
+//				
+//				/***************************2.開始查詢資料****************************************/
+//				ShowtimeService showtimeSvc = new ShowtimeService();
+//				ShowtimeVO showtimeVO = showtimeSvc.getOneShowtime(showtime_no);
+//								
+//				/***************************3.查詢完成,準備轉交(Send the Success view)************/
+//				req.setAttribute("showtimeVO", showtimeVO);         // 資料庫取出的theaterVO物件,存入req
+//				String url = "/back-end/showtime/update_showtime_input3.jsp";
+//				RequestDispatcher successView = req.getRequestDispatcher(url);// 成功轉交 update_theater_input.jsp
+//				successView.forward(req, res);
+//
+//				/***************************其他可能的錯誤處理**********************************/
+//			} catch (Exception e) {
+//				errorMsgs.add("無法取得要修改的資料:" + e.getMessage());
+//				RequestDispatcher failureView = req
+//						.getRequestDispatcher("/back-end/showtime/listAllShowtime.jsp");
+//				failureView.forward(req, res);
+//			}
+//		}
 		
 		if ("update".equals(action)) { // 來自update_theater_input.jsp的請求
 			
@@ -192,11 +191,20 @@ public class ShowtimeServlet extends HttpServlet {
 				for(int i = 0; i < s.length; i++) {
 					seat_no = seat_no + s[i];
 				}
-				
-				Timestamp showtime_time = java.sql.Timestamp.valueOf(req.getParameter("showtime_time"));
-				if (showtime_time == null) {
-					errorMsgs.add("場次時間請勿空白");
+				Timestamp showtime_time;
+				try{
+					showtime_time = java.sql.Timestamp.valueOf(req.getParameter("showtime_time")+":00");
+				}catch (IllegalArgumentException e) {
+					showtime_time= new java.sql.Timestamp(System.currentTimeMillis());
+					errorMsgs.add("場次時間請輸入日期時間!");
 				}
+				
+				System.out.println(showtime_time);
+				String sql = "select showtime_time from showtime where movie_no = " + movie_no 
+						+ " and theater_no = " + theater_no + " and showtime_time = '" 
+						+ showtime_time + "'";
+				System.out.println(sql);
+				
 				
 				ShowtimeVO showtimeVO = new ShowtimeVO();
 				showtimeVO.setShowtime_no(showtime_no);
@@ -205,22 +213,28 @@ public class ShowtimeServlet extends HttpServlet {
 				showtimeVO.setSeat_no(seat_no);
 				showtimeVO.setShowtime_time(showtime_time);
 
+				ShowtimeService showtimeSvc = new ShowtimeService();
+				List<Object[]> list = showtimeSvc.getByHibernate(sql);
+				if(list.size() >= 1) {
+					errorMsgs.add("場次重複");
+				}
+				
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					req.setAttribute("showtimeVO", showtimeVO); // 含有輸入格式錯誤的empVO物件,也存入req
 					RequestDispatcher failureView = req
-							.getRequestDispatcher("/back-end/showtimeVO/update_showtimeVO_input.jsp");
+							.getRequestDispatcher("/back-end/showtime/update_showtime_input.jsp");
 					failureView.forward(req, res);
 					return; //程式中斷
 				}
 				
+				
 				/***************************2.開始修改資料*****************************************/
-				ShowtimeService showtimeSvc = new ShowtimeService();
 				showtimeVO = showtimeSvc.updateShowtime(showtime_no, movie_no, theater_no, seat_no, showtime_time);
 				
 				/***************************3.修改完成,準備轉交(Send the Success view)*************/
 				req.setAttribute("showtimeVO", showtimeVO); // 資料庫update成功後,正確的的theaterVO物件,存入req
-				String url = "/back-end/showtime/listOneShowtime.jsp";
+				String url = "/back-end/showtime/listAllShowtime.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 修改成功後,轉交listOneEmp.jsp
 				successView.forward(req, res);
 

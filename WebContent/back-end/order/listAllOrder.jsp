@@ -3,6 +3,9 @@
 <%@ page import="java.util.*"%>
 <%@ page import="com.order.model.*"%>
 <%@ page import="com.employee.model.*"%>
+<%@ page import="com.mem.model.*"%>
+
+<jsp:useBean id="memSvc" scope="page" class="com.mem.model.MemService"></jsp:useBean>
 
 <%
 	OrderService orderSvc = new OrderService();
@@ -169,7 +172,7 @@
                                        <c:forEach var="orderVO" items="${list}" begin="<%=pageIndex%>" end="<%=pageIndex+rowsPerPage-1%>">
 											<tr  ${(orderVO.order_no == param.order_no) ? 'style="background-color:#C9B8DC;"':''}>
 												<td>${orderVO.order_no}</td>
-												<td>${orderVO.member_no}</td>
+												<td>${memSvc.getOneMem(orderVO.member_no).mb_name}</td>
 												<td>${orderVO.showtime_no}</td>
 												<td>${df.format(orderVO.crt_dt)}</td>
 												<td>
