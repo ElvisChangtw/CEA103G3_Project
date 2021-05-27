@@ -127,7 +127,7 @@
  		 	<div class="container">
  		 		<div class="row">
  		 			<div class="col-md-3" style="text-align:center;">
-		 		 		<img src ="<%=request.getContextPath()%>/MemServlet?action=view_memPic&member_no=${articleVO.memberno}" height= "200px" width="200px" style="margin-bottom:8px"/>
+		 		 		<img src="<%=request.getContextPath()%>/mem/DBGifReader4.do?member_no=${articleVO.memberno}"height= "200px" width="200px" style="margin-bottom:8px"/>
 		 		 		<h3><span class="badge badge-pill badge-success" style="font-size:1.5rem">樓主 ${memSvc.getOneMem(articleVO.memberno).mb_name}</span></h3>		 		 				 		 		
 		 		 			<span><i class="fas fa-bookmark" id="thumb1" style="font-size: 30px" ></i></span>
 							<a id="hao2">點我可以收藏文章!!</a>
@@ -193,7 +193,7 @@
 						<div class="row">
 					 		<div class="col-md-7.5" >
 						 		<p style="padding-top:0px; margin-top:20px; " style="width: 200%;">
-						 			<img src ="<%=request.getContextPath()%>/MemServlet?action=view_memPic&member_no=${replyVO.member_no}" height= "100px" width="100px" style="border-radius:50%" style="margin-bottom:5px"/>
+						 			<img src="<%=request.getContextPath()%>/mem/DBGifReader4.do?member_no=${replyVO.member_no}" height= "100px" width="100px" style="border-radius:50%" style="margin-bottom:5px"/>
 						 			【<font color=orange>${memSvc.getOneMem(replyVO.member_no).mb_name}</font>】
 						 			${replyVO.content}		 		 					 					 			
 						 		</p>
@@ -216,7 +216,7 @@
 		<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/reply/reply.do" name="form1" role="form">	
 			<div class="form-group form-group-lg" style="text-align:center">
 				<h5><label for="content">回覆內容:</label></h5>
-				<img src ="<%=request.getContextPath()%>/MemServlet?action=view_memPic&member_no=${memVO.member_no}"style="vertical-align:super;border-radius:50%;margin-bottom:5px;float: left" height= "100px" width="100px" />								
+				<img src="<%=request.getContextPath()%>/mem/DBGifReader4.do?member_no=${memVO.member_no}"style="vertical-align:super;border-radius:50%;margin-bottom:5px;float: left" height= "100px" width="100px" />
 				<textarea id="content" cols="60" name="content" rows="5" value="${replyVO.content}" style="width:80%" placeholder="message..."></textarea>
 			</div>						
 				<input type="hidden" name="action" value="insert">
