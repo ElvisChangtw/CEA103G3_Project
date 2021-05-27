@@ -339,36 +339,36 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			
 			</div>
 			<div class="clearfix">
-				<div class="booking-form">
-					<div class="form-header">
-						<h1>訂票</h1>
-					</div>
-					<form>
-						<div class="form-group">
-							<span class="form-label">電影</span> <select class="form-control">
-							<c:forEach var="movieVO" items="${movieSvc.all}">
-								<option value="${movieVO.movieno}" ${(commentVO.movieno==movieVO.movieno)? 'selected':'' } >${movieVO.moviename} 
- 							</c:forEach> 
-							</select> <span class="select-arrow"></span>
-						</div>
-						<div class="form-group">
-							<span class="form-label">場次</span> <select class="form-control">
-								<option>場次一</option>
-								<option>場次二</option>
-								<option>場次三</option>
-								<option>場次四</option>
-								<option>場次五</option>
-							</select> <span class="select-arrow"></span>
-						</div>
-						<div class="form-group">
-							<span class="form-label">放映時間</span> <input class="form-control"
-								type="datetime-local" required>
-						</div>
-						<div class="form-btn">
-							<button class="submit-btn">Book Now</button>
-						</div>
-					</form>
-				</div>
+<!-- 				<div class="booking-form"> -->
+<!-- 					<div class="form-header"> -->
+<!-- 						<h1>訂票</h1> -->
+<!-- 					</div> -->
+<!-- 					<form> -->
+<!-- 						<div class="form-group"> -->
+<!-- 							<span class="form-label">電影</span> <select class="form-control"> -->
+<%-- 							<c:forEach var="movieVO" items="${movieSvc.all}"> --%>
+<%-- 								<option value="${movieVO.movieno}" ${(commentVO.movieno==movieVO.movieno)? 'selected':'' } >${movieVO.moviename}  --%>
+<%--  							</c:forEach>  --%>
+<!-- 							</select> <span class="select-arrow"></span> -->
+<!-- 						</div> -->
+<!-- 						<div class="form-group"> -->
+<!-- 							<span class="form-label">場次</span> <select class="form-control"> -->
+<!-- 								<option>場次一</option> -->
+<!-- 								<option>場次二</option> -->
+<!-- 								<option>場次三</option> -->
+<!-- 								<option>場次四</option> -->
+<!-- 								<option>場次五</option> -->
+<!-- 							</select> <span class="select-arrow"></span> -->
+<!-- 						</div> -->
+<!-- 						<div class="form-group"> -->
+<!-- 							<span class="form-label">放映時間</span> <input class="form-control" -->
+<!-- 								type="datetime-local" required> -->
+<!-- 						</div> -->
+<!-- 						<div class="form-btn"> -->
+<!-- 							<button class="submit-btn">Book Now</button> -->
+<!-- 						</div> -->
+<!-- 					</form> -->
+<!-- 				</div> -->
 			</div>
 		</div>
 		<div class="clearfix"></div>
