@@ -2562,17 +2562,19 @@ var count=0;
             var j = event.results[i].length - 1;
 //             show.innerHTML = event.results[i][j].transcript;
 			if(event.results[i][j].transcript.indexOf("清除")> -1 ||
-					event.results[i][j].transcript.indexOf("清楚")> -1	){
+					event.results[i][j].transcript.indexOf("清楚")> -1 ||
+					event.results[i][j].transcript == "新竹"		
+			){
 				console.log(event.results[i][j].transcript);
 // 				event.results[i][j].transcript="";
-				$("#search-context").val("");
-				$("#search-results").val("");
+				$("#search-context").html("");
+				$("#search-results").html("");
 			} else if(event.results[i][j].transcript.indexOf("停止") > -1 ||
 					event.results[i][j].transcript =="屏"
 			) {
 // 				event.results[i][j].transcript="";
-				$("#search-context").val("");
-				$("#search-results").val("");
+				$("#search-context").html("");
+				$("#search-results").html("");
 				
 				recognition.stop();
 				Swal.fire({
@@ -2591,14 +2593,12 @@ var count=0;
 // 			    sound.currentTime = 3;
 			    sound.play(); 
 // 			    sound.currentTime = 3;
-			    $("#search-context").val("");
-			    $("#search-results").val("");
+			    $("#search-context").html("");
+			    $("#search-results").html("");
 			}
 			else{
 				$("#search-context").val(event.results[i][j].transcript);
 				console.log(event.results[i][j].transcript);
-			
-			
 			
 			$("#search-results").html('<hr class="hrhr">');
     		if(!($("#search-context").val() == "")){

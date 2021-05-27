@@ -483,11 +483,25 @@ public class EmployeeServlet extends HttpServlet {
 					failureView.forward(req, res);
 					return;// 程式中斷
 				}
+				Integer empno = employeeVO.getEmpno();
+//				System.out.println(empno);
+				
+				Set<AuthorityVO> set = employeeSvc.getAuthsByEmpno(empno);
+				if (set == null) {
+					errorMsgs.add("查無權限資料");
+				}
+				// Send the use back to the form, if there were errors
+				if (!errorMsgs.isEmpty()) {
+					RequestDispatcher failureView = req.getRequestDispatcher("/back-end/employee/empLogin.jsp");
+					failureView.forward(req, res);
+					return;// 程式中斷
+				}
 				
 				
 				/*************************** 3.查詢完成,準備轉交(Send the Success view) *************/
 				HttpSession session = req.getSession();
 				session.setAttribute("employeeVO", employeeVO); // 資料庫取出的empVO物件,存入session
+				session.setAttribute("authList", set); 
 				String url = "/back-home/index2.jsp";
 //				System.out.println(req.getContextPath());
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交 listOneEmp.jsp

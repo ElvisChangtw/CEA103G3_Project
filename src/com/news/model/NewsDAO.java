@@ -27,7 +27,7 @@ public class NewsDAO implements NewsDAO_interface {
 	private static final String INSERT_STMT = 
 		"INSERT INTO news (empno,news_title,news_desc,status,publish_date) VALUES (?, ?, ?, ?, ?)";
 	private static final String GET_ALL_STMT = 
-		"SELECT news_no,empno,news_title,news_desc,status,publish_date FROM news order by news_no";
+		"SELECT news_no,empno,news_title,news_desc,status,publish_date FROM news order by news_no desc";
 	private static final String GET_ONE_STMT = 
 		"SELECT news_no,empno,news_title,news_desc,status,publish_date FROM news where news_no = ?";
 	private static final String DELETE = 
