@@ -11,9 +11,6 @@
 	if(request.getAttribute("list") == null){
 		ShowtimeService showtimeSvc = new ShowtimeService();
 		list = showtimeSvc.getAll();
-		pageContext.setAttribute("list",list);
-	}else{
-		list = (List<ShowtimeVO>)request.getAttribute("list");
 		for(int i = 0; i < list.size(); i++){
 			ShowtimeVO showtimeVO = list.get(i);
 			Timestamp nowTime = new Timestamp(System.currentTimeMillis());
@@ -22,6 +19,9 @@
 				i--;
 			}
 		}
+		pageContext.setAttribute("list",list);
+	}else{
+		list = (List<ShowtimeVO>)request.getAttribute("list");
 		
 		
 		pageContext.setAttribute("list",list);

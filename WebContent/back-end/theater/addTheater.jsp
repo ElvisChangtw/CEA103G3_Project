@@ -266,15 +266,12 @@ button{
 												</td>
 											</tr>
 											<tr>
-												<td><span style="font-weight:bolder;">餐點種類</span></td>
+												<td><span style="font-weight:bolder;">廳院種類</span></td>
 												<td>
 													<select name="theater_type">
 														<option value="0" ${(theaterVO==null) ? "" : (theaterVO.theater_type==0)?"selected":""}>2D</option>
 														<option value="1" ${(theaterVO==null) ? "" : (theaterVO.theater_type==1)?"selected":""} >3D</option>
 														<option value="2" ${(theaterVO==null) ? "" : (theaterVO.theater_type==2)?"selected":""} >IMAX</option>
-														<option value="3" ${(theaterVO==null) ? "" : (theaterVO.theater_type==3)?"selected":""} >2D_IMAX</option>
-														<option value="4" ${(theaterVO==null) ? "" : (theaterVO.theater_type==4)?"selected":""} >3D_IMAX</option>
-														<option value="5" ${(theaterVO==null) ? "" : (theaterVO.theater_type==5)?"selected":""} >數位</option>
 													</select>
 												</td>
 											</tr>
