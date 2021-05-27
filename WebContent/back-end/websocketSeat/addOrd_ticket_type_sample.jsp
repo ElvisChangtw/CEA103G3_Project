@@ -169,6 +169,11 @@ FORM {
 			margin-top:20px;
 			align-items:center;
 		}
+		@media (max-width: 767px){
+  			#choose_seat{
+  				width:800px;
+  			}
+		}
 
 </style>
 <!-- <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script> -->
@@ -244,7 +249,7 @@ FORM {
 				<h2 id="h2">選擇座位</h2>
 				<p id="p1">選擇您希望購買的電影票張數和類型.請注意系統將自動為您保留可訂的最佳座位, 每筆交易最多可購買10張電影票</p>
 			</div>
-			<div style="border:1px solid chocolate; margin-top:20px;">
+			<div id="choose_seat"style="border:1px solid chocolate; margin-top:20px;">
 				<div id="d0">
 					<div id="d3">
 					</div>&nbsp&nbsp可選擇
