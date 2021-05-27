@@ -22,8 +22,6 @@
 		pageContext.setAttribute("list",list);
 	}else{
 		list = (List<ShowtimeVO>)request.getAttribute("list");
-		
-		
 		pageContext.setAttribute("list",list);
 	}
 %>
@@ -178,7 +176,7 @@
                           				  </select>
 									       <b>¤é´Á: </b>
 									       <br>
-										   <input name="" type="date">
+										   <input name="showtime_time" type="date">
 											<br>      
 											<br>      
 									        <input type="submit" value="°e¥X" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#F5CA5E; font-weight:bold; color:white;">
