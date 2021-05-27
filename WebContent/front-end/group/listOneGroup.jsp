@@ -193,7 +193,7 @@ th, td {
 				  <div class="col-md-2 lead div-th">
 				   電影名稱:
 				  </div>
-			      <div class="col-md-2 lead">${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(groupVO.showtime_no).movie_no).moviename}
+			      <div class="col-md lead">${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(groupVO.showtime_no).movie_no).moviename}
 			      </div>
 			  </div>
 			  <div class="row">
@@ -386,12 +386,12 @@ th, td {
             		$("#dd-cntDown").toggleClass("urgentCounter", true);
             	}
             }
-            else {
-                alert('揪團已截止！');
+//             else {
+//                 alert('揪團已截止！');
 //                 window.location.reload();
-				document.location.href ="<%=request.getContextPath()%>/front-end/group/group_front_page.jsp";
-                clearInterval(timer); 
-            }
+<%-- 				document.location.href ="<%=request.getContextPath()%>/front-end/group/group_front_page.jsp"; --%>
+//                 clearInterval(timer); 
+//             }
         }, 1000);
 		//揪團截止倒數計時
 		
