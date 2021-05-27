@@ -188,6 +188,7 @@
 											     <input type="submit" value="н╫зя"
 											     class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#73BDBE; font-weight:bold; color:white;">
 											     <input type="hidden" name="showtime_no"  value="${showtimeVO.showtime_no}">
+											     <input type="hidden" name="whichPage"  value="<%=whichPage%>">
 			    								 <input type="hidden" name="action"	value="getOne_For_Update"></FORM>
 											</td>
 <!-- 											<td> -->
@@ -223,14 +224,14 @@
                                 </div>
                             </div>
                     </div>
-                     <%if (request.getAttribute("showtimeVO")!=null){%>
-						<jsp:include page="listOneShowtime.jsp" />
-					<%} %>
                 </main>
             </div>
         
         
         </div>
+                     <%if (request.getAttribute("showtimeVO")!=null){%>
+						<jsp:include page="listOneShowtime.jsp" />
+					<%} %>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="<%=request.getContextPath()%>/back-home/js/scripts.js"></script>
