@@ -58,7 +58,8 @@ tr td>img {
         </a>
 	</nav>
     
-   
+    
+    
     
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
@@ -114,7 +115,7 @@ tr td>img {
                         </a>
                         <div class="collapse" id="collapsePages3" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link function" href="layout-static.html">現場劃位</a>
+                                <a class="nav-link function" href="<%=request.getContextPath()%>/back-end/order/onSite.jsp">現場劃位</a>
                                 <a class="nav-link function" href="<%=request.getContextPath()%>/back-end/order/listAllOrder.jsp">訂單管理</a>
                             </nav>
                         </div>
