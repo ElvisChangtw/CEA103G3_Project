@@ -1,26 +1,47 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="Big5"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page import="java.util.*"%>
 <%@ page import="com.showtime.model.*"%>
+<%@ page import="com.employee.model.*"%>
 
+<%
+	List<ShowtimeVO> list;
+	System.out.println(request.getAttribute("list")==null);
+	if(request.getAttribute("list") == null){
+		ShowtimeService showtimeSvc = new ShowtimeService();
+		list = showtimeSvc.getAll();
+		pageContext.setAttribute("list",list);
+	}else{
+		list = (List<ShowtimeVO>)request.getAttribute("list");
+		pageContext.setAttribute("list",list);
+	}
+%>
 
 <jsp:useBean id="theaterSvc" scope="page" class="com.theater.model.TheaterService" />
 <jsp:useBean id="movieSvc" scope="page" class="com.movie.model.MovieService" />
 
+<% 
+	java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:00");; 
+	pageContext.setAttribute("df",df);
+%>
+
+<%
+    EmployeeVO employeeVO = (EmployeeVO) session.getAttribute("employeeVO");
+%>
+
+<!DOCTYPE html>
 <html>
-<head>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-<meta charset="big5" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-<meta name="description" content="" />
-<meta name="author" content="" />
-<link href="<%=request.getContextPath()%>/back-home/css/styles.css" rel="stylesheet" />
-<link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
-<title>MoviesHit</title>
-
-
-</head>
+    <head>
+    	<title>MoviesHit</title>
+        <meta charset="big5" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <link href="<%=request.getContextPath()%>/back-home/css/styles.css" rel="stylesheet" />
+        <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
+    </head>
     <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
     	<a class="navbar-brand" href="index2.jsp">MOVIESHIT後台系統</a>
@@ -39,6 +60,9 @@
            	 登出
         </a>
 	</nav>
+    
+    
+    
     
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
@@ -120,164 +144,116 @@
                 </div>
             </nav>
         </div>
-        
-              <div id="layoutSidenav_content">
+            
+            
+            
+            
+            
+            
+            <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">後台　場次修改</h1>
+                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">後台　現場劃位</h1>
+                        <a href="<%=request.getContextPath()%>/back-end/showtime/addShowtime.jsp" class="btn btn-primary btn-lg" ><i class="material-icons">&#xE147;&ensp;</i><span>新增場次</span></a>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                   <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/showtime/showtime.do" name="form1">
-                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="text-align:left;">
+                                <%@ include file="pages/page1.file"%>
+                                	
+                                	<div>
+                                		 <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/showtime/showtime.do" name="form1">
+                                		 <b>電影: </b>
+									      <select class="form-control" id="movie" name="movie_no" style="width:158px; height:40px;" >
+												<option value="">請選擇電影</option>
+                          				  </select>
+									       <b>日期: </b>
+									       <br>
+										   <input name="" type="date">
+											<br>      
+											<br>      
+									        <input type="submit" value="送出" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#F5CA5E; font-weight:bold; color:white;">
+									        <br>
+									        <br>
+									        <input type="hidden" name="action" value="listByCompositeQuery" >
+								    	 </FORM>	
+                                	</div>
+                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="text-align:center;">
                                         <thead style="background-color:#9099AA; color:white;; white-space: nowrap;" >
                                             <tr>
-                                            	<th id="th1" colspan="3" align="center"><CENTER>請輸入場次資料</CENTER></th>
+												<th width="150px;">電影</th>
+												<th>廳院</th>
+												<th width="150px;">場次時間</th>
+												<th>場次座位</th>
+												<th>訂票</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-											<tr>
-												<td width="110px;"><span style="font-weight:bolder;">電影</span></td>
-												<td width="800px;">
-													${movieSvc.getOneMovie(showtimeVO.movie_no).moviename}
- 												</td>
-												<td>
-												</td>
-											</tr>
-											<tr>
-												<td><span style="font-weight:bolder;">廳院</span></td>
-												<td>
-													${theaterSvc.getOneTheater(showtimeVO.theater_no).theater_name}
-												</td>
-												<td></td> 
-											</tr>
-											<tr>
-												<td><span style="font-weight:bolder;">時間</span></td>
-												<td>
-													<input name="showtime_time" id="f_date1" type="text">
-												</td>
-												<td></td> 
-											</tr>
+                                        <c:forEach var="showtimeVO" items="${list}" begin="<%=pageIndex%>" end="<%=pageIndex+rowsPerPage-1%>">
+										  <tr  ${(showtimeVO.showtime_no == param.showtime_no) ? 'style="background-color:#C9B8DC;"':''}>
+										  	<td>${movieSvc.getOneMovie(showtimeVO.movie_no).moviename}</td>
+											<td>${theaterSvc.getOneTheater(showtimeVO.theater_no).theater_name}</td>
+											<td>${df.format(showtimeVO.showtime_time)}</td>
 											
-											<tr>
-												<td></td>
-												<td></td>
-												<td>
-													<input type="submit" id="submit" value="送出修改">
-												</td>
-											</tr>
+											<td>
+											  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/showtime/showtime.do" style="margin-bottom: 0px;">
+											     <input type="submit" value="查看"
+											     class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#F5CA5E; font-weight:bold; color:white;">
+											     <input type="hidden" name="showtime_no"  value="${showtimeVO.showtime_no}">
+											     <input type="hidden" name="whichPage"	value="<%=whichPage%>">
+											     <input type="hidden" name="action"	value="getOne_For_Showtime"></FORM>
+											</td>
+											
+											<td>
+											  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/order/order.do" style="margin-bottom: 0px;">
+											     <input type="submit" value="訂票"
+											     class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#AE67D8; font-weight:bold; color:white;">
+											     <input type="hidden" name="showtime_no"  value="${showtimeVO.showtime_no}">
+			    								 <input type="hidden" name="action"	value="sendToFT"></FORM>
+											</td>
+										</tr>
+									</c:forEach>
                                             <tr>
                                             </tr>
+                                         
+                                           
                                         </tbody>
                                     </table>
-													<input type="hidden" name="showtime_no" value="${showtimeVO.showtime_no}">
-													<input type="hidden" name="movie_no" value="${showtimeVO.movie_no}">
-													<input type="hidden" name="theater_no" value="${showtimeVO.theater_no}">
-													<input type="hidden" name="seat_no" value="${showtimeVO.seat_no}" >
-													<input type="hidden" name="action" value="update">
-									</FORM>
+                                    <%@ include file="pages/page2.file"%>
                                 </div>
                             </div>
-                   		 </div>
-               		 </main>
-     			 </div>
-        	</div>
-        	
-        	
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-<script src="<%=request.getContextPath()%>/back-home/js/scripts.js"></script>
-<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
-<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
-<script src="<%=request.getContextPath()%>/back-home/dist/assets/demo/datatables-demo.js"></script>
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</body>
-<!-- =========================================以下為 datetimepicker 之相關設定========================================== -->
-
-<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/datetimepicker/jquery.datetimepicker.css" />
-<script src="<%=request.getContextPath()%>/datetimepicker/jquery.js"></script>
-<script src="<%=request.getContextPath()%>/datetimepicker/jquery.datetimepicker.full.js"></script>
-
-<style>
-  .xdsoft_datetimepicker .xdsoft_datepicker {
-           width:  300px;   /* width:  300px; */
-  }
-  .xdsoft_datetimepicker .xdsoft_timepicker .xdsoft_time_box {
-           height: 151px;   /* height:  151px; */
-  }
-</style>
-
+                    </div>
+                </main>
+            </div>
+        
+        
+        </div>
+                     <%if (request.getAttribute("showtimeVO")!=null){%>
+						<jsp:include page="listOneShowtime.jsp" />
+					<%} %>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="<%=request.getContextPath()%>/back-home/js/scripts.js"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+        <script src="<%=request.getContextPath()%>/back-home/dist/assets/demo/datatables-demo.js"></script>
+        <script src="<%=request.getContextPath()%>/js/jquery-1.11.1.min.js"></script>
 <script>
-        $.datetimepicker.setLocale('zh');
-        $('#f_date1').datetimepicker({
-	       theme: '',              //theme: 'dark',
-	       step: 5,                //step: 60 (這是timepicker的預設間隔60分鐘)
-	       format:'Y-m-d H:i',         //format:'Y-m-d',
-		   value: '${showtimeVO.showtime_time}', // value:   new Date(),
-           //disabledDates:        ['2017/06/08','2017/06/09','2017/06/10'], // 去除特定不含
-           //startDate:	            '2017/07/10',  // 起始日
-           minDate:               '+1970-01-06', // 去除今日(不含)之前
-           maxDate:               '${movieSvc.getOneMovie(showtimeVO.movie_no).offdate}'  // 去除今日(不含)之後
-        });
-        
-        // ----------------------------------------------------------以下用來排定無法選擇的日期-----------------------------------------------------------
-
-        //      1.以下為某一天之前的日期無法選擇
-        //      var somedate1 = new Date('2017-06-15');
-        //      $('#f_date1').datetimepicker({
-        //          beforeShowDay: function(date) {
-        //        	  if (  date.getYear() <  somedate1.getYear() || 
-        //		           (date.getYear() == somedate1.getYear() && date.getMonth() <  somedate1.getMonth()) || 
-        //		           (date.getYear() == somedate1.getYear() && date.getMonth() == somedate1.getMonth() && date.getDate() < somedate1.getDate())
-        //              ) {
-        //                   return [false, ""]
-        //              }
-        //              return [true, ""];
-        //      }});
-
-        
-        //      2.以下為某一天之後的日期無法選擇
-        //      var somedate2 = new Date('2017-06-15');
-        //      $('#f_date1').datetimepicker({
-        //          beforeShowDay: function(date) {
-        //        	  if (  date.getYear() >  somedate2.getYear() || 
-        //		           (date.getYear() == somedate2.getYear() && date.getMonth() >  somedate2.getMonth()) || 
-        //		           (date.getYear() == somedate2.getYear() && date.getMonth() == somedate2.getMonth() && date.getDate() > somedate2.getDate())
-        //              ) {
-        //                   return [false, ""]
-        //              }
-        //              return [true, ""];
-        //      }});
-
-
-        //      3.以下為兩個日期之外的日期無法選擇 (也可按需要換成其他日期)
-        //      var somedate1 = new Date('2017-06-15');
-        //      var somedate2 = new Date('2017-06-25');
-        //      $('#f_date1').datetimepicker({
-        //          beforeShowDay: function(date) {
-        //        	  if (  date.getYear() <  somedate1.getYear() || 
-        //		           (date.getYear() == somedate1.getYear() && date.getMonth() <  somedate1.getMonth()) || 
-        //		           (date.getYear() == somedate1.getYear() && date.getMonth() == somedate1.getMonth() && date.getDate() < somedate1.getDate())
-        //		             ||
-        //		            date.getYear() >  somedate2.getYear() || 
-		//         		           (date.getYear() == somedate2.getYear() && date.getMonth() >  somedate2.getMonth()) || 
-        //		           (date.getYear() == somedate2.getYear() && date.getMonth() == somedate2.getMonth() && date.getDate() > somedate2.getDate())
-        //              ) {
-        //                   return [false, ""]
-        //              }
-        //              return [true, ""];
-        //      }});
-        let error = "";
-				<c:if test="${not empty errorMsgs}">
-						<c:forEach var="message" items="${errorMsgs}">
-							error += "${message}";
-						</c:forEach>
-						swal.fire({
-							 icon: 'error',
-							 title: "請修正以下錯誤",
-							 text: error
-						});
-				</c:if>
-        
-</script>
+$.ajax({
+	url: "<%=request.getContextPath()%>/showtime/showtime.do",
+	type: "POST",
+	data:{
+		action: "getMovieFromHibernate",
+	},
+	success: function(json){
+			let jsonobj = JSON.parse(json);
+			for(let i = 0; i < jsonobj['movie_no'].length; i++){
+				let opt = $("<option>").val(jsonobj["movie_no"][i]).text(jsonobj["movie_name"][i]);
+   				$("#movie").append(opt);
+			}
+		}
+});		
+		
+</script>    
+</body>
+    
 
 </html>

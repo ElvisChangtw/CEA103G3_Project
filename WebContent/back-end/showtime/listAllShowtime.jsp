@@ -159,9 +159,9 @@
 												<th width="150px;">電影</th>
 												<th>廳院</th>
 												<th width="150px;">場次時間</th>
-												<th>場次座位</th>
+												<th>座位狀態</th>
 												<th>修改</th>
-												<th>選擇座位</th>
+<!-- 												<th>選擇座位</th> -->
 												<th>訂票</th>
 												<th>刪除</th>
                                             </tr>
@@ -190,13 +190,13 @@
 											     <input type="hidden" name="showtime_no"  value="${showtimeVO.showtime_no}">
 			    								 <input type="hidden" name="action"	value="getOne_For_Update"></FORM>
 											</td>
-											<td>
-											  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/showtime/showtime.do" style="margin-bottom: 0px;">
-											     <input type="submit" value="選擇座位"
-											     class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#766BB0; font-weight:bold; color:white;">
-											     <input type="hidden" name="showtime_no"  value="${showtimeVO.showtime_no}">
-			     								 <input type="hidden" name="action"	value="getOne_For_Update2"></FORM>
-											</td>
+<!-- 											<td> -->
+<%-- 											  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/showtime/showtime.do" style="margin-bottom: 0px;"> --%>
+<!-- 											     <input type="submit" value="選擇座位" -->
+<!-- 											     class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#766BB0; font-weight:bold; color:white;"> -->
+<%-- 											     <input type="hidden" name="showtime_no"  value="${showtimeVO.showtime_no}"> --%>
+<!-- 			     								 <input type="hidden" name="action"	value="getOne_For_Update2"></FORM> -->
+<!-- 											</td> -->
 											<td>
 											  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/order/order.do" style="margin-bottom: 0px;">
 											     <input type="submit" value="訂票"

@@ -17,7 +17,7 @@
 
 <meta charset="BIG5">
 <title>Insert title here</title>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <style>
    body {  
 /*      width: 1200px;   */
@@ -46,6 +46,8 @@ div.container.bulletin-container{
 	 border:1px solid red; 
 	 font-size:50px; 
 	 width:80%;
+	 min-height:450px;
+	 margin-bottom:20px;
 }
   table {
 	width: 100%;
@@ -181,7 +183,15 @@ $("#bulletin>tbody>tr>td").mouseleave(function(){
 });
 
 $("#bulletin>tbody>tr>td").click(function(){
-	$(this).find(".JQellipsis").toggle();
+	var isOn = $(this).find("a.JQellipsis").is(":hidden");
+	$(".JQellipsis").hide();
+	
+	console.log();
+	if(isOn){
+		$(this).find("a.JQellipsis").show();
+	} else{
+		$(this).find("a.JQellipsis").hide();
+	}
 	window.scrollTo(0, document.body.scrollHeight);
 });
 </script>

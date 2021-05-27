@@ -3,6 +3,9 @@
 <%@ page import="java.util.*"%>
 <%@ page import="com.order.model.*"%>
 <%@ page import="com.employee.model.*"%>
+<%@ page import="com.mem.model.*"%>
+
+<jsp:useBean id="memSvc" scope="page" class="com.mem.model.MemService"></jsp:useBean>
 
 <%
 	OrderService orderSvc = new OrderService();
@@ -30,7 +33,8 @@
         <link href="<%=request.getContextPath()%>/back-home/css/styles.css" rel="stylesheet" />
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
-    
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     </head>
     <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -162,14 +166,14 @@
 												<th>座位</th>
 												<th>查看</th>
 												<th>修改</th>
-												<th>刪除</th>
+												<th>退票</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                        <c:forEach var="orderVO" items="${list}" begin="<%=pageIndex%>" end="<%=pageIndex+rowsPerPage-1%>">
 											<tr  ${(orderVO.order_no == param.order_no) ? 'style="background-color:#C9B8DC;"':''}>
 												<td>${orderVO.order_no}</td>
-												<td>${orderVO.member_no}</td>
+												<td>${memSvc.getOneMem(orderVO.member_no).mb_name}</td>
 												<td>${orderVO.showtime_no}</td>
 												<td>${df.format(orderVO.crt_dt)}</td>
 												<td>
@@ -180,7 +184,7 @@
 														<c:when test="${orderVO.order_status == 1 }">
 															已付款
 														</c:when>
-														<c:when test="${theaterVO.theater_type == 2 }">
+														<c:when test="${orderVO.order_status == 2 }">
 															已取消
 														</c:when>
 													</c:choose>
@@ -220,11 +224,10 @@
 											</td>
 											
 											<td>
-											  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/order/order.do" style="margin-bottom: 0px;">
-											     <input type="submit" value="刪除"
+<%-- 											  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/order/order.do" style="margin-bottom: 0px;"> --%>
+											     <input type="submit" name="cancel" value="退票"
 											     class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#FC9C9D; font-weight:bold; color:white;">
 											     <input type="hidden" name="order_no"  value="${orderVO.order_no}">
-											     <input type="hidden" name="action" value="delete"></FORM>
 											</td>
 										</tr>
 									</c:forEach>
@@ -261,7 +264,29 @@
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
         <script src="<%=request.getContextPath()%>/back-home/dist/assets/demo/datatables-demo.js"></script>
 
+
+
+
+<script src="<%=request.getContextPath()%>/js/jquery-1.11.1.min.js"></script>
+ <script>
+ 	$("input[name=cancel]").click(function(){
+ 		
+ 		let $status = $(this);
+ 		$.ajax({
+			url: "<%=request.getContextPath()%>/order/order.do",
+			type: "POST",
+			data:{
+				action: "cancel_booking",
+				order_no: $(this).next().val(),
+			},
+			success: function(data){
+				swal.fire("退票成功");
+				$status.eq(0).parent().prev().prev().prev().prev().prev().prev().prev().text("已取消");
+				}
+		});
+ 		
+ 	})
+ </script>
 </body>
-    
 
 </html>
