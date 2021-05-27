@@ -68,6 +68,7 @@ public class ReportCommentServlet extends HttpServlet {
 
 
 		if ("insert".equals(action)) { // 來自addComment.jsp的請求  
+
 			Map<String, String> errorMsgs = new LinkedHashMap<String, String>();
 			// Store this set in the request scope, in case we need to
 			// send the ErrorPage view.
