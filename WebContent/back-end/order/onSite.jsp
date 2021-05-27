@@ -5,9 +5,16 @@
 <%@ page import="com.employee.model.*"%>
 
 <%
-	ShowtimeService showtimeSvc = new ShowtimeService();
-    List<ShowtimeVO> list = showtimeSvc.getAll();
-    pageContext.setAttribute("list",list);
+	List<ShowtimeVO> list;
+	System.out.println(request.getAttribute("list")==null);
+	if(request.getAttribute("list") == null){
+		ShowtimeService showtimeSvc = new ShowtimeService();
+		list = showtimeSvc.getAll();
+		pageContext.setAttribute("list",list);
+	}else{
+		list = (List<ShowtimeVO>)request.getAttribute("list");
+		pageContext.setAttribute("list",list);
+	}
 %>
 
 <jsp:useBean id="theaterSvc" scope="page" class="com.theater.model.TheaterService" />
@@ -34,7 +41,6 @@
         <link href="<%=request.getContextPath()%>/back-home/css/styles.css" rel="stylesheet" />
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
-   
     </head>
     <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -147,11 +153,29 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">後台　所有場次資料</h1>
+                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">後台　現場劃位</h1>
                         <a href="<%=request.getContextPath()%>/back-end/showtime/addShowtime.jsp" class="btn btn-primary btn-lg" ><i class="material-icons">&#xE147;&ensp;</i><span>新增場次</span></a>
                             <div class="card-body">
                                 <div class="table-responsive">
                                 <%@ include file="pages/page1.file"%>
+                                	
+                                	<div>
+                                		 <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/showtime/showtime.do" name="form1">
+                                		 <b>電影: </b>
+									      <select class="form-control" id="movie" name="movie_no" style="width:158px; height:40px;" >
+												<option value="">請選擇電影</option>
+                          				  </select>
+									       <b>日期: </b>
+									       <br>
+										   <input name="" type="date">
+											<br>      
+											<br>      
+									        <input type="submit" value="送出" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#F5CA5E; font-weight:bold; color:white;">
+									        <br>
+									        <br>
+									        <input type="hidden" name="action" value="listByCompositeQuery" >
+								    	 </FORM>	
+                                	</div>
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="text-align:center;">
                                         <thead style="background-color:#9099AA; color:white;; white-space: nowrap;" >
                                             <tr>
@@ -211,48 +235,22 @@
         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
         <script src="<%=request.getContextPath()%>/back-home/dist/assets/demo/datatables-demo.js"></script>
+        <script src="<%=request.getContextPath()%>/js/jquery-1.11.1.min.js"></script>
 <script>
-	$("input[type=button]").click(function(){
-		console.log("123")
-		console.log("${foodVO.food_no}")
-		let food_no = $(this).attr('id');
-		console.log(food_no);
-		$.ajax({
-			url:"<%=request.getContextPath()%>/food/food.do?action=updateStatus",
-			data:{
-				food_no:food_no
-			},
-			type:"POST",
-			
-// 			$("#status").html("");
-// 			$("#status").append("OK");
-			success:function(json){
-				let jsonobj = JSON.parse(json);
-				let newStatus = jsonobj.newStatus;
-				let s;
-				let t;
-				if(newStatus == "1"){
-					s = "上架";
-					t = "下架";
-					$("#"+ food_no).css("background-color","#416DB6")
-					$("#"+ food_no).parent().prev().prev().css("color","#FF4364");
-					$("#"+ food_no).parent().prev().prev().css("font-weight","bold");
-				}else{
-					s = "下架";
-					t = "上架";
-					$("#"+ food_no).css("background-color","#FF4364")
-					$("#"+ food_no).parent().prev().prev().css("color","#416DB6");
-					$("#"+ food_no).parent().prev().prev().css("font-weight","bold");
-				}
-				$("#"+ food_no).parent().prev().prev().text(s);
-				
-				
-				$("#"+ food_no).val(t);
-
+$.ajax({
+	url: "<%=request.getContextPath()%>/showtime/showtime.do",
+	type: "POST",
+	data:{
+		action: "getMovieFromHibernate",
+	},
+	success: function(json){
+			let jsonobj = JSON.parse(json);
+			for(let i = 0; i < jsonobj['movie_no'].length; i++){
+				let opt = $("<option>").val(jsonobj["movie_no"][i]).text(jsonobj["movie_name"][i]);
+   				$("#movie").append(opt);
 			}
-		 });
-	});
-		
+		}
+});		
 		
 </script>    
 </body>

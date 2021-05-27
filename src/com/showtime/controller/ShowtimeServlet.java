@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -581,5 +583,45 @@ public class ShowtimeServlet extends HttpServlet {
 			}
 		}
 		
+		//複合查詢
+		if("listByCompositeQuery".equals(action)) {
+			List<String> errorMsgs = new LinkedList<String>();
+			// Store this set in the request scope, in case we need to
+			// send the ErrorPage view.
+			req.setAttribute("errorMsgs", errorMsgs);
+
+			try {
+				
+				/***************************1.將輸入資料轉為Map**********************************/ 
+				//採用Map<String,String[]> getParameterMap()的方法 
+				//注意:an immutable java.util.Map 
+				//Map<String, String[]> map = req.getParameterMap();
+				HttpSession session = req.getSession();
+				Map<String, String[]> map = (Map<String, String[]>)session.getAttribute("map");
+				
+				// 以下的 if 區塊只對第一次執行時有效
+				if (req.getParameter("whichPage") == null){
+					Map<String, String[]> map1 = new HashMap<String, String[]>(req.getParameterMap());
+					session.setAttribute("map",map1);
+					map = map1;
+				} 
+				
+				/***************************2.開始複合查詢***************************************/
+				ShowtimeService showtimeSvc = new ShowtimeService();
+				List<ShowtimeVO> list  = showtimeSvc.getAll(map);
+				
+				/***************************3.查詢完成,準備轉交(Send the Success view)************/
+				req.setAttribute("list", list); // 資料庫取出的list物件,存入request
+				RequestDispatcher successView = req.getRequestDispatcher("/back-end/order/onSite.jsp"); // 成功轉交listEmps_ByCompositeQuery.jsp
+				successView.forward(req, res);
+				
+				/***************************其他可能的錯誤處理**********************************/
+			} catch (Exception e) {
+				errorMsgs.add(e.getMessage());
+				RequestDispatcher failureView = req
+						.getRequestDispatcher("/back-end/order/onSite.jsp");
+				failureView.forward(req, res);
+			}
+		}
 	}
 }
