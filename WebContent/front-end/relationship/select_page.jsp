@@ -74,7 +74,7 @@
 	<img src="${pageContext.request.contextPath}/mem/DBGifReader4.do?member_no=${memVO.member_no}"
 				alt="尚無圖片" class="rounded-circle" width="60px" height="60px" title=""/>
 <%--      		【<font color=orange>${memVO.mb_name}</font>】 --%>
-	<h1 class="shadow p-3 mb-1 bg-white rounded" style="background-color:#02a388 display:inline-block;color: white;">
+	<h1 class="shadow p-3 mb-1 bg-white rounded" style="background-color:#02a388 ;display:inline-block;color: white;">
 			${memVO.mb_name} 的好友專區
 	</h1>
 

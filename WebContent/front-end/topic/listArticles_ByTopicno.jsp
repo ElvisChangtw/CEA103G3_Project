@@ -144,7 +144,7 @@ table#forum.table>tbody>tr>td>a.JQellipsis
 	</ul>
 </c:if>
 <div class="row"  style="margin:5px 0;">
-	<h1 class="shadow p-3 mb-1 bg-white rounded" style="background-color:#C7C1EA; display:inline-block;">
+	<h1 class="shadow p-3 mb-1 bg-white rounded" style="background-color:#02a388; display:inline-block;">
 			MoviesHit論壇
 	</h1>
 
@@ -179,7 +179,7 @@ table#forum.table>tbody>tr>td>a.JQellipsis
         <input type="text" name="article_headline" value="" placeholder="請輸入主題  ">   
         <input type="submit" value="送出" class="btn btn-primary" style="border-radius:5px;">
         <input type="hidden" name="action" value="listArticles_ByCompositeQuery">
-        <button type="button" class="btn btn-info" onclick="location.href='addArticle.jsp'" style="border-radius:5px;"><i class="fa fa-plus" aria-hidden="true"></i>新增文章</button>
+        <button type="button" class="btn btn-info" onclick="location.href='<%=request.getContextPath()%>/front-end/article/addArticle.jsp'" style="border-radius:5px;"><i class="fa fa-plus" aria-hidden="true"></i>新增文章</button>
      </FORM>
 
 

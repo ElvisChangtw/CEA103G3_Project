@@ -259,9 +259,17 @@ FORM {
 	
 </body>
 <script>
+	window.onload=function(){
+		swal.fire({
+			icon: 'success',
+			text:"¥I´Ú¦¨¥\",
+			timer: 500
+		});
+	}
 	$("#submit").click(function(){
 		window.location.href='<%=request.getContextPath()%>/front-end/mem/memberSys.jsp';
 	})
+	
 
 </script>
 </html>

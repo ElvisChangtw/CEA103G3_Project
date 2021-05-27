@@ -6,6 +6,7 @@
 <%@ page import="com.articleCollection.model.*"%>
 <%@ page import="com.mem.model.*"%>
 <%@ page import="com.relationship.model.*"%>
+<%@ page import="com.like.model.*"%>
 
 <%@ page import="java.util.*"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -24,6 +25,9 @@
 
 	Set<ReplyVO> set = articleSvc.getReplysByArticleno(articleno);
 	pageContext.setAttribute("set",set);  //EL寫法
+	
+	Set<LikeVO> set1 = articleSvc.getLikesByArticle(articleno);
+	pageContext.setAttribute("set1",set1); 
 	
 	int count = 0;
 	LikeService likeSvc = new LikeService();
@@ -95,10 +99,18 @@
 </c:if>	
 
 	<div>
-		<%="目前登入會員=" + memVO.getMember_no() + " " +memVO.getMb_name()%>     
+<%-- 		<%="目前登入會員=" + memVO.getMember_no() + " " +memVO.getMb_name()%>      --%>
 	</div>
-
-	 <div class="card-header bg-transparent border-success" > 		 			 	 		 	
+	
+	 <div class="card-header bg-transparent border-success" >
+		 <div class="liked-mems" style="display:none;">
+		 <c:forEach var="LikeVO" items="${set1}">
+	 		<p class="liked-mem">${memSvc.getOneMem(LikeVO.memberno).mb_name}</p>
+	<%-- 		 	<img src ="<%=request.getContextPath()%>/MemServlet?action=view_memPic&member_no=${LikeVO.memberno}" style="border-radius:50%" height= "30px" width="30px"/> --%>
+		 </c:forEach>
+		 </div>
+	 
+	  		 			 	 		 	
  		 	<div>		 		
 				<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/front-end/article/article.do" style="margin-bottom: 0px;" >
 					<button type="button" class="btn btn-outline-success" onclick="location.href='<%=request.getContextPath()%>/front-end/article/listAllArticle.jsp'">回上一列表</button>
@@ -115,7 +127,7 @@
  		 	<div class="container">
  		 		<div class="row">
  		 			<div class="col-md-3" style="text-align:center;">
-		 		 		<img src ="<%=request.getContextPath()%>/MemServlet?action=view_memPic&member_no=${articleVO.memberno}" height= "200px" width="200px" style="margin-bottom:8px"/>
+		 		 		<img src="<%=request.getContextPath()%>/mem/DBGifReader4.do?member_no=${articleVO.memberno}"height= "200px" width="200px" style="margin-bottom:8px"/>
 		 		 		<h3><span class="badge badge-pill badge-success" style="font-size:1.5rem">樓主 ${memSvc.getOneMem(articleVO.memberno).mb_name}</span></h3>		 		 				 		 		
 		 		 			<span><i class="fas fa-bookmark" id="thumb1" style="font-size: 30px" ></i></span>
 							<a id="hao2">點我可以收藏文章!!</a>
@@ -137,13 +149,15 @@
   			<div class="card-body ">  		
     			<p class="card-text" style="font-size:1.45rem;  text-indent:2em;">${articleVO.content}</p>			
   		</div>
+  		
   			<div class="card-footer bg-transparent border-success" style="text-align:right">
 <%--   					新增文章時間:<fmt:formatDate value="${articleVO.crtdt}" pattern="yyyy-MM-dd HH:mm:ss"/> --%>
 					<h4 id="hao" style="text-align:left;">
 						文章點讚數:${articleVO.likecount}											
-					</h4>
+					</h4>	
+						<font style="color:blue"><div style="text-align:left;" id="like1"></div></font>						
 						<div style="text-align:left"><span><i class="fas fa-heart" id="thumb" style="font-size: 50px"></i></span></div>
-						<div style="text-align:left" id="hao1">我是愛心可以點我喔!!</div>				
+						<div style="text-align:left" id="hao1">我是愛心可以點我喔!!</div>													
 			</div>
 			  	<div class="card-footer bg-transparent border-success">
 <%-- 					文章狀態:${articleVO.status} --%>
@@ -161,8 +175,7 @@
 		<%@ include file="pages/page1.file" %> 	
 			<c:forEach var="replyVO" items="${set}" begin="<%=pageIndex%>" end="<%=pageIndex+rowsPerPage-1%>"> 
 			<div class="container">
-				<div class="row alert alert-dark" style="margin-bottom:0px">
-					
+				<div class="row alert alert-dark" style="margin-bottom:0px">					
 							<%count++;%>	
 						<div class="col-md-10" role="alert">
 		  					<%=count%>樓
@@ -180,7 +193,7 @@
 						<div class="row">
 					 		<div class="col-md-7.5" >
 						 		<p style="padding-top:0px; margin-top:20px; " style="width: 200%;">
-						 			<img src ="<%=request.getContextPath()%>/MemServlet?action=view_memPic&member_no=${replyVO.member_no}" height= "100px" width="100px" style="border-radius:50%" style="margin-bottom:5px"/>
+						 			<img src="<%=request.getContextPath()%>/mem/DBGifReader4.do?member_no=${replyVO.member_no}" height= "100px" width="100px" style="border-radius:50%" style="margin-bottom:5px"/>
 						 			【<font color=orange>${memSvc.getOneMem(replyVO.member_no).mb_name}</font>】
 						 			${replyVO.content}		 		 					 					 			
 						 		</p>
@@ -203,6 +216,7 @@
 		<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/reply/reply.do" name="form1" role="form">	
 			<div class="form-group form-group-lg" style="text-align:center">
 				<h5><label for="content">回覆內容:</label></h5>
+				<img src="<%=request.getContextPath()%>/mem/DBGifReader4.do?member_no=${memVO.member_no}"style="vertical-align:super;border-radius:50%;margin-bottom:5px;float: left" height= "100px" width="100px" />
 				<textarea id="content" cols="60" name="content" rows="5" value="${replyVO.content}" style="width:80%" placeholder="message..."></textarea>
 			</div>						
 				<input type="hidden" name="action" value="insert">
@@ -234,10 +248,10 @@
 		console.log("isLiked = " + isLiked);
 		//第一次判斷
 		if(isLiked){
-			console.log("應該要亮");
+// 			console.log("應該要亮");
 			$("#thumb").css("color","#FF7575");		
 		} else{
-			console.log("應該要暗");
+// 			console.log("應該要暗");
 			$("#thumb").css("color","black");
 		}
 		// 		 $("#thumb").val("1");
@@ -317,10 +331,10 @@
 		$(document).ready(function(){
 			//第一次判斷
 			if(isCollection){
-				console.log("收藏應該要亮");
+// 				console.log("收藏應該要亮");
 				$("#thumb1").css("color","blue");
 			} else{
-				console.log("收藏應該要暗");
+// 				console.log("收藏應該要暗");
 				$("#thumb1").css("color","black");
 			}
 		});
@@ -387,7 +401,32 @@
 			   }
 		   });
 		  });
-	
+
+		 
+	 	$(document).ready(function(){
+
+	 	var lst = [];
+		 $(".liked-mems>.liked-mem").each(function(){
+			 lst.push($(this).text());
+		 }); //把每個人都塞進lst裡面
+		sort(lst);
+		var likeMems = "";
+		if(lst.length == 1){
+			likeMems = lst[0] + "說這個讚";
+		 }else if(lst.length == 2){
+			 likeMems =lst[0] + " 以及 " + lst[1] + "說這個讚";
+		 }else if(lst.length == 0){
+			 likeMems ="這篇文章還沒人按讚，快來按讚喔!";
+		 }else{
+			 likeMems =lst[0] + " 以及 " + lst[1] + "及其他"+ (${articleVO.likecount}-2) + "人說這個讚";
+		 }
+		
+		$("#like1").text(likeMems);
+			
+	 	});
+	 	function sort(array) {
+	 		  array.sort(() => Math.random() - 0.5);
+	 		}
 </script>
 
 </body>

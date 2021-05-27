@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.like.model.LikeVO;
 import com.reply.model.ReplyVO;
 
 public class ArticleService {
@@ -83,7 +84,8 @@ public class ArticleService {
 	public List<ArticleVO> getAll(Map<String, String[]> map) {		
 		return dao.getAll(map);
 	}
-	
-	
+	public Set<LikeVO> getLikesByArticle(Integer articleno){
+		return dao.getLikesByArticle(articleno);
+	}
 	
 }

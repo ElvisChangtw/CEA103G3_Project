@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.article.model.ArticleVO;
+import com.like.model.LikeVO;
 import com.reply.model.ReplyVO;
 
 public interface ArticleDAO_interface {
@@ -23,6 +24,8 @@ public interface ArticleDAO_interface {
 	void subtractArticleLike(int articleno, Connection con);
 	void addArticleLike(int articleno, Connection con);
 	public List<ArticleVO> getAll(Map<String, String[]> map);
+	public Set<LikeVO> getLikesByArticle(Integer articleno);
+	
 	
 	
 	
