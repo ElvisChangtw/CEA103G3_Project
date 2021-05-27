@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="Big5"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.*"%>
+<%@ page import="java.sql.*"%>
 <%@ page import="com.showtime.model.*"%>
 <%@ page import="com.employee.model.*"%>
 
@@ -10,9 +11,19 @@
 	if(request.getAttribute("list") == null){
 		ShowtimeService showtimeSvc = new ShowtimeService();
 		list = showtimeSvc.getAll();
+		for(int i = 0; i < list.size(); i++){
+			ShowtimeVO showtimeVO = list.get(i);
+			Timestamp nowTime = new Timestamp(System.currentTimeMillis());
+			if(showtimeVO.getShowtime_time().before(nowTime)){
+				list.remove(i);
+				i--;
+			}
+		}
 		pageContext.setAttribute("list",list);
 	}else{
 		list = (List<ShowtimeVO>)request.getAttribute("list");
+		
+		
 		pageContext.setAttribute("list",list);
 	}
 %>

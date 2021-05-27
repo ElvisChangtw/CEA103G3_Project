@@ -246,9 +246,9 @@ FORM {
 							</head>
 							<body>
 								<div id="qrcode"></div>
-								<a href="<%=request.getContextPath()%>/back-end/order/check_in.jsp?order_no=${orderVO.order_no}">查看</a>
+								<a href="<%=request.getContextPath()%>/back-end/order/listOneOrder.jsp?order_no=${orderVO.order_no}">查看</a>
 							<script>
-							$('#qrcode').qrcode({width: 200,height: 200,text: "<%=request.getContextPath()%>/back-end/order/check_in.jsp?order_no=${orderVO.order_no}"});      
+							$('#qrcode').qrcode({width: 200,height: 200,text: "<%=request.getContextPath()%>/back-end/order/listOneOrder.jsp.jsp?order_no=${orderVO.order_no}"});      
 							</script>
 							</body>
 							</html>
@@ -263,7 +263,8 @@ FORM {
 		swal.fire({
 			icon: 'success',
 			text:"付款成功",
-			timer: 500
+			timer: 500,
+			showConfirmButton: false
 		});
 	}
 	$("#submit").click(function(){

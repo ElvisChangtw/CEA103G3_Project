@@ -83,8 +83,9 @@ class TimerTask_Dismiss extends TimerTask {
 	@Override
 	public void run() {
 		GroupService groupSvc = new GroupService();
+		System.out.println("1揪團編號: " + this.groupVO.getGroup_no() + "超過截止時間, 揪團失敗!!!");
 		groupSvc.groupOverDue(this.groupVO.getGroup_no());
-		System.out.println("揪團編號: " + this.groupVO.getGroup_no() + "超過截止時間, 揪團失敗!!!");
+		System.out.println("2揪團編號: " + this.groupVO.getGroup_no() + "超過截止時間, 揪團失敗!!!");
 		sendWSMessage("dismissGroup",this.groupVO.getMember_no(), String.valueOf(this.groupVO.getGroup_no()),this.groupVO.getCrt_dt());
 	}
 	

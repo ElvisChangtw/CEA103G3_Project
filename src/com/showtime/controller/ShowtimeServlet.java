@@ -202,11 +202,9 @@ public class ShowtimeServlet extends HttpServlet {
 				}
 				
 				System.out.println(showtime_time);
-				String sql = "select showtime_time from showtime where movie_no = " + movie_no 
+				String sql = "select showtime_no, showtime_time from showtime where movie_no = " + movie_no 
 						+ " and theater_no = " + theater_no + " and showtime_time = '" 
 						+ showtime_time + "'";
-				System.out.println(sql);
-				
 				
 				ShowtimeVO showtimeVO = new ShowtimeVO();
 				showtimeVO.setShowtime_no(showtime_no);
@@ -217,8 +215,14 @@ public class ShowtimeServlet extends HttpServlet {
 
 				ShowtimeService showtimeSvc = new ShowtimeService();
 				List<Object[]> list = showtimeSvc.getByHibernate(sql);
+				int no = 0;
 				if(list.size() >= 1) {
-					errorMsgs.add("場次重複");
+					no = (int) list.get(0)[0];
+				}
+				if(showtime_no.intValue() != no) {
+					if(list.size() >= 1) {
+						errorMsgs.add("場次重複");
+					}
 				}
 				
 				// Send the use back to the form, if there were errors
@@ -235,8 +239,10 @@ public class ShowtimeServlet extends HttpServlet {
 				showtimeVO = showtimeSvc.updateShowtime(showtime_no, movie_no, theater_no, seat_no, showtime_time);
 				
 				/***************************3.修改完成,準備轉交(Send the Success view)*************/
+				String page = req.getParameter("whichPage");
+				System.out.println("page = " + page);
 				req.setAttribute("showtimeVO", showtimeVO); // 資料庫update成功後,正確的的theaterVO物件,存入req
-				String url = "/back-end/showtime/listAllShowtime.jsp";
+				String url = "/back-end/showtime/listAllShowtime.jsp?whichPage="+page;
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 修改成功後,轉交listOneEmp.jsp
 				successView.forward(req, res);
 
@@ -392,15 +398,13 @@ public class ShowtimeServlet extends HttpServlet {
         		}
         		/***************************2.開始新增資料***************************************/
         		showtimeSvc.addShowtimes(list_showtimeVO);
-        		
         		/***************************3.新增完成,準備轉交(Send the Success view)***********/
-        		String url = "/back-end/showtime/listAllShowtime.jsp";
+        		String url = "/back-end/showtime/listAllShowtime.jsp?whichPage=99999";
         		RequestDispatcher successView = req.getRequestDispatcher(url); // 新增成功後轉交listAllTheater.jsp
         		successView.forward(req, res);				
         		
         		/***************************其他可能的錯誤處理**********************************/
         	} catch (Exception e) {
-        		System.out.println("123");
         		errorMsgs.add(e.getMessage());
         		RequestDispatcher failureView = req
         				.getRequestDispatcher("/back-end/showtime/addShowtime.jsp");
@@ -546,7 +550,6 @@ public class ShowtimeServlet extends HttpServlet {
 				out.flush();
 				out.close();
 			}
-			
 		}
 		
 		if("getTimeFromHibernate".equals(action)) {
@@ -609,6 +612,14 @@ public class ShowtimeServlet extends HttpServlet {
 				/***************************2.開始複合查詢***************************************/
 				ShowtimeService showtimeSvc = new ShowtimeService();
 				List<ShowtimeVO> list  = showtimeSvc.getAll(map);
+				for(int i = 0; i < list.size(); i++) {
+					Timestamp now = new Timestamp(System.currentTimeMillis());
+					ShowtimeVO showtimeVO = list.get(i);
+					if(showtimeVO.getShowtime_time().before(now)) {
+						list.remove(i);
+						i--;
+					}
+				}
 				
 				/***************************3.查詢完成,準備轉交(Send the Success view)************/
 				req.setAttribute("list", list); // 資料庫取出的list物件,存入request
