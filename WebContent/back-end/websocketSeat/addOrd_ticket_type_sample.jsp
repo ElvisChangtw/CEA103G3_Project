@@ -111,9 +111,7 @@ FORM {
 			margin: 0px 2px;
 			border-radius: 5px;
 		}
-
 		input[type=checkbox]:checked+span {
-			/* 			color: yellow; */
 			background-color: #ADD8E6;
 		}
 
@@ -638,24 +636,23 @@ FORM {
 	}
 	
 	//­p®É¾¹
-// 	let sec = 59;
-// 		setInterval(function() {
-// 			$("#timeOut").text(timeFormat(sec));
-// 			sec -= 1;
-// 		}, 1000)
-// 		setTimeout(
-// 			function() {
-// 				window.location.replace("${pageContext.request.contextPath}/back-end/showtime/select_page.jsp");
-// 			}, sec * 1000);
-// 		function timeFormat(second) {
-// 			let minute = parseInt(second / 60);
-// 			second %= 60;
-// 			(second < 10) ? second = '0' + second : second;
-// 			return minute + ":" + second;
-// 		}
+	let sec = 59;
+		setInterval(function() {
+			$("#timeOut").text(timeFormat(sec));
+			sec -= 1;
+		}, 1000)
+		setTimeout(
+			function() {
+				window.location.replace("${pageContext.request.contextPath}/index.jsp");
+			}, sec * 1000);
+		function timeFormat(second) {
+			let minute = parseInt(second / 60);
+			second %= 60;
+			(second < 10) ? second = '0' + second : second;
+			return minute + ":" + second;
+		}
 
 </script>
 <jsp:include page="/front_footer_copy.jsp"/>
-<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script> -->
 </body>
 </html>

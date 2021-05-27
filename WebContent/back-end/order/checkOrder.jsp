@@ -306,21 +306,21 @@ FORM {
 	}
 	
 	//­p®É¾¹
-// 	let sec = 300;
-// 		setInterval(function() {
-// 			$("#timeOut").text(timeFormat(sec));
-// 			sec -= 1;
-// 		}, 1000)
-// 		setTimeout(
-// 			function() {
-// 				window.location.replace("${pageContext.request.contextPath}/back-end/showtime/select_page.jsp");
-// 			}, sec * 1000);
-// 		function timeFormat(second) {
-// 			let minute = parseInt(second / 60);
-// 			second %= 60;
-// 			(second < 10) ? second = '0' + second : second;
-// 			return minute + ":" + second;
-// 		}
+	let sec = 300;
+		setInterval(function() {
+			$("#timeOut").text(timeFormat(sec));
+			sec -= 1;
+		}, 1000)
+		setTimeout(
+			function() {
+				window.location.replace("${pageContext.request.contextPath}/index.jsp");
+			}, sec * 1000);
+		function timeFormat(second) {
+			let minute = parseInt(second / 60);
+			second %= 60;
+			(second < 10) ? second = '0' + second : second;
+			return minute + ":" + second;
+		}
 	
 	
 	

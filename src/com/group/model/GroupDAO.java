@@ -38,7 +38,7 @@ public class GroupDAO implements GroupDAO_interface {
 			"LEFT JOIN SHOWTIME S1 ON S0.SHOWTIME_NO = S1.SHOWTIME_NO " + 
 			"LEFT JOIN GROUP_MEMBER S2 ON S0.GROUP_NO = S2.GROUP_NO " + 
 			"where S0.group_status = ?  AND DATE(S1.SHOWTIME_TIME) >= DATE_ADD(DATE(NOW()), INTERVAL 1 DAY) " + 
-			"and s2.member_no = ? AND S2.STATUS = 1  AND S0.DEADLINE_DT > NOW()"
+			"and s2.member_no = ? AND S2.STATUS = 1 "
 			+ "order by S0.group_no ";
 	private static final String GET_ONE_STMT = "SELECT * FROM `group` where group_no = ?";
 	private static final String GET_Members_ByGroupno_STMT = "SELECT * FROM group_member where group_no = ? order by member_no";

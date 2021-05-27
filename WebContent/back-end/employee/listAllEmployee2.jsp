@@ -4,7 +4,7 @@
 <%@ page import="com.employee.model.*"%>
 <%@ page import="com.authority.model.*"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%-- 此頁練習採用 EL 的寫法取值 --%>
+
 <%
     EmployeeService employeeSvc = new EmployeeService();
     List<EmployeeVO> list = employeeSvc.getAll();
@@ -17,21 +17,21 @@
 	Set<AuthorityVO> authList = (Set<AuthorityVO>) session.getAttribute("authList");
 %>
 
-<%-- <% --%>
-<!-- // 	Integer empno = employeeVO.getEmpno(); -->
-<!-- // 	AuthorityService authSvc1 = new AuthorityService(); -->
-<!-- // 	List<AuthorityVO> list2 = authSvc1.getOneAuthorityByEmpNo(empno);  -->
-<!-- // 	for(int i = 0; i < list2.size(); i++){ -->
-<!-- // 		AuthorityVO authVO = list2.get(i); -->
-<!-- // 		if(authVO.getAuth_status().equals("N")){ -->
-<!-- // 			list.remove(authVO); -->
-<!-- // 			i--; -->
-<!-- // 		}else{ -->
-<!-- // 			System.out.println(authVO.getFunction_no()); -->
-<!-- // 		} -->
-<!-- // 	} -->
-<%-- %> --%>
 
+<%--
+		Integer empno = employeeVO.getEmpno();
+		AuthorityService authSvc1 = new AuthorityService(); 
+ 		List<AuthorityVO> list2 = authSvc1.getOneAuthorityByEmpNo(empno);  
+ 		for(int i = 0; i < list2.size(); i++){ 
+				AuthorityVO authVO = list2.get(i); 
+			if(authVO.getAuth_status().equals("N")){ 
+				list2.remove(authVO); 
+					i--; 
+			}else{ 
+				System.out.println(authVO.getFunction_no()); 
+ 			} 
+ 		}
+--%>
 
 
 <jsp:useBean id="authoritytSvc" scope="page" class="com.authority.model.AuthorityService" />
@@ -102,7 +102,7 @@
 <!--                             <div class="sb-nav-link-icon"><i class="fas fa-user-alt"></i></div> -->
 <!--                            	 基本資料 -->
 <!--                         </a> -->
-                        <a id="movie_management" class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapseLayouts1">
+                        <a id="employee_management" class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapseLayouts1">
                             <div class="sb-nav-link-icon"><i class="fas fa-user-cog"></i></div>
                            	 員工管理系統
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
@@ -136,7 +136,7 @@
                                 <a class="nav-link function" href="<%=request.getContextPath()%>/back-end/mem/listAllMem2.jsp">會員資料管理</a>
                             </nav>
                         </div>
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages3" aria-expanded="false" aria-controls="collapsePages3">
+                        <a id="ticket_management" class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages3" aria-expanded="false" aria-controls="collapsePages3">
                             <div class="sb-nav-link-icon"><i class="fas fa-ticket-alt"></i></div>
                         	    售票管理
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
@@ -147,7 +147,7 @@
                                 <a class="nav-link function" href="<%=request.getContextPath()%>/back-end/order/listAllOrder.jsp">訂單管理</a>
                             </nav>
                         </div>
-           				 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages4" aria-expanded="false" aria-controls="collapsePages4">
+           				 <a id="comment_management" class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages4" aria-expanded="false" aria-controls="collapsePages4">
                             <div class="sb-nav-link-icon"><i class="fas fa-user-alt-slash"></i></div>
                           	  檢舉管理
                           	<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
@@ -157,11 +157,11 @@
                                 <a class="nav-link function" href="<%=request.getContextPath()%>/back-end/report_comment/listAllReportComment.jsp">評論檢舉</a>
                             </nav>
                         </div>
-                        <a class="nav-link function" href="tables1.html">
+                        <a id="news_management" class="nav-link function" href="tables1.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-bullhorn"></i></div>
                            	 管理最新消息
                         </a>
-                        <a class="nav-link function" href="tables2.html">
+                        <a id="customer_service" class="nav-link function" href="tables2.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-hands-helping"></i></div>
                        	     	回應客服小幫手
                         </a>
@@ -314,7 +314,7 @@
 					<div class="form-group">
 						<label>職稱:</label>
 						<input type="text" name="title" size="45"
-					value= "後台管理員" : employeeVO.getTitle()%>" class="form-control" required>
+					value= "後台管理員" class="form-control" required>
 					</div>	
 					
 					<div class="form-group">
@@ -341,64 +341,48 @@
 						<input type="hidden" name="function_no" value="1">
 						<input type="hidden" name="auth_status" value="N">
 						 &nbsp;&nbsp;
-						<input type="checkbox" > 員工權限管理
+						<input type="checkbox" > 電影資訊管理
 						<input type="hidden" name="function_no" value="2" >
 						<input type="hidden" name="auth_status" value="N">
 						 &nbsp;&nbsp;
 						<input type="checkbox" > 場次管理
 						<input type="hidden" name="function_no" value="3" >
 						<input type="hidden" name="auth_status" value="N">
-						 &nbsp;&nbsp;
-						<input type="checkbox" > 電影資訊管理
+						 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" > 廳院管理
 						<input type="hidden" name="function_no" value="4" > 
 						<input type="hidden" name="auth_status" value="N">
 						<br>
-						<input type="checkbox"> 廳院管理
+						<input type="checkbox"> 票種管理
 						<input type="hidden" name="function_no" value="5" > 
 						<input type="hidden" name="auth_status" value="N">
 						 &nbsp;&nbsp;
-						<input type="checkbox"> 座位管理
+						<input type="checkbox"> 餐點管理
 						<input type="hidden" name="function_no" value="6" > 
 						<input type="hidden" name="auth_status" value="N">
 						 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="checkbox"> 票種管理
+						<input type="checkbox"> 會員資料管理
 						<input type="hidden" name="function_no" value="7" > 
 						<input type="hidden" name="auth_status" value="N">
 						 &nbsp;&nbsp;
-						<input type="checkbox"> 餐點管理
+						<input type="checkbox"> 現場劃位
 						<input type="hidden" name="function_no" value="8" >
 						<input type="hidden" name="auth_status" value="N">
 						<br>
-						<input type="checkbox"> 會員資料管理
+						<input type="checkbox"> 訂單管理
 						<input type="hidden" name="function_no" value="9" > 
 						<input type="hidden" name="auth_status" value="N">
 						 &nbsp;&nbsp;
-						<input type="checkbox"> 會員審核
+						<input type="checkbox"> 檢舉管理
 						<input type="hidden" name="function_no" value="10" > 
 						<input type="hidden" name="auth_status" value="N">
-						 &nbsp;&nbsp;
-						<input type="checkbox"> 專業評論審核
+						 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="checkbox"> 最新消息管理
 						<input type="hidden" name="function_no" value="11" >
 						<input type="hidden" name="auth_status" value="N">
 						 &nbsp;&nbsp;
-						<input type="checkbox"> 現場劃位
-						<input type="hidden" name="function_no" value="12" > 
-						<input type="hidden" name="auth_status" value="N">
-						<br>
-						<input type="checkbox"> 查詢線上訂單
-						<input type="hidden" name="function_no" value="13" >
-						<input type="hidden" name="auth_status" value="N">
-						 &nbsp;&nbsp;
-						<input type="checkbox"> 檢舉管理
-						<input type="hidden" name="function_no" value="14" >
-						<input type="hidden" name="auth_status" value="N">
-						 &nbsp;&nbsp;
-						<input type="checkbox"> 最新消息管理
-						<input type="hidden" name="function_no" value="15" >
-						<input type="hidden" name="auth_status" value="N">
-						 &nbsp;&nbsp;
 						<input type="checkbox"> 客服小幫手
-						<input type="hidden" name="function_no" value="16" > 
+						<input type="hidden" name="function_no" value="12" > 
 						<input type="hidden" name="auth_status" value="N">
 					</div>	
 					
@@ -434,9 +418,88 @@
 <script src="js/main.js"></script>
     </body>
     
+    
+
+
+    
+	<!-- =========================================以下為 datetimepicker 之相關設定========================================== -->
+
+<%
+	java.sql.Date hiredate = null;
+	try {
+		hiredate = employeeVO.getHiredate();
+	} catch (Exception e) {
+		hiredate = new java.sql.Date(System.currentTimeMillis());
+	}
+%>
+
+<%
+	java.sql.Date quitdate = null; 
+	try { 
+		quitdate = employeeVO.getQuitdate(); 
+	} catch (Exception e) { 
+		quitdate = new java.sql.Date(System.currentTimeMillis()); 
+	} 
+%>
+
+
+<link rel="stylesheet" type="text/css"
+	href="<%=request.getContextPath()%>/datetimepicker/jquery.datetimepicker.css" />
+<script src="<%=request.getContextPath()%>/datetimepicker/jquery.js"></script>
+<script
+	src="<%=request.getContextPath()%>/datetimepicker/jquery.datetimepicker.full.js"></script>
+
+<style>
+.xdsoft_datetimepicker .xdsoft_datepicker {
+	width: 300px; /* width:  300px; */
+}
+
+.xdsoft_datetimepicker .xdsoft_timepicker .xdsoft_time_box {
+	height: 151px; /* height:  151px; */
+}
+</style>
+
+
+<script>
+        $.datetimepicker.setLocale('zh');
+        $('#f_date1').datetimepicker({
+	       theme: '',              //theme: 'dark',
+	       timepicker:false,       //timepicker:true,
+	       step: 1,                //step: 60 (這是timepicker的預設間隔60分鐘)
+	       format:'Y-m-d',         //format:'Y-m-d H:i:s',
+		   value: '<%=hiredate%>',  // value:   new Date(),
+           //disabledDates:        ['2017/06/08','2017/06/09','2017/06/10'], // 去除特定不含
+           //startDate:	            '2017/07/10',  // 起始日
+           //minDate:               '-1970-01-01', // 去除今日(不含)之前
+           //maxDate:               '+1970-01-01'  // 去除今日(不含)之後
+        });
+        
+        $.datetimepicker.setLocale('zh');
+        $('#f_date2').datetimepicker({
+	       theme: '',              //theme: 'dark',
+	       timepicker:false,       //timepicker:true,
+	       step: 1,                //step: 60 (這是timepicker的預設間隔60分鐘)
+	       format:'Y-m-d',         //format:'Y-m-d H:i:s',
+		   value: '<%=quitdate%>',   // value:   new Date(),
+	//disabledDates:        ['2017/06/08','2017/06/09','2017/06/10'], // 去除特定不含
+	//startDate:	            '2017/07/10',  // 起始日
+	//minDate:               '-1970-01-01', // 去除今日(不含)之前
+	//maxDate:               '+1970-01-01'  // 去除今日(不含)之後
+	});
+        
+    $("input[type=checkbox]").click(function(){
+       	if($(this).prop("checked")==true){
+	       	$(this).next().next().val("Y");
+       	}else{
+       		$(this).next().next().val("N");
+       	}
+    })
+        
+</script>   
+
 <script>
 
-<c:forEach var="authList" varStatus="status" items="${authList}" >
+<c:forEach var="authList" varStatus="status" items="${sessionScope.authList}">
 var index = ${authList.getFunction_no()} -1;
 var tree = document.getElementsByClassName("nav-link function")[index]
 	if(`${authList.getAuth_status()}`=='N'){
@@ -451,7 +514,6 @@ var tree = document.getElementsByClassName("nav-link function")[index]
 		} 
 	}
 	
-    
 </c:forEach>
 
 
@@ -487,79 +549,6 @@ if(funno12 == false){
 //  document.getElementById("demo").innerHTML = tree.length;
 
 </script>
-    
-	<!-- =========================================以下為 datetimepicker 之相關設定========================================== -->
-
-<%
-	java.sql.Date hiredate = null;
-	try {
-		hiredate = employeeVO.getHiredate();
-	} catch (Exception e) {
-		hiredate = new java.sql.Date(System.currentTimeMillis());
-	}
-%>
-
-<%
-	java.sql.Date quitdate = null;
-	try {
-		quitdate = employeeVO.getQuitdate();
-	} catch (Exception e) {
-		quitdate = new java.sql.Date(System.currentTimeMillis());
-	}
-%>
-
-
-<link rel="stylesheet" type="text/css"
-	href="<%=request.getContextPath()%>/datetimepicker/jquery.datetimepicker.css" />
-<script src="<%=request.getContextPath()%>/datetimepicker/jquery.js"></script>
-<script
-	src="<%=request.getContextPath()%>/datetimepicker/jquery.datetimepicker.full.js"></script>
-
-<style>
-.xdsoft_datetimepicker .xdsoft_datepicker {
-	width: 300px; /* width:  300px; */
-}
-
-.xdsoft_datetimepicker .xdsoft_timepicker .xdsoft_time_box {
-	height: 151px; /* height:  151px; */
-}
-</style>
-
-<script>
-        $.datetimepicker.setLocale('zh');
-        $('#f_date1').datetimepicker({
-	       theme: '',              //theme: 'dark',
-	       timepicker:false,       //timepicker:true,
-	       step: 1,                //step: 60 (這是timepicker的預設間隔60分鐘)
-	       format:'Y-m-d',         //format:'Y-m-d H:i:s',
-		   value: '<%=hiredate%>',  // value:   new Date(),
-           //disabledDates:        ['2017/06/08','2017/06/09','2017/06/10'], // 去除特定不含
-           //startDate:	            '2017/07/10',  // 起始日
-           //minDate:               '-1970-01-01', // 去除今日(不含)之前
-           //maxDate:               '+1970-01-01'  // 去除今日(不含)之後
-        });
-        
-        $.datetimepicker.setLocale('zh');
-        $('#f_date2').datetimepicker({
-	       theme: '',              //theme: 'dark',
-	       timepicker:false,       //timepicker:true,
-	       step: 1,                //step: 60 (這是timepicker的預設間隔60分鐘)
-	       format:'Y-m-d',         //format:'Y-m-d H:i:s',
-		   value: '<%=quitdate%>',  // value:   new Date(),
-	//disabledDates:        ['2017/06/08','2017/06/09','2017/06/10'], // 去除特定不含
-	//startDate:	            '2017/07/10',  // 起始日
-	//minDate:               '-1970-01-01', // 去除今日(不含)之前
-	//maxDate:               '+1970-01-01'  // 去除今日(不含)之後
-	});
-        
-    $("input[type=checkbox]").click(function(){
-       	if($(this).prop("checked")==true){
-	       	$(this).next().next().val("Y");
-       	}else{
-       		$(this).next().next().val("N");
-       	}
-    })
-        
-</script>    
+     
     
 </html>

@@ -246,8 +246,9 @@ FORM {
 							</head>
 							<body>
 								<div id="qrcode"></div>
+								<a href="<%=request.getContextPath()%>/back-end/order/check_in.jsp?order_no=${orderVO.order_no}">¬d¬Ý</a>
 							<script>
-							$('#qrcode').qrcode({width: 200,height: 200,text: "<%=request.getRequestURL()%>?order_no=${orderVO.order_no}"});      
+							$('#qrcode').qrcode({width: 200,height: 200,text: "<%=request.getContextPath()%>/back-end/order/check_in.jsp?order_no=${orderVO.order_no}"});      
 							</script>
 							</body>
 							</html>
@@ -256,6 +257,11 @@ FORM {
 	</div>
 		
 	
-<!-- 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script> -->
 </body>
+<script>
+	$("#submit").click(function(){
+		window.location.href='<%=request.getContextPath()%>/front-end/mem/memberSys.jsp';
+	})
+
+</script>
 </html>

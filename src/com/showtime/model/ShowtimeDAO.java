@@ -39,7 +39,7 @@ public class ShowtimeDAO implements ShowtimeDAO_interface {
 
 	private static final String INSERT_STMT = "insert into showtime (movie_no, theater_no, seat_no, showtime_time)"
 			+ "values(?, ?, ?, ?)";
-	private static final String GET_ALL_STMT = "select * from showtime order by showtime_no";
+	private static final String GET_ALL_STMT = "select * from showtime order by showtime_time";
 	private static final String GET_ONE_STMT = "select * from showtime where showtime_no = ?";
 	private static final String DELETE = "delete from showtime where showtime_no = ?";
 	private static final String UPDATE = "update showtime set movie_no = ?, theater_no = ?, seat_no = ?,"
@@ -511,10 +511,11 @@ public class ShowtimeDAO implements ShowtimeDAO_interface {
 			NativeQuery<Object[]> query2 = session.createNativeQuery(sql);
 			list = query2.getResultList();
 			System.out.println(list.size());
-			System.out.println(list.get(0));
-			for(int i = 0; i < list.size(); i++) {
-					System.out.println(list.get(i));
-			}
+			
+//			for(int i = 0; i < list.size(); i++) {
+//				System.out.println(list.get(0));
+//				System.out.println(list.get(i));
+//			}
 			session.getTransaction().commit();
 		} catch (RuntimeException ex) {
 			session.getTransaction().rollback();
