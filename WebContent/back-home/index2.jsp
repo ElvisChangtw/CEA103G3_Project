@@ -9,6 +9,12 @@
 <%
     EmployeeVO employeeVO = (EmployeeVO) session.getAttribute("employeeVO");
 	Set<AuthorityVO> authList = (Set<AuthorityVO>) session.getAttribute("authList");
+	
+	if (employeeVO == null){
+		employeeVO = new EmployeeVO();
+		employeeVO.setEmpno(99);
+	}
+	pageContext.setAttribute("employeeVO", employeeVO);
 %>
 
 
@@ -50,6 +56,32 @@
     		color: #02a388;
    			font-size: 1em;
    			}	
+   		#welcome{
+   			position: fixed;
+			left: 50%;
+			top: 50%;
+   		}	
+   		#welcome1{
+   			position: fixed;
+			left: 45%;
+			top: 40%;
+   		}
+   		#welcome2{
+   			position: fixed;
+			left: 45%;
+			top: 50%;
+   		}	
+   		#welcome3{
+   			position: fixed;
+			left: 62%;
+			top: 50%;
+   		}	
+   		#welcome4{
+   			position: fixed;
+			left: 43%;
+			top: 60%;
+   		}
+   		
 		
 </style>
 	
@@ -163,9 +195,17 @@
              <div class="container-fluid">
 <!--     			 <img style="width: inherit" -->
 <%--     			  src="<%=request.getContextPath()%>/img/back-home-img.jpg" alt="" />  --%>
-     			<h2><font color =white>歡迎MoviesHit員工:</font><font color=yellow style="font-weight: bold">${employeeVO.empname}</font><font color=white>登入!</font></h2>		
-     			<h2><font color =white>請點選左側功能進行操作!</font></h2>               
-
+     			<h2>
+     				<c:if test="${employeeVO.empno == 99}">
+     					<font id="welcome" color=red style="font-weight:bold">請先登入</font>
+     				</c:if>
+     				<c:if test="${employeeVO.empno != 99}">
+     					<font id="welcome1" color=white>歡迎MoviesHit員工:</font>
+     					<font id="welcome2" color=yellow style="font-weight:bold">${employeeVO.empname}</font>
+     					<font id="welcome3" color=white>登入!</font>
+     					<font id="welcome4" color=white>請點選左側功能進行操作!</font>
+     				</c:if>
+     			</h2>		
 			</div> 
         </div>
 	</div>
