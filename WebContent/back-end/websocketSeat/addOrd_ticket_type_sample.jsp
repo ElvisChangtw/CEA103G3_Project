@@ -111,9 +111,7 @@ FORM {
 			margin: 0px 2px;
 			border-radius: 5px;
 		}
-
 		input[type=checkbox]:checked+span {
-			/* 			color: yellow; */
 			background-color: #ADD8E6;
 		}
 
