@@ -258,7 +258,7 @@ left: 1095px;
 .sec:hover{
   background-color: #BFBFBF;
 }
-#mic{
+#mic, #mic-using{
 	width: 40px;
     height: 40px;
     position: absolute;
@@ -488,8 +488,9 @@ left: 1095px;
 							<form method="post" action="<%=request.getContextPath()%>/movie/movie.do" name="form1">
 								<input id="search-context"  type="text" name="MOVIE_NAME" value="" placeholder="請輸入電影名稱" onkeydown="if (event.keyCode == 13) sendMessage();">
 								<input type="hidden" name="action" value="listMovies_ByCompositeQuery">
+
 								<img id="mic"src="<%=request.getContextPath()%>/images/mic.png">
-								
+								<img id="mic-using"src="<%=request.getContextPath()%>/images/MicUsing.gif" style="display:none;">
 							</form>
 							<div id="search-results"class="container" >
 							</div>
@@ -2544,6 +2545,8 @@ var count=0;
 	}
 	
 	$("#mic").on("click", function(){
+		$(this).hide();
+		$("#mic-using").show();
 		var sound = new Audio(); 
 	    sound.src = '<%=request.getContextPath()%>/img/kiss.mp3';
 // 	    sound.currentTime = 3;
@@ -2587,6 +2590,8 @@ var count=0;
                     showConfirmButton: false,
                     timer: 1300,
                 });
+				$(this).show();
+				$("#mic-using").hide();
 			} else if(event.results[i][j].transcript == "親一下" ||
 					event.results[i][j].transcript.indexOf("一下") > -1 ||
 					event.results[i][j].transcript.indexOf("記下") > -1 ||
