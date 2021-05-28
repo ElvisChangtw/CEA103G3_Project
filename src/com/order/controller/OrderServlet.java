@@ -809,6 +809,29 @@ public class OrderServlet extends HttpServlet {
 			}
  		}
  		
+ 		if ("cancel_booking".equals(action)) { // 來自listAllEmp.jsp
+ 			List<String> errorMsgs = new ArrayList<String>();
+ 			req.setAttribute("errorMsgs", errorMsgs);
+ 			PrintWriter out = res.getWriter();
+ 			try {
+ 				int order_no = new Integer(req.getParameter("order_no"));
+ 				String order_status="2";
+ 				OrderService orderSvc = new OrderService();
+ 				orderSvc.deleteOrderByMem(order_status, order_no);
+ 				out.println("sucess");
+ 			}
+ 			catch(Exception e) {
+ 				out.print("fail");
+ 				errorMsgs.add("評論刪除失敗");
+ 				RequestDispatcher failureView = req
+ 						.getRequestDispatcher("/front-end/mem/memberSys.jsp");
+ 				failureView.forward(req, res);
+ 			}finally {
+ 				out.flush();
+ 				out.close();
+ 			}
+ 		}
+ 		
  		
  	}
  		

@@ -8,6 +8,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import com.like.model.LikeVO;
 import com.reply.model.ReplyVO;
 
 import jdbc.util.CompositeQuery.jdbcUtil_CompositeQuery_Article;
@@ -40,8 +41,8 @@ public class ArticleDAO implements ArticleDAO_interface{
 				"DELETE FROM reply where article_no = ?";
 		private static final String DELETE_Artcile = 
 				"DELETE FROM article where article_no = ?";	
-		private static final String UPDATE_ARTICLE_LIKE_STMT = 
-				"update ARTICLE set LIKE_COUNT=? where ARTICLE_NO = ?";
+//		private static final String UPDATE_ARTICLE_LIKE_STMT = 
+//				"update ARTICLE set LIKE_COUNT=? where ARTICLE_NO = ?";
 		
 		private static final String ADD_ARTICLE_LIKE_STMT = 
 				"update ARTICLE set LIKE_COUNT= LIKE_COUNT+1 where ARTICLE_NO = ?";
@@ -49,6 +50,8 @@ public class ArticleDAO implements ArticleDAO_interface{
 				"update ARTICLE set LIKE_COUNT=LIKE_COUNT-1 where ARTICLE_NO = ?";
 		private static final String GET_ARTICLE_LIKE_COUNT_5 = 
 				"SELECT * FROM ARTICLE order by LIKE_COUNT desc limit 5";
+		private static final String GET_LIKES_BYARTICLE_STMT = 
+				"select * from `LIKE` where ARTICLE_NO = ?";
 			
 		
 		
@@ -428,6 +431,62 @@ public class ArticleDAO implements ArticleDAO_interface{
 		}
 		return list;
 	}
+	public Set<LikeVO> getLikesByArticle(Integer articleno) {
+		Set<LikeVO> set = new LinkedHashSet<LikeVO>();
+		LikeVO likeVO = null;
+		System.out.println("articleno = " + articleno);
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_LIKES_BYARTICLE_STMT);
+			pstmt.setInt(1, articleno);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				// empVO ¤]ºÙ¬° Domain objects
+				likeVO = new LikeVO();
+				System.out.println(rs.getInt("article_no"));
+				System.out.println(rs.getInt("member_no"));
+				likeVO.setArticleno(rs.getInt("article_no"));
+				likeVO.setMemberno(rs.getInt("member_no"));
+				set.add(likeVO); // Store the row in the list
+			}
+			
+			
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return set;
+	}
 
 	@Override
 	public Set<ReplyVO> getReplysByArticleno(Integer articleno) {
@@ -611,6 +670,7 @@ public class ArticleDAO implements ArticleDAO_interface{
 		}
 		return list;
 	}
+
 		
 }
 

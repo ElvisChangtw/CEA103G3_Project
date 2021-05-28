@@ -36,6 +36,7 @@
    h4 { 
         display: inline;  
    } 
+
 </style> 
 
  <style> 
@@ -50,7 +51,12 @@
    } 
    th, td { 
      padding: 1px; 
-   } 
+   }
+   #mic{
+	width: 40px;
+    height: 35px;
+    cursor: pointer; 
+} 
 </style>
 <style>
 
@@ -90,13 +96,13 @@ top: -1em;
 
 <%-- <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/report_comment/reportcomment.do" name="form1" id="add-form" onclick="return false"> --%>
 <%-- <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/report_comment/reportcomment.do" name="form1" id="add-form"> --%>
-<table>
+<table id="back">
 	<tr>
 		<c:forEach var="commentVO" items="${commentSvc.all}">
 			<c:if test="${param.commentno == commentVO.commentno}">
 				<td >
 					<div class="zi_box_1" style="border-width: 3px; border-style:solid ; width: 555px; border-color: #FEA36D; padding: 5px; text-align: left;">
-						<img src="${pageContext.request.contextPath}/mem/mem.do?action=view_memPic&member_no=${commentVO.memberno}" 
+						<img id="memberpic" src="${pageContext.request.contextPath}/mem/mem.do?action=view_memPic&member_no=${commentVO.memberno}" 
 							style="border-radius:50%; width:60px; height:60px; float: left; margin-right: 20px;">
 						${commentVO.content}
 					</div>
@@ -107,10 +113,13 @@ top: -1em;
 
 
 	<tr>
-		<td><span class="badge badge-danger" style="font-size:20px; background-color:#D66B75; margin:5px 5px 5px 5px">檢舉評論原因</span></td>
+		<td>
+			<span class="badge badge-danger" style="font-size:20px; background-color:#D66B75; margin:5px 5px 5px 5px">檢舉評論原因</span>
+			<img id="mic"src="<%=request.getContextPath()%>/images/MicReady.png">
+		</td>
 	</tr>	
 	<tr>
-		<td><textarea id="content-1" name="content" rows="5" cols="73" maxlength="300" style="border-width: 3px; border-color: #D66B75; resize:none;">${reportCommentVO.content}</textarea></td>
+		<td><textarea id="content-1" name="content" rows="5" cols="73" maxlength="300" style="border-width: 3px; border-color: #D66B75; resize:none;" >${reportCommentVO.content}</textarea></td>
 	</tr>	
 
 
@@ -122,6 +131,7 @@ top: -1em;
 <input type="hidden" name="requestURL" value="<%=request.getParameter("requestURL")%>"> <!--接收原送出修改的來源網頁路徑後,再送給Controller準備轉交之用-->
 <center><input type="submit" value="送出檢舉" class="btn btn-outline-danger" id="add-btn"></center>
 <!-- </FORM> -->
+
 </body>
 
 <!-- <br>送出修改的來源網頁路徑:<br><b> -->
@@ -245,39 +255,113 @@ function nosweet(){
   		`
 	})
 }
+
+function sendReport(){
 	
+	let content = $("#content-1").val();
+	let commentno = "${param.commentno}";
+	let memberno = "${memVO.member_no}";
+	
+	$.ajax({
+		url:"<%=request.getContextPath()%>/report_comment/reportcomment.do",
+		data:{
+			commentno: "${param.commentno}",
+			content: $('#content-1').val(),
+			memberno:"${memVO.member_no}",
+			action:"insert"
+		},
+		async: false,
+		type:"POST",
+		success:function(json){
+			let jsonobj = JSON.parse(json);
+			let problem = jsonobj.problem;
+			console.log(problem);
+			if (problem==0){
+				sweet();
+			}else{
+				nosweet();
+			}
+		}
+	});
+}
+
+
 $(document).ready(function(){
 	$("#add-btn").click(function(){
-		
-		let content = $("#content-1").val();
-		let commentno = "${param.commentno}";
-		let memberno = "${memVO.member_no}";
-		
-		$.ajax({
-			url:"<%=request.getContextPath()%>/report_comment/reportcomment.do",
-			data:{
-				commentno: "${param.commentno}",
-				content: $('#content-1').val(),
-				memberno:"${memVO.member_no}",
-				action:"insert"
-			},
-			async: false,
-			type:"POST",
-			success:function(json){
-				let jsonobj = JSON.parse(json);
-				let problem = jsonobj.problem;
-				console.log(problem);
-				if (problem==0){
-					sweet();
-				}else{
-					nosweet();
-				}
-			}
-		});
+		sendReport();
 	})
 })
 
 
+
+</script>
+
+<script>
+$("#mic").on("click", function(){
+	$("#mic").attr("src","<%=request.getContextPath()%>/images/MicUsing.gif");  
+// 	var show = document.getElementById('show');
+    var recognition = new webkitSpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = "cmn-Hant-TW";
+    recognition.onstart = function() {
+        console.log('開始辨識...');
+    };
+    recognition.onend = function() {
+//     	$("#mic").setAttribute("disabled", "disabled");
+    	$("#mic").attr("src","<%=request.getContextPath()%>/images/MicReady.png");  
+        console.log('停止辨識!');
+        
+    };
+    recognition.onresult = function(event) {
+    	
+        var i = event.resultIndex;
+        var j = event.results[i].length - 1;
+//         show.innerHTML = event.results[i][j].transcript;
+
+		if(event.results[i][j].transcript.indexOf("停止") > -1){
+			$("#content-1").html("");
+			recognition.stop();
+			Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "停止辨識",
+                showConfirmButton: false,
+                timer: 1300,
+            });
+			
+		} else if(event.results[i][j].transcript.indexOf("送出")> -1 
+		){
+			
+			if(event.results[i].isFinal === true){
+				var string = event.results[i][j].transcript;
+				var NewArray = new Array();
+				var NewArray = string.split("送");
+				$("#content-1").val(NewArray[0]);
+				sendReport();
+			}
+			
+// 			$("#content-1").html("");
+// 			recognition.stop();
+// 			sendReport();
+		}else if(event.results[i][j].transcript.indexOf("清除")> -1 ||
+				event.results[i][j].transcript.indexOf("清楚")> -1
+		){
+			$("#content-1").html("");
+		}else if(event.results[i][j].transcript.indexOf("安安")> -1 
+		){
+			$("#memberpic").attr("src", "<%=request.getContextPath()%>/images/小吳.jpg");
+			
+		}else if(event.results[i][j].transcript.indexOf("你好")> -1 
+		){
+			$("#mic").attr("src","<%=request.getContextPath()%>/images/test1.gif");
+		}
+		else{
+			$("#content-1").val(event.results[i][j].transcript);
+		}
+    };
+    recognition.start();
+});
 
 </script>
 </html>

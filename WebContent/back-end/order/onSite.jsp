@@ -1,13 +1,29 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="Big5"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.*"%>
+<%@ page import="java.sql.*"%>
 <%@ page import="com.showtime.model.*"%>
 <%@ page import="com.employee.model.*"%>
 
 <%
-	ShowtimeService showtimeSvc = new ShowtimeService();
-    List<ShowtimeVO> list = showtimeSvc.getAll();
-    pageContext.setAttribute("list",list);
+	List<ShowtimeVO> list;
+	System.out.println(request.getAttribute("list")==null);
+	if(request.getAttribute("list") == null){
+		ShowtimeService showtimeSvc = new ShowtimeService();
+		list = showtimeSvc.getAll();
+		for(int i = 0; i < list.size(); i++){
+			ShowtimeVO showtimeVO = list.get(i);
+			Timestamp nowTime = new Timestamp(System.currentTimeMillis());
+			if(showtimeVO.getShowtime_time().before(nowTime)){
+				list.remove(i);
+				i--;
+			}
+		}
+		pageContext.setAttribute("list",list);
+	}else{
+		list = (List<ShowtimeVO>)request.getAttribute("list");
+		pageContext.setAttribute("list",list);
+	}
 %>
 
 <jsp:useBean id="theaterSvc" scope="page" class="com.theater.model.TheaterService" />
@@ -34,11 +50,10 @@
         <link href="<%=request.getContextPath()%>/back-home/css/styles.css" rel="stylesheet" />
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
-   
     </head>
-    <body class="sb-nav-fixed">
+     <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-    	<a class="navbar-brand" href="index2.jsp">MOVIESHIT後台系統</a>
+    	<a class="navbar-brand" href="<%=request.getContextPath()%>/back-home/index2.jsp">MOVIESHIT後台系統</a>
     	<button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
     	<!-- Navbar Search-->
     	<form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
@@ -65,72 +80,72 @@
                     <div class="nav">
                         <img src="<%=request.getContextPath()%>/back-home/img/logo2-1-6.png">
 	                         <h1 style="text-align: center;color: white;font-weight: bold ;font-size:35px">
-	                         	<span style="color: #02a388; font-size: 1em;">M</span>ovies<span style="color: #02a388; font-size: 1em;">H</span>it
+	                         	<span>M</span>ovies<span>H</span>it
 	                         </h1>
 <!--                         <a class="nav-link collapsed" href="tables3.html"> -->
 <!--                             <div class="sb-nav-link-icon"><i class="fas fa-user-alt"></i></div> -->
 <!--                            	 基本資料 -->
 <!--                         </a> -->
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapseLayouts1">
+                        <a id="employee_management"class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapseLayouts1">
                             <div class="sb-nav-link-icon"><i class="fas fa-user-cog"></i></div>
                            	 員工管理系統
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapseLayouts1" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/employee/listAllEmployee2.jsp">員工管理</a>
+                                <a  class="nav-link nav-link function" href="<%=request.getContextPath()%>/back-end/employee/listAllEmployee2.jsp">員工管理</a>
                             </nav>
                         </div>
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                        <a id="movie_management" class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                             <div class="sb-nav-link-icon"><i class="fas fa-video"></i></div>
                          	   影城基本資料系統
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/movie/backEndlistAllMovie.jsp">電影資料管理</a>
-                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/showtime/listAllShowtime.jsp">場次管理</a>
-                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/theater/listAllTheater.jsp"> 廳院管理</a>
-                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/ticket_type/listAllTicket_type.jsp">票種管理</a>
-                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/food/listAllFood.jsp">餐點管理</a>
+                                <a class="nav-link function" href="<%=request.getContextPath()%>/back-end/movie/backEndlistAllMovie.jsp">電影資料管理</a>
+                                <a class="nav-link function" href="<%=request.getContextPath()%>/back-end/showtime/listAllShowtime.jsp">場次管理</a>
+                                <a class="nav-link function" href="<%=request.getContextPath()%>/back-end/theater/listAllTheater.jsp"> 廳院管理</a>
+                                <a class="nav-link function" href="<%=request.getContextPath()%>/back-end/ticket_type/listAllTicket_type.jsp">票種管理</a>
+                                <a class="nav-link function" href="<%=request.getContextPath()%>/back-end/food/listAllFood.jsp">餐點管理</a>
                             </nav>
                         </div>
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages2" aria-expanded="false" aria-controls="collapsePages2">
+                        <a id="member_management" class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages2" aria-expanded="false" aria-controls="collapsePages2">
                             <div class="sb-nav-link-icon"><i class="fas fa-user-clock"></i></div>
                             	會員管理系統
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapsePages2" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/mem/listAllMem2.jsp">會員資料管理</a>
+                                <a class="nav-link function" href="<%=request.getContextPath()%>/back-end/mem/listAllMem2.jsp">會員資料管理</a>
                             </nav>
                         </div>
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages3" aria-expanded="false" aria-controls="collapsePages3">
+                        <a id="ticket_management" class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages3" aria-expanded="false" aria-controls="collapsePages3">
                             <div class="sb-nav-link-icon"><i class="fas fa-ticket-alt"></i></div>
                         	    售票管理
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapsePages3" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="layout-static.html">現場劃位</a>
-                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/order/listAllOrder.jsp">訂單管理</a>
+                                <a class="nav-link function" href="<%=request.getContextPath()%>/back-end/order/onSite.jsp">現場劃位</a>
+                                <a class="nav-link function" href="<%=request.getContextPath()%>/back-end/order/listAllOrder.jsp">訂單管理</a>
                             </nav>
                         </div>
-           				 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages4" aria-expanded="false" aria-controls="collapsePages4">
+           				 <a id="comment_management" class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages4" aria-expanded="false" aria-controls="collapsePages4">
                             <div class="sb-nav-link-icon"><i class="fas fa-user-alt-slash"></i></div>
                           	  檢舉管理
                           	<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapsePages4" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="<%=request.getContextPath()%>/back-end/report_comment/listAllReportComment.jsp">評論檢舉</a>
+                                <a class="nav-link function" href="<%=request.getContextPath()%>/back-end/report_comment/listAllReportComment.jsp">評論檢舉</a>
                             </nav>
                         </div>
-                        <a class="nav-link" href="tables1.html">
+                        <a id="news_management" class="nav-link function" href="tables1.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-bullhorn"></i></div>
                            	 管理最新消息
                         </a>
-                        <a class="nav-link" href="tables2.html">
+                        <a id="customer_service" class="nav-link function" href="tables2.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-hands-helping"></i></div>
                        	     	回應客服小幫手
                         </a>
@@ -147,11 +162,29 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">後台　所有場次資料</h1>
+                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">後台　現場劃位</h1>
                         <a href="<%=request.getContextPath()%>/back-end/showtime/addShowtime.jsp" class="btn btn-primary btn-lg" ><i class="material-icons">&#xE147;&ensp;</i><span>新增場次</span></a>
                             <div class="card-body">
                                 <div class="table-responsive">
                                 <%@ include file="pages/page1.file"%>
+                                	
+                                	<div>
+                                		 <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/showtime/showtime.do" name="form1">
+                                		 <b>電影: </b>
+									      <select class="form-control" id="movie" name="movie_no" style="width:158px; height:40px;" >
+												<option value="">請選擇電影</option>
+                          				  </select>
+									       <b>日期: </b>
+									       <br>
+										   <input name="showtime_time" type="date">
+											<br>      
+											<br>      
+									        <input type="submit" value="送出" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#F5CA5E; font-weight:bold; color:white;">
+									        <br>
+									        <br>
+									        <input type="hidden" name="action" value="listByCompositeQuery" >
+								    	 </FORM>	
+                                	</div>
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="text-align:center;">
                                         <thead style="background-color:#9099AA; color:white;; white-space: nowrap;" >
                                             <tr>
@@ -211,48 +244,22 @@
         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
         <script src="<%=request.getContextPath()%>/back-home/dist/assets/demo/datatables-demo.js"></script>
+        <script src="<%=request.getContextPath()%>/js/jquery-1.11.1.min.js"></script>
 <script>
-	$("input[type=button]").click(function(){
-		console.log("123")
-		console.log("${foodVO.food_no}")
-		let food_no = $(this).attr('id');
-		console.log(food_no);
-		$.ajax({
-			url:"<%=request.getContextPath()%>/food/food.do?action=updateStatus",
-			data:{
-				food_no:food_no
-			},
-			type:"POST",
-			
-// 			$("#status").html("");
-// 			$("#status").append("OK");
-			success:function(json){
-				let jsonobj = JSON.parse(json);
-				let newStatus = jsonobj.newStatus;
-				let s;
-				let t;
-				if(newStatus == "1"){
-					s = "上架";
-					t = "下架";
-					$("#"+ food_no).css("background-color","#416DB6")
-					$("#"+ food_no).parent().prev().prev().css("color","#FF4364");
-					$("#"+ food_no).parent().prev().prev().css("font-weight","bold");
-				}else{
-					s = "下架";
-					t = "上架";
-					$("#"+ food_no).css("background-color","#FF4364")
-					$("#"+ food_no).parent().prev().prev().css("color","#416DB6");
-					$("#"+ food_no).parent().prev().prev().css("font-weight","bold");
-				}
-				$("#"+ food_no).parent().prev().prev().text(s);
-				
-				
-				$("#"+ food_no).val(t);
-
+$.ajax({
+	url: "<%=request.getContextPath()%>/showtime/showtime.do",
+	type: "POST",
+	data:{
+		action: "getMovieFromHibernate",
+	},
+	success: function(json){
+			let jsonobj = JSON.parse(json);
+			for(let i = 0; i < jsonobj['movie_no'].length; i++){
+				let opt = $("<option>").val(jsonobj["movie_no"][i]).text(jsonobj["movie_name"][i]);
+   				$("#movie").append(opt);
 			}
-		 });
-	});
-		
+		}
+});		
 		
 </script>    
 </body>

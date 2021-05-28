@@ -58,7 +58,7 @@
                     <div class="nav">
                         <img src="<%=request.getContextPath()%>/back-home/img/logo2-1-6.png">
 	                         <h1 style="text-align: center;color: white;font-weight: bold ;font-size:35px">
-	                         	<span>M</span>ovies<span>H</span>it
+	                         	<span style="color: #02a388; font-size: 1em;">M</span>ovies<span style="color: #02a388; font-size: 1em;">H</span>it
 	                         </h1>
 <!--                         <a class="nav-link collapsed" href="tables3.html"> -->
 <!--                             <div class="sb-nav-link-icon"><i class="fas fa-user-alt"></i></div> -->

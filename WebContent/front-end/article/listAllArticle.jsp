@@ -157,7 +157,7 @@ table#forum.table>tbody>tr>td>a.JQellipsis
 	</ul>
 </c:if>
 <div class="row"  style="margin:5px 0;">
-	<h1 class="shadow p-3 mb-1 bg-white rounded" style="background-color:#C7C1EA; display:inline-block;">
+	<h1 class="shadow p-3 mb-1 bg-white rounded" style="background-color:#02a388; display:inline-block;">
 			MoviesHit½×¾Â
 	</h1>
 
@@ -259,7 +259,8 @@ table#forum.table>tbody>tr>td>a.JQellipsis
 									
 				</td>		
 				
-				<td style="text-align:left;"><img src ="<%=request.getContextPath()%>/MemServlet?action=view_memPic&member_no=${articleVO.memberno}" height= "30px" width="30px" style="margin-bottom:8px; border-radius:10px;"/>
+				<td style="text-align:left;">
+				<img src="<%=request.getContextPath()%>/mem/DBGifReader4.do?member_no=${articleVO.memberno}" height= "30px" width="30px" style="margin-bottom:8px; border-radius:10px;"/>
 				${memSvc.getOneMem(articleVO.memberno).mb_name}</td>		
 				<td><fmt:formatDate value="${articleVO.crtdt}" pattern="yyyy-MM-dd HH:mm"/></td>
 <%-- 			<td><fmt:formatDate value="${articleVO.updatedt}" pattern="yyyy-MM-dd HH:mm:ss"/></td> --%>
