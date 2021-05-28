@@ -39,7 +39,7 @@ integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwr
 								<div>
 									<i class="fas fa-cloud-upload-alt"></i>
 									<p>§ó´«·Ó¤ù</p>
-									<input type="file" name="mb_pic" id="update-mbpic">
+									<input type="file" name="mb_pic" id="update-mbpic"/>
 								</div>
 							</div>
 
