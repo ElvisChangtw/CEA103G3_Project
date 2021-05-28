@@ -636,7 +636,7 @@ FORM {
 	}
 	
 	function disabled(seat){
-		alert("提醒您，此座位不能點選");
+		swal.fire('提醒您，此座位不能點選');
 		seat.checked = false;
 	}
 	
