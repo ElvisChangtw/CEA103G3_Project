@@ -2055,13 +2055,10 @@ function drawPieChart2() {
     			console.log("送出搜尋 = " + $(this).val());
     			let json_result_list = getResults($(this).val());
         		console.log("收回結果");
-    			console.log(json_result_list);
+//     			console.log(json_result_list);
         		if(json_result_list != undefined ){
 	        		for ( movieVO of json_result_list){
-	        			console.log(movieVO.moviename);
-	        			console.log(movieVO.actor);
-	        			console.log(movieVO.premiredate);
-	        			console.log(movieVO.movieno);
+
 	        			let link = '<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=' + movieVO.movieno  + '' ;
 	        			var dt = new Date(movieVO.premiredate);
 	        			var yr = 1900 + dt.getYear();
@@ -2097,7 +2094,7 @@ function drawPieChart2() {
 					},
 					async: false,
 					success: function(data){
-						console.log(data);
+// 						console.log(data);
 						json = JSON.parse(data).results;
 					}
 				});
@@ -2606,21 +2603,17 @@ var count=0;
 			}
 			else{
 				$("#search-context").val(event.results[i][j].transcript);
-				console.log(event.results[i][j].transcript);
+				console.log("您說的是: " + event.results[i][j].transcript);
 			
 			$("#search-results").html('<hr class="hrhr">');
     		if(!($("#search-context").val() == "")){
     			var result;
     			console.log("送出搜尋 = " + $("#search-context").val());
-    			let json_result_list = getResults($("#search-context").val());
-        		console.log("收回結果");
-    			console.log(json_result_list);
+//     			let json_result_list = getResults($("#search-context").val());
+//         		console.log("收回結果");
+//     			console.log(json_result_list);
         		if(json_result_list != undefined ){
 	        		for ( movieVO of json_result_list){
-	        			console.log(movieVO.moviename);
-	        			console.log(movieVO.actor);
-	        			console.log(movieVO.premiredate);
-	        			console.log(movieVO.movieno);
 	        			let link = '<%=request.getContextPath()%>/movie/movie.do?action=getOne_For_Display&movieno=' + movieVO.movieno  + '' ;
 	        			var dt = new Date(movieVO.premiredate);
 	        			var yr = 1900 + dt.getYear();
@@ -2637,7 +2630,7 @@ var count=0;
 		    				'</div>' +
 		    				'<hr class="hrhr">';
 		        		$("#search-results").html(
-		        				$("#search-results").html() + result
+		        				$("#search-results").html() + result;
 		        		);
 	        		}
         		}
