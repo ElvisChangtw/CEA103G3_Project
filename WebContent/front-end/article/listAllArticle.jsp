@@ -11,7 +11,7 @@
 	
 <%-- <% --%>
 <!-- ArticleService articleSvc = new ArticleService(); -->
-<!-- List<ArticleVO> list = ArticleSvc.getAll(); -->
+<!-- List<ArticleVO> list = articleSvc.getAll(); -->
 <!-- pageContext.setAttribute("list",list); -->
 <%-- %> --%>
 	<jsp:useBean id="articleSvc" scope="page" class="com.article.model.ArticleService" />
