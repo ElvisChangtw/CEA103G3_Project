@@ -36,6 +36,7 @@
    h4 { 
         display: inline;  
    } 
+
 </style> 
 
  <style> 
@@ -95,13 +96,13 @@ top: -1em;
 
 <%-- <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/report_comment/reportcomment.do" name="form1" id="add-form" onclick="return false"> --%>
 <%-- <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/report_comment/reportcomment.do" name="form1" id="add-form"> --%>
-<table>
+<table id="back">
 	<tr>
 		<c:forEach var="commentVO" items="${commentSvc.all}">
 			<c:if test="${param.commentno == commentVO.commentno}">
 				<td >
 					<div class="zi_box_1" style="border-width: 3px; border-style:solid ; width: 555px; border-color: #FEA36D; padding: 5px; text-align: left;">
-						<img src="${pageContext.request.contextPath}/mem/mem.do?action=view_memPic&member_no=${commentVO.memberno}" 
+						<img id="memberpic" src="${pageContext.request.contextPath}/mem/mem.do?action=view_memPic&member_no=${commentVO.memberno}" 
 							style="border-radius:50%; width:60px; height:60px; float: left; margin-right: 20px;">
 						${commentVO.content}
 					</div>
@@ -118,7 +119,7 @@ top: -1em;
 		</td>
 	</tr>	
 	<tr>
-		<td><textarea id="content-1" name="content" rows="5" cols="73" maxlength="300" style="border-width: 3px; border-color: #D66B75; resize:none;">${reportCommentVO.content}</textarea></td>
+		<td><textarea id="content-1" name="content" rows="5" cols="73" maxlength="300" style="border-width: 3px; border-color: #D66B75; resize:none;" >${reportCommentVO.content}</textarea></td>
 	</tr>	
 
 
@@ -130,6 +131,7 @@ top: -1em;
 <input type="hidden" name="requestURL" value="<%=request.getParameter("requestURL")%>"> <!--接收原送出修改的來源網頁路徑後,再送給Controller準備轉交之用-->
 <center><input type="submit" value="送出檢舉" class="btn btn-outline-danger" id="add-btn"></center>
 <!-- </FORM> -->
+
 </body>
 
 <!-- <br>送出修改的來源網頁路徑:<br><b> -->
@@ -297,8 +299,7 @@ $(document).ready(function(){
 <script>
 $("#mic").on("click", function(){
 	$("#mic").attr("src","<%=request.getContextPath()%>/images/MicUsing.gif");  
-// 	$("#mic").setAttribute("disabled", "disabled");
-	var show = document.getElementById('show');
+// 	var show = document.getElementById('show');
     var recognition = new webkitSpeechRecognition();
     recognition.continuous = true;
     recognition.interimResults = true;
@@ -331,9 +332,29 @@ $("#mic").on("click", function(){
 			
 		} else if(event.results[i][j].transcript.indexOf("送出")> -1 
 		){
+			
+			if(event.results[i].isFinal === true){
+				var string = event.results[i][j].transcript;
+				var NewArray = new Array();
+				var NewArray = string.split("送");
+				$("#content-1").val(NewArray[0]);
+				sendReport();
+			}
+			
+// 			$("#content-1").html("");
+// 			recognition.stop();
+// 			sendReport();
+		}else if(event.results[i][j].transcript.indexOf("清除")> -1 ||
+				event.results[i][j].transcript.indexOf("清楚")> -1
+		){
 			$("#content-1").html("");
-			recognition.stop();
-			sendReport();
+		}else if(event.results[i][j].transcript.indexOf("安安")> -1 
+		){
+			$("#memberpic").attr("src", "<%=request.getContextPath()%>/images/小吳.jpg");
+			
+		}else if(event.results[i][j].transcript.indexOf("你好")> -1 
+		){
+			$("#mic").attr("src","<%=request.getContextPath()%>/images/test1.gif");
 		}
 		else{
 			$("#content-1").val(event.results[i][j].transcript);

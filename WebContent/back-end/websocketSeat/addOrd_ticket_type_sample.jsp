@@ -108,7 +108,7 @@ FORM {
 			user-select: none; /* 防止文字被滑鼠選取反白 */
 			width: 25px;
 			height: 25px;		
-			margin: 0px 2px;
+			margin: 3px 3px;
 			border-radius: 5px;
 		}
 		input[type=checkbox]:checked+span {
@@ -249,7 +249,7 @@ FORM {
 				<h2 id="h2">選擇座位</h2>
 				<p id="p1">選擇您希望購買的電影票張數和類型.請注意系統將自動為您保留可訂的最佳座位, 每筆交易最多可購買10張電影票</p>
 			</div>
-			<div id="choose_seat"style="border:1px solid chocolate; margin-top:20px;">
+			<div id="choose_seat"style="border:1px solid chocolate; margin-top:20px; padding:30px;">
 				<div id="d0">
 					<div id="d3">
 					</div>&nbsp&nbsp可選擇
@@ -636,7 +636,7 @@ FORM {
 	}
 	
 	function disabled(seat){
-		alert("提醒您，此座位不能點選");
+		swal.fire('提醒您，此座位不能點選');
 		seat.checked = false;
 	}
 	

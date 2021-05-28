@@ -34,7 +34,7 @@ public class OrderDAO implements OrderDAO_interface {
 
 	private static final String INSERT_STMT = "insert into `order` (member_no, showtime_no, crt_dt, order_status, "
 			+ "order_type, payment_type, total_price, seat_name) values(?, ?, ?, ?, ?, ?, ?, ?)";
-	private static final String GET_ALL_STMT = "select * from `order` order by order_no";
+	private static final String GET_ALL_STMT = "select * from `order` order by order_no desc";
 	private static final String GET_ONE_STMT = "select * from `order` where order_no = ?";
 	private static final String DELETE = "delete from `order` where order_no = ?";
 	private static final String UPDATE = "update `order` set member_no = ?, showtime_no = ?, crt_dt = ?,"

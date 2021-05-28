@@ -6,24 +6,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="com.employee.model.*"%>
 
-<%
-	OrderVO orderVO = (OrderVO) request.getAttribute("orderVO");
-%>
-
-<% 
-	java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:00");; 
-	pageContext.setAttribute("df",df);
-%>
-<%
-    EmployeeVO employeeVO = (EmployeeVO) session.getAttribute("employeeVO");
-%>
-
+<jsp:useBean id="memSvc" scope="page" class="com.mem.model.MemService"></jsp:useBean>
 <jsp:useBean id="ord_ticket_typeSvc" scope="page" class="com.ord_ticket_type.model.Ord_ticket_typeService"></jsp:useBean>
 <jsp:useBean id="ord_foodSvc" scope="page" class="com.ord_food.model.Ord_foodService"></jsp:useBean>
+<jsp:useBean id="orderSvc" scope="page" class="com.order.model.OrderService"></jsp:useBean>
 <jsp:useBean id="foodSvc" scope="page" class="com.food.model.FoodService"></jsp:useBean>
 <jsp:useBean id="ticket_typeSvc" scope="page" class="com.ticket_type.model.Ticket_typeService"></jsp:useBean>
-
-<%
+<% 
+	Integer order_no = new Integer(request.getParameter("order_no"));
+	OrderVO orderVO = orderSvc.getOneOrder(order_no);
 	List<Ord_ticket_typeVO> list = ord_ticket_typeSvc.getAll();
 	for(int i = 0; i < list.size(); i++){
 		if(orderVO.getOrder_no().intValue() != list.get(i).getOrder_no().intValue()){
@@ -31,7 +22,7 @@
 			i--;
 		}
 	}
-	
+
 	List<Ord_foodVO> list1 = ord_foodSvc.getAll();
 	for(int i = 0; i < list1.size(); i++){
 		if(orderVO.getOrder_no().intValue() != list1.get(i).getOrder_no().intValue()){
@@ -39,11 +30,18 @@
 			i--;
 		}
 	}
-	
+
+	request.setAttribute("orderVO", orderVO);
 	request.setAttribute("list", list);
 	request.setAttribute("list1", list1);
 
+	java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:00");; 
+	pageContext.setAttribute("df",df);
 %>
+<%
+    EmployeeVO employeeVO = (EmployeeVO) session.getAttribute("employeeVO");
+%>
+
 
 <!DOCTYPE html>
 <html>
@@ -57,9 +55,10 @@
         <link href="<%=request.getContextPath()%>/back-home/css/styles.css" rel="stylesheet" />
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
+    	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     
     </head>
-    <body class="sb-nav-fixed">
+     <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
     	<a class="navbar-brand" href="<%=request.getContextPath()%>/back-home/index2.jsp">MOVIESHIT後台系統</a>
     	<button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
@@ -82,7 +81,7 @@
     
     
     <div id="layoutSidenav">
-       <div id="layoutSidenav_nav">
+        <div id="layoutSidenav_nav">
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
@@ -135,7 +134,7 @@
                         </a>
                         <div class="collapse" id="collapsePages3" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link function" href="layout-static.html">現場劃位</a>
+                                <a class="nav-link function" href="<%=request.getContextPath()%>/back-end/order/onSite.jsp">現場劃位</a>
                                 <a class="nav-link function" href="<%=request.getContextPath()%>/back-end/order/listAllOrder.jsp">訂單管理</a>
                             </nav>
                         </div>
@@ -163,19 +162,14 @@
         </div>
             
             
-            
-            
-            
-            
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">單一訂單資料</h1>
 <%--                         <a href="<%=request.getContextPath()%>/back-end/order/addOrder.jsp" class="btn btn-primary btn-lg" ><i class="material-icons">&#xE147;&ensp;</i><span>新增訂單</span></a> --%>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="text-align:center;">
-                                        <thead style="background-color:#575058; color:white;; white-space: nowrap;" >
+                                        <thead style="background-color:#9099AA; color:white;; white-space: nowrap;" >
                                             <tr>
                                            		<th>訂單<br>編號</th>
 												<th>會員<br>編號</th>
@@ -186,12 +180,15 @@
 												<th>付款<br>方式</th>
 												<th>訂單<br>總價</th>
 												<th>座位</th>
+												<th>查看</th>
+												<th>修改</th>
+												<th>退票</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        	<tr>
+											<tr  ${(orderVO.order_no == param.order_no) ? 'style="background-color:#C9B8DC;"':''}>
 												<td>${orderVO.order_no}</td>
-												<td>${orderVO.member_no}</td>
+												<td>${memSvc.getOneMem(orderVO.member_no).mb_name}</td>
 												<td>${orderVO.showtime_no}</td>
 												<td>${df.format(orderVO.crt_dt)}</td>
 												<td>
@@ -202,7 +199,7 @@
 														<c:when test="${orderVO.order_status == 1 }">
 															已付款
 														</c:when>
-														<c:when test="${theaterVO.theater_type == 2 }">
+														<c:when test="${orderVO.order_status == 2 }">
 															已取消
 														</c:when>
 													</c:choose>
@@ -222,10 +219,41 @@
 													</c:choose>
 												</td>
 												<td>${orderVO.total_price }</td>
-												<td>${orderVO.seat_name }</td>
-											</tr>
-											<tr>
-											</tr>
+												<td>${orderVO.seat_name}</td>
+											
+											<td>
+											  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/order/order.do" style="margin-bottom: 0px;">
+											     <input type="submit" value="查看"
+											     class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#F5CA5E; font-weight:bold; color:white;">
+											     <input type="hidden" name="order_no"  value="${orderVO.order_no}">
+											     <input type="hidden" name="action"	value="getOne_For_Order"></FORM>
+											</td>
+											
+											<td>
+											  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/order/order.do" style="margin-bottom: 0px;">
+											     <input type="submit" value="修改"
+											     class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#73BDBE; font-weight:bold; color:white;">
+											     <input type="hidden" name="order_no"  value="${orderVO.order_no}">
+											     <input type="hidden" name="action"	value="getOne_For_Update"></FORM>
+											</td>
+											
+											<td>
+<%-- 											  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/order/order.do" style="margin-bottom: 0px;"> --%>
+											     <input type="submit" name="cancel" value="退票"
+											     class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#FC9C9D; font-weight:bold; color:white;">
+											     <input type="hidden" name="order_no"  value="${orderVO.order_no}">
+											</td>
+										</tr>
+                                            <tr>
+<!--                                                 <td></td> -->
+<!--                                                 <td></td> -->
+<!--                                                 <td></td> -->
+<!--                                                 <td></td> -->
+<!--                                                 <td></td> -->
+<!--                                                 <td></td> -->
+                                            </tr>
+                                         
+                                           
                                         </tbody>
                                     </table>
                                 </div>
@@ -315,7 +343,32 @@
         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
         <script src="<%=request.getContextPath()%>/back-home/dist/assets/demo/datatables-demo.js"></script>
-
+		<script src="<%=request.getContextPath()%>/js/jquery-1.11.1.min.js"></script>
+		
+ <script>
+ 	$("input[name=cancel]").click(function(){
+ 		
+ 		let $status = $(this);
+ 		$.ajax({
+			url: "<%=request.getContextPath()%>/order/order.do",
+			type: "POST",
+			data:{
+				action: "cancel_booking",
+				order_no: $(this).next().val(),
+			},
+			success: function(data){
+				swal.fire({
+					icon:'success',
+					text:'退票成功',
+					showConfirmButton: false,
+					timer: 1000
+				});
+				$status.eq(0).parent().prev().prev().prev().prev().prev().prev().prev().text("已取消");
+				}
+		});
+ 		
+ 	})
+ </script>
 </body>
     
 

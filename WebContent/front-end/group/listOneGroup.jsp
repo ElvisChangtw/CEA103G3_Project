@@ -365,35 +365,9 @@ th, td {
 			$("#dismissBtn").hide();
 			$("#gogoBtn").hide();
 		}
-		
-		
-		//揪團截止倒數計時
 		$("#dd-cntDown").html(
     			'<fmt:formatDate value="${groupVO.deadline_dt}" pattern="yyyy-MM-dd HH:mm" />'
     			+ ' <font color="red"> (remaining: '+ timeFormat(timeLeft())+ ') </font>' );
-		timer = setInterval(function() {
-            let left = timeLeft(); 
-            if (left >= 1000) {
-//             	$("#dd-cntDown").html(
-//             			'<fmt:formatDate value="${groupVO.deadline_dt}" pattern="yyyy-MM-dd HH:mm" />'
-//             			+ '<br><p class="counter">(' + timeFormat(left)  + ')</p>');
-            	$("#dd-cntDown").html(
-            			'<fmt:formatDate value="${groupVO.deadline_dt}" pattern="yyyy-MM-dd HH:mm" />'
-            			+ ' <font color="red"> (remaining: '+ timeFormat(timeLeft())+ ') </font>' );
-            	
-            	if(left <= 1000 * 60 *5 ){
-            		$("#dd-cntDown").toggleClass("counter", false);
-            		$("#dd-cntDown").toggleClass("urgentCounter", true);
-            	}
-            }
-//             else {
-//                 alert('揪團已截止！');
-//                 window.location.reload();
-<%-- 				document.location.href ="<%=request.getContextPath()%>/front-end/group/group_front_page.jsp"; --%>
-//                 clearInterval(timer); 
-//             }
-        }, 1000);
-		//揪團截止倒數計時
 		
 		//判斷瀏覽此頁面之會員是否已加入揪團
 		$.ajax({
@@ -782,10 +756,6 @@ th, td {
 				}
 			});
 		}
-		
-
-
-
 
 	var MyPoint = "/NotifyWS/${memVO.member_no}";
 	var host = window.location.host;
@@ -1039,7 +1009,31 @@ th, td {
 			window.location.href = "<%=request.getContextPath()%>/front-end/mem/MemLogin.jsp";
 		});
 	}
-
+	//揪團截止倒數計時
+	timer = setInterval(function() {
+        let left = timeLeft(); 
+        if (left >= 1000) {
+//         	$("#dd-cntDown").html(
+//         			'<fmt:formatDate value="${groupVO.deadline_dt}" pattern="yyyy-MM-dd HH:mm" />'
+//         			+ '<br><p class="counter">(' + timeFormat(left)  + ')</p>');
+        	$("#dd-cntDown").html(
+        			'<fmt:formatDate value="${groupVO.deadline_dt}" pattern="yyyy-MM-dd HH:mm" />'
+        			+ ' <font color="red"> (remaining: '+ timeFormat(timeLeft())+ ') </font>' );
+        	
+        	if(left <= 1000 * 60 *5 ){
+        		$("#dd-cntDown").toggleClass("counter", false);
+        		$("#dd-cntDown").toggleClass("urgentCounter", true);
+        	}
+        }
+        else {
+            alert('揪團已截止！');
+            window.location.reload();
+			document.location.href ="<%=request.getContextPath()%>/front-end/group/group_front_page.jsp";
+            clearInterval(timer); 
+        }
+    }, 1000);
+	//揪團截止倒數計時
+	
 
 
 </script>

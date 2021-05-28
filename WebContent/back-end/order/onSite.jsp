@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="Big5"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.*"%>
+<%@ page import="java.sql.*"%>
 <%@ page import="com.showtime.model.*"%>
 <%@ page import="com.employee.model.*"%>
 
@@ -10,6 +11,14 @@
 	if(request.getAttribute("list") == null){
 		ShowtimeService showtimeSvc = new ShowtimeService();
 		list = showtimeSvc.getAll();
+		for(int i = 0; i < list.size(); i++){
+			ShowtimeVO showtimeVO = list.get(i);
+			Timestamp nowTime = new Timestamp(System.currentTimeMillis());
+			if(showtimeVO.getShowtime_time().before(nowTime)){
+				list.remove(i);
+				i--;
+			}
+		}
 		pageContext.setAttribute("list",list);
 	}else{
 		list = (List<ShowtimeVO>)request.getAttribute("list");
@@ -167,7 +176,7 @@
                           				  </select>
 									       <b>¤é´Á: </b>
 									       <br>
-										   <input name="" type="date">
+										   <input name="showtime_time" type="date">
 											<br>      
 											<br>      
 									        <input type="submit" value="°e¥X" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#F5CA5E; font-weight:bold; color:white;">

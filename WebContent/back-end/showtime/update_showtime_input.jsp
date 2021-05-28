@@ -162,7 +162,7 @@
 												<td></td>
 												<td></td>
 												<td>
-													<input type="submit" id="submit" value="送出修改">
+													<input type="submit" id="submit" value="送出修改" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#AE67D8; font-weight:bold; color:white;">
 												</td>
 											</tr>
                                             <tr>
@@ -173,6 +173,7 @@
 													<input type="hidden" name="movie_no" value="${showtimeVO.movie_no}">
 													<input type="hidden" name="theater_no" value="${showtimeVO.theater_no}">
 													<input type="hidden" name="seat_no" value="${showtimeVO.seat_no}" >
+													<input type="hidden" name="whichPage" value="${param.whichPage}" >
 													<input type="hidden" name="action" value="update">
 									</FORM>
                                 </div>
