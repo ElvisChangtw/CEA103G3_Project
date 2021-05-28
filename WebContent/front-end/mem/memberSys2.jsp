@@ -152,6 +152,15 @@ text-align:center;
 	margin:auto;
 }
 
+.notification{
+/*   bottom: 25px; */
+bottom: 45px !important; 
+/*   left: 340px; */
+left: 1440px !important; 
+  position: relative;
+  display: inline-block;
+}
+
 /* 通知用 */
   @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
@@ -253,7 +262,7 @@ text-align:center;
 								<br>
 								<hr class="table-order"/>
 								<h1 class="table-history">購票紀錄</h1>
-								<table class="table table-hover table-history">								
+								<table class="table table-hover table-history table-bordered">								
 									 <tr class="table-history" style="display:none;"><th>購票日期</th><th>電影名稱</th><th>狀態</th><th>付款方式</th><th>金額</th><th>詳細資訊</th></tr>
 									 <center id="orderhistory_switch"><div>您沒有任何訂票紀錄</div></center>
 								</table>
@@ -531,7 +540,7 @@ if(now>showTime||"${orderVO.order_status}"=="1"){
 	undue.css("display","");
 	fragment = `<tr><td><fmt:formatDate value="${orderVO.crt_dt}" pattern="yyyy-MM-dd HH:mm" />
 			    </td><td>` + "${movieSvc.getOneMovie(showtimeSvc.getOneShowtime(orderVO.showtime_no).movie_no).moviename}" + 
-			   `</td><td>` +  "${orderVO.order_status}" + `</td><td>` + "${orderVO.payment_type}" + 
+			   `</td><td>` +  "${mapping.dboOrderStatus(orderVO.order_status)}" + `</td><td>` + "${mapping.dboOrderType(orderVO.payment_type)}" + 
 			   `</td><td>`+ "${orderVO.total_price}" +
 			   `</td><td><i class="fas fa-minus-circle delete-order"></i><input name="order_no" style="display: none" value=`+"${orderVO.order_no}"+
 			   `></td><td><button type="button" class="btn btn-primary" id="show_orderBox_${orderVO.order_no}">查看</button></td></tr>`
@@ -989,7 +998,7 @@ $(document).ready(function(){
 		contain.style.left="33%";
 		let row = document.createElement("div");
 		row.classList.add("row");
-		row.innerHTML=`<div style="">您尚未是專職影評，可點擊<a class="apply_commenter">這裡</a>申請成為專職評論</div>`;
+		row.innerHTML=`<div style="">您尚未是專職影評，可點擊<a class="apply_commenter">這裡</a>申請成為專職影評</div>`;
 		contain.append(row);
 		$("#comment").append(contain);
 		

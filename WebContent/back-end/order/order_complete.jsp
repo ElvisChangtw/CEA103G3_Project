@@ -268,7 +268,7 @@ FORM {
 		});
 	}
 	$("#submit").click(function(){
-		window.location.href='<%=request.getContextPath()%>/front-end/mem/memberSys.jsp';
+		window.location.href='<%=request.getContextPath()%>/front-end/mem/memberSys2.jsp';
 	})
 	
 

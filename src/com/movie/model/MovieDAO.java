@@ -54,7 +54,7 @@ public class MovieDAO implements MovieDAO_interface{
 	private static final String GET_ONE_NEWEST_INTHEATERS_MOVIE_STMT = 
 			"select MOVIE_NO, MOVIE_NAME, DIRECTOR, ACTOR, CATEGORY, LENGTH, STATUS, PREMIERE_DT, OFF_DT, TRAILOR, EMBED, GRADE, RATING, EXPECTATION from MOVIE where cast(now() as date) between PREMIERE_DT and OFF_DT order by PREMIERE_DT desc limit 1";
 	private static final String GET_COMINGSOON_MOVIE_STMT = 
-			"select MOVIE_NO, MOVIE_NAME, DIRECTOR, ACTOR, CATEGORY, LENGTH, STATUS, PREMIERE_DT, OFF_DT, TRAILOR, EMBED, GRADE, RATING, EXPECTATION from MOVIE where PREMIERE_DT between now() and date_sub(now(),interval -30 day)";	
+			"select MOVIE_NO, MOVIE_NAME, DIRECTOR, ACTOR, CATEGORY, LENGTH, STATUS, PREMIERE_DT, OFF_DT, TRAILOR, EMBED, GRADE, RATING, EXPECTATION from MOVIE where PREMIERE_DT between now() and date_sub(now(),interval -30 day) order by PREMIERE_DT";	
 	private static final String GET_ONE_NEWEST_COMINGSOON_MOVIE_STMT = 
 			"select MOVIE_NO, MOVIE_NAME, DIRECTOR, ACTOR, CATEGORY, LENGTH, STATUS, PREMIERE_DT, OFF_DT, TRAILOR, EMBED, GRADE, RATING, EXPECTATION from MOVIE where PREMIERE_DT between now() and date_sub(now(),interval -30 day) order by PREMIERE_DT desc limit 1";	
 	private static final String GET_ALL_TOPRATING_INTHEATERS_MOVIE_STMT = 
