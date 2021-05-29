@@ -822,7 +822,6 @@ public class OrderServlet extends HttpServlet {
  			}
  			catch(Exception e) {
  				out.print("fail");
- 				errorMsgs.add("µû½×§R°£¥¢±Ñ");
  				RequestDispatcher failureView = req
  						.getRequestDispatcher("/front-end/mem/memberSys.jsp");
  				failureView.forward(req, res);
