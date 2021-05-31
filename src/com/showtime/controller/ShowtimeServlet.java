@@ -491,6 +491,24 @@ public class ShowtimeServlet extends HttpServlet {
 				throw new ServletException(e);
 			}
 		}
+		if("getOne_For_Onsite".equals(action)) {
+			
+			try {
+				Integer showtime_no = new Integer(req.getParameter("showtime_no"));
+				
+				ShowtimeService showtimeSvc = new ShowtimeService();
+				ShowtimeVO showtimeVO = showtimeSvc.getOneShowtime(showtime_no);
+				
+				req.setAttribute("showtimeVO", showtimeVO);
+				
+				RequestDispatcher successView = req.getRequestDispatcher("/back-end/order/onSite.jsp");
+				successView.forward(req, res);
+				return;
+				
+			}catch (Exception e) {
+				throw new ServletException(e);
+			}
+		}
 		
 		//ajax
 		if("getMovieFromHibernate".equals(action)) {

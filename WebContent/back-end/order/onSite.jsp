@@ -207,7 +207,7 @@
 											     class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#F5CA5E; font-weight:bold; color:white;">
 											     <input type="hidden" name="showtime_no"  value="${showtimeVO.showtime_no}">
 											     <input type="hidden" name="whichPage"	value="<%=whichPage%>">
-											     <input type="hidden" name="action"	value="getOne_For_Showtime"></FORM>
+											     <input type="hidden" name="action"	value="getOne_For_Onsite"></FORM>
 											</td>
 											
 											<td>
