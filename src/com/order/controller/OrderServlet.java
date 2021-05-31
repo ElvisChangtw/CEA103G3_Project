@@ -759,6 +759,7 @@ public class OrderServlet extends HttpServlet {
 					}
 				}
 				String seat_no = req.getParameter("seat_no");
+				
 				/***************************2.開始新增資料***************************************/
   				OrderService orderSvc = new OrderService();
   				orderVO = orderSvc.addOrder2(member_no, showtime_no, crt_dt	, order_status, 
@@ -772,6 +773,7 @@ public class OrderServlet extends HttpServlet {
 //  				session.removeAttribute("foodprice");
   				/***************************3.新增完成,準備轉交(Send the Success view)***********/
   				req.setAttribute("orderVO", orderVO);
+  				session.setAttribute("memVO", memVO);
   				String url = "/back-end/order/order_complete.jsp";
   				RequestDispatcher successView = req.getRequestDispatcher(url); // 新增成功後轉交listAllTicket_type.jsp
   				successView.forward(req, res);	
