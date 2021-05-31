@@ -764,12 +764,12 @@ public class OrderServlet extends HttpServlet {
   				orderVO = orderSvc.addOrder2(member_no, showtime_no, crt_dt	, order_status, 
   						order_type, payment_type, total_price, seat_name, ordFood_list, 
   						ordTicket_list, seat_no);
-  				session.removeAttribute("ticket_typeno");
-  				session.removeAttribute("ticketcount");
-  				session.removeAttribute("ticketprice");
-  				session.removeAttribute("foodno");
-  				session.removeAttribute("foodcount");
-  				session.removeAttribute("foodprice");
+//  				session.removeAttribute("ticket_typeno");
+//  				session.removeAttribute("ticketcount");
+//  				session.removeAttribute("ticketprice");
+//  				session.removeAttribute("foodno");
+//  				session.removeAttribute("foodcount");
+//  				session.removeAttribute("foodprice");
   				/***************************3.新增完成,準備轉交(Send the Success view)***********/
   				req.setAttribute("orderVO", orderVO);
   				String url = "/back-end/order/order_complete.jsp";
