@@ -141,7 +141,7 @@ table#forum.table>tbody>tr>td>a.JQellipsis
 <div class="container-fluid forum-body" style="min-height:450px;">
 
 <div class="row"  style="margin:5px 0;">
-	<h1 class="shadow p-3 mb-1 bg-white rounded" style="background-color:#C7C1EA; display:inline-block;">
+	<h1 class="shadow p-3 mb-1 bg-white rounded" style="background-color:#02a388; display:inline-block;">
 			MoviesHit½×¾Â
 	</h1>
 

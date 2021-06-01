@@ -50,7 +50,12 @@
    } 
    th, td { 
      padding: 1px; 
-   } 
+   }
+   #mic{
+	width: 40px;
+    height: 35px;
+    cursor: pointer; 
+} 
 </style>
 <style>
 
@@ -107,7 +112,10 @@ top: -1em;
 
 
 	<tr>
-		<td><span class="badge badge-danger" style="font-size:20px; background-color:#D66B75; margin:5px 5px 5px 5px">檢舉評論原因</span></td>
+		<td>
+			<span class="badge badge-danger" style="font-size:20px; background-color:#D66B75; margin:5px 5px 5px 5px">檢舉評論原因</span>
+			<img id="mic"src="<%=request.getContextPath()%>/images/MicReady.png">
+		</td>
 	</tr>	
 	<tr>
 		<td><textarea id="content-1" name="content" rows="5" cols="73" maxlength="300" style="border-width: 3px; border-color: #D66B75; resize:none;">${reportCommentVO.content}</textarea></td>
@@ -245,39 +253,94 @@ function nosweet(){
   		`
 	})
 }
+
+function sendReport(){
 	
+	let content = $("#content-1").val();
+	let commentno = "${param.commentno}";
+	let memberno = "${memVO.member_no}";
+	
+	$.ajax({
+		url:"<%=request.getContextPath()%>/report_comment/reportcomment.do",
+		data:{
+			commentno: "${param.commentno}",
+			content: $('#content-1').val(),
+			memberno:"${memVO.member_no}",
+			action:"insert"
+		},
+		async: false,
+		type:"POST",
+		success:function(json){
+			let jsonobj = JSON.parse(json);
+			let problem = jsonobj.problem;
+			console.log(problem);
+			if (problem==0){
+				sweet();
+			}else{
+				nosweet();
+			}
+		}
+	});
+}
+
+
 $(document).ready(function(){
 	$("#add-btn").click(function(){
-		
-		let content = $("#content-1").val();
-		let commentno = "${param.commentno}";
-		let memberno = "${memVO.member_no}";
-		
-		$.ajax({
-			url:"<%=request.getContextPath()%>/report_comment/reportcomment.do",
-			data:{
-				commentno: "${param.commentno}",
-				content: $('#content-1').val(),
-				memberno:"${memVO.member_no}",
-				action:"insert"
-			},
-			async: false,
-			type:"POST",
-			success:function(json){
-				let jsonobj = JSON.parse(json);
-				let problem = jsonobj.problem;
-				console.log(problem);
-				if (problem==0){
-					sweet();
-				}else{
-					nosweet();
-				}
-			}
-		});
+		sendReport();
 	})
 })
 
 
+
+</script>
+
+<script>
+$("#mic").on("click", function(){
+	$("#mic").attr("src","<%=request.getContextPath()%>/images/MicUsing.gif");  
+// 	$("#mic").setAttribute("disabled", "disabled");
+	var show = document.getElementById('show');
+    var recognition = new webkitSpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = "cmn-Hant-TW";
+    recognition.onstart = function() {
+        console.log('開始辨識...');
+    };
+    recognition.onend = function() {
+//     	$("#mic").setAttribute("disabled", "disabled");
+    	$("#mic").attr("src","<%=request.getContextPath()%>/images/MicReady.png");  
+        console.log('停止辨識!');
+        
+    };
+    recognition.onresult = function(event) {
+    	
+        var i = event.resultIndex;
+        var j = event.results[i].length - 1;
+//         show.innerHTML = event.results[i][j].transcript;
+
+		if(event.results[i][j].transcript.indexOf("停止") > -1){
+			$("#content-1").html("");
+			recognition.stop();
+			Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "停止辨識",
+                showConfirmButton: false,
+                timer: 1300,
+            });
+			
+		} else if(event.results[i][j].transcript.indexOf("送出")> -1 
+		){
+			$("#content-1").html("");
+			recognition.stop();
+			sendReport();
+		}
+		else{
+			$("#content-1").val(event.results[i][j].transcript);
+		}
+    };
+    recognition.start();
+});
 
 </script>
 </html>

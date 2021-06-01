@@ -16,7 +16,7 @@ public class jdbcUtil_CompositeQuery_Showtime {
 		if ("movie_no".equals(columnName) ) // 用於其他
 			aCondition = columnName + "=" + value;
 		else if("showtime_time".equals(columnName))
-			aCondition = columnName + " = " + "'" + value + "'"; 
+			aCondition = "date(" + columnName + ")  = " + "'" + value + "'"; 
 
 		return aCondition + " ";
 	}

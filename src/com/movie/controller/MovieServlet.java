@@ -476,7 +476,7 @@ public class MovieServlet extends HttpServlet {
 				/*************************** 其他可能的錯誤處理 *************************************/
 			} catch (Exception e) {
 				errorMsgs.put("Exception", e.getMessage());
-System.out.println("我錯了"+e.getMessage());
+System.out.println("updatemovie錯了"+e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/back-end/movie/update_movie_input.jsp");
 				failureView.forward(req, res);
 				
@@ -686,7 +686,7 @@ System.out.println("我錯了"+e.getMessage());
 				/*************************** 其他可能的錯誤處理 **********************************/
 			} catch (Exception e) {
 				errorMsgs.put("Exception", e.getMessage());
-System.out.println("出錯了"+e.getMessage());
+System.out.println("insertMovie出錯了"+e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/back-end/movie/addMovie.jsp");
 				failureView.forward(req, res);
 			}

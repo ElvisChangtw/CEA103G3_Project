@@ -1618,6 +1618,7 @@ activate: function(event) { // Callback function if tab is switched
 			},
 			success: function(json){
 					let jsonobj = JSON.parse(json);
+					$("#movie").html("<option value=''>請選擇電影</option>");
 					for(let i = 0; i < jsonobj['movie_no'].length; i++){
 						let opt = $("<option>").val(jsonobj["movie_no"][i]).text(jsonobj["movie_name"][i]);
 		   				$("#movie").append(opt);
@@ -1631,6 +1632,7 @@ activate: function(event) { // Callback function if tab is switched
 	    		type: "POST",
 	    		success: function(json){
 						let jsonobj = JSON.parse(json);
+						$("#date").html("<option value=''>請選擇日期</option>");
 						for(let i = 0; i < jsonobj['showtime_date'].length; i++){
 							let opt = $("<option>").val(jsonobj['showtime_date'][i]).text(jsonobj['showtime_date'][i]);
 	         				$("#date").append(opt);
@@ -1648,6 +1650,7 @@ activate: function(event) { // Callback function if tab is switched
 	        		},
 	        		success: function(json){
 							let jsonobj = JSON.parse(json);
+	        				$("#showtime").html("<option value=''>請選擇場次</option>");
 							for(let i = 0; i < jsonobj['showtime_no'].length; i++){
 								let opt = $("<option>").val(jsonobj['showtime_no'][i]).text(jsonobj['showtime_time'][i]);
 		         				$("#showtime").append(opt);

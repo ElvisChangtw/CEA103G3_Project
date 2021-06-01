@@ -80,7 +80,7 @@ tr td>img {
                     <div class="nav">
                         <img src="<%=request.getContextPath()%>/back-home/img/logo2-1-6.png">
 	                         <h1 style="text-align: center;color: white;font-weight: bold ;font-size:35px">
-	                         	<span>M</span>ovies<span>H</span>it
+	                         	<span style="color: #02a388; font-size: 1em;">M</span>ovies<span style="color: #02a388; font-size: 1em;">H</span>it
 	                         </h1>
 <!--                         <a class="nav-link collapsed" href="tables3.html"> -->
 <!--                             <div class="sb-nav-link-icon"><i class="fas fa-user-alt"></i></div> -->
@@ -242,7 +242,7 @@ tr td>img {
 												<td><span style="font-weight:bolder;">電影狀態:</span></td>
 												<td><select name="status" size="1" style="width:555px;">
 														<option value="9"
-															<%=(movieVO.getStatus().equals("9") ? "selected" : "")%>></option>
+															<%=(movieVO.getStatus().equals("9") ? "selected" : "")%>>請選擇</option>
 														<option value="0"
 															<%=(movieVO.getStatus().equals("0") ? "selected" : "")%>>上映中</option>
 														<option value="1"
@@ -280,7 +280,7 @@ tr td>img {
 												<td><span style="font-weight:bolder;">電影分級:</span></td>
 												<td><select name="grade" size="1" style="width:555px;">
 														<option value="9"
-															<%=(movieVO.getGrade().equals("9") ? "selected" : "")%>></option>
+															<%=(movieVO.getGrade().equals("9") ? "selected" : "")%>>請選擇</option>
 														<option value="0"
 															<%=(movieVO.getGrade().equals("0") ? "selected" : "")%>>普遍級</option>
 														<option value="1"

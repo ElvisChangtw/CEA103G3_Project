@@ -25,6 +25,7 @@
 <html>
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <title>訂單票種資料新增 - addOrd_ticket_type2.jsp</title>
 
 <style>
@@ -411,7 +412,10 @@ FORM {
 		}
 // 		alert("count = " + count);
 		if(count==0){
-			alert("請至少選一張票");
+			swal.fire({
+				icon:'error',
+				text: '請至少選一張票'
+			});
 		}else{
 				$(this).attr("type", "submit");
 		}

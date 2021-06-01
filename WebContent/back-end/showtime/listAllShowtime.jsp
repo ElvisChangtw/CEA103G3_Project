@@ -38,7 +38,7 @@
     </head>
     <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-    	<a class="navbar-brand" href="index2.jsp">MOVIESHIT後台系統</a>
+    	<a class="navbar-brand" href="<%=request.getContextPath()%>/back-home/index2.jsp">MOVIESHIT後台系統</a>
     	<button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
     	<!-- Navbar Search-->
     	<form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
@@ -112,7 +112,7 @@
                         </a>
                         <div class="collapse" id="collapsePages3" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link function" href="layout-static.html">現場劃位</a>
+                                <a class="nav-link function" href="<%=request.getContextPath()%>/back-end/order/onSite.jsp">現場劃位</a>
                                 <a class="nav-link function" href="<%=request.getContextPath()%>/back-end/order/listAllOrder.jsp">訂單管理</a>
                             </nav>
                         </div>
@@ -188,6 +188,7 @@
 											     <input type="submit" value="修改"
 											     class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#73BDBE; font-weight:bold; color:white;">
 											     <input type="hidden" name="showtime_no"  value="${showtimeVO.showtime_no}">
+											     <input type="hidden" name="whichPage"  value="<%=whichPage%>">
 			    								 <input type="hidden" name="action"	value="getOne_For_Update"></FORM>
 											</td>
 <!-- 											<td> -->
@@ -223,14 +224,14 @@
                                 </div>
                             </div>
                     </div>
-                     <%if (request.getAttribute("showtimeVO")!=null){%>
-						<jsp:include page="listOneShowtime.jsp" />
-					<%} %>
                 </main>
             </div>
         
         
         </div>
+                     <%if (request.getAttribute("showtimeVO")!=null){%>
+						<jsp:include page="listOneShowtime.jsp" />
+					<%} %>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="<%=request.getContextPath()%>/back-home/js/scripts.js"></script>
