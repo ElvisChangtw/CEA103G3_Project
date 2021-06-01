@@ -609,6 +609,7 @@ public class GroupDAO implements GroupDAO_interface {
 	//截止時間內團長未出團, 失敗結束
 	@Override
 	public void failure(Integer group_no) {
+		System.out.println("有進截止揪團DAO");
 		Connection con = null;
 		PreparedStatement pstmt = null, pstmt2 = null;
 
@@ -621,7 +622,7 @@ public class GroupDAO implements GroupDAO_interface {
 			pstmt2 = con.prepareStatement(OVER_DUE_STMT);
 			pstmt2.setInt(1, group_no);
 			pstmt2.executeUpdate();
-			System.out.println("有進截止揪團DAO");
+			
 			// 
 			con.commit();
 			con.setAutoCommit(true);
