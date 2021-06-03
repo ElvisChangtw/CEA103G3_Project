@@ -27,7 +27,7 @@ public class Ticket_typeDAO implements Ticket_typeDAO_interface {
 	}
 
 	private static final String INSERT_STMT = "insert into ticket_type (ticket_type, ticket_price, ticket_desc) values(?, ?, ?)";
-	private static final String GET_ALL_STMT = "select * from ticket_type order by ticket_type_no";
+	private static final String GET_ALL_STMT = "select * from ticket_type order by ticket_type_no desc";
 	private static final String GET_ONE_STMT = "select * from ticket_type where ticket_type_no = ?";
 	private static final String DELETE = "delete from ticket_type where ticket_type_no = ?";
 	private static final String UPDATE = "update ticket_type set ticket_type = ? , ticket_price = ?, ticket_desc = ? "

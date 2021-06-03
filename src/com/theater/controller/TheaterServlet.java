@@ -198,7 +198,7 @@ public class TheaterServlet extends HttpServlet {
 				
 				/***************************3.修改完成,準備轉交(Send the Success view)*************/
 				req.setAttribute("theaterVO", theaterVO); // 資料庫update成功後,正確的的theaterVO物件,存入req
-				String url = "/back-end/theater/listAllTheater.jsp";
+				String url = "/back-end/theater/listAllTheater.jsp?whichPage=9999";
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 修改成功後,轉交listOneEmp.jsp
 				successView.forward(req, res);
 

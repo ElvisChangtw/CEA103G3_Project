@@ -32,7 +32,7 @@ public class FoodDAO implements FoodDAO_interface {
 
 	private static final String INSERT_STMT = "insert into food (food_name, food_type, food_price, food_pic, food_status) "
 			+ "values(?, ?, ?, ?, ?)";
-	private static final String GET_ALL_STMT = "select * from food order by food_no";
+	private static final String GET_ALL_STMT = "select * from food order by food_no desc";
 	private static final String GET_ONE_STMT = "select * from food where food_no = ?";
 	private static final String DELETE = "delete from food where food_no = ?";
 	private static final String UPDATE = "update food set food_name = ?, food_type = ?, food_price = ?, food_pic = ?  , food_status = ? "

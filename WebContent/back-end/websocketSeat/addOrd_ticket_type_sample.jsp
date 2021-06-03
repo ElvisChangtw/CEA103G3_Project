@@ -416,7 +416,10 @@ FORM {
 				label.style.cursor= "not-allowed";
 				seat_name.style.backgroundColor = "coral";
 				seat.addEventListener("click", function(){
-					swal.fire('提醒您，此座位不能點選');
+					swal.fire({
+						icon:'error',
+						text:'提醒您，此座位不能點選'
+					});
 					seat.checked = false;
 				},false);
 				
@@ -461,7 +464,10 @@ FORM {
 			}
 		}
 		if(count != countSeat){
-			swal.fire("您還有" + (count-countSeat + "個座位未選擇")); 
+			swal.fire({
+				icon:'error',
+				text:"您還有" + (count-countSeat + "個座位未選擇")
+			}); 
 			countSeat = 0;
 			return false;
 		}
@@ -636,7 +642,7 @@ FORM {
 	}
 	
 	function disabled(seat){
-		alert("提醒您，此座位不能點選");
+		swal.fire('提醒您，此座位不能點選');
 		seat.checked = false;
 	}
 	

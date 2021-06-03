@@ -255,7 +255,10 @@ FORM {
 		})
 		$("#submit").click(function(){
 			if($("#payByCredit").prop("checked") == false && $("#payAtCounter").prop("checked") == false){
-				swal.fire("請選擇付款方式");
+				swal.fire({
+					icon:'error',
+					text:"請選擇付款方式",
+				});
 			}else{
 				$("#submit").attr("type","submit")
 			}
@@ -278,7 +281,6 @@ FORM {
 	
 	window.onload = connect();
 	function connect(){
-		console.log("我有印到");
 		webSocket = new WebSocket(endPointURL);
 		
 		webSocket.onopen = function(event) {

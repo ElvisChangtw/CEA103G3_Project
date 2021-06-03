@@ -261,14 +261,14 @@ button{
 											<tr>
 											<tr>
 												<td><span style="font-weight:bolder;">廳院名稱</span></td>
-												<td><input type="TEXT" name="theater_name" size="45" 
+												<td><input type="TEXT" name="theater_name" style="width:100px;" 
 			 										value="<%= (theaterVO==null)? "G廳" : theaterVO.getTheater_name()%>" />
 												</td>
 											</tr>
 											<tr>
 												<td><span style="font-weight:bolder;">廳院種類</span></td>
 												<td>
-													<select name="theater_type">
+													<select name="theater_type" style="width:100px;">
 														<option value="0" ${(theaterVO==null) ? "" : (theaterVO.theater_type==0)?"selected":""}>2D</option>
 														<option value="1" ${(theaterVO==null) ? "" : (theaterVO.theater_type==1)?"selected":""} >3D</option>
 														<option value="2" ${(theaterVO==null) ? "" : (theaterVO.theater_type==2)?"selected":""} >IMAX</option>

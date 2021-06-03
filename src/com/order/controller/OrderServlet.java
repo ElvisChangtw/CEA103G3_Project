@@ -759,19 +759,21 @@ public class OrderServlet extends HttpServlet {
 					}
 				}
 				String seat_no = req.getParameter("seat_no");
+				
 				/***************************2.開始新增資料***************************************/
   				OrderService orderSvc = new OrderService();
   				orderVO = orderSvc.addOrder2(member_no, showtime_no, crt_dt	, order_status, 
   						order_type, payment_type, total_price, seat_name, ordFood_list, 
   						ordTicket_list, seat_no);
-  				session.removeAttribute("ticket_typeno");
-  				session.removeAttribute("ticketcount");
-  				session.removeAttribute("ticketprice");
-  				session.removeAttribute("foodno");
-  				session.removeAttribute("foodcount");
-  				session.removeAttribute("foodprice");
+//  				session.removeAttribute("ticket_typeno");
+//  				session.removeAttribute("ticketcount");
+//  				session.removeAttribute("ticketprice");
+//  				session.removeAttribute("foodno");
+//  				session.removeAttribute("foodcount");
+//  				session.removeAttribute("foodprice");
   				/***************************3.新增完成,準備轉交(Send the Success view)***********/
   				req.setAttribute("orderVO", orderVO);
+  				session.setAttribute("memVO", memVO);
   				String url = "/back-end/order/order_complete.jsp";
   				RequestDispatcher successView = req.getRequestDispatcher(url); // 新增成功後轉交listAllTicket_type.jsp
   				successView.forward(req, res);	
@@ -822,7 +824,6 @@ public class OrderServlet extends HttpServlet {
  			}
  			catch(Exception e) {
  				out.print("fail");
- 				errorMsgs.add("評論刪除失敗");
  				RequestDispatcher failureView = req
  						.getRequestDispatcher("/front-end/mem/memberSys.jsp");
  				failureView.forward(req, res);

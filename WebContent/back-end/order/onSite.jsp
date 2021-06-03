@@ -163,7 +163,6 @@
                 <main>
                     <div class="container-fluid">
                         <h1 class="mt-4" style="text-align:center; font-weight:bolder;">後台　現場劃位</h1>
-                        <a href="<%=request.getContextPath()%>/back-end/showtime/addShowtime.jsp" class="btn btn-primary btn-lg" ><i class="material-icons">&#xE147;&ensp;</i><span>新增場次</span></a>
                             <div class="card-body">
                                 <div class="table-responsive">
                                 <%@ include file="pages/page1.file"%>
@@ -208,7 +207,7 @@
 											     class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#F5CA5E; font-weight:bold; color:white;">
 											     <input type="hidden" name="showtime_no"  value="${showtimeVO.showtime_no}">
 											     <input type="hidden" name="whichPage"	value="<%=whichPage%>">
-											     <input type="hidden" name="action"	value="getOne_For_Showtime"></FORM>
+											     <input type="hidden" name="action"	value="getOne_For_Onsite"></FORM>
 											</td>
 											
 											<td>
