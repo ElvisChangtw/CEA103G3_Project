@@ -53,8 +53,8 @@
      padding: 1px; 
    }
    #mic{
-	width: 40px;
-    height: 35px;
+	width: 45px;
+    height: 40px;
     cursor: pointer; 
 } 
 </style>
@@ -350,11 +350,11 @@ $("#mic").on("click", function(){
 			$("#content-1").html("");
 		}else if(event.results[i][j].transcript.indexOf("安安")> -1 
 		){
-			$("#memberpic").attr("src", "<%=request.getContextPath()%>/images/小吳.jpg");
+			$("#memberpic").attr("src", "<%=request.getContextPath()%>/images/大吳.jpg");
 			
 		}else if(event.results[i][j].transcript.indexOf("你好")> -1 
 		){
-			$("#mic").attr("src","<%=request.getContextPath()%>/images/test1.gif");
+			$("#mic").attr("src","<%=request.getContextPath()%>/images/小吳.jpg");
 		}
 		else{
 			$("#content-1").val(event.results[i][j].transcript);
