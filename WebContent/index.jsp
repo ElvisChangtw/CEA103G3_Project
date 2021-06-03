@@ -107,9 +107,9 @@
 }
 .notification{
 /*   bottom: 25px; */
-bottom: 58px; 
+bottom: 45px; 
 /*   left: 340px; */
-left: 1095px; 
+left: 1420px; 
   position: relative;
   display: inline-block;
 }
@@ -431,7 +431,7 @@ left: 1095px;
 	                                        	<li><a href="#" onclick="loginFirst()" >好友管理</a></li>
 	                                        </c:when>
 	                                        <c:otherwise>
-	                                        	<li><a href="<%=request.getContextPath()%>/front-end/mem/memberSys2.jsp">會員中心</a></li>
+	                                        	<li><a href="<%=request.getContextPath()%>/front-end/mem/memberSys.jsp">會員中心</a></li>
 	                                        	<li><a href="<%=request.getContextPath()%>/front-end/mem/memberInfo.jsp">會員資訊</a></li>
 	                                        	<li><a href="<%=request.getContextPath()%>/front-end/relationship/select_page.jsp">好友管理</a></li>
 	                                        </c:otherwise>
@@ -439,6 +439,7 @@ left: 1095px;
                                     </ul>
                                 </li>
                             </ul>
+                            
                         </div>
                         
                         <div class="clearfix"> </div>
@@ -1618,7 +1619,6 @@ activate: function(event) { // Callback function if tab is switched
 			},
 			success: function(json){
 					let jsonobj = JSON.parse(json);
-					$("#movie").html("<option value=''>請選擇電影</option>");
 					for(let i = 0; i < jsonobj['movie_no'].length; i++){
 						let opt = $("<option>").val(jsonobj["movie_no"][i]).text(jsonobj["movie_name"][i]);
 		   				$("#movie").append(opt);
@@ -1632,7 +1632,6 @@ activate: function(event) { // Callback function if tab is switched
 	    		type: "POST",
 	    		success: function(json){
 						let jsonobj = JSON.parse(json);
-						$("#date").html("<option value=''>請選擇日期</option>");
 						for(let i = 0; i < jsonobj['showtime_date'].length; i++){
 							let opt = $("<option>").val(jsonobj['showtime_date'][i]).text(jsonobj['showtime_date'][i]);
 	         				$("#date").append(opt);
@@ -1650,7 +1649,6 @@ activate: function(event) { // Callback function if tab is switched
 	        		},
 	        		success: function(json){
 							let jsonobj = JSON.parse(json);
-	        				$("#showtime").html("<option value=''>請選擇場次</option>");
 							for(let i = 0; i < jsonobj['showtime_no'].length; i++){
 								let opt = $("<option>").val(jsonobj['showtime_no'][i]).text(jsonobj['showtime_time'][i]);
 		         				$("#showtime").append(opt);
@@ -2567,16 +2565,15 @@ var count=0;
 					event.results[i][j].transcript.indexOf("清楚")> -1 ||
 					event.results[i][j].transcript == "新竹"		
 			){
-					console.log(event.results[i][j].transcript);
-//	 				event.results[i][j].transcript="";
-					$("#search-context").val("");
-					$("#search-results").html("");
-				
+				console.log(event.results[i][j].transcript);
+// 				event.results[i][j].transcript="";
+				$("#search-context").html("");
+				$("#search-results").html("");
 			} else if(event.results[i][j].transcript.indexOf("停止") > -1 ||
 					event.results[i][j].transcript =="屏"
 			) {
 // 				event.results[i][j].transcript="";
-				$("#search-context").val("");
+				$("#search-context").html("");
 				$("#search-results").html("");
 				
 				recognition.stop();
@@ -2596,7 +2593,7 @@ var count=0;
 // 			    sound.currentTime = 3;
 			    sound.play(); 
 // 			    sound.currentTime = 3;
-			    $("#search-context").val("");
+			    $("#search-context").html("");
 			    $("#search-results").html("");
 			}
 			else{
