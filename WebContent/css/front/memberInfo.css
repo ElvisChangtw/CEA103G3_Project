@@ -127,8 +127,8 @@ i.log-in {
 	background-color: #DEEDEB;
 	min-width: 280px;
 	max-height: 40px;
-	padding:10px 0px;
-	margin-top:10px;
+	padding:25px 0px;
+	margin-top:6px;
 	display:flex;
 	flex-direction: row;
 	justify-content: center;

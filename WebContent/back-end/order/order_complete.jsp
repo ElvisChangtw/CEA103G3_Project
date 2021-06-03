@@ -246,9 +246,9 @@ FORM {
 							</head>
 							<body>
 								<div id="qrcode"></div>
-								<a href="<%=request.getContextPath()%>/back-end/order/listOneOrder.jsp?order_no=${orderVO.order_no}">查看</a>
+								<a href="http://35.236.176.224/<%=request.getContextPath()%>/back-end/order/listOneOrder.jsp?order_no=${orderVO.order_no}">查看</a>
 							<script>
-							$('#qrcode').qrcode({width: 200,height: 200,text: "<%=request.getContextPath()%>/back-end/order/listOneOrder.jsp.jsp?order_no=${orderVO.order_no}"});      
+							$('#qrcode').qrcode({width: 200,height: 200,text: "http://35.236.176.224/<%=request.getContextPath()%>/back-end/order/listOneOrder.jsp?order_no=${orderVO.order_no}"});      
 							</script>
 							</body>
 							</html>
@@ -268,7 +268,7 @@ FORM {
 		});
 	}
 	$("#submit").click(function(){
-		window.location.href='<%=request.getContextPath()%>/front-end/mem/memberSys.jsp';
+		window.location.href='<%=request.getContextPath()%>/front-end/mem/memberSys2.jsp';
 	})
 	
 
