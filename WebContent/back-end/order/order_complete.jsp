@@ -126,7 +126,8 @@ FORM {
 <!-- <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script> -->
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"> -->
-
+<script>
+</script>
 </head>
 <body bgcolor='white'>
 	<jsp:include page="/front_header.jsp"/>
@@ -259,14 +260,22 @@ FORM {
 	
 </body>
 <script>
-	window.onload=function(){
-		swal.fire({
-			icon: 'success',
-			text:"付款成功",
-			timer: 500,
-			showConfirmButton: false
-		});
-	}
+$(window).load(function() {
+	swal.fire({
+		icon: 'success',
+		text:"付款成功",
+		timer: 1500,
+		showConfirmButton: false
+	});
+});
+// 	window.onload=function(){
+// 		swal.fire({
+// 			icon: 'success',
+// 			text:"付款成功",
+// 			timer: 1500,
+// 			showConfirmButton: false
+// 		});
+// 	}
 	$("#submit").click(function(){
 		window.location.href='<%=request.getContextPath()%>/front-end/mem/memberSys2.jsp';
 	})

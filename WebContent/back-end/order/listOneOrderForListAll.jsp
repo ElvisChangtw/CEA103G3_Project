@@ -164,9 +164,39 @@
         </div>
                     
                     
-                    
                    <div class="container-fluid">
-                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">後台　訂單餐點資料</h1>
+                    <h1 class="mt-4" style="text-align:center; font-weight:bolder;">票種</h1>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="text-align:center;">
+                                        <thead style="background-color:#707070; color:white;; white-space: nowrap;" >
+                                            <tr>
+                                           		<th>訂單<br>編號</th>
+												<th>票種<br>編號</th>
+												<th>票種<br>數量</th>
+												<th>票種<br>價格</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <c:forEach var="ord_ticket_typeVO" items="${list}">
+											<c:forEach var="ticket_typeVO" items="${ticket_typeSvc.all}">
+												<c:if test="${ord_ticket_typeVO.ticket_type_no == ticket_typeVO.ticket_type_no}">
+		                                        	<tr>
+														<td>${ord_ticket_typeVO.order_no}</td>
+														<td>${ticket_typeVO.ticket_desc}</td>
+														<td>${ord_ticket_typeVO.ticket_count}</td>
+														<td>${ord_ticket_typeVO.price}</td>
+													</tr>
+											 	</c:if>
+											</c:forEach>
+										</c:forEach>
+<!-- 										<tr> -->
+<!-- 										</tr> -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">餐點</h1>
 <%--                         <a href="<%=request.getContextPath()%>/back-end/order/addOrder.jsp" class="btn btn-primary btn-lg" ><i class="material-icons">&#xE147;&ensp;</i><span>新增訂單</span></a> --%>
                             <div class="card-body">
                                 <div class="table-responsive">

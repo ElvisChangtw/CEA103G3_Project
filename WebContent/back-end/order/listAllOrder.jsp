@@ -187,6 +187,9 @@
 														<c:when test="${orderVO.order_status == 2 }">
 															已取消
 														</c:when>
+														<c:when test="${orderVO.order_status == 3 }">
+															已取票
+														</c:when>
 													</c:choose>
 												</td>
 												<td>${orderVO.order_type == 0 ? "現場" : "線上"}</td>
@@ -280,7 +283,12 @@
 				order_no: $(this).next().val(),
 			},
 			success: function(data){
-				swal.fire("退票成功");
+				swal.fire({
+					icon:'success',
+					text:'退票成功',
+					showConfirmButton: false,
+					timer: 1000
+				});
 				$status.eq(0).parent().prev().prev().prev().prev().prev().prev().prev().text("已取消");
 				}
 		});

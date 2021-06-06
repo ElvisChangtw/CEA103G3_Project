@@ -313,7 +313,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!--單一揪團開始 -->
                 <div class="col-md-2 w3l-movie-gride-agile requested-movies">
                     <a href="<%=request.getContextPath()%>/group/group.do?action=getOne_For_Display&group_no=${groupVO.group_no}&requestURL=<%=request.getServletPath()%>" class="hvr-sweep-to-bottom">
-                    	<img src="${pageContext.request.contextPath}/movie/DBGifReader4.do?movieno=${showtimeSvc.getOneShowtime(groupVO.showtime_no).movie_no}" title="MoviesHit" class="img-responsive" alt="尚無圖片"
+                    	<img src="<%=request.getContextPath()%>/movie/DBGifReader4.do?movieno=${showtimeSvc.getOneShowtime(groupVO.showtime_no).movie_no}" title="MoviesHit" class="img-responsive" alt="尚無圖片"
                     	 ${(groupVO.group_no==param.group_no) ? 'style="background-color:rgb(2, 163, 136, 0.3);"':''}>
                         <div class="w3l-action-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
                     </a>

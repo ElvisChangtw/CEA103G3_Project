@@ -204,7 +204,7 @@ td {
 	
 	if(${orderVO.order_status.equals("3")}){
 		$("#button").hide();
-	}
+	} 
 	$("#btn").click(function(){
     	$.ajax({
     		url: "<%=request.getContextPath()%>/order/order.do",

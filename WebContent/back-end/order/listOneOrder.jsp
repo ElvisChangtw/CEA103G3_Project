@@ -180,8 +180,8 @@
 												<th>付款<br>方式</th>
 												<th>訂單<br>總價</th>
 												<th>座位</th>
-												<th>查看</th>
-												<th>修改</th>
+<!-- 												<th>查看</th> -->
+												<th>取票</th>
 												<th>退票</th>
                                             </tr>
                                         </thead>
@@ -191,7 +191,7 @@
 												<td>${memSvc.getOneMem(orderVO.member_no).mb_name}</td>
 												<td>${orderVO.showtime_no}</td>
 												<td>${df.format(orderVO.crt_dt)}</td>
-												<td>
+												<td id="order_status">
 													<c:choose>
 														<c:when test="${orderVO.order_status == 0 }">
 															未付款
@@ -202,9 +202,12 @@
 														<c:when test="${orderVO.order_status == 2 }">
 															已取消
 														</c:when>
+														<c:when test="${orderVO.order_status == 3 }">
+															已取票
+														</c:when>
 													</c:choose>
 												</td>
-												<td>${orderVO.order_type == 0 ? "現場" : "線上"}</td>
+												<td id="order_type">${orderVO.order_type == 0 ? "現場" : "線上"}</td>
 												<td>
 													<c:choose>
 														<c:when test="${orderVO.payment_type == 0 }">
@@ -221,17 +224,16 @@
 												<td>${orderVO.total_price }</td>
 												<td>${orderVO.seat_name}</td>
 											
-											<td>
-											  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/order/order.do" style="margin-bottom: 0px;">
-											     <input type="submit" value="查看"
-											     class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#F5CA5E; font-weight:bold; color:white;">
-											     <input type="hidden" name="order_no"  value="${orderVO.order_no}">
-											     <input type="hidden" name="action"	value="getOne_For_Order"></FORM>
-											</td>
+<!-- 											<td> -->
+<%-- 											  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/order/order.do" style="margin-bottom: 0px;"> --%>
+<!-- 											     <input type="submit" value="查看" -->
+<!-- 											     class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#F5CA5E; font-weight:bold; color:white;"> -->
+<%-- 											     <input type="hidden" name="order_no"  value="${orderVO.order_no}"> --%>
+<!-- 											     <input type="hidden" name="action"	value="getOne_For_Order"></FORM> -->
+<!-- 											</td> -->
 											
 											<td>
-											  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/order/order.do" style="margin-bottom: 0px;">
-											     <input type="submit" value="修改"
+											     <input type="button" value="取票" id="btn"
 											     class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#73BDBE; font-weight:bold; color:white;">
 											     <input type="hidden" name="order_no"  value="${orderVO.order_no}">
 											     <input type="hidden" name="action"	value="getOne_For_Update"></FORM>
@@ -262,7 +264,7 @@
                     
                     
                    <div class="container-fluid">
-                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">訂單票種資料</h1>
+                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">票種</h1>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="text-align:center;">
@@ -298,7 +300,7 @@
                     
                     
                    <div class="container-fluid">
-                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">訂單餐點資料</h1>
+                        <h1 class="mt-4" style="text-align:center; font-weight:bolder;">餐點</h1>
 <%--                         <a href="<%=request.getContextPath()%>/back-end/order/addOrder.jsp" class="btn btn-primary btn-lg" ><i class="material-icons">&#xE147;&ensp;</i><span>新增訂單</span></a> --%>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -363,11 +365,36 @@
 					showConfirmButton: false,
 					timer: 1000
 				});
-				$status.eq(0).parent().prev().prev().prev().prev().prev().prev().prev().text("已取消");
+				$("#order_status").text("已取消");
 				}
 		});
  		
  	})
+ 	
+ 	$("#btn").click(function(){
+    	$.ajax({
+    		url: "<%=request.getContextPath()%>/order/order.do",
+    		type: "POST",
+    		data: {	action: "update_status", 
+    			   	order_no: "${orderVO.order_no}"
+    		},
+    		success: function(){
+    			}
+    	});
+    	
+		swal.fire({
+			icon:'success',
+			text:'取票成功',
+			showConfirmButton: false,
+			timer: 1500
+			
+		});
+		$("#order_status").text("已取票")
+		$("#order_type").text("信用卡")
+		$("#button").hide();
+	});
+ 	
+ 	
  </script>
 </body>
     

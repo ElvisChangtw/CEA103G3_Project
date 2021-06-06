@@ -162,7 +162,7 @@
 												<th>畒篈</th>
 												<th>э</th>
 <!-- 												<th>匡拒畒</th> -->
-												<th>璹布</th>
+<!-- 												<th>璹布</th> -->
 												<th>埃</th>
                                             </tr>
                                         </thead>
@@ -198,13 +198,13 @@
 <%-- 											     <input type="hidden" name="showtime_no"  value="${showtimeVO.showtime_no}"> --%>
 <!-- 			     								 <input type="hidden" name="action"	value="getOne_For_Update2"></FORM> -->
 <!-- 											</td> -->
-											<td>
-											  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/order/order.do" style="margin-bottom: 0px;">
-											     <input type="submit" value="璹布"
-											     class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#AE67D8; font-weight:bold; color:white;">
-											     <input type="hidden" name="showtime_no"  value="${showtimeVO.showtime_no}">
-			    								 <input type="hidden" name="action"	value="sendToFT"></FORM>
-											</td>
+<!-- 											<td> -->
+<%-- 											  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/order/order.do" style="margin-bottom: 0px;"> --%>
+<!-- 											     <input type="submit" value="璹布" -->
+<!-- 											     class="btn btn-outline-danger" style="border:2px #B7B7B7 solid;border-radius:10px; background-color:#AE67D8; font-weight:bold; color:white;"> -->
+<%-- 											     <input type="hidden" name="showtime_no"  value="${showtimeVO.showtime_no}"> --%>
+<!-- 			    								 <input type="hidden" name="action"	value="sendToFT"></FORM> -->
+<!-- 											</td> -->
 											<td>
 											  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/showtime/showtime.do" style="margin-bottom: 0px;">
 											     <input type="submit" value="埃"
